@@ -20,7 +20,7 @@ async function hmacSha256(keyStr, data) {
   const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data));
   return new Uint8Array(sig);
 }
-async function pbkdf2Hash(password, saltB64, iterations = 120000) {
+async function pbkdf2Hash(password, saltB64, iterations = 100000) {
   const salt = b64urlDecode(saltB64);
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, key, 256);
@@ -63,6 +63,7 @@ function parseCookies(req) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === '/favicon.ico') return new Response(null, { status: 204 });
     // --- API routes ---
     if (url.pathname.startsWith('/api/')) {
       const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
