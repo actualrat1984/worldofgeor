@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World of Ge'or — A World Built to Endure</title>
+  <meta name="description" content="World of Ge'or — 1.37× Earth, ringed by the Silver Bride. Three million years of war, shadow and stubborn freedom. A living worldbuilding archive by Mikhail & Ichi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+</head>
+<body class="bg-ink text-cream">
+  <!-- Nav -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-ink/80 backdrop-blur-md border-b border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
+        <span class="font-display tracking-[0.18em] text-[13px] font-semibold text-cream">WORLD OF GE'OR</span>
+        <span class="hidden sm:inline text-gold/60 text-xs tracking-widest ml-2">EST. 597 AGD</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-[13px] tracking-widest font-medium">
+        <a href="#world" class="text-cream/70 hover:text-cream transition">WORLD</a>
+        <a href="#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
+        <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
+        <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
+      </nav>
+      <div class="hidden md:flex items-center gap-3">
+        <a href="mailto:hello@worldofgeor.com" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</a>
+        <a href="#world" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
+      </div>
+      <button id="menuBtn" class="md:hidden p-2 text-cream/80">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-gold/10 bg-ink px-6 py-4 space-y-3">
+      <a href="#world" class="block text-sm tracking-widest text-cream/80">WORLD</a>
+      <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
+      <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
+      <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
+      <a href="#" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
+    <div class="absolute inset-0">
+      <img src="/Geor_from_orbit.png" alt="Ge'or from orbit" class="w-full h-full object-cover object-[center_35%]" onerror="this.style.display='none'" />
+      <div class="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/40 to-ink"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"></div>
+    </div>
+    <div class="relative max-w-[1280px] mx-auto px-6 w-full py-16 md:py-24">
+      <div class="max-w-[620px]">
+        <p class="text-gold tracking-[0.32em] text-[11px] font-semibold mb-4">A WORLD 1.37× OLD EARTH • RINGED BY THE SILVER BRIDE</p>
+        <h1 class="font-display text-[42px] md:text-[64px] leading-[0.95] font-bold tracking-tight">
+          A WORLD<br/>
+          <span class="font-serif font-normal italic text-gold">forged</span> THROUGH<br/>
+          THREE MILLION<br/>
+          YEARS OF WAR.
+        </h1>
+        <p class="mt-5 text-[16px] leading-7 text-cream/80 max-w-[520px] font-light">
+          Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#world" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Explore the World</a>
+          <a href="#atlas" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">View the Atlas</a>
+        </div>
+        <div class="mt-10 flex flex-wrap gap-2 text-[11px] tracking-widest">
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">60+</b> PEOPLES</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">12</b> AGES</span>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-ink to-transparent"></div>
+  </section>
+
+  <!-- Trust / Manifesto bar -->
+  <section class="border-y border-gold/10 bg-cream/[0.02]">
+    <div class="max-w-[1280px] mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.22em] text-cream/60">
+      <span>BUILT BY MIKHAIL & ICHI — SINCE MAY 2026</span>
+      <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
+      <span>PRIVATE ARCHIVE • INVITE ONLY • BUILT TO ENDURE</span>
+      <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
+      <span class="text-gold">WORLDOFGEOR.COM</span>
+    </div>
+  </section>
+
+  <!-- Three pillars -->
+  <section id="world" class="max-w-[1280px] mx-auto px-6 py-16 md:py-24">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◈</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">SCALE THAT MATTERS</h3>
+        <p class="text-sm leading-6 text-cream/70">1.37× Earth, 1.26 AU from Golias, a ring torn from its moon. Every continent has a climate, a trade, a lie it tells itself. Nothing is filler.</p>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◎</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">MEMORY THAT LASTS</h3>
+        <p class="text-sm leading-6 text-cream/70">Twelve ages from the Lost Era to the Age of Strife. 3M years of Shadow conspiracy, filed, cross-linked and guarded. No retcons, no orphans.</p>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">⬢</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">FREEDOM AS PHYSICS</h3>
+        <p class="text-sm leading-6 text-cream/70">Magic is not divine — it is mage-cells. Souls recycle. The Shadows weaponized it. Free people weaponized refusal. That is the thesis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Atlas split -->
+  <section id="atlas" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <div class="rounded-[20px] overflow-hidden border border-gold/15 bg-ink">
+      <div class="grid lg:grid-cols-[1.35fr_0.85fr]">
+        <div class="relative min-h-[420px] bg-[#0b0b0a] flex items-center justify-center overflow-hidden">
+          <img src="/Geor_World.png" alt="World map of Ge'or" class="w-full h-full object-cover opacity-90" onerror="this.parentElement.innerHTML='<div class=\'p-12 text-center text-cream/50 text-sm\'>World map preview — add Geor_World.png to /public</div>'" />
+          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full text-[11px] tracking-widest border border-gold/20">POLITICAL MAP • 597 AGD • CARTOGRAPHER OFFICE OF THE ERISIAN EMPIRE</div>
+        </div>
+        <div class="p-8 md:p-10 flex flex-col justify-center">
+          <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">THE ATLAS</p>
+          <h2 class="font-display text-[30px] leading-[1.05] font-bold">17 CONTINENTS.<br/>ONE COHERENT WORLD.</h2>
+          <p class="mt-4 text-sm leading-6 text-cream/70">
+            Erisdar is the heart — the cracking Erisian Empire at its center. Around it: Lumina’s canopy, Kobre’s gear-towers, the Demon Continent, the Ash Seas. Every border was drawn for a reason. Every name has an alias, a language, a map position.
+          </p>
+          <ul class="mt-6 space-y-2.5 text-sm text-cream/80">
+            <li class="flex gap-3"><span class="text-gold">—</span> 15 continents + 2 major archipelagos, 8 seas, 3 moons</li>
+            <li class="flex gap-3"><span class="text-gold">—</span> 194+ nation links on the interactive atlas</li>
+            <li class="flex gap-3"><span class="text-gold">—</span> Grid-accurate: 3.086 km / pixel • ~49,400 km world</li>
+          </ul>
+          <a href="#" class="mt-7 inline-flex w-fit border border-gold/30 text-gold px-5 py-2.5 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">OPEN ATLAS PREVIEW</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="history" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <div class="flex items-end justify-between gap-4 mb-8">
+      <div>
+        <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">CHRONOLOGY</p>
+        <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">TWELVE AGES OF GE'OR</h2>
+      </div>
+      <p class="hidden md:block text-sm text-cream/60 max-w-[360px] text-right">From the Great Divergence (Year 0) to 597 AGD — the present. No gaps, no ghosts.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+        <div class="text-[11px] tracking-widest text-gold">AGE 0</div>
+        <div class="font-serif text-[15px] font-semibold">The Lost Era</div>
+        <div class="text-xs text-cream/60 mt-1">15,000 — 2,000 BGD</div>
+      </div>
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+        <div class="text-[11px] tracking-widest text-gold">AGE 1–3</div>
+        <div class="font-serif text-[15px] font-semibold">Nomads to Empires</div>
+        <div class="text-xs text-cream/60 mt-1">Kingdoms, tribes, first cities</div>
+      </div>
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+        <div class="text-[11px] tracking-widest text-gold">AGE 4–6</div>
+        <div class="font-serif text-[15px] font-semibold">Dragons & Divergence</div>
+        <div class="text-xs text-cream/60 mt-1">The Groom forms • Year 0</div>
+      </div>
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+        <div class="text-[11px] tracking-widest text-gold">AGE 7–9</div>
+        <div class="font-serif text-[15px] font-semibold">Eris Ascendant</div>
+        <div class="text-xs text-cream/60 mt-1">Empire, crusades, schism</div>
+      </div>
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+        <div class="text-[11px] tracking-widest text-gold">AGE 10–11</div>
+        <div class="font-serif text-[15px] font-semibold">The Fracturing</div>
+        <div class="text-xs text-cream/60 mt-1">Present • 597 AGD</div>
+      </div>
+      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4 bg-gradient-to-br from-gold/10 to-transparent">
+        <div class="text-[11px] tracking-widest text-gold">AGE 12</div>
+        <div class="font-serif text-[15px] font-semibold">Age of Strife</div>
+        <div class="text-xs text-cream/60 mt-1">Future • unwritten</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery / Peoples -->
+  <section id="gallery" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">PEOPLES & POWERS</p>
+    <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mb-8">A WORLD THAT BREATHES.</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <div class="h-44 bg-gradient-to-br from-[#1a1611] to-[#0f0e0d] flex items-center justify-center text-gold/30 text-xs tracking-widest">ERISIAN EMPIRE • CRACKING</div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">THE ERISIAN EMPIRE</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Three duchies, 30 counties, draconic law and elven memory. The sword of Eris is dulling.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <div class="h-44 bg-gradient-to-br from-[#151a17] to-[#0f0e0d] flex items-center justify-center text-gold/30 text-xs tracking-widest">KOBRE • GEAR-TOWERS</div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">KOBRE & THE GEAR</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Every tooth is law. Four nations measuring the world in brass, coal and debt.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <div class="h-44 bg-gradient-to-br from-[#1a1611] to-[#0f0e0d] flex items-center justify-center text-gold/30 text-xs tracking-widest">LUMINA • CANOPY</div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">LUMINA</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Ten nations in the trees, where light is currency and the ground is myth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="max-w-[860px] mx-auto px-6 pb-16 md:pb-24 text-center">
+    <div class="text-gold/40 text-3xl mb-4">“</div>
+    <blockquote class="font-serif text-[24px] md:text-[32px] leading-[1.25] text-cream">
+      The Shadows are losing to the fact that <span class="text-gold italic">free people keep refusing to stay dead.</span>
+    </blockquote>
+    <p class="mt-4 text-xs tracking-[0.24em] text-cream/50">— ARCHIVE OF THE TRAVELER, RUINS OF BAOTH</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-[1280px] mx-auto px-6 pb-16">
+    <div class="rounded-[20px] bg-gradient-to-br from-gold to-amberdeep p-[1px]">
+      <div class="rounded-[19px] bg-ink px-8 md:px-12 py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+          <h3 class="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-cream">This world is private.</h3>
+          <p class="mt-2 text-sm leading-6 text-cream/70 max-w-[560px]">World of Ge'or is an invite-only archive. If you were given a link, you’re already on the list. If not — request access and we’ll get back to you.</p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+          <a href="mailto:hello@worldofgeor.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="bg-cream text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-white transition">Request Access</a>
+          <a href="https://worldofgeor.com" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium hover:bg-cream/10 transition">worldofgeor.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs tracking-widest">
+      <span class="text-cream/50">© <span id="year"></span> WORLD OF GE'OR — BY MIKHAIL & ICHI</span>
+      <span class="text-cream/35">BUILT TO ENDURE • SLATE / AMBER • PRIVATE ARCHIVE</span>
+      <span class="text-gold/60">WORLDOFGEOR.COM</span>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
