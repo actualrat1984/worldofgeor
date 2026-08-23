@@ -66,6 +66,15 @@ export default {
     // --- API routes ---
     if (url.pathname.startsWith('/api/')) {
       const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
+      // auto-migrate tables if missing (so /api/register 500 never happens)
+      async function ensureTables() {
+        if (!env.DB) throw new Error('D1 binding DB missing — add D1 database worldofgeor-db with variable name DB in Worker Settings → Bindings');
+        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, invite_code TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
+        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS invites (code TEXT PRIMARY KEY, used_by TEXT, used_at TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
+        await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`).run();
+        // seed defaults (ignore if exists)
+        try { await env.DB.prepare(`INSERT OR IGNORE INTO invites (code) VALUES ('WELCOME_TO_GEOR_2026'), ('MIKHAIL_INVITE'), ('ARCADY_INVITE')`).run(); } catch {}
+      }
       // CORS for same origin only
       if (request.method === 'OPTIONS') {
         return new Response(null, { headers: { 'Access-Control-Allow-Origin': url.origin, 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Credentials': 'true' } });
@@ -74,6 +83,7 @@ export default {
       // POST /api/register  {email, password, inviteCode}
       if (url.pathname === '/api/register' && request.method === 'POST') {
         try {
+          await ensureTables();
           const { email, password, inviteCode } = await request.json();
           if (!email || !password || !inviteCode) return json({ error: 'Missing fields' }, 400);
           if (password.length < 8) return json({ error: 'Password too short (8+)' }, 400);
@@ -100,6 +110,7 @@ export default {
       // POST /api/login  {email, password}
       if (url.pathname === '/api/login' && request.method === 'POST') {
         try {
+          await ensureTables();
           const { email, password } = await request.json();
           if (!email || !password) return json({ error: 'Missing fields' }, 400);
           const normEmail = email.trim().toLowerCase();
@@ -160,6 +171,10 @@ export default {
           return json({ users: results });
         }
         return json({ error: 'Not found' }, 404);
+      }
+
+      if (url.pathname === '/api/debug' && request.method === 'GET') {
+        return json({ hasDB: !!env.DB, binding: env.DB ? 'ok' : 'missing — add D1 binding DB → worldofgeor-db', ts: new Date().toISOString() });
       }
 
       return json({ error: 'Not found' }, 404);

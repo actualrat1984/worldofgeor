@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 </head>
 <body class="bg-ink text-cream">
   <!-- Nav -->
@@ -304,8 +303,9 @@
           const url = mode==='login' ? '/api/login' : '/api/register';
           const body = mode==='login' ? {email,password} : {email,password,inviteCode};
           const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-          const j=await r.json();
-          if(!r.ok) throw new Error(j.error||'Failed');
+          let j={};
+          try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300) || 'Failed'); }
+          if(!r.ok) throw new Error((j.detail? j.error+': '+j.detail : j.error) || 'Failed');
           msg.textContent = mode==='login' ? 'Welcome back — entering…' : 'Registered — entering…';
           msg.className='text-xs text-center min-h-[1.2em] text-green-400';
           setTimeout(()=>{ closeModal(); location.reload(); }, 800);
