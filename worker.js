@@ -129,6 +129,39 @@ export default {
         return json({ ok: true }, 200, { 'Set-Cookie': `geor_token=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0` });
       }
 
+      // --- Admin (only ichieisenheart@gmail.com) ---
+      const isAdmin = async () => {
+        const cookies = parseCookies(request);
+        const token = cookies.geor_token || request.headers.get('Authorization')?.replace('Bearer ', '');
+        if (!token) return false;
+        const p = await verifyJwt(token, secret);
+        return p && p.email === 'ichieisenheart@gmail.com';
+      };
+      if (url.pathname.startsWith('/api/admin/')) {
+        if (!(await isAdmin())) return json({ error: 'Admin only — login as ichieisenheart@gmail.com' }, 403);
+        if (url.pathname === '/api/admin/invites' && request.method === 'GET') {
+          const { results } = await env.DB.prepare('SELECT code, used_by, used_at, created_at FROM invites ORDER BY created_at DESC').all();
+          return json({ invites: results });
+        }
+        if (url.pathname === '/api/admin/invites' && request.method === 'POST') {
+          const { code } = await request.json();
+          if (!code) return json({ error: 'code required' }, 400);
+          const clean = code.trim().toUpperCase().replace(/\s+/g, '_');
+          await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
+          return json({ ok: true, code: clean });
+        }
+        if (url.pathname.startsWith('/api/admin/invites/') && request.method === 'DELETE') {
+          const code = decodeURIComponent(url.pathname.split('/').pop());
+          await env.DB.prepare('DELETE FROM invites WHERE code = ?').bind(code).run();
+          return json({ ok: true });
+        }
+        if (url.pathname === '/api/admin/users' && request.method === 'GET') {
+          const { results } = await env.DB.prepare('SELECT id, email, invite_code, created_at FROM users ORDER BY created_at DESC').all();
+          return json({ users: results });
+        }
+        return json({ error: 'Not found' }, 404);
+      }
+
       return json({ error: 'Not found' }, 404);
     }
 

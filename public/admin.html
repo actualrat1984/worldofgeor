@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+</head>
+<body class="bg-ink text-cream font-sans min-h-screen">
+  <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
+    <div class="max-w-[1000px] mx-auto px-6 h-[56px] flex items-center justify-between">
+      <a href="/" class="font-display tracking-[0.18em] text-xs font-semibold">WORLD OF GE'OR — ADMIN</a>
+      <div class="flex gap-2">
+        <a href="/atlas.html" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">ATLAS</a>
+        <a href="/" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold">← WORLD</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1000px] mx-auto px-6 py-8">
+    <div id="gate" class="rounded-2xl border border-gold/20 bg-cream/[0.03] p-6 text-center">
+      <p class="text-sm">Checking admin… you must be logged in as <b class="text-gold">ichieisenheart@gmail.com</b>.</p>
+      <p class="text-xs text-cream/60 mt-2">Log in on the main site first (ENTER → login), then reopen /admin.html</p>
+      <a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>
+    </div>
+
+    <div id="panel" class="hidden space-y-8">
+      <div class="flex items-center justify-between">
+        <h1 class="font-display text-2xl font-bold">Invite Codes</h1>
+        <span id="me" class="text-xs text-cream/60"></span>
+      </div>
+
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+        <form id="createForm" class="flex gap-2">
+          <input id="newCode" placeholder="NEW_CODE (e.g. ARCADY_2026)" class="flex-1 px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none text-sm" />
+          <button class="bg-gold text-ink px-5 py-2.5 rounded-full text-sm font-semibold hover:brightness-110">Create</button>
+        </form>
+        <p id="createMsg" class="text-xs mt-2 min-h-[1em]"></p>
+      </div>
+
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
+        <div class="px-5 py-3 border-b border-gold/10 flex justify-between items-center">
+          <h3 class="text-sm font-semibold tracking-widest">INVITES</h3>
+          <button id="refreshInv" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+        </div>
+        <div id="invites" class="divide-y divide-gold/10 text-sm"></div>
+      </div>
+
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
+        <div class="px-5 py-3 border-b border-gold/10 flex justify-between items-center">
+          <h3 class="text-sm font-semibold tracking-widest">USERS</h3>
+          <button id="refreshUsers" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+        </div>
+        <div id="users" class="divide-y divide-gold/10 text-sm"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function api(path, opts={}) {
+      const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) } });
+      const j = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(j.error || 'Failed');
+      return j;
+    }
+    async function load(){
+      try{
+        const me = await api('/api/me');
+        if(!me.user || me.user.email !== 'ichieisenheart@gmail.com') throw new Error('not admin');
+        document.getElementById('me').textContent = me.user.email;
+        document.getElementById('gate').classList.add('hidden');
+        document.getElementById('panel').classList.remove('hidden');
+        await refreshInvites();
+        await refreshUsers();
+      } catch(e){
+        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${e.message}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
+      }
+    }
+    async function refreshInvites(){
+      const j = await api('/api/admin/invites');
+      const el = document.getElementById('invites');
+      if(!j.invites.length){ el.innerHTML='<div class="p-4 text-cream/50">No invites</div>'; return; }
+      el.innerHTML = j.invites.map(i=>`
+        <div class="flex items-center justify-between px-5 py-3">
+          <div><b class="text-gold">${i.code}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+i.used_by : 'unused'}</span></div>
+          <button onclick="delInvite('${i.code}')" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
+        </div>
+      `).join('');
+    }
+    async function refreshUsers(){
+      const j = await api('/api/admin/users');
+      const el = document.getElementById('users');
+      if(!j.users.length){ el.innerHTML='<div class="p-4 text-cream/50">No users yet</div>'; return; }
+      el.innerHTML = j.users.map(u=>`
+        <div class="flex items-center justify-between px-5 py-3">
+          <div><b>${u.email}</b> <span class="text-cream/40 text-xs">via ${u.invite_code} • ${new Date(u.created_at).toLocaleDateString()}</span></div>
+        </div>
+      `).join('');
+    }
+    async function delInvite(code){
+      if(!confirm('Delete invite '+code+'?')) return;
+      await api('/api/admin/invites/'+encodeURIComponent(code), { method:'DELETE' });
+      await refreshInvites();
+    }
+    document.getElementById('createForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const code=document.getElementById('newCode').value.trim();
+      if(!code) return;
+      try{ await api('/api/admin/invites',{method:'POST', body:JSON.stringify({code})}); document.getElementById('newCode').value=''; document.getElementById('createMsg').textContent='Created '+code.toUpperCase(); document.getElementById('createMsg').className='text-xs mt-2 text-green-400'; await refreshInvites(); } catch(err){ document.getElementById('createMsg').textContent=err.message; document.getElementById('createMsg').className='text-xs mt-2 text-red-400'; }
+    });
+    document.getElementById('refreshInv').onclick=refreshInvites;
+    document.getElementById('refreshUsers').onclick=refreshUsers;
+    load();
+  </script>
+</body>
+</html>
