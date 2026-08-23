@@ -1,0 +1,19 @@
+{
+  "name": "worldofgeor",
+  "compatibility_date": "2026-08-23",
+  "main": "worker.js",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "worldofgeor-db",
+      "database_id": "REPLACE_WITH_D1_ID_after_create"
+    }
+  ],
+  "vars": {
+    "INVITE_CODE": "WELCOME_TO_GEOR_2026"
+  }
+}

@@ -62,7 +62,7 @@
           Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#world" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Explore the World</a>
+          <button id="openExplore" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Explore the World</button>
           <a href="#atlas" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">View the Atlas</a>
         </div>
         <div class="mt-10 flex flex-wrap gap-2 text-[11px] tracking-widest">
@@ -240,5 +240,90 @@
   </footer>
 
   <script type="module" src="/src/main.js"></script>
+
+  <!-- Login Modal -->
+  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4">
+    <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
+      <button id="closeAuth" class="absolute top-4 right-4 text-cream/60 hover:text-cream">✕</button>
+      <h3 class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
+      <p class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
+      <div class="flex gap-2 mt-4 text-xs">
+        <button id="tabLogin" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
+        <button id="tabRegister" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
+      </div>
+      <form id="authForm" class="mt-5 space-y-3">
+        <input id="authEmail" type="email" placeholder="email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authPassword" type="password" placeholder="password (8+ chars)" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authInvite" type="text" placeholder="invite code (for register)" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <button type="submit" id="authSubmit" class="w-full bg-gradient-to-b from-gold to-amberdeep text-ink py-3 rounded-full text-sm font-semibold hover:brightness-110 transition">Continue</button>
+        <p id="authMsg" class="text-xs text-center min-h-[1.2em]"></p>
+      </form>
+      <p class="text-[11px] text-cream/40 text-center mt-3">Secure — PBKDF2 + D1. Invite codes you control in Cloudflare.</p>
+    </div>
+  </div>
+  <script>
+    (function(){
+      const modal = document.getElementById('authModal');
+      const backdrop = document.getElementById('authBackdrop');
+      const close = document.getElementById('closeAuth');
+      const openBtns = [document.getElementById('openExplore'), document.querySelector('a[href="#atlas"]')?.closest('div')?.querySelector('#openExplore')].filter(Boolean);
+      // Actually bind all ENTER / Explore buttons
+      const triggers = document.querySelectorAll('#openExplore, a[href="#atlas"].bg-gradient-to-b, header a[href="#atlas"]');
+      // Simpler: bind any element with text ENTER or Explore the World
+      document.querySelectorAll('a,button').forEach(el=>{
+        const t = el.textContent.trim();
+        if(t==='ENTER' || t==='Explore the World'){
+          el.addEventListener('click', e=>{ e.preventDefault(); openModal('login'); });
+        }
+      });
+      const tabLogin = document.getElementById('tabLogin');
+      const tabRegister = document.getElementById('tabRegister');
+      const invite = document.getElementById('authInvite');
+      const msg = document.getElementById('authMsg');
+      const form = document.getElementById('authForm');
+      let mode='login';
+      function openModal(m){ mode=m; modal.classList.remove('hidden'); modal.classList.add('flex'); updateTabs(); msg.textContent=''; }
+      function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      function updateTabs(){
+        if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; invite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; invite.style.display='block'; }
+      }
+      tabLogin?.addEventListener('click', ()=>{mode='login'; updateTabs();});
+      tabRegister?.addEventListener('click', ()=>{mode='register'; updateTabs();});
+      close?.addEventListener('click', closeModal);
+      backdrop?.addEventListener('click', closeModal);
+      document.getElementById('menuBtn')?.addEventListener('click', ()=>{}); // keep existing
+      form?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const email=document.getElementById('authEmail').value.trim();
+        const password=document.getElementById('authPassword').value;
+        const inviteCode=document.getElementById('authInvite').value.trim();
+        const btn=document.getElementById('authSubmit');
+        msg.textContent='…';
+        btn.disabled=true;
+        try{
+          const url = mode==='login' ? '/api/login' : '/api/register';
+          const body = mode==='login' ? {email,password} : {email,password,inviteCode};
+          const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+          const j=await r.json();
+          if(!r.ok) throw new Error(j.error||'Failed');
+          msg.textContent = mode==='login' ? 'Welcome back — entering…' : 'Registered — entering…';
+          msg.className='text-xs text-center min-h-[1.2em] text-green-400';
+          setTimeout(()=>{ closeModal(); location.reload(); }, 800);
+        }catch(err){ msg.textContent=err.message; msg.className='text-xs text-center min-h-[1.2em] text-red-400'; }
+        finally{ btn.disabled=false; }
+      });
+      // expose for ENTER link (we changed href to #atlas, intercept)
+      // also fetch /api/me to show logged state
+      fetch('/api/me').then(r=>r.json()).then(j=>{
+        if(j.user){
+          document.querySelectorAll('a,button').forEach(el=>{
+            if(el.textContent.trim()==='ENTER'){ el.textContent=j.user.email.split('@')[0]; el.href='#'; }
+          });
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
