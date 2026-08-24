@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Battlestation — World of Ge'or (Web)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com">
+</script>
 <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',ink2:'#1a1a18',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],serif:['Cormorant Garamond','serif'],sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -61,7 +62,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 <div class="p-3 border-b border-gold/10 shrink-0">
 <div class="relative">
-<input id="vaultSearch" placeholder="Search 720 pages… ( / )" class="w-full bg-cream/5 border border-gold/15 rounded-xl px-3 py-2 pr-8 text-sm placeholder:text-cream/30 focus:border-gold/30 focus:bg-cream/[0.07] outline-none transition"/>
+<input id="vaultSearch" placeholder="Search the vault… ( / )" class="w-full bg-cream/5 border border-gold/15 rounded-xl px-3 py-2 pr-8 text-sm placeholder:text-cream/30 focus:border-gold/30 focus:bg-cream/[0.07] outline-none transition"/>
 <span class="absolute right-2.5 top-2.5 text-[10px] leading-none text-cream/30 border border-gold/15 rounded px-1 py-0.5">/</span>
 </div>
 <div class="flex gap-1 mt-2 flex-wrap">
@@ -102,11 +103,11 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div id="panePreview" class="flex-1 overflow-auto">
 <div class="max-w-[820px] mx-auto p-4 md:p-6">
 <h2 class="font-display text-[22px] leading-none tracking-wide">Welcome to Battlestation Web</h2>
-<p class="text-sm text-cream/60 mt-2.5 leading-relaxed">No install, same login as wiki. Browse the 720-page vault on the left, edit with live preview in the center, and open the world map. Everything stays private behind <code class="text-gold">geor_token</code> — same as <a href="/wiki/" class="text-gold underline">wiki</a>.</p>
+<p class="text-sm text-cream/60 mt-2.5 leading-relaxed">No install, same login as wiki. Browse the vault on the left, edit with live preview in the center, and open the world map. Everything stays private behind <code class="text-gold">geor_token</code> — same as <a href="/wiki/" class="text-gold underline">wiki</a>.</p>
 <div class="mt-6 grid md:grid-cols-3 gap-3">
 <div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4 hover:border-gold/25 hover:bg-cream/[0.05] transition">
 <div class="text-xs tracking-widest text-gold font-medium">VAULT</div>
-<div class="text-sm mt-1.5 leading-relaxed">Search 720 pages. Click any file to preview wiki HTML right here.</div>
+<div class="text-sm mt-1.5 leading-relaxed">Search every page. Click any file to preview wiki HTML right here.</div>
 <div class="text-xs text-cream/40 mt-2" id="vaultPreviewCount">Loading…</div>
 <button data-jump="vault" class="mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">Open Vault →</button>
 </div>
@@ -166,20 +167,22 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 </div>
 
-<div id="paneMaps" class="hidden flex-1 flex-col min-h-0">
+<div id="paneMaps" class="hidden flex-1 flex-col min-h-0 relative">
 <div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0">
 <div class="flex gap-1">
 <button data-map="world" class="mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold">WORLD</button>
 <button data-map="grimmel" class="mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10">GRIMMEL</button>
 </div>
 <div class="flex items-center gap-2">
+<button id="mapReset" class="hidden text-[11px] border border-gold/15 text-cream/60 hover:text-gold hover:border-gold/30 rounded-full px-2.5 py-0.5 transition">RESET</button>
 <span class="hidden sm:inline text-[11px] text-cream/40">Leaflet • CRS.Simple • 3.086 km/px</span>
 <span id="mapScale" class="text-[11px] text-gold border border-gold/15 rounded-full px-2 py-0.5">— km</span>
 </div>
 </div>
 <div id="map" class="flex-1 min-h-[380px] bg-[#0b0b0a]"></div>
+<div id="mapLoading" class="hidden absolute inset-0 top-10 bottom-11 flex items-center justify-center pointer-events-none z-[400]"><div class="text-xs text-cream/50 bg-ink/90 border border-gold/15 rounded-full px-4 py-2 tracking-widest">LOADING MAP…</div></div>
 <div class="px-3 py-2 border-t border-gold/10 bg-ink/60 text-[11px] text-cream/40 flex items-center justify-between">
-<span>Scroll to zoom • drag to pan • <span class="text-gold">WORLD</span> is 16000×8000</span>
+<span>Scroll to zoom • drag to pan • <span class="text-gold">3.086 km/px</span> canon scale</span>
 <a href="/wiki/World/Maps%20and%20Assets/" class="text-gold hover:underline hidden sm:inline">Maps in wiki →</a>
 </div>
 </div>
@@ -404,45 +407,69 @@ function init(){
  updateEditorStats();
 
  // maps
- const map=L.map('map', {crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:0.25, zoomDelta:0.5, attributionControl:true});
- L.control.scale({metric:true, imperial:false, position:'bottomleft'}).addTo(map);
- let currentBounds=null;
- function loadMap(which){
-   map.eachLayer(l=> { if(l instanceof L.ImageOverlay) map.removeLayer(l); });
-   const url= which==='world' ? '/world-map.jpg' : '/grimmel-peninsula.jpg';
-   const fallback= which==='world' ? '/world-map.webp' : '/grimmel-peninsula.webp';
-   const img=new Image(); img.src=url;
-   const onLoad=()=>{
-     const w=img.naturalWidth||16000, h=img.naturalHeight||8000;
-     const bounds=[[0,0],[h,w]];
-     currentBounds=bounds;
-     L.imageOverlay(url, bounds).addTo(map);
-     map.fitBounds(bounds, {padding:[12,12]});
-     const kmW=Math.round(w*3.086), kmH=Math.round(h*3.086);
-     document.getElementById('mapScale').textContent=kmW.toLocaleString()+' × '+kmH.toLocaleString()+' km';
-     // add grimmel marker if world
-     if(which==='world'){
-       // approx grimmel peninsula location — center-ish
-       const cy=h*0.62, cx=w*0.54;
-       L.circleMarker([cy,cx], {radius:6, color:'#d9b77a', fillColor:'#d9b77a', fillOpacity:0.9, weight:1.5}).addTo(map).bindPopup('Grimmel Peninsula • 597 AGD');
-     }
-   };
-   const onErr=()=>{
-     // try webp
-     const img2=new Image(); img2.src=fallback;
-     img2.onload=()=>{ img.src=fallback; onLoad(); };
-     img2.onerror=()=>{ document.getElementById('map').innerHTML='<div class=\"p-8 text-center\"><div class=\"text-sm text-cream/60\">Map image missing</div><div class=\"text-xs text-cream/30 mt-1\">'+url+' not found in /public — add world-map.jpg / grimmel-peninsula.jpg</div></div>'; };
-   };
-   img.onload=onLoad; img.onerror=onErr;
-   if(img.complete && img.naturalWidth) onLoad();
- }
- document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=>{
-   document.querySelectorAll('.mapBtn').forEach(x=> x.className='mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10');
-   b.className='mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold';
-   loadMap(b.dataset.map);
- });
- loadMap('world');
+let map=null, currentBounds=null, lastMap='world';
+function initMap(){
+  if(map) return;
+  map=L.map('map', {crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:0.25, zoomDelta:0.5, attributionControl:true, zoomControl:false});
+  L.control.zoom({position:'bottomright'}).addTo(map);
+}
+function mapBusy(on){ document.getElementById('mapLoading').classList.toggle('hidden', !on); }
+function mapError(msg){
+  let el=document.getElementById('mapError');
+  if(!el){ el=document.createElement('div'); el.id='mapError'; el.className='absolute inset-0 top-10 bottom-11 flex items-center justify-center z-[500]'; document.getElementById('paneMaps').appendChild(el); }
+  el.classList.remove('hidden');
+  el.innerHTML='<div class="text-center bg-ink/95 border border-red-900/40 rounded-xl p-5"><div class="text-sm text-red-200">'+msg+'</div><button id="mapRetry" class="mt-3 text-xs border border-gold/30 text-gold px-4 py-1.5 rounded-full hover:bg-gold/10">Retry</button></div>';
+  el.querySelector('#mapRetry').onclick=()=>{ el.classList.add('hidden'); loadMap(lastMap); };
+}
+function mapClearError(){ const el=document.getElementById('mapError'); if(el) el.classList.add('hidden'); }
+function loadMap(which){
+  lastMap=which;
+  mapBusy(true); mapClearError();
+  initMap();
+  map.eachLayer(l=> { if(l instanceof L.ImageOverlay) map.removeLayer(l); });
+  const url= which==='world' ? '/world-map.jpg' : '/grimmel-peninsula.jpg';
+  const fallback= which==='world' ? '/world-map.webp' : '/grimmel-peninsula.webp';
+  const img=new Image(); img.src=url;
+  const onLoad=()=>{
+    const w=img.naturalWidth||16000, h=img.naturalHeight||8000;
+    const bounds=[[0,0],[h,w]];
+    currentBounds=bounds;
+    mapBusy(false);
+    document.getElementById('mapReset').classList.remove('hidden');
+    L.imageOverlay(url, bounds).addTo(map);
+    map.fitBounds(bounds, {padding:[12,12]});
+    const kmW=Math.round(w*3.086), kmH=Math.round(h*3.086);
+    document.getElementById('mapScale').textContent=kmW.toLocaleString()+' x '+kmH.toLocaleString()+' km';
+    if(which==='world'){
+      const cy=h*0.62, cx=w*0.54;
+      L.circleMarker([cy,cx], {radius:6, color:'#d9b77a', fillColor:'#d9b77a', fillOpacity:0.9, weight:1.5}).addTo(map).bindPopup('Grimmel Peninsula • 597 AGD');
+      L.circleMarker([h*0.30,w*0.48], {radius:5, color:'#b8924a', fillColor:'#b8924a', fillOpacity:0.8, weight:1.2}).addTo(map).bindPopup('Erisdar • primary setting');
+    } else {
+      const cy=h*0.5, cx=w*0.5;
+      L.circleMarker([cy,cx], {radius:6, color:'#d9b77a', fillColor:'#d9b77a', fillOpacity:0.9, weight:1.5}).addTo(map).bindPopup('Grimmel Peninsula • 597 AGD');
+    }
+  };
+  const onErr=()=>{
+    const img2=new Image(); img2.src=fallback;
+    img2.onload=()=>{ img.src=fallback; onLoad(); };
+    img2.onerror=()=>{ mapBusy(false); mapError('Map image missing — '+url); };
+  };
+  img.onload=onLoad; img.onerror=onErr;
+  if(img.complete && img.naturalWidth) onLoad();
+}
+document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=>{
+  document.querySelectorAll('.mapBtn').forEach(x=> x.className='mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10');
+  b.className='mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold';
+  loadMap(b.dataset.map);
+});
+document.getElementById('mapReset').onclick=()=>{ if(map&&currentBounds){ map.fitBounds(currentBounds, {padding:[12,12]}); map.invalidateSize(); } };
+loadMap('world');
+
  showTab('vault');
+  // jump buttons — visible actions (runs after init's assigns)
+  document.querySelectorAll('[data-jump="vault"]').forEach(b=> b.onclick=()=>{ showTab('vault'); const s=document.getElementById('vaultSearch'); s.focus(); s.select(); toast('Vault ready — type to search'); });
+  document.querySelectorAll('.jumpEditor').forEach(b=> b.onclick=()=>{ showTab('editor'); toast('Editor ready'); });
+  document.querySelectorAll('[data-jump="maps"]').forEach(b=> b.onclick=()=>{ showTab('maps'); toast('Map loaded'); });
 }
 </script>
 </body>

@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World of Ge'or — A World Built to Endure</title>
+  <meta name="description" content="World of Ge'or — 1.37× Earth, ringed by the Silver Bride. Three million years of war, shadow and stubborn freedom. A living worldbuilding archive by Mikhail & Ichi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="/Geor_from_orbit-1280.webp" imagesrcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high">
+  <style>html{scroll-padding-top:72px}</style>
+  <script type="module" crossorigin src="/assets/index-DK2n_Hdz.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CrdTOjRH.css">
+</head>
+<body class="bg-ink text-cream">
+  <!-- Nav -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-ink/80 backdrop-blur-md border-b border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
+        <span class="font-display tracking-[0.18em] text-[13px] font-semibold text-cream">WORLD OF GE'OR</span>
+        <span class="hidden sm:inline text-gold/60 text-xs tracking-widest ml-2">EST. 597 AGD</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 text-[13px] tracking-widest font-medium">
+        <a href="#world" class="text-cream/70 hover:text-cream transition">WORLD</a>
+        <a href="#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
+        <a href="/wiki/" class="text-gold hover:text-cream transition">WIKI</a>
+        <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
+        <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
+      </nav>
+      <div class="hidden md:flex items-center gap-3" id="navRight">
+        <button id="deskRequestBtn" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
+        <a id="deskEnterLink" href="#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
+        <div id="deskUserWrap" class="hidden relative">
+          <button id="deskUserBtn" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span class="text-[10px]">▼</span></button>
+          <div id="deskUserMenu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
+            <a href="/dashboard.html" class="block px-4 py-2 text-sm hover:bg-gold/10">Enter Dashboard</a>
+            <a href="/admin.html" id="deskAdminLink" class="hidden block px-4 py-2 text-sm hover:bg-gold/10 text-gold">Admin</a>
+            <button id="deskSettingsBtn" class="w-full text-left px-4 py-2 text-sm hover:bg-gold/10">Settings</button>
+            <div class="border-t border-gold/10 my-1"></div>
+            <button id="deskLogoutBtn" class="w-full text-left px-4 py-2 text-sm hover:bg-gold/10 text-red-300">Logout</button>
+          </div>
+        </div>
+      </div>
+      <button id="menuBtn" class="md:hidden p-2 text-cream/80">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden border-t border-gold/10 bg-ink px-6 py-4 space-y-3">
+      <a href="#world" class="block text-sm tracking-widest text-cream/80">WORLD</a>
+      <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
+      <a href="/wiki/" class="block text-sm tracking-widest text-gold">WIKI</a>
+      <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
+      <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
+      <button id="mobRequestBtn" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
+      <div id="mobUserWrap" class="hidden mt-3 border-t border-gold/10 pt-3 space-y-2">
+        <div class="text-xs text-gold tracking-widest" id="mobUserName">USER</div>
+        <a href="/dashboard.html" class="block text-sm text-cream">Enter Dashboard</a>
+        <a href="/admin.html" id="mobAdminLink" class="hidden block text-sm text-gold">Admin</a>
+        <button id="mobLogoutBtn" class="block text-sm text-red-300">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
+    <div class="absolute inset-0">
+      <picture>
+        <source type="image/webp" srcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" sizes="100vw">
+        <img src="/Geor_from_orbit.png" alt="Ge'or from orbit — the Silver Bride, a thin fragmented debris ring" class="w-full h-full object-cover object-[center_35%]" fetchpriority="high" decoding="async" onerror="this.style.display='none'" width="1920" height="1080" />
+      </picture>
+      <div class="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/40 to-ink"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"></div>
+    </div>
+    <div class="relative max-w-[1280px] mx-auto px-6 w-full py-16 md:py-24">
+      <div class="max-w-[620px]">
+        <p class="text-gold tracking-[0.32em] text-[11px] font-semibold mb-4">A WORLD 1.37× OLD EARTH • RINGED BY THE SILVER BRIDE</p>
+        <h1 class="font-display text-[42px] md:text-[64px] leading-[0.95] font-bold tracking-tight">
+          A WORLD<br/>
+          <span class="font-serif font-normal italic text-gold">forged</span> THROUGH<br/>
+          THREE MILLION<br/>
+          YEARS OF WAR.
+        </h1>
+        <p class="mt-5 text-[16px] leading-7 text-cream/80 max-w-[520px] font-light">
+          Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <button id="openExplore" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Explore the World</button>
+          <a href="#atlas" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">View the Atlas</a>
+        </div>
+        <div class="mt-10 flex flex-wrap gap-2 text-[11px] tracking-widest">
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">60+</b> PEOPLES</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">12</b> AGES</span>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-ink to-transparent"></div>
+  </section>
+
+  <!-- Trust / Manifesto bar -->
+  <section class="border-y border-gold/10 bg-cream/[0.02]">
+    <div class="max-w-[1280px] mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.22em] text-cream/60">
+      <span>BUILT BY MIKHAIL & ICHI — SINCE MAY 2026</span>
+      <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
+      <span>PRIVATE ARCHIVE • INVITE ONLY • BUILT TO ENDURE</span>
+      <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
+      <span class="text-gold">WORLDOFGEOR.COM</span>
+    </div>
+  </section>
+
+  <!-- Three pillars -->
+  <section id="world" class="max-w-[1280px] mx-auto px-6 py-16 md:py-24">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◈</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">SCALE THAT MATTERS</h3>
+        <p class="text-sm leading-6 text-cream/70">1.37× Earth, 1.26 AU from Golias, a ring torn from its moon. Every continent has a climate, a trade, a lie it tells itself. Nothing is filler.</p>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◎</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">MEMORY THAT LASTS</h3>
+        <p class="text-sm leading-6 text-cream/70">Twelve ages from the Lost Era to the Age of Strife. 3M years of Shadow conspiracy, filed, cross-linked and guarded. No retcons, no orphans.</p>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
+        <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">⬢</div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">FREEDOM AS PHYSICS</h3>
+        <p class="text-sm leading-6 text-cream/70">Magic is not divine — it is mage-cells. Souls recycle. The Shadows weaponized it. Free people weaponized refusal. That is the thesis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Atlas split -->
+  <section id="atlas" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <div class="rounded-[20px] overflow-hidden border border-gold/15 bg-ink">
+      <div class="grid lg:grid-cols-[1.35fr_0.85fr]">
+        <div class="relative min-h-[420px] bg-[#0b0b0a] flex items-center justify-center overflow-hidden">
+          <picture class="w-full h-full">
+            <source type="image/webp" srcset="/Geor_World.webp">
+            <img src="/Geor_World.png" alt="Ge'or valley — river, castle and cliffs under the Silver Bride" class="w-full h-full object-cover opacity-90" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\'p-12 text-center text-cream/50 text-sm\'>Valley view — Geor_World.png</div>'" width="1376" height="768" />
+          </picture>
+          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full text-[11px] tracking-widest border border-gold/20">VALLEY VIEW • GRIMMEL PENINSULA • 597 AGD</div>
+        </div>
+        <div class="p-8 md:p-10 flex flex-col justify-center">
+          <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">THE ATLAS</p>
+          <h2 class="font-display text-[30px] leading-[1.05] font-bold">17 CONTINENTS.<br/>ONE COHERENT WORLD.</h2>
+          <p class="mt-4 text-sm leading-6 text-cream/70">
+            Under the Silver Bride — a thin, shattered ring torn from the third moon, not a solid Saturn band — 17 continents await. Commissioned by Archduke Hermes Kennensbach, Cartographer Office of the Erisian Empire — 0–8000 km scale, 16-point compass. Every border is canon.
+          </p>
+          <ul class="mt-6 space-y-2.5 text-sm text-cream/80">
+            <li class="flex gap-3"><span class="text-gold">—</span> 17 continents / landmasses, 8 seas, 3 moons + the Bride</li>
+            <li class="flex gap-3"><span class="text-gold">—</span> Political map at 3.086 km / pixel • ~49,400 km world</li>
+            <li class="flex gap-3"><span class="text-gold">—</span> World map & Grimmel zoom — choose your view in the Atlas</li>
+          </ul>
+          <a href="/atlas.html" class="mt-7 inline-flex w-fit border border-gold/30 text-gold px-5 py-2.5 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">OPEN ATLAS PREVIEW</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="history" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <div class="flex items-end justify-between gap-4 mb-8">
+      <div>
+        <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">CHRONOLOGY</p>
+        <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">TWELVE AGES OF GE'OR</h2>
+      </div>
+      <p class="hidden md:block text-sm text-cream/60 max-w-[360px] text-right">From the Great Divergence (Year 0) to 597 AGD — the present. No gaps, no ghosts.</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="ageGrid">
+      <button data-age="0" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 0</div>
+        <div class="font-serif text-[15px] font-semibold">The Lost Era</div>
+        <div class="text-xs text-cream/60 mt-1">15,000 — 2,000 BGD</div>
+      </button>
+      <button data-age="1" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 1–3</div>
+        <div class="font-serif text-[15px] font-semibold">Nomads to Empires</div>
+        <div class="text-xs text-cream/60 mt-1">Kingdoms, tribes, first cities</div>
+      </button>
+      <button data-age="4" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 4–6</div>
+        <div class="font-serif text-[15px] font-semibold">Dragons & Divergence</div>
+        <div class="text-xs text-cream/60 mt-1">The Groom forms • Year 0</div>
+      </button>
+      <button data-age="7" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 7–9</div>
+        <div class="font-serif text-[15px] font-semibold">Eris Ascendant</div>
+        <div class="text-xs text-cream/60 mt-1">Empire, crusades, schism</div>
+      </button>
+      <button data-age="10" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 10–11</div>
+        <div class="font-serif text-[15px] font-semibold">The Fracturing</div>
+        <div class="text-xs text-cream/60 mt-1">Present • 597 AGD</div>
+      </button>
+      <button data-age="12" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 bg-gradient-to-br from-gold/10 to-transparent hover:border-gold/30 transition focus:outline-none focus:border-gold/40">
+        <div class="text-[11px] tracking-widest text-gold">AGE 12</div>
+        <div class="font-serif text-[15px] font-semibold">Age of Strife</div>
+        <div class="text-xs text-cream/60 mt-1">Future • unwritten</div>
+      </button>
+    </div>
+  </section>
+
+  <!-- Age drawer (private archive teaser) -->
+  <div id="ageDrawer" class="hidden max-w-[1280px] mx-auto px-6 -mt-8 pb-16 md:pb-24">
+    <div class="rounded-2xl border border-gold/20 bg-[#1a1a18] p-6 md:p-7 flex justify-between gap-6">
+      <div>
+        <p id="ageDrawerKicker" class="text-gold text-[11px] tracking-[0.28em] font-semibold"></p>
+        <h3 id="ageDrawerTitle" class="font-display text-[22px] font-bold mt-1"></h3>
+        <p id="ageDrawerText" class="text-sm leading-6 text-cream/70 mt-2 max-w-[640px]"></p>
+        <div id="ageDrawerMeta" class="text-xs text-cream/50 mt-3"></div>
+        <button id="ageDrawerEnter" class="mt-4 inline-flex border border-gold/30 text-gold px-5 py-2 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">ENTER ARCHIVE →</button>
+      </div>
+      <button id="ageDrawerClose" class="self-start text-cream/60 hover:text-cream text-xl leading-none" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <!-- Gallery / Peoples -->
+  <section id="gallery" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+    <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">PEOPLES & POWERS</p>
+    <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mb-8">A WORLD THAT BREATHES.</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <picture><source type="image/webp" srcset="/panel-erisia.webp"><img src="/panel-erisia.jpg" alt="Erisian Empire — gothic imperial capital on the hill, flags of the dragon" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">THE ERISIAN EMPIRE</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Three duchies, 30 counties, draconic law and elven memory. The sword of Eris is dulling.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <picture><source type="image/webp" srcset="/panel-kobre.webp"><img src="/panel-kobre.jpg" alt="Kobre — brass gear-towers and clockwork forges" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">KOBRE & THE GEAR</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Every tooth is law. Four nations measuring the world in brass, coal and debt.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
+        <picture><source type="image/webp" srcset="/panel-lumina.webp"><img src="/panel-lumina.jpg" alt="Lumina — canopy villages in the luminous forest" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">LUMINA</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Ten nations in the trees, where light is currency and the ground is myth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="max-w-[860px] mx-auto px-6 pb-16 md:pb-24 text-center">
+    <div class="text-gold/40 text-3xl mb-4">“</div>
+    <blockquote class="font-serif text-[24px] md:text-[32px] leading-[1.25] text-cream">
+      The Shadows are losing to the fact that <span class="text-gold italic">free people keep refusing to stay dead.</span>
+    </blockquote>
+    <p class="mt-4 text-xs tracking-[0.24em] text-cream/50">— ARCHIVE OF THE TRAVELER, RUINS OF BAOTH</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-[1280px] mx-auto px-6 pb-16">
+    <div class="rounded-[20px] bg-gradient-to-br from-gold to-amberdeep p-[1px]">
+      <div class="rounded-[19px] bg-ink px-8 md:px-12 py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div>
+          <h3 class="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-cream">This world is private.</h3>
+          <p class="mt-2 text-sm leading-6 text-cream/70 max-w-[560px]">World of Ge'or is an invite-only archive. If you were given a link, you’re already on the list. If not — request access and we’ll get back to you.</p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+          <button id="ctaRequestBtn" class="bg-cream text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-white transition">Request Access</button>
+          <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium hover:bg-cream/10 transition">Email Mikhail</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs tracking-widest">
+      <span class="text-cream/50">© <span id="year"></span> WORLD OF GE'OR — BY MIKHAIL & ICHI</span>
+      <span class="text-cream/35">BUILT TO ENDURE • SLATE / AMBER • PRIVATE ARCHIVE</span>
+      <span class="text-gold/60">WORLDOFGEOR.COM</span>
+    </div>
+  </footer>
+
+
+
+  <!-- Request Access Modal -->
+  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="requestTitle">
+    <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
+      <button id="closeRequest" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <h3 id="requestTitle" class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
+      <p class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
+      <form id="requestForm" class="mt-5 space-y-3">
+        <input id="reqEmail" type="email" placeholder="your email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none resize-none"></textarea>
+        <button type="submit" id="reqSubmit" class="w-full bg-cream text-ink py-3 rounded-full text-sm font-semibold hover:bg-white transition">Send Request</button>
+        <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]"></p>
+      </form>
+      <p class="text-[11px] text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="authTitle">
+    <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
+      <button id="closeAuth" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <h3 id="authTitle" class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
+      <p class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
+      <div class="flex gap-2 mt-4 text-xs">
+        <button id="tabLogin" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
+        <button id="tabRegister" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
+      </div>
+      <form id="authForm" class="mt-5 space-y-3">
+        <input id="authEmail" type="email" placeholder="email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authPassword" type="password" placeholder="password (8+ chars)" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authInvite" type="text" placeholder="invite code (for register)" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <button type="submit" id="authSubmit" class="w-full bg-gradient-to-b from-gold to-amberdeep text-ink py-3 rounded-full text-sm font-semibold hover:brightness-110 transition">Continue</button>
+        <p id="authMsg" class="text-xs text-center min-h-[1.2em]"></p>
+        </form>
+    </div>
+  </div>
+  <script>
+    (function(){
+      let currentUser = null;
+      const authModal = document.getElementById('authModal');
+      const authBackdrop = document.getElementById('authBackdrop');
+      const closeAuth = document.getElementById('closeAuth');
+      const tabLogin = document.getElementById('tabLogin');
+      const tabRegister = document.getElementById('tabRegister');
+      const authInvite = document.getElementById('authInvite');
+      const authMsg = document.getElementById('authMsg');
+      const authForm = document.getElementById('authForm');
+      const requestModal = document.getElementById('requestModal');
+      const requestBackdrop = document.getElementById('requestBackdrop');
+      const closeRequest = document.getElementById('closeRequest');
+      const requestForm = document.getElementById('requestForm');
+      const reqMsgOut = document.getElementById('reqMsgOut');
+      let mode='login';
+      // a11y helpers — body lock + focus trap
+      function lockBody(){ document.body.style.overflow='hidden' }
+      function unlockBody(){ document.body.style.overflow='' }
+      function trapFocus(modal){
+        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if(!focusable.length) return;
+        const first = focusable[0], last = focusable[focusable.length-1];
+        function onTab(e){
+          if(e.key !== 'Tab') return;
+          if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+        modal._trapHandler = onTab;
+        modal.addEventListener('keydown', onTab);
+        first.focus();
+      }
+      function releaseTrap(modal){
+        if(modal._trapHandler){ modal.removeEventListener('keydown', modal._trapHandler); delete modal._trapHandler; }
+      }
+      function openAuth(m){ mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
+      function closeAuthModal(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); unlockBody(); }
+      function updateTabs(){
+        if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='block'; }
+      }
+      function openRequest(){ requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); requestModal.setAttribute('aria-hidden','false'); reqMsgOut.textContent=''; lockBody(); trapFocus(requestModal); }
+      function closeRequestModal(){ requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); requestModal.setAttribute('aria-hidden','true'); releaseTrap(requestModal); unlockBody(); }
+      tabLogin?.addEventListener('click', ()=>{mode='login'; updateTabs();});
+      tabRegister?.addEventListener('click', ()=>{mode='register'; updateTabs();});
+      closeAuth?.addEventListener('click', closeAuthModal);
+      authBackdrop?.addEventListener('click', closeAuthModal);
+      closeRequest?.addEventListener('click', closeRequestModal);
+      requestBackdrop?.addEventListener('click', closeRequestModal);
+      document.getElementById('deskRequestBtn')?.addEventListener('click', openRequest);
+      document.getElementById('mobRequestBtn')?.addEventListener('click', openRequest);
+      document.getElementById('ctaRequestBtn')?.addEventListener('click', openRequest);
+      // mobile menu handled in src/main.js (hide-on-scroll, outside-ESC, link-close)
+      // age drawer — private archive teaser (no vault data exposed)
+      const AGE_DATA = {
+        '0': { kicker:'AGE 0 • 15,000 — 2,000 BGD', title:'The Lost Era', text:'Before canon. Mage-cells emerge, first peoples scatter. Everything the later empires call "divine" is rubble from here.', meta:'Key: Baoth ruins • Traveler archive • no empire yet' },
+        '1': { kicker:'AGE 1–3 • 2,000 BGD — 800 BGD', title:'Nomads to Empires', text:'Tribes become kingdoms. The Erisian plain unites under dragon law; Kobre learns to count in brass. First cities, first conspiracies.', meta:'Key: Eris plain • Kobre gear-cult • first duchies' },
+        '4': { kicker:'AGE 4–6 • 800 BGD — Year 0', title:'Dragons & Divergence', text:'The Groom forms from the third moon — the Silver Bride is born. Year 0, the calendar resets. Dragons pick sides.', meta:'Key: Groom formation • Year 0 • Silver Bride visible' },
+        '7': { kicker:'AGE 7–9 • 0 — 411 AGD', title:'Eris Ascendant', text:'Eris at its height. Three duchies, crusades, schism. The Shadows learn that mage-cells can be farmed.', meta:'Key: 30 counties • crusades • schism • Shadows weaponize mage-cells' },
+        '10': { kicker:'AGE 10–11 • 411 — 597 AGD • PRESENT', title:'The Fracturing', text:'The Sword dulls. 300 nations now, no center. 597 AGD is today — you are here. Free people refuse to stay dead.', meta:'Present • 300 nations • 17 continents • 59k entries' },
+        '12': { kicker:'AGE 12 • FUTURE', title:'Age of Strife — Unwritten', text:'Not canon yet. When it starts, it will not start with a trumpet. It starts with a stubborn "no".', meta:'Future • unwritten • your play is here' }
+      };
+      const ageDrawer = document.getElementById('ageDrawer');
+      const ageKicker = document.getElementById('ageDrawerKicker');
+      const ageTitle = document.getElementById('ageDrawerTitle');
+      const ageText = document.getElementById('ageDrawerText');
+      const ageMeta = document.getElementById('ageDrawerMeta');
+      const ageClose = document.getElementById('ageDrawerClose');
+      const ageEnter = document.getElementById('ageDrawerEnter');
+      document.querySelectorAll('.age-card').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const d = AGE_DATA[btn.dataset.age];
+          if(!d) return;
+          ageKicker.textContent = d.kicker;
+          ageTitle.textContent = d.title;
+          ageText.textContent = d.text;
+          ageMeta.textContent = d.meta;
+          ageDrawer.classList.remove('hidden');
+          ageDrawer.scrollIntoView({behavior:'smooth', block:'nearest'});
+          // highlight active
+          document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40'));
+          btn.classList.add('border-gold/40');
+        });
+      });
+      ageClose?.addEventListener('click', ()=>{ ageDrawer.classList.add('hidden'); document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40')); });
+      ageEnter?.addEventListener('click', ()=>{ if(currentUser) location.href='/dashboard.html'; else openAuth('login'); });
+      // auth form
+      authForm?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const email=document.getElementById('authEmail').value.trim();
+        const password=document.getElementById('authPassword').value;
+        const inviteCode=document.getElementById('authInvite').value.trim();
+        const btn=document.getElementById('authSubmit');
+        authMsg.textContent='…';
+        btn.disabled=true;
+        try{
+          const url = mode==='login' ? '/api/login' : '/api/register';
+          const body = mode==='login' ? {email,password} : {email,password,inviteCode};
+          const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+          let j={};
+          try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300) || 'Failed'); }
+          if(!r.ok) throw new Error((j.detail? j.error+': '+j.detail : j.error) || 'Failed');
+          const qp = new URLSearchParams(location.search);
+          const nxt = qp.get('next');
+          const dest = nxt ? decodeURIComponent(nxt) : '/dashboard.html';
+          authMsg.textContent = mode==='login' ? ('Welcome — entering ' + (nxt ? dest : 'dashboard') + '…') : ('Registered — entering ' + (nxt ? dest : 'dashboard') + '…');
+          authMsg.className='text-xs text-center min-h-[1.2em] text-green-400';
+          setTimeout(()=>{ location.href=dest; }, 700);
+        }catch(err){ authMsg.textContent=err.message; authMsg.className='text-xs text-center min-h-[1.2em] text-red-400'; }
+        finally{ btn.disabled=false; }
+      });
+      // request form
+      requestForm?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const email=document.getElementById('reqEmail').value.trim();
+        const message=document.getElementById('reqMsg').value.trim();
+        const btn=document.getElementById('reqSubmit');
+        reqMsgOut.textContent='…';
+        btn.disabled=true;
+        try{
+          const r=await fetch('/api/request-access',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,message})});
+          let j={}; try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300)); }
+          if(!r.ok) throw new Error(j.error||'Failed');
+          reqMsgOut.textContent='Request sent — we will email you an invite code.';
+          reqMsgOut.className='text-xs text-center min-h-[1.2em] text-green-400';
+          setTimeout(closeRequestModal, 1600);
+        }catch(err){ reqMsgOut.textContent=err.message; reqMsgOut.className='text-xs text-center min-h-[1.2em] text-red-400'; }
+        finally{ btn.disabled=false; }
+      });
+      // nav actions - handle logged-in vs logged-out
+      const openExplore = document.getElementById('openExplore');
+      const deskEnterLink = document.getElementById('deskEnterLink');
+      const deskUserWrap = document.getElementById('deskUserWrap');
+      const deskUserBtn = document.getElementById('deskUserBtn');
+      const deskUserMenu = document.getElementById('deskUserMenu');
+      const deskRequestBtn = document.getElementById('deskRequestBtn');
+      const deskAdminLink = document.getElementById('deskAdminLink');
+      const deskUserName = document.getElementById('deskUserName');
+      const mobUserWrap = document.getElementById('mobUserWrap');
+      const mobUserName = document.getElementById('mobUserName');
+      const mobAdminLink = document.getElementById('mobAdminLink');
+      function applyUser(user){
+        currentUser = user;
+        if(user){
+          const short = user.email.split('@')[0];
+          if(deskEnterLink) deskEnterLink.classList.add('hidden');
+          if(deskRequestBtn) deskRequestBtn.classList.add('hidden');
+          if(deskUserWrap){ deskUserWrap.classList.remove('hidden'); }
+          if(deskUserName) deskUserName.textContent = short;
+          if(mobUserWrap){ mobUserWrap.classList.remove('hidden'); }
+          if(mobUserName) mobUserName.textContent = user.email;
+          // admin link
+          if(user.email === 'ichieisenheart@gmail.com'){
+            deskAdminLink?.classList.remove('hidden');
+            mobAdminLink?.classList.remove('hidden');
+          }
+          // CTA request hide
+          document.getElementById('ctaRequestBtn')?.classList.add('hidden');
+          // clicking Explore when logged in -> dashboard
+          openExplore?.addEventListener('click', (e)=>{ e.preventDefault(); location.href='/dashboard.html'; }, {once:true});
+        } else {
+          // logged out: Explore opens auth
+          openExplore?.addEventListener('click', (e)=>{ e.preventDefault(); openAuth('login'); });
+          deskEnterLink?.addEventListener('click', (e)=>{ e.preventDefault(); openAuth('login'); });
+        }
+      }
+      // dropdown toggle
+      deskUserBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); deskUserMenu.classList.toggle('hidden'); });
+      document.addEventListener('click', ()=> deskUserMenu?.classList.add('hidden'));
+      // settings & logout
+      document.getElementById('deskSettingsBtn')?.addEventListener('click', ()=> location.href='/dashboard.html#settings');
+      document.getElementById('deskLogoutBtn')?.addEventListener('click', async ()=>{
+        await fetch('/api/logout',{method:'POST'});
+        location.href='/';
+      });
+      document.getElementById('mobLogoutBtn')?.addEventListener('click', async ()=>{
+        await fetch('/api/logout',{method:'POST'});
+        location.href='/';
+      });
+      // ESC closes modals
+      document.addEventListener('keydown', e=>{
+        if(e.key==='Escape'){ closeAuthModal(); closeRequestModal(); deskUserMenu?.classList.add('hidden'); }
+      });
+      // fetch me
+      fetch('/api/me').then(r=>r.json()).then(j=>{
+        if(j.user) applyUser(j.user);
+        else applyUser(null);
+      }).catch(()=> applyUser(null));
+      // If URL has #atlas and logged in, allow atlas view; otherwise keep Explore handling
+      // Expose openAuth globally for other buttons
+      window.openAuth = openAuth;
+      window.openRequest = openRequest;
+    })();
+  </script>
+
+</body>
+</html>

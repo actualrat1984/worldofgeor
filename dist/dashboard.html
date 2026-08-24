@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+</head>
+<body class="bg-ink text-cream font-sans min-h-screen">
+  <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
+    <div class="max-w-[1100px] mx-auto px-6 h-[56px] flex items-center justify-between">
+      <a href="/" class="font-display tracking-[0.18em] text-xs font-semibold">WORLD OF GE'OR — DASHBOARD</a>
+      <div class="flex items-center gap-2">
+        <span id="who" class="text-xs text-cream/60 hidden"></span>
+        <a href="/wiki/" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">WIKI</a>
+        <a href="/app/" class="text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">APP</a>
+        <a href="/atlas.html" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">ATLAS</a>
+        <a href="/" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">WORLD</a>
+        <button id="logout" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold">Logout</button>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-[1100px] mx-auto px-6 py-8 space-y-6">
+    <div id="gate" class="rounded-2xl border border-gold/20 bg-cream/[0.03] p-8 text-center">
+      <p class="text-sm">Checking access…</p>
+    </div>
+    <div id="dash" class="hidden space-y-6">
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-6">
+        <h1 class="font-display text-2xl font-bold">Welcome, <span id="dashName" class="text-gold">—</span></h1>
+        <p class="text-sm text-cream/60 mt-1">You are inside. Invite-only archive — 17 continents, 12 ages, Silver Bride overhead.</p>
+        <div class="flex gap-2 mt-4 flex-wrap">
+          <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 720 pages</a>
+          <a href="/app/" class="text-xs border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10">Open Battlestation →</a>
+          <a href="/atlas.html" class="text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Open Atlas</a>
+          <a href="/admin.html" id="adminLink" class="hidden text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Admin</a>
+          <button id="copyInvite" class="hidden text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Copy my invite: WELCOME_TO_GEOR_2026</button>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">ATLAS</h3>
+          <p class="text-sm text-cream/70 mt-2">World map + Grimmel zoom. 597 AGD, 0–8000 km, 16-point compass.</p>
+          <a href="/atlas.html" class="inline-block mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">Open →</a>
+        </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">WIKI — PRIVATE ARCHIVE</h3>
+          <p class="text-sm text-cream/70 mt-2">720 pages, 15 hubs. Search, read, no public leak — same login as here.</p>
+          <a href="/wiki/" class="inline-block mt-3 text-xs bg-gold text-ink px-3 py-1.5 rounded-full font-semibold">Enter Wiki →</a>
+        </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">BATTLESTATION</h3>
+          <p class="text-sm text-cream/70 mt-2">Vault, editor, maps, XP — web version of your desktop Battlestation. No install.</p>
+          <a href="/app/" class="inline-block mt-3 text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">Open App →</a>
+        </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5" id="settings">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">SETTINGS</h3>
+          <div class="mt-3 space-y-2 text-sm">
+            <div class="text-cream/70">Email: <span id="setEmail" class="text-cream">—</span></div>
+            <button id="changePwBtn" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">Change password (soon)</button>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+        <h3 class="text-sm font-semibold tracking-widest">What’s inside</h3>
+        <ul class="mt-3 text-sm text-cream/70 list-disc ml-4 space-y-1">
+          <li>Private archive — invite-only, you own the DB</li>
+          <li>Request queue → Admin approves → invite code emailed</li>
+          <li>All future lore pages gated behind this login</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  <script>
+    async function api(path, opts={}) {
+      const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) } });
+      const j = await r.json().catch(()=>({}));
+      if (!r.ok) throw new Error(j.error||'Failed');
+      return j;
+    }
+    const gate=document.getElementById('gate');
+    const dash=document.getElementById('dash');
+    const who=document.getElementById('who');
+    fetch('/api/me').then(r=>r.json()).then(j=>{
+      if(!j.user){ gate.innerHTML='<p class="text-sm text-red-400">Not logged in — <a href="/" class="text-gold underline">go log in</a></p>'; return; }
+      gate.classList.add('hidden');
+      dash.classList.remove('hidden');
+      who.textContent=j.user.email;
+      who.classList.remove('hidden');
+      document.getElementById('dashName').textContent=j.user.email.split('@')[0];
+      document.getElementById('setEmail').textContent=j.user.email;
+      if(j.user.email==='ichieisenheart@gmail.com'){
+        document.getElementById('adminLink').classList.remove('hidden');
+        document.getElementById('copyInvite').classList.remove('hidden');
+      }
+    });
+    document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
+    document.getElementById('copyInvite').onclick=()=>{
+      navigator.clipboard.writeText('WELCOME_TO_GEOR_2026');
+      const b=document.getElementById('copyInvite'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy my invite: WELCOME_TO_GEOR_2026',1500);
+    };
+    document.getElementById('changePwBtn').onclick=()=> alert('Password change coming next — for now create a new invite and re-register if needed.');
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas — World of Ge'or</title>
+  <meta name="description" content="Choose your map — World of Ge'or (597 AGD) or Grimmel Peninsula. Political maps by the Cartographer Office of the Erisian Empire." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ink: '#0f0e0d', cream: '#f2e8d0', gold: '#d9b77a', amberdeep: '#b8924a' }, fontFamily: { display: ['Cinzel','serif'], sans: ['Inter','sans-serif'] } } } }
+  </script>
+  <style>body{background:#0f0e0d;color:#f2e8d0}</style>
+</head>
+<body class="bg-ink text-cream font-sans">
+  <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
+        <span class="font-display tracking-[0.18em] text-[13px] font-semibold">WORLD OF GE'OR</span>
+      </a>
+      <a href="/" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← BACK TO WORLD</a>
+    </div>
+  </header>
+
+  <section class="max-w-[1280px] mx-auto px-6 py-12 md:py-16">
+    <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">CARTOGRAPHER OFFICE • 597 AGD</p>
+    <h1 class="font-display text-[36px] md:text-[48px] font-bold tracking-tight leading-[0.95] mt-2">CHOOSE YOUR MAP</h1>
+    <p class="mt-4 text-cream/70 max-w-[640px] leading-7">Two views of the same world. The World Map shows all 17 continents at 3.086 km / pixel. The Grimmel Peninsula is the zoom where Mikhail and Ichi will awaken — streets, forests and the war’s edge at statue level. Tap a card to open the full-resolution map.</p>
+
+    <div class="grid md:grid-cols-2 gap-6 mt-10">
+      <!-- World map -->
+      <a href="/world-map.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+        <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
+          <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" />
+          <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">WORLD MAP • 16000×8000 • 597 AGD</div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display tracking-widest text-sm font-semibold">WORLD MAP — POLITICAL</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">All 17 continents, 15 + 2 archipelagos, 8 seas. Commissioned by Archduke Hermes Kennensbach. 0–8000 km scale, 16-point compass. Full view: 3840×1920 (≈ 0.95 MB).</p>
+          <span class="inline-flex mt-4 text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full group-hover:bg-gold/10 transition">OPEN FULL MAP →</span>
+        </div>
+      </a>
+
+      <!-- Grimmel -->
+      <a href="/grimmel-peninsula.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+        <div class="relative aspect-[1.49/1] overflow-hidden bg-[#0b0b0a]">
+          <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500" />
+          <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">GRIMMEL PENINSULA • STATUE LEVEL ZOOM</div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display tracking-widest text-sm font-semibold">GRIMMEL PENINSULA</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">The peninsula where the story breathes. Forests, roads, the Mann Order frontier — drawn to place every statue and grove. Full view: 3840×5715 (≈ 1.89 MB).</p>
+          <span class="inline-flex mt-4 text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold group-hover:brightness-110 transition">OPEN GRIMMEL →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="mt-10 rounded-xl border border-gold/10 bg-cream/[0.03] p-5 text-sm text-cream/60 leading-6">
+      <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews — the vault holds the 57 MB / 43 MB masters for battlestation tiling at <code class="text-gold/80">C:\Users\pc\Downloads\Map</code>.
+    </div>
+  </section>
+
+  <footer class="border-t border-gold/10 mt-8">
+    <div class="max-w-[1280px] mx-auto px-6 py-6 text-xs tracking-widest text-cream/40 flex justify-between">
+      <span>© <span id="y"></span> WORLD OF GE'OR</span>
+      <span class="text-gold/60">ATLAS • 597 AGD</span>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
+</html>
