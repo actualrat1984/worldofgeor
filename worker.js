@@ -95,6 +95,24 @@ function sanitizeAdditionsPath(p) {
   }
   return parts.join('/');
 }
+function sanitizeFolderPath(p) {
+  if (p == null) return null;
+  p = String(p).trim().replace(/^\/+/, '').replace(/\/+$/, '');
+  if (!p) return null;
+  if (p.includes('..') || p.includes('\\')) return null;
+  if (!/^[A-Za-z0-9._\-\/ ]+$/.test(p)) return null;
+  if (p.length > 180) return null;
+  if (p.startsWith('.') || p.startsWith('/')) return null;
+  if (p.includes('//')) return null;
+  const parts = p.split('/').map(s => s.trim()).filter(Boolean);
+  if (!parts.length) return null;
+  for (const seg of parts) {
+    if (seg.length > 80) return null;
+    if (seg === '.' || seg === '..') return null;
+    if (seg.startsWith('.')) return null;
+  }
+  return parts.join('/');
+}
 function b64EncodeUtf8(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = '';
@@ -443,6 +461,42 @@ export default {
           return json({ ok: true, path: p });
         } catch (e) {
           return json({ error: 'Delete failed', detail: String(e).slice(0,800) }, 500);
+        }
+      }
+
+      // POST /api/additions/mkdir {path} -> create folder via .gitkeep
+      if (url.pathname === '/api/additions/mkdir' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Auth required' }, 401);
+        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        let body; try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+        const raw = (body.path || '').trim();
+        const folder = sanitizeFolderPath(raw);
+        if (!folder) return json({ error: 'Invalid folder — use A-Z 0-9 _ - / and space, e.g. lore/characters' }, 400);
+        const keepPath = folder + '/.gitkeep';
+        try {
+          // if folder already has any file, no need to create keep
+          const treeRes = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/git/trees/${ADDITIONS_BRANCH}?recursive=1`, { method: 'GET' }, env);
+          if (treeRes.ok) {
+            const tj = await treeRes.json();
+            const hasContent = (tj.tree||[]).some(n => n.path === keepPath || n.path.startsWith(folder + '/'));
+            if (hasContent) return json({ ok: true, path: folder, existed: true });
+          } else {
+            // fallback check via contents
+            const c = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(keepPath).replace(/%2F/g,'/')}?ref=${ADDITIONS_BRANCH}`, { method: 'GET' }, env);
+            if (c.ok) return json({ ok: true, path: folder, existed: true });
+          }
+          const b64 = b64EncodeUtf8('');
+          const put = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(keepPath).replace(/%2F/g,'/')}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: `create folder ${folder} — by ${user.email}`, content: b64, branch: ADDITIONS_BRANCH })
+          }, env);
+          if (!put.ok) { const t = await put.text(); return json({ error: 'GitHub mkdir failed', detail: t.slice(0,700) }, 502); }
+          const pj = await put.json();
+          return json({ ok: true, path: folder, sha: pj.content?.sha });
+        } catch (e) {
+          return json({ error: 'Mkdir failed', detail: String(e).slice(0,700) }, 500);
         }
       }
 
