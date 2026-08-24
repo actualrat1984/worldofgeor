@@ -239,7 +239,7 @@ export default {
     }
 
     // --- Gated archive: /wiki/*, /atlas.html, /dashboard.html, /admin.html share same geor_token
-    const needsAuth = url.pathname === '/atlas.html' || url.pathname === '/dashboard.html' || url.pathname === '/admin.html' || url.pathname.startsWith('/wiki');
+    const needsAuth = url.pathname === '/atlas.html' || url.pathname === '/dashboard.html' || url.pathname === '/admin.html' || url.pathname.startsWith('/wiki') || url.pathname.startsWith('/app');
     if (needsAuth) {
       const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
       const cookies = parseCookies(request);

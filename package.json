@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build && npm run build:wiki",
     "build:vite": "vite build",
-    "build:wiki": "python -m mkdocs build -f \"C:/Users/pc/Documents/Lore/Lore/site/mkdocs.yml\" --site-dir \"C:/Users/pc/Documents/worldofgeor/dist/wiki\" && python \"C:/Users/pc/Documents/Lore/Lore/site/optimize_assets.py\" \"C:/Users/pc/Documents/worldofgeor/dist/wiki\"",
+    "build:wiki": "python -m mkdocs build -f \"C:/Users/pc/Documents/Lore/Lore/site/mkdocs.yml\" --site-dir \"C:/Users/pc/Documents/worldofgeor/dist/wiki\" && python \"C:/Users/pc/Documents/Lore/Lore/site/optimize_assets.py\" \"C:/Users/pc/Documents/worldofgeor/dist/wiki\" && python \"C:/Users/pc/Documents/worldofgeor/scripts/generate-wiki-index.py\"",
     "preview": "vite preview"
   },
   "devDependencies": {

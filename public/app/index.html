@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Battlestation — World of Ge'or (Web)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.25) transparent}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(217,183,122,0.25);border-radius:999px}
+.leaflet-container{background:#0b0b0a}
+</style>
+</head>
+<body class="bg-ink text-cream font-sans min-h-screen flex flex-col">
+<header class="h-[56px] border-b border-gold/10 bg-ink/90 backdrop-blur sticky top-0 z-40 flex items-center justify-between px-4 md:px-6">
+<div class="flex items-center gap-3">
+<a href="/" class="font-display tracking-[0.16em] text-[11px] font-semibold">WORLD OF GE'OR</a>
+<span class="text-gold/30">/</span>
+<span class="font-display text-xs tracking-widest text-gold">BATTLESTATION WEB</span>
+<span class="hidden md:inline text-[10px] tracking-widest text-cream/40 border border-gold/15 rounded-full px-2 py-0.5">BETA • WEB</span>
+</div>
+<div class="flex items-center gap-2">
+<span id="who" class="hidden text-xs text-cream/60"></span>
+<span id="xpBadge" class="hidden text-[11px] tracking-widest bg-gold text-ink px-3 py-1 rounded-full font-semibold">LV 42 • 0 XP</span>
+<a href="/wiki/" class="hidden md:inline text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">WIKI</a>
+<a href="/dashboard.html" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">DASHBOARD</a>
+<button id="logout" class="text-xs bg-cream text-ink px-3 py-1.5 rounded-full font-semibold hover:bg-white">Logout</button>
+</div>
+</header>
+<div id="gate" class="flex-1 flex items-center justify-center p-8">
+<div class="text-sm text-cream/60">Checking battlestation clearance…</div>
+</div>
+<div id="app" class="hidden flex-1 flex flex-col md:flex-row min-h-0">
+<!-- sidebar -->
+<aside class="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-gold/10 bg-ink flex flex-col">
+<div class="p-3 flex gap-1 border-b border-gold/10">
+<button data-tab="vault" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold">VAULT</button>
+<button data-tab="editor" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold">EDITOR</button>
+<button data-tab="maps" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold">MAPS</button>
+</div>
+<div class="p-3 border-b border-gold/10">
+<div class="relative">
+<input id="vaultSearch" placeholder="Search wiki… ( / )" class="w-full bg-cream/5 border border-gold/15 rounded-xl px-3 py-2 text-sm placeholder:text-cream/30 focus:border-gold/30 outline-none"/>
+<span class="absolute right-2 top-2 text-[10px] text-cream/30">⌘K</span>
+</div>
+<div class="flex gap-1 mt-2">
+<button id="vaultFilterAll" class="text-[10px] tracking-widest px-2 py-1 rounded-full bg-gold/15 text-gold border border-gold/20">ALL</button>
+<button data-filter="Nations" class="vaultFilter text-[10px] tracking-widest px-2 py-1 rounded-full border border-gold/10 text-cream/50">NATIONS</button>
+<button data-filter="Species" class="vaultFilter text-[10px] tracking-widest px-2 py-1 rounded-full border border-gold/10 text-cream/50">SPECIES</button>
+</div>
+</div>
+<div id="vaultList" class="flex-1 overflow-auto p-2 space-y-1 text-sm">
+<div class="text-xs text-cream/40 p-2">Loading wiki index…</div>
+</div>
+<div class="p-3 border-t border-gold/10">
+<div class="text-[11px] tracking-widest text-gold">XP</div>
+<div class="mt-1 h-2 rounded-full bg-cream/10 overflow-hidden">
+<div id="xpBar" class="h-full bg-gradient-to-r from-gold to-amberdeep" style="width: 8%"></div>
+</div>
+<div id="xpText" class="text-[11px] text-cream/50 mt-1">Lv 42 • 0 / 8,300 to 43</div>
+</div>
+</aside>
+<!-- main -->
+<main class="flex-1 flex flex-col min-h-[60vh] md:min-h-0 bg-[#0b0b0a]">
+<!-- breadcrumbs -->
+<div id="crumbs" class="hidden md:flex items-center gap-2 px-4 h-9 border-b border-gold/10 text-xs text-cream/50 bg-ink/60">
+<span>World</span><span class="text-gold/30">/</span><span id="crumbName" class="text-cream">Select a file</span>
+<span id="dirtyDot" class="hidden w-1.5 h-1.5 rounded-full bg-gold ml-2"></span>
+</div>
+<!-- vault preview / editor / maps panes -->
+<div id="panePreview" class="flex-1 overflow-auto p-4">
+<div class="max-w-[800px] mx-auto">
+<h2 class="font-display text-xl">Welcome to Battlestation Web</h2>
+<p class="text-sm text-cream/60 mt-2">This is the web version of your desktop Battlestation — no install, same login. Browse the 720-page wiki on the left, edit in the center (XP per keystroke), and open the world map. Everything you do here stays private behind <code class="text-gold">geor_token</code>.</p>
+<div class="mt-6 grid md:grid-cols-3 gap-3">
+<div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4">
+<div class="text-xs tracking-widest text-gold">VAULT</div>
+<div class="text-sm mt-1">Search 1458 markdown files. Click to preview wiki pages.</div>
+<button data-jump="vault" class="mt-3 text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Open Vault →</button>
+</div>
+<div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4">
+<div class="text-xs tracking-widest text-gold">EDITOR</div>
+<div class="text-sm mt-1">Write with XP. 1 XP/char, level 42 start, quadratic curve. Saved locally.</div>
+<button data-jump="editor" class="jumpEditor mt-3 text-xs bg-gold text-ink px-3 py-1 rounded-full">Open Editor →</button>
+</div>
+<div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4">
+<div class="text-xs tracking-widest text-gold">MAPS</div>
+<div class="text-sm mt-1">World + Grimmel leaflet at 3.086 km/px. Pan/zoom, no Electron needed.</div>
+<button data-jump="maps" class="mt-3 text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Open Maps →</button>
+</div>
+</div>
+<p class="text-xs text-cream/40 mt-6">Tip: Press <span class="text-gold">/</span> to focus search, <span class="text-gold">Ctrl+S</span> to save editor, <span class="text-gold">Esc</span> to close preview.</p>
+</div>
+</div>
+<div id="paneEditor" class="hidden flex-1 flex flex-col">
+<div class="flex items-center justify-between px-4 h-9 border-b border-gold/10 bg-ink/60">
+<div class="flex items-center gap-2 text-xs">
+<span class="text-cream/50">EDITOR</span>
+<span id="editorFile" class="text-cream">untitled.md</span>
+<span id="editorDirty" class="hidden w-1.5 h-1.5 bg-gold rounded-full"></span>
+</div>
+<div class="flex gap-1">
+<button id="btnSave" class="text-xs bg-gold text-ink px-3 py-1 rounded-full font-semibold">Save (Ctrl+S)</button>
+<button id="btnDownload" class="text-xs border border-gold/20 px-3 py-1 rounded-full">Download</button>
+<button id="btnCopy" class="text-xs border border-gold/20 px-3 py-1 rounded-full">Copy</button>
+</div>
+</div>
+<textarea id="editor" placeholder="Write here… every char = 1 XP. Level 42+ quadratic (8300 to 43, 19900 to 100). XP persists in localStorage." class="flex-1 w-full bg-transparent p-4 text-sm leading-6 outline-none resize-none placeholder:text-cream/20"></textarea>
+</div>
+<div id="paneMaps" class="hidden flex-1 flex flex-col">
+<div class="flex items-center justify-between px-4 h-9 border-b border-gold/10 bg-ink/60">
+<div class="flex gap-1">
+<button data-map="world" class="mapBtn text-xs px-3 py-1 rounded-full bg-gold text-ink font-semibold">WORLD</button>
+<button data-map="grimmel" class="mapBtn text-xs px-3 py-1 rounded-full border border-gold/20 text-gold">GRIMMEL</button>
+</div>
+<span class="text-[11px] text-cream/40">Leaflet • CRS.Simple • 3.086 km/px</span>
+</div>
+<div id="map" class="flex-1 min-h-[360px]"></div>
+</div>
+</main>
+</div>
+<script>
+let currentUser=null;
+const gate=document.getElementById('gate'), app=document.getElementById('app'), who=document.getElementById('who'), xpBadge=document.getElementById('xpBadge');
+fetch('/api/me').then(r=>r.json()).then(j=>{
+ if(!j.user){ location.href='/?next='+encodeURIComponent('/app/'); return; }
+ currentUser=j.user; gate.classList.add('hidden'); app.classList.remove('hidden'); who.textContent=j.user.email; who.classList.remove('hidden'); init();
+}).catch(()=> location.href='/?next='+encodeURIComponent('/app/'));
+document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
+
+function init(){
+ // tabs
+ const tabs=document.querySelectorAll('.tabBtn');
+ const panes={vault:document.getElementById('panePreview'), editor:document.getElementById('paneEditor'), maps:document.getElementById('paneMaps')};
+ function showTab(t){
+   tabs.forEach(b=>{ const a=b.dataset.tab===t; b.className= a? 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold' : 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold'; });
+   Object.entries(panes).forEach(([k,el])=> el.classList.toggle('hidden', k!==t));
+   if(t==='maps') setTimeout(()=> map.invalidateSize(), 80);
+   if(t==='editor') document.getElementById('editor').focus();
+ }
+ tabs.forEach(b=> b.onclick=()=> showTab(b.dataset.tab));
+ document.querySelectorAll('[data-jump="vault"]').forEach(b=> b.onclick=()=> showTab('vault'));
+ document.querySelectorAll('.jumpEditor').forEach(b=> b.onclick=()=> showTab('editor'));
+ document.querySelectorAll('[data-jump="maps"]').forEach(b=> b.onclick=()=> showTab('maps'));
+
+ // vault
+ const vaultList=document.getElementById('vaultList'), search=document.getElementById('vaultSearch');
+ let allEntries=[];
+ async function loadVault(){
+   try{
+     // try wiki-index.json first (generated at build), fallback to sitemap.xml
+     let entries=[];
+     try{
+       const r=await fetch('/wiki-index.json'); if(r.ok){ entries=await r.json(); }
+     }catch(e){}
+     if(!entries.length){
+       const r=await fetch('/wiki/sitemap.xml'); const txt=await r.text();
+       const doc=new DOMParser().parseFromString(txt,'text/xml');
+       entries=[...doc.querySelectorAll('url loc')].map(n=> n.textContent.replace(location.origin,'')).filter(u=> u.startsWith('/wiki/'));
+       entries=entries.map(u=> ({url:u, title:u.split('/').pop().replace('.html','').replace('%20',' ') || 'Home'}));
+     }
+     allEntries=entries;
+     renderVault('');
+   }catch(e){ vaultList.innerHTML='<div class=\"text-xs text-red-400 p-2\">Failed to load wiki index. Try refresh.</div>'; console.error(e); }
+ }
+ function renderVault(q){
+   const f=q.trim().toLowerCase();
+   const filtered= allEntries.filter(e=> !f || e.title.toLowerCase().includes(f) || e.url.toLowerCase().includes(f)).slice(0,200);
+   const activeFilter=document.querySelector('.vaultFilter.bg-gold\\/15');
+   const filt=activeFilter? activeFilter.dataset.filter : null;
+   let list=filtered;
+   if(filt) list=list.filter(e=> e.url.includes(filt));
+   if(!list.length){ vaultList.innerHTML='<div class=\"text-xs text-cream/40 p-2\">No matches</div>'; return; }
+   vaultList.innerHTML=list.map(e=> `<button data-url=\"${e.url}\" class=\"vaultItem w-full text-left px-2 py-1.5 rounded-lg hover:bg-cream/5 border border-transparent hover:border-gold/10 flex justify-between gap-2\"><span class=\"truncate\">${e.title}</span><span class=\"text-[10px] text-cream/30 truncate hidden md:inline\">${e.url.replace('/wiki/','')}</span></button>`).join('');
+   vaultList.querySelectorAll('.vaultItem').forEach(b=> b.onclick=()=> openPreview(b.dataset.url));
+ }
+ function openPreview(url){
+   document.getElementById('crumbName').textContent=url;
+   document.getElementById('crumbs').classList.remove('hidden');
+   // gated fetch — worker will 302 if not logged, but we are logged so fetch wiki HTML and embed
+   fetch(url).then(r=> r.text()).then(html=>{
+     const doc=new DOMParser().parseFromString(html,'text/html');
+     const art=doc.querySelector('article') || doc.querySelector('.md-content') || doc.body;
+     const title=doc.querySelector('h1')?.textContent || url;
+     document.getElementById('panePreview').innerHTML=`<div class=\"max-w-[800px] mx-auto p-4\"><div class=\"text-[11px] tracking-widest text-gold mb-2\"><a href=\"${url}\" class=\"underline\">${url}</a> • <a href=\"/\" class=\"text-cream/50\">World</a></div><h1 class=\"font-display text-2xl\">${title}</h1><div class=\"prose prose-invert prose-sm max-w-none mt-4 text-cream/80\">${art.innerHTML.slice(0,8000)}</div><div class=\"mt-6 flex gap-2\"><a href=\"${url}\" class=\"text-xs bg-gold text-ink px-3 py-1 rounded-full\">Open in Wiki →</a><button onclick=\"document.getElementById('panePreview').innerHTML='<div class=\\'p-4 text-sm text-cream/40\\'>Select a file from Vault</div>'\" class=\"text-xs border border-gold/20 px-3 py-1 rounded-full\">Close</button></div></div>`;
+     showTab('vault');
+   }).catch(()=> window.open(url,'_blank'));
+ }
+ search.addEventListener('input', ()=> renderVault(search.value));
+ document.addEventListener('keydown', e=>{ if(e.key==='/' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){ e.preventDefault(); search.focus(); } if(e.key==='k' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); search.focus(); } });
+ document.querySelectorAll('.vaultFilter').forEach(b=> b.onclick=()=>{
+   document.querySelectorAll('.vaultFilter').forEach(x=> x.className='vaultFilter text-[10px] tracking-widest px-2 py-1 rounded-full border border-gold/10 text-cream/50');
+   b.className='vaultFilter text-[10px] tracking-widest px-2 py-1 rounded-full bg-gold/15 text-gold border border-gold/20';
+   document.getElementById('vaultFilterAll').className='text-[10px] tracking-widest px-2 py-1 rounded-full border border-gold/10 text-cream/50';
+   renderVault(search.value);
+ });
+ document.getElementById('vaultFilterAll').onclick=()=>{
+   document.querySelectorAll('.vaultFilter').forEach(x=> x.className='vaultFilter text-[10px] tracking-widest px-2 py-1 rounded-full border border-gold/10 text-cream/50');
+   document.getElementById('vaultFilterAll').className='text-[10px] tracking-widest px-2 py-1 rounded-full bg-gold/15 text-gold border border-gold/20';
+   renderVault(search.value);
+ };
+ loadVault();
+
+ // editor + XP
+ const editor=document.getElementById('editor'), dirty=document.getElementById('editorDirty'), dot=document.getElementById('dirtyDot'), fileLabel=document.getElementById('editorFile');
+ let xp=parseInt(localStorage.getItem('geor_xp')||'168100'), level=42, dirtyFlag=false;
+ function xpForNext(lv){ return Math.round(8300 + (lv-42)*(lv-42)*18 + (lv-42)*420); } // quadratic approx 8300->19900
+ function calcLevel(){
+   let cur=42, curXp=xp, need=xpForNext(cur);
+   while(curXp>=need){ curXp-=need; cur++; need=xpForNext(cur); if(cur>200) break; }
+   level=cur;
+   const pct=Math.round(curXp/need*100);
+   document.getElementById('xpBar').style.width=pct+'%';
+   document.getElementById('xpText').textContent=`Lv ${level} • ${curXp} / ${need} to ${level+1} (${pct}%)`;
+   xpBadge.textContent=`LV ${level} • ${xp.toLocaleString()} XP`;
+   xpBadge.classList.remove('hidden');
+ }
+ calcLevel();
+ editor.value=localStorage.getItem('geor_editor')||'';
+ editor.addEventListener('input', ()=>{
+   const len=editor.value.length;
+   const prev=parseInt(localStorage.getItem('geor_editor_len')||'0');
+   const delta=Math.max(0, len - prev);
+   if(delta>0){ xp+=delta; localStorage.setItem('geor_xp', String(xp)); calcLevel(); const s=document.createElement('div'); s.textContent=`+${delta} XP`; s.className='fixed bottom-4 right-4 bg-gold text-ink text-xs px-3 py-1 rounded-full pointer-events-none'; document.body.appendChild(s); setTimeout(()=> s.remove(), 900); }
+   localStorage.setItem('geor_editor', editor.value);
+   localStorage.setItem('geor_editor_len', String(len));
+   dirtyFlag=true; dirty.classList.remove('hidden'); dot.classList.remove('hidden');
+   // spark
+   if(Math.random()<0.12){ const p=document.createElement('div'); p.textContent='✦'; p.className='fixed text-gold pointer-events-none'; p.style.left=(Math.random()*80+10)+'%'; p.style.bottom='18%'; p.style.fontSize='10px'; document.body.appendChild(p); p.animate([{transform:'translateY(0)', opacity:1},{transform:'translateY(-24px)', opacity:0}],{duration:700}).onfinish=()=> p.remove(); }
+ });
+ document.getElementById('btnSave').onclick=()=>{ localStorage.setItem('geor_editor', editor.value); dirty.classList.add('hidden'); dot.classList.add('hidden'); dirtyFlag=false; const b=document.getElementById('btnSave'); b.textContent='Saved ✓'; setTimeout(()=> b.textContent='Save (Ctrl+S)', 1200); };
+ document.getElementById('btnDownload').onclick=()=>{
+   const blob=new Blob([editor.value], {type:'text/markdown'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(fileLabel.textContent||'untitled.md'); a.click();
+ };
+ document.getElementById('btnCopy').onclick=()=>{ navigator.clipboard.writeText(editor.value); const b=document.getElementById('btnCopy'); b.textContent='Copied!'; setTimeout(()=> b.textContent='Copy', 1000); };
+ document.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); document.getElementById('btnSave').click(); } });
+
+ // maps
+ const map=L.map('map', {crs:L.CRS.Simple, minZoom:-1, maxZoom:4, zoomSnap:0.25});
+ function loadMap(which){
+   map.eachLayer(l=> map.removeLayer(l));
+   const url= which==='world' ? '/world-map.jpg' : '/grimmel-peninsula.jpg';
+   const img=new Image(); img.src=url;
+   img.onload=()=>{
+     const w=img.naturalWidth, h=img.naturalHeight;
+     const bounds=[[0,0],[h,w]];
+     L.imageOverlay(url, bounds).addTo(map);
+     map.fitBounds(bounds, {padding:[10,10]});
+   };
+   img.onerror=()=>{ map.getContainer().innerHTML='<div class=\"p-6 text-sm text-cream/50\">Map image not found: '+url+' — add to /public</div>'; };
+ }
+ document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=>{
+   document.querySelectorAll('.mapBtn').forEach(x=> x.className='mapBtn text-xs px-3 py-1 rounded-full border border-gold/20 text-gold');
+   b.className='mapBtn text-xs px-3 py-1 rounded-full bg-gold text-ink font-semibold';
+   loadMap(b.dataset.map);
+ });
+ loadMap('world');
+ showTab('vault');
+}
+</script>
+</body>
+</html>
