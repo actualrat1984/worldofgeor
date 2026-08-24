@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Battlestation — World of Ge'or (Web)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com">
-</script>
+<script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',ink2:'#1a1a18',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],serif:['Cormorant Garamond','serif'],sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -25,6 +24,8 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 .prose blockquote{border-left:2px solid rgba(217,183,122,0.35);color:rgba(242,232,208,0.68)}
 .skeleton{background:linear-gradient(90deg, rgba(242,232,208,0.06) 25%, rgba(242,232,208,0.10) 50%, rgba(242,232,208,0.06) 75%);background-size:200% 100%;animation:shimmer 1.3s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+#editorFileInput{background:transparent;border:1px solid transparent}
+#editorFileInput:focus{border-color:rgba(217,183,122,0.25);background:rgba(242,232,208,0.04)}
 </style>
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen flex flex-col selection:bg-gold/30">
@@ -58,6 +59,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div class="p-3 flex gap-1 border-b border-gold/10 shrink-0">
 <button data-tab="vault" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold">VAULT</button>
 <button data-tab="editor" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">EDITOR</button>
+<button data-tab="changes" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">CHANGES</button>
 <button data-tab="maps" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">MAPS</button>
 </div>
 <div class="p-3 border-b border-gold/10 shrink-0">
@@ -112,42 +114,56 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <button data-jump="vault" class="mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">Open Vault →</button>
 </div>
 <div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4 hover:border-gold/25 transition">
-<div class="text-xs tracking-widest text-gold font-medium">EDITOR</div>
-<div class="text-sm mt-1.5 leading-relaxed">Write markdown with live preview. 1 XP/char, quadratic Lv 42+.</div>
-<div class="text-xs text-cream/40 mt-2">Saved locally • <span class="text-gold">Ctrl+S</span></div>
+<div class="text-xs tracking-widest text-gold font-medium">EDITOR → GITHUB</div>
+<div class="text-sm mt-1.5 leading-relaxed">Write markdown. <span class="text-gold font-medium">Save commits to Website-additions</span> on GitHub.</div>
+<div class="text-xs text-gold mt-2"><span class="text-cream/40">Ctrl+S = </span> commit • rename file above</div>
 <button data-jump="editor" class="jumpEditor mt-3 text-xs bg-gold text-ink px-3 py-1.5 rounded-full font-semibold hover:brightness-110 transition">Open Editor →</button>
 </div>
 <div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4 hover:border-gold/25 transition">
-<div class="text-xs tracking-widest text-gold font-medium">MAPS</div>
-<div class="text-sm mt-1.5 leading-relaxed">World + Grimmel at 3.086 km/px. Leaflet CRS.Simple, pan/zoom.</div>
-<div class="text-xs text-cream/40 mt-2">No Electron needed</div>
-<button data-jump="maps" class="mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">Open Maps →</button>
+<div class="text-xs tracking-widest text-gold font-medium">CHANGES</div>
+<div class="text-sm mt-1.5 leading-relaxed">Your committed files from <span class="text-gold">Website-additions</span>. Re-open, rewrite, re-save.</div>
+<div class="text-xs text-cream/40 mt-2">Git-backed • Mikhail → Ichi</div>
+<button data-jump="changes" class="mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">Open Changes →</button>
 </div>
 </div>
-<div class="mt-6 rounded-xl border border-gold/10 bg-ink p-4">
+<div class="mt-4 grid md:grid-cols-2 gap-3">
+<div class="rounded-xl border border-gold/15 bg-cream/[0.03] p-4 flex items-center justify-between">
+<div><div class="text-xs tracking-widest text-gold font-medium">MAPS</div><div class="text-sm mt-1">World + Grimmel — pick, then zoom.</div></div>
+<button data-jump="maps" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition shrink-0 ml-4">Open Maps →</button>
+</div>
+<div class="rounded-xl border border-gold/10 bg-ink p-4">
 <div class="text-xs tracking-widest text-gold">TIPS</div>
 <div class="text-sm text-cream/60 mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
 <span><span class="text-gold">/</span> focus search</span>
 <span><span class="text-gold">Ctrl+K</span> focus search</span>
-<span><span class="text-gold">Ctrl+S</span> save</span>
+<span><span class="text-gold">Ctrl+S</span> save→commit</span>
 <span><span class="text-gold">Esc</span> close preview</span>
-<span><span class="text-gold">Ctrl+Shift+P</span> preview toggle</span>
+</div>
+</div>
+</div>
+<div id="saveExplainer" class="mt-6 rounded-xl border border-gold/15 bg-[#1a1a18] p-4 flex gap-3">
+<div class="shrink-0 w-8 h-8 rounded-full bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-sm">✓</div>
+<div class="text-sm leading-relaxed">
+<div class="font-medium">Where does Save go?</div>
+<div class="text-cream/60 mt-1"><span class="text-gold">Before:</span> only localStorage. <span class="text-gold">Now:</span> <b class="text-cream">Save</b> commits to <span class="text-gold">github.com/actualrat1984/Website-additions</span> (private) as <code class="text-gold">path</code> you name at the top. Open <b class="text-cream">CHANGES</b> to see all committed files — click to re-edit and Save again. At home you ping Ichi “do the changes” and Ichi ingests them.</div>
 </div>
 </div>
 </div>
 </div>
 
 <div id="paneEditor" class="hidden flex-1 flex-col min-h-0">
-<div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0 gap-2">
-<div class="flex items-center gap-2 text-xs min-w-0">
-<span class="text-cream/50 hidden sm:inline">EDITOR</span>
-<span id="editorFile" class="text-cream font-medium truncate">untitled.md</span>
+<div class="flex items-center justify-between px-3 md:px-4 h-11 border-b border-gold/10 bg-ink/60 shrink-0 gap-2">
+<div class="flex items-center gap-2 text-xs min-w-0 flex-1">
+<span class="text-cream/50 hidden sm:inline shrink-0">EDITOR</span>
+<input id="editorFileInput" value="untitled.md" title="Click to rename — this is the GitHub path in Website-additions" class="flex-1 min-w-[140px] max-w-[320px] truncate font-medium text-cream px-2 py-1 rounded-lg focus:outline-none placeholder:text-cream/30" placeholder="filename.md" autocomplete="off" spellcheck="false"/>
 <span id="editorDirty" class="hidden w-1.5 h-1.5 bg-gold rounded-full shrink-0"></span>
-<span id="editorWords" class="hidden md:inline text-cream/40 ml-1"></span>
+<span id="editorGitStatus" class="hidden text-[11px] border border-gold/15 rounded-full px-2 py-0.5 shrink-0"></span>
+<span id="editorWords" class="hidden lg:inline text-cream/40 ml-1 shrink-0"></span>
+<button id="btnRename" title="Rename file" class="hidden sm:inline text-[11px] border border-gold/20 px-2 py-1 rounded-full hover:bg-gold/10 shrink-0">Rename</button>
 </div>
 <div class="flex gap-1 shrink-0">
 <button id="btnPreviewToggle" class="hidden md:inline text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Preview</button>
-<button id="btnSave" class="text-xs bg-gold text-ink px-3 py-1 rounded-full font-semibold hover:brightness-110">Save</button>
+<button id="btnSave" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110 flex items-center gap-1.5"><span id="btnSaveLabel">Save → commit</span><span id="btnSaveSpin" class="hidden w-3 h-3 border-2 border-ink/30 border-t-ink rounded-full animate-spin"></span></button>
 <button id="btnDownload" class="hidden sm:inline text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Download</button>
 <button id="btnCopy" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Copy</button>
 </div>
@@ -159,27 +175,91 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <button data-md="- " class="px-2 py-1 rounded hover:bg-cream/10">• List</button>
 <button data-md="[]()" class="px-2 py-1 rounded hover:bg-cream/10">Link</button>
 <button data-md="> " class="px-2 py-1 rounded hover:bg-cream/10">Quote</button>
-<span class="ml-auto text-[11px] text-cream/30 whitespace-nowrap">Markdown • live preview in split</span>
+<span class="ml-auto text-[11px] text-cream/30 whitespace-nowrap">Markdown • File name = GitHub path • Ctrl+S commits</span>
 </div>
 <div class="flex-1 flex min-h-0">
-<textarea id="editor" placeholder="Write here… every char = 1 XP. Try **bold**, # heading, - list. Ctrl+S saves locally. Preview → toggle split." class="flex-1 w-full bg-transparent p-4 text-sm leading-6 outline-none resize-none placeholder:text-cream/20 font-mono"></textarea>
+<textarea id="editor" placeholder="Write here… every char = 1 XP. Try **bold**, # heading, - list. Ctrl+S saves locally + commits to Website-additions. Preview → toggle split. Rename by editing the filename at the top." class="flex-1 w-full bg-transparent p-4 text-sm leading-6 outline-none resize-none placeholder:text-cream/20 font-mono"></textarea>
 <div id="editorPreview" class="hidden md:flex flex-1 border-l border-gold/10 bg-[#0f0e0d] overflow-auto p-4 prose prose-invert prose-sm max-w-none"></div>
+</div>
+</div>
+
+<!-- CHANGES pane -->
+<div id="paneChanges" class="hidden flex-1 flex-col min-h-0">
+<div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0">
+<div class="flex items-center gap-2 text-xs">
+<span class="text-cream/50 hidden sm:inline">CHANGES</span>
+<span class="text-gold font-medium">Website-additions</span>
+<span id="changesCount" class="text-[11px] text-cream/40">—</span>
+</div>
+<div class="flex items-center gap-2">
+<button id="btnChangesRefresh" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+<a href="https://github.com/actualrat1984/Website-additions" target="_blank" rel="noopener" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10 hidden sm:inline">GitHub →</a>
+</div>
+</div>
+<div id="changesStatus" class="px-4 py-2 text-xs text-gold/70 border-b border-gold/10 hidden"></div>
+<div id="changesList" class="flex-1 overflow-auto p-3 space-y-2">
+<div class="text-sm text-cream/50 text-center py-12">Click Refresh to load your committed files<br><span class="text-xs text-cream/30">Same as github.com/actualrat1984/Website-additions</span></div>
+</div>
+<div class="px-3 py-2 border-t border-gold/10 bg-ink/60 text-[11px] text-cream/40 flex items-center justify-between">
+<span>Click a file to edit — Save re-commits • At home: say “do the changes” to Ichi</span>
+<span class="hidden sm:inline text-gold">private repo</span>
 </div>
 </div>
 
 <div id="paneMaps" class="hidden flex-1 flex-col min-h-0 relative">
 <div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0">
-<div class="flex gap-1">
-<button data-map="world" class="mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold">WORLD</button>
+<div class="flex items-center gap-2">
+<button id="mapBackBtn" class="hidden text-xs border border-gold/20 px-2.5 py-1 rounded-full hover:bg-gold/10">← Selection</button>
+<div id="mapQuickBtns" class="hidden gap-1">
+<button data-map="world" class="mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10">WORLD</button>
 <button data-map="grimmel" class="mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10">GRIMMEL</button>
+</div>
+<span id="mapTitle" class="text-xs tracking-widest text-gold hidden">—</span>
 </div>
 <div class="flex items-center gap-2">
 <button id="mapReset" class="hidden text-[11px] border border-gold/15 text-cream/60 hover:text-gold hover:border-gold/30 rounded-full px-2.5 py-0.5 transition">RESET</button>
 <span class="hidden sm:inline text-[11px] text-cream/40">Leaflet • CRS.Simple • 3.086 km/px</span>
-<span id="mapScale" class="text-[11px] text-gold border border-gold/15 rounded-full px-2 py-0.5">— km</span>
+<span id="mapScale" class="text-[11px] text-gold border border-gold/15 rounded-full px-2 py-0.5 hidden">— km</span>
 </div>
 </div>
-<div id="map" class="flex-1 min-h-[380px] bg-[#0b0b0a]"></div>
+<!-- picker -->
+<div id="mapPicker" class="flex-1 flex flex-col min-h-[380px] bg-[#0b0b0a] p-4 md:p-6 overflow-auto">
+<div class="max-w-[760px] w-full mx-auto">
+<h3 class="font-display text-[18px] tracking-wide">Choose a map</h3>
+<p class="text-sm text-cream/60 mt-1">No map loads until you pick one — selection first, then pan & zoom.</p>
+<div class="mt-5 grid sm:grid-cols-2 gap-4">
+<button data-pick="world" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
+<div class="h-[150px] overflow-hidden bg-ink relative">
+<img src="/world-map.jpg" alt="World map" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">World • /world-map.jpg</div>
+<div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">49,400 km • WORLD</div>
+</div>
+<div class="p-4">
+<div class="font-display text-sm tracking-widest font-semibold">WORLD</div>
+<div class="text-sm text-cream/60 mt-1">Full political map • 3.086 km/px • 1.37× Earth</div>
+<div class="text-xs text-gold mt-2">Click to open →</div>
+</div>
+</button>
+<button data-pick="grimmel" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
+<div class="h-[150px] overflow-hidden bg-ink relative">
+<img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">Grimmel • /grimmel-peninsula.jpg</div>
+<div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">GRIMMEL PENINSULA</div>
+</div>
+<div class="p-4">
+<div class="font-display text-sm tracking-widest font-semibold">GRIMMEL PENINSULA</div>
+<div class="text-sm text-cream/60 mt-1">Western frontier • primary zoom for campaign</div>
+<div class="text-xs text-gold mt-2">Click to open →</div>
+</div>
+</button>
+</div>
+<div class="mt-6 rounded-xl border border-gold/10 bg-ink p-4 flex items-center justify-between">
+<span class="text-xs text-cream/40">More zooms coming — picker grows as you add tiles.</span>
+<a href="/wiki/World/Maps%20and%20Assets/" class="text-xs text-gold hover:underline">Maps in wiki →</a>
+</div>
+</div>
+</div>
+<div id="map" class="hidden flex-1 min-h-[380px] bg-[#0b0b0a]"></div>
 <div id="mapLoading" class="hidden absolute inset-0 top-10 bottom-11 flex items-center justify-center pointer-events-none z-[400]"><div class="text-xs text-cream/50 bg-ink/90 border border-gold/15 rounded-full px-4 py-2 tracking-widest">LOADING MAP…</div></div>
 <div class="px-3 py-2 border-t border-gold/10 bg-ink/60 text-[11px] text-cream/40 flex items-center justify-between">
 <span>Scroll to zoom • drag to pan • <span class="text-gold">3.086 km/px</span> canon scale</span>
@@ -210,22 +290,27 @@ function toast(msg, ok=true){
   t.className='pointer-events-auto text-sm px-4 py-2 rounded-full shadow-lg border '+(ok?'bg-ink border-gold/20 text-cream':'bg-red-950 border-red-800 text-red-200');
   t.textContent=msg;
   document.getElementById('toast').appendChild(t);
-  setTimeout(()=> t.remove(), 2200);
+  setTimeout(()=> t.remove(), 2600);
 }
 
 function init(){
  const tabs=document.querySelectorAll('.tabBtn');
- const panes={vault:document.getElementById('panePreview'), editor:document.getElementById('paneEditor'), maps:document.getElementById('paneMaps')};
+ const panes={vault:document.getElementById('panePreview'), editor:document.getElementById('paneEditor'), changes:document.getElementById('paneChanges'), maps:document.getElementById('paneMaps')};
  function showTab(t){
    tabs.forEach(b=>{ const a=b.dataset.tab===t; b.className= a? 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold' : 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10'; });
-   Object.entries(panes).forEach(([k,el])=>{ el.classList.toggle('hidden', k!==t); el.classList.toggle('flex', k===t); });
-   if(t==='maps') setTimeout(()=> map && map.invalidateSize(), 90);
+   Object.entries(panes).forEach(([k,el])=>{ const is=k===t; el.classList.toggle('hidden', !is); el.classList.toggle('flex', is); });
+   if(t==='maps') { /* don't auto-load; picker handles. invalidate if map exists */
+     setTimeout(()=> map && map.invalidateSize(), 120);
+   }
    if(t==='editor') document.getElementById('editor').focus();
+   if(t==='changes') loadChanges(false);
  }
  tabs.forEach(b=> b.onclick=()=> showTab(b.dataset.tab));
- document.querySelectorAll('[data-jump=\"vault\"]').forEach(b=> b.onclick=()=> showTab('vault'));
+ document.querySelectorAll('[data-jump="vault"]').forEach(b=> b.onclick=()=> showTab('vault'));
+ document.querySelectorAll('[data-jump="editor"]').forEach(b=> b.onclick=()=> showTab('editor'));
+ document.querySelectorAll('[data-jump="changes"]').forEach(b=> b.onclick=()=> showTab('changes'));
+ document.querySelectorAll('[data-jump="maps"]').forEach(b=> b.onclick=()=> showTab('maps'));
  document.querySelectorAll('.jumpEditor').forEach(b=> b.onclick=()=> showTab('editor'));
- document.querySelectorAll('[data-jump=\"maps\"]').forEach(b=> b.onclick=()=> showTab('maps'));
 
  // vault
  const vaultList=document.getElementById('vaultList'), search=document.getElementById('vaultSearch'), vaultCount=document.getElementById('vaultCount'), vaultStatus=document.getElementById('vaultStatus'), vaultPreviewCount=document.getElementById('vaultPreviewCount');
@@ -236,7 +321,6 @@ function init(){
      let entries=[];
      try{
        const r=await fetch('/wiki-index.json',{credentials:'same-origin'}); if(r.ok){ entries=await r.json(); }
-       // strip para if any slipped through
        entries=entries.map(e=> ({url:e.url, title:(e.title||'').replace(/¶/g,'').replace(/&para;/g,'').trim()}));
      }catch(e){}
      if(!entries.length){
@@ -253,49 +337,47 @@ function init(){
      renderVault('');
    }catch(e){
      vaultStatus.textContent='';
-     vaultList.innerHTML='<div class=\"p-3 rounded-xl border border-red-900/50 bg-red-950/20 text-sm text-red-200\">Failed to load wiki index.<br><span class=\"text-xs text-red-300/70\">'+String(e).slice(0,120)+'</span><br><button onclick=\"location.reload()\" class=\"mt-2 text-xs border border-red-800 px-3 py-1 rounded-full\">Retry</button></div>';
+     vaultList.innerHTML='<div class="p-3 rounded-xl border border-red-900/50 bg-red-950/20 text-sm text-red-200">Failed to load wiki index.<br><span class="text-xs text-red-300/70">'+String(e).slice(0,120)+'</span><br><button onclick="location.reload()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>';
      console.error(e);
    }
  }
  function highlight(text, q){
    if(!q) return text;
-   try{ return text.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'), '<mark class=\"bg-gold/30 text-cream rounded px-0.5\">$1</mark>'); }catch{ return text; }
+   try{ return text.replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'), '<mark class="bg-gold/30 text-cream rounded px-0.5">$1</mark>'); }catch{ return text; }
  }
  function renderVault(q){
    const f=(q||'').trim().toLowerCase();
    let filtered= allEntries.filter(e=> !f || e.title.toLowerCase().includes(f) || e.url.toLowerCase().includes(f)).slice(0,220);
-   const activeFilter=document.querySelector('.vaultFilter.bg-gold\\/15') || document.querySelector('.vaultFilter.bg-gold\\/15');
-   // detect active via class bg-gold/15
    let filt=null;
    document.querySelectorAll('.vaultFilter').forEach(x=>{ if(x.className.includes('bg-gold/15')) filt=x.dataset.filter; });
    if(filt) filtered=filtered.filter(e=> e.url.includes(filt));
    vaultCount.textContent= filtered.length + ' / ' + allEntries.length;
-   if(!filtered.length){ vaultList.innerHTML='<div class=\"text-sm text-cream/40 p-3 text-center\">No matches<br><span class=\"text-xs\">Try another term or clear filters</span></div>'; return; }
+   if(!filtered.length){ vaultList.innerHTML='<div class="text-sm text-cream/40 p-3 text-center">No matches<br><span class="text-xs">Try another term or clear filters</span></div>'; return; }
    vaultList.innerHTML=filtered.map(e=>{
      const short=e.url.replace('/wiki/','').replace(/\/$/,'') || 'Home';
-     return `<button data-url=\"${e.url}\" class=\"vaultItem w-full text-left px-3 py-2.5 rounded-xl hover:bg-cream/5 border border-transparent hover:border-gold/10 flex flex-col gap-0.5 group transition\"><span class=\"text-sm leading-none truncate group-hover:text-cream\">${highlight(e.title, f)}</span><span class=\"text-[11px] text-cream/35 truncate\">${short}</span></button>`;
+     return `<button data-url="${e.url}" class="vaultItem w-full text-left px-3 py-2.5 rounded-xl hover:bg-cream/5 border border-transparent hover:border-gold/10 flex flex-col gap-0.5 group transition"><span class="text-sm leading-none truncate group-hover:text-cream">${highlight(e.title, f)}</span><span class="text-[11px] text-cream/35 truncate">${short}</span></button>`;
    }).join('');
    vaultList.querySelectorAll('.vaultItem').forEach(b=> b.onclick=()=> openPreview(b.dataset.url));
  }
  function openPreview(url){
    document.getElementById('crumbName').textContent=url;
    document.getElementById('crumbs').classList.remove('hidden');
-   document.getElementById('panePreview').innerHTML='<div class=\"max-w-[820px] mx-auto p-6\"><div class=\"skeleton h-7 rounded w-2/3\"></div><div class=\"skeleton h-4 rounded mt-3\"></div><div class=\"skeleton h-4 rounded mt-2 w-5/6\"></div><div class=\"skeleton h-64 rounded-xl mt-6\"></div></div>';
+   document.getElementById('panePreview').innerHTML='<div class="max-w-[820px] mx-auto p-6"><div class="skeleton h-7 rounded w-2/3"></div><div class="skeleton h-4 rounded mt-3"></div><div class="skeleton h-4 rounded mt-2 w-5/6"></div><div class="skeleton h-64 rounded-xl mt-6"></div></div>';
    fetch(url,{credentials:'same-origin'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); }).then(html=>{
      const doc=new DOMParser().parseFromString(html,'text/html');
      const art=doc.querySelector('article') || doc.querySelector('.md-content__inner') || doc.querySelector('.md-content') || doc.body;
      const title=(doc.querySelector('h1')?.textContent || url.split('/').filter(Boolean).pop() || 'Page').replace(/¶/g,'').trim();
      document.getElementById('crumbName').textContent=title;
-     // sanitize: remove scripts
      art.querySelectorAll('script').forEach(s=> s.remove());
      const inner=art.innerHTML.slice(0,14000);
-     document.getElementById('panePreview').innerHTML=`<div class=\"max-w-[820px] mx-auto p-4 md:p-6\"><div class=\"text-[11px] tracking-widest text-gold mb-2 flex items-center gap-2\"><a href=\"${url}\" class=\"underline\">${url}</a><span class=\"text-cream/20\">•</span><a href=\"/\" class=\"text-cream/50 hover:text-gold\">World</a></div><h1 class=\"font-display text-2xl leading-tight\">${title}</h1><div class=\"prose prose-invert prose-sm max-w-none mt-4 leading-relaxed\">${inner}</div><div class=\"mt-6 flex flex-wrap gap-2\"><a href=\"${url}\" class=\"text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110\">Open in Wiki →</a><button id=\"editFromPreview\" class=\"text-xs border border-gold/20 px-4 py-1.5 rounded-full hover:bg-gold/10\">Edit in Editor →</button><button onclick=\"document.getElementById('panePreview').innerHTML='<div class=\\'max-w-[820px] mx-auto p-6 text-sm text-cream/40\\' >Select a file from Vault</div>' \" class=\"text-xs text-cream/50 px-3 py-1.5\">Close</button></div></div>`;
+     document.getElementById('panePreview').innerHTML=`<div class="max-w-[820px] mx-auto p-4 md:p-6"><div class="text-[11px] tracking-widest text-gold mb-2 flex items-center gap-2"><a href="${url}" class="underline">${url}</a><span class="text-cream/20">•</span><a href="/" class="text-cream/50 hover:text-gold">World</a></div><h1 class="font-display text-2xl leading-tight">${title}</h1><div class="prose prose-invert prose-sm max-w-none mt-4 leading-relaxed">${inner}</div><div class="mt-6 flex flex-wrap gap-2"><a href="${url}" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110">Open in Wiki →</a><button id="editFromPreview" class="text-xs border border-gold/20 px-4 py-1.5 rounded-full hover:bg-gold/10">Edit in Editor →</button><button onclick="document.getElementById('panePreview').innerHTML='<div class=\'max-w-[820px] mx-auto p-6 text-sm text-cream/40\'>Select a file from Vault</div>' " class="text-xs text-cream/50 px-3 py-1.5">Close</button></div></div>`;
      document.getElementById('editFromPreview').onclick=()=>{
        const ed=document.getElementById('editor');
-       ed.value='# '+title+'\n\nSource: '+url+'\n\n'+doc.querySelector('article')?.innerText?.slice(0,4000)||'';
+       ed.value='# '+title+'\n\nSource: '+url+'\n\n'+(doc.querySelector('article')?.innerText?.slice(0,4000)||'');
+       // keep current file name unless untitled
        showTab('editor');
        ed.dispatchEvent(new Event('input'));
-       toast('Loaded into editor');
+       toast('Loaded into editor — Save will commit as '+document.getElementById('editorFileInput').value);
      };
      showTab('vault');
    }).catch(e=>{
@@ -323,9 +405,12 @@ function init(){
  };
  loadVault();
 
- // editor + XP + preview
- const editor=document.getElementById('editor'), dirty=document.getElementById('editorDirty'), dot=document.getElementById('dirtyDot'), fileLabel=document.getElementById('editorFile'), wordsEl=document.getElementById('editorWords'), statsEl=document.getElementById('editorStats'), previewEl=document.getElementById('editorPreview');
+ // editor + XP + preview + GitHub
+ const editor=document.getElementById('editor'), dirty=document.getElementById('editorDirty'), dot=document.getElementById('dirtyDot'), wordsEl=document.getElementById('editorWords'), statsEl=document.getElementById('editorStats'), previewEl=document.getElementById('editorPreview');
+ const fileInput=document.getElementById('editorFileInput'), gitStatus=document.getElementById('editorGitStatus');
  let xp=parseInt(localStorage.getItem('geor_xp')||'168100'), level=42, dirtyFlag=false, previewOn=true;
+ let editorOriginalPath=localStorage.getItem('geor_editor_path')||'untitled.md';
+ fileInput.value=editorOriginalPath;
  function xpForNext(lv){ return Math.round(8300 + (lv-42)*(lv-42)*18 + (lv-42)*420); }
  function calcLevel(){
    let cur=42, curXp=xp, need=xpForNext(cur);
@@ -339,6 +424,26 @@ function init(){
  }
  calcLevel();
  editor.value=localStorage.getItem('geor_editor')||'';
+ function sanitizeInputPath(v){
+   v=(v||'').trim();
+   if(!v) return 'untitled.md';
+   // basic: allow letters, numbers, . _ - / and space, else strip
+   // keep user's intent but tell them via toast if cleaned
+   return v;
+ }
+ fileInput.addEventListener('change', ()=>{
+   const cleaned=fileInput.value.trim()||'untitled.md';
+   fileInput.value=cleaned;
+   editorOriginalPath=cleaned;
+   localStorage.setItem('geor_editor_path', cleaned);
+   dirtyFlag=true; dirty.classList.remove('hidden'); dot.classList.remove('hidden');
+   toast('Filename → '+cleaned);
+ });
+ fileInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); fileInput.blur(); }});
+ document.getElementById('btnRename').onclick=()=>{
+   fileInput.focus(); fileInput.select();
+   toast('Rename: edit the filename at the top — .md added if missing');
+ };
  function updateEditorStats(){
    const txt=editor.value;
    const words=txt.trim()? txt.trim().split(/\s+/).length:0;
@@ -347,15 +452,62 @@ function init(){
    wordsEl.textContent=words+' words • '+chars+' chars • '+lines+' lines';
    statsEl.textContent=words+'w • '+chars+'c';
    statsEl.classList.remove('hidden');
-   if(previewOn){ try{ previewEl.innerHTML=marked.parse(txt) || '<p class=\"text-cream/30 text-sm\">Preview…</p>'; }catch{ previewEl.textContent=txt; } }
+   if(previewOn){ try{ previewEl.innerHTML=marked.parse(txt) || '<p class="text-cream/30 text-sm">Preview…</p>'; }catch{ previewEl.textContent=txt; } }
  }
  updateEditorStats();
  previewEl.classList.remove('hidden');
+ function setGitStatus(msg, ok=true){
+   gitStatus.textContent=msg;
+   gitStatus.className='text-[11px] border rounded-full px-2 py-0.5 shrink-0 '+(ok?'border-gold/20 text-gold bg-gold/10':'border-red-900/40 text-red-300 bg-red-950/30');
+   gitStatus.classList.remove('hidden');
+ }
+ async function saveToGithub(path, content, oldPath){
+   const btn=document.getElementById('btnSave'), spin=document.getElementById('btnSaveSpin'), label=document.getElementById('btnSaveLabel');
+   spin.classList.remove('hidden'); label.textContent='Committing…'; btn.disabled=true;
+   try{
+     const r=await fetch('/api/additions/save',{method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin', body: JSON.stringify({path, content, oldPath, message: 'web edit '+path })});
+     const j=await r.json().catch(()=> ({}));
+     if(!r.ok){
+       const err=(j.error||'Commit failed')+(j.detail? ': '+j.detail.slice(0,200):'');
+       setGitStatus('✗ '+err.slice(0,60), false);
+       toast(err, false);
+       return false;
+     }
+     setGitStatus('✓ committed → '+path, true);
+     toast('✓ Committed to Website-additions: '+path);
+     return true;
+   }catch(e){
+     setGitStatus('✗ network: '+String(e).slice(0,40), false);
+     toast('Commit failed: '+String(e).slice(0,120), false);
+     return false;
+   } finally {
+     spin.classList.add('hidden'); label.textContent='Save → commit'; btn.disabled=false;
+   }
+ }
+ let lastGithubSave=0;
  function saveEditor(showToast=true){
-   localStorage.setItem('geor_editor', editor.value);
+   const content=editor.value;
+   const path=(fileInput.value||'untitled.md').trim()||'untitled.md';
+   // local persistence
+   localStorage.setItem('geor_editor', content);
+   localStorage.setItem('geor_editor_path', path);
+   localStorage.setItem('geor_editor_len', String(content.length));
+   // xp etc already handled in input, but ensure dirty cleared locally
+   const oldPath = editorOriginalPath;
+   editorOriginalPath=path;
    dirty.classList.add('hidden'); dot.classList.add('hidden'); dirtyFlag=false;
-   if(showToast) toast('Saved ✓');
-   const b=document.getElementById('btnSave'); const old=b.textContent; b.textContent='Saved ✓'; setTimeout(()=> b.textContent=old, 1100);
+   if(showToast) toast('Saved locally ✓ — committing…');
+   const b=document.getElementById('btnSave'); const old=b.querySelector('#btnSaveLabel').textContent;
+   // do github push async
+   saveToGithub(path, content, oldPath !== path ? oldPath : null).then(ok=>{
+     if(ok) {
+       // remember new path as original for future rename detection
+       editorOriginalPath=path;
+       localStorage.setItem('geor_editor_path', path);
+       // also refresh changes list silently
+       if(!document.getElementById('paneChanges').classList.contains('hidden')) loadChanges(false);
+     }
+   });
  }
  editor.addEventListener('input', ()=>{
    const len=editor.value.length;
@@ -392,7 +544,8 @@ function init(){
    updateEditorStats();
  };
  document.getElementById('btnDownload').onclick=()=>{
-   const blob=new Blob([editor.value], {type:'text/markdown'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(fileLabel.textContent||'untitled.md'); a.click(); toast('Downloaded');
+   const path=fileInput.value||'untitled.md';
+   const blob=new Blob([editor.value], {type:'text/markdown'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=path.split('/').pop()||'untitled.md'; a.click(); toast('Downloaded '+a.download);
  };
  document.getElementById('btnCopy').onclick=()=>{
    navigator.clipboard.writeText(editor.value); toast('Copied');
@@ -402,12 +555,74 @@ function init(){
    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveEditor(true); }
    if((e.ctrlKey||e.metaKey) && e.shiftKey && e.key.toLowerCase()==='p'){ e.preventDefault(); document.getElementById('btnPreviewToggle').click(); }
  });
- // auto-save every 12s if dirty
- setInterval(()=>{ if(dirtyFlag) saveEditor(false); }, 12000);
+ // auto-save every 12s if dirty (local only, no github spam)
+ setInterval(()=>{ if(dirtyFlag) { localStorage.setItem('geor_editor', editor.value); localStorage.setItem('geor_editor_path', fileInput.value||'untitled.md'); dirty.classList.add('hidden'); dot.classList.add('hidden'); /* no toast */ } }, 12000);
  updateEditorStats();
 
- // maps
-let map=null, currentBounds=null, lastMap='world';
+ // CHANGES pane
+ const changesListEl=document.getElementById('changesList'), changesCount=document.getElementById('changesCount'), changesStatus=document.getElementById('changesStatus');
+ async function loadChanges(showToast=true){
+   changesStatus.textContent='Loading committed files…'; changesStatus.classList.remove('hidden');
+   changesCount.textContent='…';
+   try{
+     const r=await fetch('/api/additions/list',{credentials:'same-origin'});
+     const j=await r.json().catch(()=> ({}));
+     if(!r.ok){
+       const msg=j.error||('HTTP '+r.status);
+       changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Failed to load — ${msg}<br><span class="text-xs text-red-300/70">${(j.detail||'').slice(0,200)}</span><br><button onclick="document.getElementById('btnChangesRefresh').click()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>`;
+       changesStatus.textContent='Error: '+msg;
+       changesStatus.className='px-4 py-2 text-xs border-b border-red-900/30 bg-red-950/20 text-red-300';
+       return;
+     }
+     const files=j.files||[];
+     changesStatus.textContent= files.length ? `${files.length} file(s) in Website-additions` : 'No files yet — Save in Editor to create the first one';
+     changesStatus.className='px-4 py-2 text-xs border-b border-gold/10 text-gold/70';
+     changesCount.textContent= files.length.toLocaleString()+' files';
+     if(!files.length){
+       changesListEl.innerHTML=`<div class="text-sm text-cream/40 text-center py-12">No committed files yet<br><span class="text-xs">Go to <b class="text-gold">Editor</b>, name your file and click <b class="text-cream">Save → commit</b>.</span><br><a href="https://github.com/actualrat1984/Website-additions" target="_blank" class="text-xs text-gold underline mt-2 inline-block">View repo →</a></div>`;
+       return;
+     }
+     // filter out github keepers? hide .github, but show README differently
+     changesListEl.innerHTML=files.map(f=>{
+       const name=f.path.split('/').pop();
+       const dir=f.path.includes('/')? f.path.slice(0, f.path.lastIndexOf('/')) : '';
+       const isReadme = f.path.toLowerCase()==='readme.md';
+       return `<button data-path="${f.path}" class="changesItem w-full text-left px-3 py-3 rounded-xl border ${isReadme ? 'border-gold/10 bg-ink' : 'border-gold/10 bg-cream/[0.03] hover:bg-cream/[0.06] hover:border-gold/20'} flex items-center justify-between gap-3 group transition"><div class="min-w-0"><div class="text-sm truncate flex items-center gap-2"><span class="shrink-0 w-1.5 h-1.5 rounded-full ${isReadme?'bg-cream/40':'bg-gold'}"></span><span class="font-medium ${isReadme?'text-cream/70':'text-cream'}">${name}</span>${isReadme?'<span class="text-[10px] tracking-widest border border-gold/15 rounded-full px-2 py-0.5 text-cream/40">README</span>':''}</div><div class="text-[11px] text-cream/35 truncate mt-0.5">${f.path}${dir?'':' • '+(f.size||0)+' B'}</div></div><span class="text-[11px] border border-gold/15 rounded-full px-2.5 py-1 text-gold group-hover:bg-gold/10 shrink-0">Edit →</span></button>`;
+     }).join('');
+     changesListEl.querySelectorAll('.changesItem').forEach(b=> b.onclick=()=> openChange(b.dataset.path));
+     if(showToast) toast('Loaded '+files.length+' file(s) from Website-additions');
+   }catch(e){
+     changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Network error<br><span class="text-xs">${String(e).slice(0,200)}</span></div>`;
+     changesStatus.textContent='Network error';
+   }
+ }
+ async function openChange(path){
+   toast('Opening '+path+'…');
+   try{
+     const r=await fetch('/api/additions/file?path='+encodeURIComponent(path),{credentials:'same-origin'});
+     const j=await r.json().catch(()=> ({}));
+     if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+     fileInput.value=j.path;
+     editorOriginalPath=j.path;
+     localStorage.setItem('geor_editor_path', j.path);
+     editor.value=j.content||'';
+     editor.dispatchEvent(new Event('input'));
+     showTab('editor');
+     editor.focus();
+     setGitStatus('Opened '+j.path+' — edit & Save to re-commit', true);
+     toast('Loaded '+j.path+' — rewrite and Save to commit again');
+   }catch(e){
+     toast('Open failed: '+String(e).slice(0,120), false);
+   }
+ }
+ // expose for fallback retry button innerHTML
+ window.loadChanges=loadChanges;
+ document.getElementById('btnChangesRefresh').onclick=()=> loadChanges(true);
+ // initial background load hidden
+ loadChanges(false);
+
+ // maps — picker first
+let map=null, currentBounds=null, lastMap=null;
 function initMap(){
   if(map) return;
   map=L.map('map', {crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:0.25, zoomDelta:0.5, attributionControl:true, zoomControl:false});
@@ -419,11 +634,42 @@ function mapError(msg){
   if(!el){ el=document.createElement('div'); el.id='mapError'; el.className='absolute inset-0 top-10 bottom-11 flex items-center justify-center z-[500]'; document.getElementById('paneMaps').appendChild(el); }
   el.classList.remove('hidden');
   el.innerHTML='<div class="text-center bg-ink/95 border border-red-900/40 rounded-xl p-5"><div class="text-sm text-red-200">'+msg+'</div><button id="mapRetry" class="mt-3 text-xs border border-gold/30 text-gold px-4 py-1.5 rounded-full hover:bg-gold/10">Retry</button></div>';
-  el.querySelector('#mapRetry').onclick=()=>{ el.classList.add('hidden'); loadMap(lastMap); };
+  el.querySelector('#mapRetry').onclick=()=>{ el.classList.add('hidden'); if(lastMap) loadMap(lastMap); };
 }
 function mapClearError(){ const el=document.getElementById('mapError'); if(el) el.classList.add('hidden'); }
+function showMapPicker(){
+  document.getElementById('mapPicker').classList.remove('hidden');
+  document.getElementById('mapPicker').classList.add('flex');
+  document.getElementById('map').classList.add('hidden');
+  document.getElementById('mapTitle').classList.add('hidden');
+  document.getElementById('mapScale').classList.add('hidden');
+  document.getElementById('mapReset').classList.add('hidden');
+  document.getElementById('mapBackBtn').classList.add('hidden');
+  document.getElementById('mapQuickBtns').classList.add('hidden');
+  document.getElementById('mapQuickBtns').classList.remove('flex');
+  if(map) setTimeout(()=> map.invalidateSize(), 80);
+}
+function showMapView(which){
+  document.getElementById('mapPicker').classList.add('hidden');
+  document.getElementById('mapPicker').classList.remove('flex');
+  document.getElementById('map').classList.remove('hidden');
+  document.getElementById('mapTitle').textContent= which==='world' ? 'WORLD' : 'GRIMMEL PENINSULA';
+  document.getElementById('mapTitle').classList.remove('hidden');
+  document.getElementById('mapScale').classList.remove('hidden');
+  document.getElementById('mapReset').classList.remove('hidden');
+  document.getElementById('mapBackBtn').classList.remove('hidden');
+  document.getElementById('mapQuickBtns').classList.remove('hidden');
+  document.getElementById('mapQuickBtns').classList.add('flex');
+  // highlight quick btn
+  document.querySelectorAll('.mapBtn').forEach(x=>{
+    const is = x.dataset.map===which;
+    x.className= is ? 'mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold' : 'mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10';
+  });
+  setTimeout(()=> map && map.invalidateSize(), 90);
+}
 function loadMap(which){
   lastMap=which;
+  showMapView(which);
   mapBusy(true); mapClearError();
   initMap();
   map.eachLayer(l=> { if(l instanceof L.ImageOverlay) map.removeLayer(l); });
@@ -435,11 +681,12 @@ function loadMap(which){
     const bounds=[[0,0],[h,w]];
     currentBounds=bounds;
     mapBusy(false);
-    document.getElementById('mapReset').classList.remove('hidden');
     L.imageOverlay(url, bounds).addTo(map);
     map.fitBounds(bounds, {padding:[12,12]});
     const kmW=Math.round(w*3.086), kmH=Math.round(h*3.086);
     document.getElementById('mapScale').textContent=kmW.toLocaleString()+' x '+kmH.toLocaleString()+' km';
+    // clear previous markers
+    map.eachLayer(l=> { if(l instanceof L.CircleMarker) map.removeLayer(l); });
     if(which==='world'){
       const cy=h*0.62, cx=w*0.54;
       L.circleMarker([cy,cx], {radius:6, color:'#d9b77a', fillColor:'#d9b77a', fillOpacity:0.9, weight:1.5}).addTo(map).bindPopup('Grimmel Peninsula • 597 AGD');
@@ -457,19 +704,19 @@ function loadMap(which){
   img.onload=onLoad; img.onerror=onErr;
   if(img.complete && img.naturalWidth) onLoad();
 }
-document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=>{
-  document.querySelectorAll('.mapBtn').forEach(x=> x.className='mapBtn text-xs px-3 py-1.5 rounded-full border border-gold/20 text-gold hover:bg-gold/10');
-  b.className='mapBtn text-xs px-3 py-1.5 rounded-full bg-gold text-ink font-semibold';
-  loadMap(b.dataset.map);
-});
+document.querySelectorAll('.pickCard').forEach(b=> b.onclick=()=> loadMap(b.dataset.pick));
+document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=> loadMap(b.dataset.map));
 document.getElementById('mapReset').onclick=()=>{ if(map&&currentBounds){ map.fitBounds(currentBounds, {padding:[12,12]}); map.invalidateSize(); } };
-loadMap('world');
+document.getElementById('mapBackBtn').onclick=()=> showMapPicker();
+// start at picker, not auto world
+showMapPicker();
 
  showTab('vault');
   // jump buttons — visible actions (runs after init's assigns)
   document.querySelectorAll('[data-jump="vault"]').forEach(b=> b.onclick=()=>{ showTab('vault'); const s=document.getElementById('vaultSearch'); s.focus(); s.select(); toast('Vault ready — type to search'); });
-  document.querySelectorAll('.jumpEditor').forEach(b=> b.onclick=()=>{ showTab('editor'); toast('Editor ready'); });
-  document.querySelectorAll('[data-jump="maps"]').forEach(b=> b.onclick=()=>{ showTab('maps'); toast('Map loaded'); });
+  document.querySelectorAll('[data-jump="editor"]').forEach(b=> b.onclick=()=>{ showTab('editor'); toast('Editor ready'); });
+  document.querySelectorAll('[data-jump="changes"]').forEach(b=> b.onclick=()=>{ showTab('changes'); toast('Changes — Website-additions'); });
+  document.querySelectorAll('[data-jump="maps"]').forEach(b=> b.onclick=()=>{ showTab('maps'); toast('Pick a map'); });
 }
 </script>
 </body>
