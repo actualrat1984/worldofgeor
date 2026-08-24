@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="/Geor_from_orbit-1280.webp" imagesrcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high">
+  <style>html{scroll-padding-top:72px}</style>
 </head>
 <body class="bg-ink text-cream">
   <!-- Nav -->
@@ -60,7 +62,10 @@
   <!-- Hero -->
   <section class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
     <div class="absolute inset-0">
-      <img src="/Geor_from_orbit.png" alt="Ge'or from orbit — the Silver Bride, a thin fragmented debris ring" class="w-full h-full object-cover object-[center_35%]" onerror="this.style.display='none'" />
+      <picture>
+        <source type="image/webp" srcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" sizes="100vw">
+        <img src="/Geor_from_orbit.png" alt="Ge'or from orbit — the Silver Bride, a thin fragmented debris ring" class="w-full h-full object-cover object-[center_35%]" fetchpriority="high" decoding="async" onerror="this.style.display='none'" width="1920" height="1080" />
+      </picture>
       <div class="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/40 to-ink"></div>
       <div class="absolute inset-0 bg-gradient-to-r from-ink/80 via-ink/20 to-transparent"></div>
     </div>
@@ -128,14 +133,17 @@
     <div class="rounded-[20px] overflow-hidden border border-gold/15 bg-ink">
       <div class="grid lg:grid-cols-[1.35fr_0.85fr]">
         <div class="relative min-h-[420px] bg-[#0b0b0a] flex items-center justify-center overflow-hidden">
-          <img src="/Geor_World.png" alt="Ge'or valley — river, castle and cliffs under the Silver Bride" class="w-full h-full object-cover opacity-90" onerror="this.parentElement.innerHTML='<div class=\'p-12 text-center text-cream/50 text-sm\'>Valley view — Geor_World.png</div>'" />
-          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full text-[11px] tracking-widest border border-gold/20">ORBITAL VIEW • THE SILVER BRIDE • 597 AGD</div>
+          <picture class="w-full h-full">
+            <source type="image/webp" srcset="/Geor_World.webp">
+            <img src="/Geor_World.png" alt="Ge'or valley — river, castle and cliffs under the Silver Bride" class="w-full h-full object-cover opacity-90" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\'p-12 text-center text-cream/50 text-sm\'>Valley view — Geor_World.png</div>'" width="1376" height="768" />
+          </picture>
+          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full text-[11px] tracking-widest border border-gold/20">VALLEY VIEW • GRIMMEL PENINSULA • 597 AGD</div>
         </div>
         <div class="p-8 md:p-10 flex flex-col justify-center">
           <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">THE ATLAS</p>
           <h2 class="font-display text-[30px] leading-[1.05] font-bold">17 CONTINENTS.<br/>ONE COHERENT WORLD.</h2>
           <p class="mt-4 text-sm leading-6 text-cream/70">
-            Ge'or from orbit — the Silver Bride seen as a thin, shattered ring torn from the third moon, not a solid Saturn band. Below, 17 continents await. Commissioned by Archduke Hermes Kennensbach, Cartographer Office of the Erisian Empire — 0–8000 km scale, 16-point compass. Every border is canon.
+            Under the Silver Bride — a thin, shattered ring torn from the third moon, not a solid Saturn band — 17 continents await. Commissioned by Archduke Hermes Kennensbach, Cartographer Office of the Erisian Empire — 0–8000 km scale, 16-point compass. Every border is canon.
           </p>
           <ul class="mt-6 space-y-2.5 text-sm text-cream/80">
             <li class="flex gap-3"><span class="text-gold">—</span> 17 continents / landmasses, 8 seas, 3 moons + the Bride</li>
@@ -157,39 +165,53 @@
       </div>
       <p class="hidden md:block text-sm text-cream/60 max-w-[360px] text-right">From the Great Divergence (Year 0) to 597 AGD — the present. No gaps, no ghosts.</p>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="ageGrid">
+      <button data-age="0" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 0</div>
         <div class="font-serif text-[15px] font-semibold">The Lost Era</div>
         <div class="text-xs text-cream/60 mt-1">15,000 — 2,000 BGD</div>
-      </div>
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+      </button>
+      <button data-age="1" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 1–3</div>
         <div class="font-serif text-[15px] font-semibold">Nomads to Empires</div>
         <div class="text-xs text-cream/60 mt-1">Kingdoms, tribes, first cities</div>
-      </div>
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+      </button>
+      <button data-age="4" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 4–6</div>
         <div class="font-serif text-[15px] font-semibold">Dragons & Divergence</div>
         <div class="text-xs text-cream/60 mt-1">The Groom forms • Year 0</div>
-      </div>
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+      </button>
+      <button data-age="7" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 7–9</div>
         <div class="font-serif text-[15px] font-semibold">Eris Ascendant</div>
         <div class="text-xs text-cream/60 mt-1">Empire, crusades, schism</div>
-      </div>
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4">
+      </button>
+      <button data-age="10" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 10–11</div>
         <div class="font-serif text-[15px] font-semibold">The Fracturing</div>
         <div class="text-xs text-cream/60 mt-1">Present • 597 AGD</div>
-      </div>
-      <div class="rounded-xl border border-gold/12 bg-cream/[0.04] p-4 bg-gradient-to-br from-gold/10 to-transparent">
+      </button>
+      <button data-age="12" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 bg-gradient-to-br from-gold/10 to-transparent hover:border-gold/30 transition focus:outline-none focus:border-gold/40">
         <div class="text-[11px] tracking-widest text-gold">AGE 12</div>
         <div class="font-serif text-[15px] font-semibold">Age of Strife</div>
         <div class="text-xs text-cream/60 mt-1">Future • unwritten</div>
-      </div>
+      </button>
     </div>
   </section>
+
+  <!-- Age drawer (private archive teaser) -->
+  <div id="ageDrawer" class="hidden max-w-[1280px] mx-auto px-6 -mt-8 pb-16 md:pb-24">
+    <div class="rounded-2xl border border-gold/20 bg-[#1a1a18] p-6 md:p-7 flex justify-between gap-6">
+      <div>
+        <p id="ageDrawerKicker" class="text-gold text-[11px] tracking-[0.28em] font-semibold"></p>
+        <h3 id="ageDrawerTitle" class="font-display text-[22px] font-bold mt-1"></h3>
+        <p id="ageDrawerText" class="text-sm leading-6 text-cream/70 mt-2 max-w-[640px]"></p>
+        <div id="ageDrawerMeta" class="text-xs text-cream/50 mt-3"></div>
+        <button id="ageDrawerEnter" class="mt-4 inline-flex border border-gold/30 text-gold px-5 py-2 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">ENTER ARCHIVE →</button>
+      </div>
+      <button id="ageDrawerClose" class="self-start text-cream/60 hover:text-cream text-xl leading-none" aria-label="Close">✕</button>
+    </div>
+  </div>
 
   <!-- Gallery / Peoples -->
   <section id="gallery" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
@@ -197,21 +219,21 @@
     <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mb-8">A WORLD THAT BREATHES.</h2>
     <div class="grid md:grid-cols-3 gap-5">
       <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
-        <img src="/panel-erisia.jpg" alt="Erisian Empire — gothic imperial capital on the hill, flags of the dragon" class="w-full h-44 object-cover" />
+        <picture><source type="image/webp" srcset="/panel-erisia.webp"><img src="/panel-erisia.jpg" alt="Erisian Empire — gothic imperial capital on the hill, flags of the dragon" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
         <div class="p-5">
           <h3 class="font-display tracking-widest text-sm font-semibold">THE ERISIAN EMPIRE</h3>
           <p class="text-sm text-cream/65 mt-2 leading-6">Three duchies, 30 counties, draconic law and elven memory. The sword of Eris is dulling.</p>
         </div>
       </div>
       <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
-        <img src="/panel-kobre.jpg" alt="Kobre — brass gear-towers and clockwork forges" class="w-full h-44 object-cover" />
+        <picture><source type="image/webp" srcset="/panel-kobre.webp"><img src="/panel-kobre.jpg" alt="Kobre — brass gear-towers and clockwork forges" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
         <div class="p-5">
           <h3 class="font-display tracking-widest text-sm font-semibold">KOBRE & THE GEAR</h3>
           <p class="text-sm text-cream/65 mt-2 leading-6">Every tooth is law. Four nations measuring the world in brass, coal and debt.</p>
         </div>
       </div>
       <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
-        <img src="/panel-lumina.jpg" alt="Lumina — canopy villages in the luminous forest" class="w-full h-44 object-cover" />
+        <picture><source type="image/webp" srcset="/panel-lumina.webp"><img src="/panel-lumina.jpg" alt="Lumina — canopy villages in the luminous forest" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
         <div class="p-5">
           <h3 class="font-display tracking-widest text-sm font-semibold">LUMINA</h3>
           <p class="text-sm text-cream/65 mt-2 leading-6">Ten nations in the trees, where light is currency and the ground is myth.</p>
@@ -239,7 +261,7 @@
         </div>
         <div class="flex gap-3 shrink-0">
           <button id="ctaRequestBtn" class="bg-cream text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-white transition">Request Access</button>
-          <a href="https://worldofgeor.com" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium hover:bg-cream/10 transition">worldofgeor.com</a>
+          <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium hover:bg-cream/10 transition">Email Mikhail</a>
         </div>
       </div>
     </div>
@@ -258,11 +280,11 @@
 
 
   <!-- Request Access Modal -->
-  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4">
+  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="requestTitle">
     <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
-      <button id="closeRequest" class="absolute top-4 right-4 text-cream/60 hover:text-cream">✕</button>
-      <h3 class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
+      <button id="closeRequest" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <h3 id="requestTitle" class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
       <p class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
       <form id="requestForm" class="mt-5 space-y-3">
         <input id="reqEmail" type="email" placeholder="your email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
@@ -275,11 +297,11 @@
   </div>
 
   <!-- Login Modal -->
-  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4">
+  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="authTitle">
     <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
-      <button id="closeAuth" class="absolute top-4 right-4 text-cream/60 hover:text-cream">✕</button>
-      <h3 class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
+      <button id="closeAuth" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <h3 id="authTitle" class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
       <p class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
       <div class="flex gap-2 mt-4 text-xs">
         <button id="tabLogin" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
@@ -311,13 +333,32 @@
       const requestForm = document.getElementById('requestForm');
       const reqMsgOut = document.getElementById('reqMsgOut');
       let mode='login';
-      function openAuth(m){ mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); updateTabs(); authMsg.textContent=''; }
-      function closeAuthModal(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
+      // a11y helpers — body lock + focus trap
+      function lockBody(){ document.body.style.overflow='hidden' }
+      function unlockBody(){ document.body.style.overflow='' }
+      function trapFocus(modal){
+        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if(!focusable.length) return;
+        const first = focusable[0], last = focusable[focusable.length-1];
+        function onTab(e){
+          if(e.key !== 'Tab') return;
+          if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+        modal._trapHandler = onTab;
+        modal.addEventListener('keydown', onTab);
+        first.focus();
+      }
+      function releaseTrap(modal){
+        if(modal._trapHandler){ modal.removeEventListener('keydown', modal._trapHandler); delete modal._trapHandler; }
+      }
+      function openAuth(m){ mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
+      function closeAuthModal(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); unlockBody(); }
       function updateTabs(){
         if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='block'; }
       }
-      function openRequest(){ requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); reqMsgOut.textContent=''; }
-      function closeRequestModal(){ requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); }
+      function openRequest(){ requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); requestModal.setAttribute('aria-hidden','false'); reqMsgOut.textContent=''; lockBody(); trapFocus(requestModal); }
+      function closeRequestModal(){ requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); requestModal.setAttribute('aria-hidden','true'); releaseTrap(requestModal); unlockBody(); }
       tabLogin?.addEventListener('click', ()=>{mode='login'; updateTabs();});
       tabRegister?.addEventListener('click', ()=>{mode='register'; updateTabs();});
       closeAuth?.addEventListener('click', closeAuthModal);
@@ -327,10 +368,40 @@
       document.getElementById('deskRequestBtn')?.addEventListener('click', openRequest);
       document.getElementById('mobRequestBtn')?.addEventListener('click', openRequest);
       document.getElementById('ctaRequestBtn')?.addEventListener('click', openRequest);
-      // mobile menu toggle
-      const menuBtn = document.getElementById('menuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      menuBtn?.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+      // mobile menu handled in src/main.js (hide-on-scroll, outside-ESC, link-close)
+      // age drawer — private archive teaser (no vault data exposed)
+      const AGE_DATA = {
+        '0': { kicker:'AGE 0 • 15,000 — 2,000 BGD', title:'The Lost Era', text:'Before canon. Mage-cells emerge, first peoples scatter. Everything the later empires call "divine" is rubble from here.', meta:'Key: Baoth ruins • Traveler archive • no empire yet' },
+        '1': { kicker:'AGE 1–3 • 2,000 BGD — 800 BGD', title:'Nomads to Empires', text:'Tribes become kingdoms. The Erisian plain unites under dragon law; Kobre learns to count in brass. First cities, first conspiracies.', meta:'Key: Eris plain • Kobre gear-cult • first duchies' },
+        '4': { kicker:'AGE 4–6 • 800 BGD — Year 0', title:'Dragons & Divergence', text:'The Groom forms from the third moon — the Silver Bride is born. Year 0, the calendar resets. Dragons pick sides.', meta:'Key: Groom formation • Year 0 • Silver Bride visible' },
+        '7': { kicker:'AGE 7–9 • 0 — 411 AGD', title:'Eris Ascendant', text:'Eris at its height. Three duchies, crusades, schism. The Shadows learn that mage-cells can be farmed.', meta:'Key: 30 counties • crusades • schism • Shadows weaponize mage-cells' },
+        '10': { kicker:'AGE 10–11 • 411 — 597 AGD • PRESENT', title:'The Fracturing', text:'The Sword dulls. 300 nations now, no center. 597 AGD is today — you are here. Free people refuse to stay dead.', meta:'Present • 300 nations • 17 continents • 59k entries' },
+        '12': { kicker:'AGE 12 • FUTURE', title:'Age of Strife — Unwritten', text:'Not canon yet. When it starts, it will not start with a trumpet. It starts with a stubborn "no".', meta:'Future • unwritten • your play is here' }
+      };
+      const ageDrawer = document.getElementById('ageDrawer');
+      const ageKicker = document.getElementById('ageDrawerKicker');
+      const ageTitle = document.getElementById('ageDrawerTitle');
+      const ageText = document.getElementById('ageDrawerText');
+      const ageMeta = document.getElementById('ageDrawerMeta');
+      const ageClose = document.getElementById('ageDrawerClose');
+      const ageEnter = document.getElementById('ageDrawerEnter');
+      document.querySelectorAll('.age-card').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const d = AGE_DATA[btn.dataset.age];
+          if(!d) return;
+          ageKicker.textContent = d.kicker;
+          ageTitle.textContent = d.title;
+          ageText.textContent = d.text;
+          ageMeta.textContent = d.meta;
+          ageDrawer.classList.remove('hidden');
+          ageDrawer.scrollIntoView({behavior:'smooth', block:'nearest'});
+          // highlight active
+          document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40'));
+          btn.classList.add('border-gold/40');
+        });
+      });
+      ageClose?.addEventListener('click', ()=>{ ageDrawer.classList.add('hidden'); document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40')); });
+      ageEnter?.addEventListener('click', ()=>{ if(currentUser) location.href='/dashboard.html'; else openAuth('login'); });
       // auth form
       authForm?.addEventListener('submit', async (e)=>{
         e.preventDefault();
