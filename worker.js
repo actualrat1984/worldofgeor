@@ -127,7 +127,7 @@ export default {
         }
       }
 
-      // POST /api/request-access  {email, message} — public, creates pending request
+      // POST /api/request-access  {email, message} — public, creates pending request + emails admin
       if (url.pathname === '/api/request-access' && request.method === 'POST') {
         try {
           await ensureTables();
@@ -139,6 +139,25 @@ export default {
           const existsReq = await env.DB.prepare('SELECT id FROM requests WHERE email = ? AND status = "pending"').bind(norm).first();
           if (existsReq) return json({ error: 'Request already pending — we will email you' }, 409);
           await env.DB.prepare('INSERT INTO requests (email, message) VALUES (?, ?)').bind(norm, (message||'').slice(0,500)).run();
+          // notify admin via MailChannels (Cloudflare Workers email) — best effort, never blocks response
+          const adminEmail = 'ichieisenheart@gmail.com';
+          const notifyFrom = 'noreply@worldofgeor.com';
+          ctx.waitUntil((async () => {
+            try {
+              const subject = `New access request: ${norm}`;
+              const text = `New request for World of Ge'or\n\nEmail: ${norm}\nMessage: ${(message||'(no message)').slice(0,800)}\n\nApprove in /admin.html or D1: INSERT INTO invites(code) VALUES ('INVITE_...'); then share code with user.\nTime: ${new Date().toISOString()}\n`;
+              await fetch('https://api.mailchannels.net/tx/v1/send', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                  personalizations: [{ to: [{ email: adminEmail, name: 'Mikhail' }] }],
+                  from: { email: notifyFrom, name: "World of Ge'or" },
+                  subject,
+                  content: [{ type: 'text/plain', value: text }],
+                })
+              });
+            } catch {}
+          })());
           return json({ ok: true });
         } catch (e) { return json({ error: 'Request failed', detail: String(e) }, 500); }
       }
