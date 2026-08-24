@@ -24,9 +24,19 @@
         <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
         <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
       </nav>
-      <div class="hidden md:flex items-center gap-3">
-        <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</a>
-        <a href="#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
+      <div class="hidden md:flex items-center gap-3" id="navRight">
+        <button id="deskRequestBtn" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
+        <a id="deskEnterLink" href="#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
+        <div id="deskUserWrap" class="hidden relative">
+          <button id="deskUserBtn" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span class="text-[10px]">▼</span></button>
+          <div id="deskUserMenu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
+            <a href="/dashboard.html" class="block px-4 py-2 text-sm hover:bg-gold/10">Enter Dashboard</a>
+            <a href="/admin.html" id="deskAdminLink" class="hidden block px-4 py-2 text-sm hover:bg-gold/10 text-gold">Admin</a>
+            <button id="deskSettingsBtn" class="w-full text-left px-4 py-2 text-sm hover:bg-gold/10">Settings</button>
+            <div class="border-t border-gold/10 my-1"></div>
+            <button id="deskLogoutBtn" class="w-full text-left px-4 py-2 text-sm hover:bg-gold/10 text-red-300">Logout</button>
+          </div>
+        </div>
       </div>
       <button id="menuBtn" class="md:hidden p-2 text-cream/80">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -37,7 +47,13 @@
       <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
       <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
       <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
-      <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</a>
+      <button id="mobRequestBtn" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
+      <div id="mobUserWrap" class="hidden mt-3 border-t border-gold/10 pt-3 space-y-2">
+        <div class="text-xs text-gold tracking-widest" id="mobUserName">USER</div>
+        <a href="/dashboard.html" class="block text-sm text-cream">Enter Dashboard</a>
+        <a href="/admin.html" id="mobAdminLink" class="hidden block text-sm text-gold">Admin</a>
+        <button id="mobLogoutBtn" class="block text-sm text-red-300">Logout</button>
+      </div>
     </div>
   </header>
 
@@ -222,7 +238,7 @@
           <p class="mt-2 text-sm leading-6 text-cream/70 max-w-[560px]">World of Ge'or is an invite-only archive. If you were given a link, you’re already on the list. If not — request access and we’ll get back to you.</p>
         </div>
         <div class="flex gap-3 shrink-0">
-          <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge'or" class="bg-cream text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-white transition">Request Access</a>
+          <button id="ctaRequestBtn" class="bg-cream text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:bg-white transition">Request Access</button>
           <a href="https://worldofgeor.com" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium hover:bg-cream/10 transition">worldofgeor.com</a>
         </div>
       </div>
@@ -239,6 +255,24 @@
   </footer>
 
   <script type="module" src="/src/main.js"></script>
+
+
+  <!-- Request Access Modal -->
+  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4">
+    <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
+      <button id="closeRequest" class="absolute top-4 right-4 text-cream/60 hover:text-cream">✕</button>
+      <h3 class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
+      <p class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
+      <form id="requestForm" class="mt-5 space-y-3">
+        <input id="reqEmail" type="email" placeholder="your email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none resize-none"></textarea>
+        <button type="submit" id="reqSubmit" class="w-full bg-cream text-ink py-3 rounded-full text-sm font-semibold hover:bg-white transition">Send Request</button>
+        <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]"></p>
+      </form>
+      <p class="text-[11px] text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
+    </div>
+  </div>
 
   <!-- Login Modal -->
   <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4">
@@ -262,42 +296,49 @@
   </div>
   <script>
     (function(){
-      const modal = document.getElementById('authModal');
-      const backdrop = document.getElementById('authBackdrop');
-      const close = document.getElementById('closeAuth');
-      const openBtns = [document.getElementById('openExplore'), document.querySelector('a[href="#atlas"]')?.closest('div')?.querySelector('#openExplore')].filter(Boolean);
-      // Actually bind all ENTER / Explore buttons
-      const triggers = document.querySelectorAll('#openExplore, a[href="#atlas"].bg-gradient-to-b, header a[href="#atlas"]');
-      // Simpler: bind any element with text ENTER or Explore the World
-      document.querySelectorAll('a,button').forEach(el=>{
-        const t = el.textContent.trim();
-        if(t==='ENTER' || t==='Explore the World'){
-          el.addEventListener('click', e=>{ e.preventDefault(); openModal('login'); });
-        }
-      });
+      let currentUser = null;
+      const authModal = document.getElementById('authModal');
+      const authBackdrop = document.getElementById('authBackdrop');
+      const closeAuth = document.getElementById('closeAuth');
       const tabLogin = document.getElementById('tabLogin');
       const tabRegister = document.getElementById('tabRegister');
-      const invite = document.getElementById('authInvite');
-      const msg = document.getElementById('authMsg');
-      const form = document.getElementById('authForm');
+      const authInvite = document.getElementById('authInvite');
+      const authMsg = document.getElementById('authMsg');
+      const authForm = document.getElementById('authForm');
+      const requestModal = document.getElementById('requestModal');
+      const requestBackdrop = document.getElementById('requestBackdrop');
+      const closeRequest = document.getElementById('closeRequest');
+      const requestForm = document.getElementById('requestForm');
+      const reqMsgOut = document.getElementById('reqMsgOut');
       let mode='login';
-      function openModal(m){ mode=m; modal.classList.remove('hidden'); modal.classList.add('flex'); updateTabs(); msg.textContent=''; }
-      function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      function openAuth(m){ mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); updateTabs(); authMsg.textContent=''; }
+      function closeAuthModal(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); }
       function updateTabs(){
-        if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; invite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; invite.style.display='block'; }
+        if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='block'; }
       }
+      function openRequest(){ requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); reqMsgOut.textContent=''; }
+      function closeRequestModal(){ requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); }
       tabLogin?.addEventListener('click', ()=>{mode='login'; updateTabs();});
       tabRegister?.addEventListener('click', ()=>{mode='register'; updateTabs();});
-      close?.addEventListener('click', closeModal);
-      backdrop?.addEventListener('click', closeModal);
-      document.getElementById('menuBtn')?.addEventListener('click', ()=>{}); // keep existing
-      form?.addEventListener('submit', async (e)=>{
+      closeAuth?.addEventListener('click', closeAuthModal);
+      authBackdrop?.addEventListener('click', closeAuthModal);
+      closeRequest?.addEventListener('click', closeRequestModal);
+      requestBackdrop?.addEventListener('click', closeRequestModal);
+      document.getElementById('deskRequestBtn')?.addEventListener('click', openRequest);
+      document.getElementById('mobRequestBtn')?.addEventListener('click', openRequest);
+      document.getElementById('ctaRequestBtn')?.addEventListener('click', openRequest);
+      // mobile menu toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      menuBtn?.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+      // auth form
+      authForm?.addEventListener('submit', async (e)=>{
         e.preventDefault();
         const email=document.getElementById('authEmail').value.trim();
         const password=document.getElementById('authPassword').value;
         const inviteCode=document.getElementById('authInvite').value.trim();
         const btn=document.getElementById('authSubmit');
-        msg.textContent='…';
+        authMsg.textContent='…';
         btn.disabled=true;
         try{
           const url = mode==='login' ? '/api/login' : '/api/register';
@@ -306,21 +347,93 @@
           let j={};
           try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300) || 'Failed'); }
           if(!r.ok) throw new Error((j.detail? j.error+': '+j.detail : j.error) || 'Failed');
-          msg.textContent = mode==='login' ? 'Welcome back — entering…' : 'Registered — entering…';
-          msg.className='text-xs text-center min-h-[1.2em] text-green-400';
-          setTimeout(()=>{ closeModal(); location.reload(); }, 800);
-        }catch(err){ msg.textContent=err.message; msg.className='text-xs text-center min-h-[1.2em] text-red-400'; }
+          authMsg.textContent = mode==='login' ? 'Welcome — entering dashboard…' : 'Registered — entering…';
+          authMsg.className='text-xs text-center min-h-[1.2em] text-green-400';
+          setTimeout(()=>{ location.href='/dashboard.html'; }, 700);
+        }catch(err){ authMsg.textContent=err.message; authMsg.className='text-xs text-center min-h-[1.2em] text-red-400'; }
         finally{ btn.disabled=false; }
       });
-      // expose for ENTER link (we changed href to #atlas, intercept)
-      // also fetch /api/me to show logged state
-      fetch('/api/me').then(r=>r.json()).then(j=>{
-        if(j.user){
-          document.querySelectorAll('a,button').forEach(el=>{
-            if(el.textContent.trim()==='ENTER'){ el.textContent=j.user.email.split('@')[0]; el.href='#'; }
-          });
-        }
+      // request form
+      requestForm?.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const email=document.getElementById('reqEmail').value.trim();
+        const message=document.getElementById('reqMsg').value.trim();
+        const btn=document.getElementById('reqSubmit');
+        reqMsgOut.textContent='…';
+        btn.disabled=true;
+        try{
+          const r=await fetch('/api/request-access',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,message})});
+          let j={}; try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300)); }
+          if(!r.ok) throw new Error(j.error||'Failed');
+          reqMsgOut.textContent='Request sent — we will email you an invite code.';
+          reqMsgOut.className='text-xs text-center min-h-[1.2em] text-green-400';
+          setTimeout(closeRequestModal, 1600);
+        }catch(err){ reqMsgOut.textContent=err.message; reqMsgOut.className='text-xs text-center min-h-[1.2em] text-red-400'; }
+        finally{ btn.disabled=false; }
       });
+      // nav actions - handle logged-in vs logged-out
+      const openExplore = document.getElementById('openExplore');
+      const deskEnterLink = document.getElementById('deskEnterLink');
+      const deskUserWrap = document.getElementById('deskUserWrap');
+      const deskUserBtn = document.getElementById('deskUserBtn');
+      const deskUserMenu = document.getElementById('deskUserMenu');
+      const deskRequestBtn = document.getElementById('deskRequestBtn');
+      const deskAdminLink = document.getElementById('deskAdminLink');
+      const deskUserName = document.getElementById('deskUserName');
+      const mobUserWrap = document.getElementById('mobUserWrap');
+      const mobUserName = document.getElementById('mobUserName');
+      const mobAdminLink = document.getElementById('mobAdminLink');
+      function applyUser(user){
+        currentUser = user;
+        if(user){
+          const short = user.email.split('@')[0];
+          if(deskEnterLink) deskEnterLink.classList.add('hidden');
+          if(deskRequestBtn) deskRequestBtn.classList.add('hidden');
+          if(deskUserWrap){ deskUserWrap.classList.remove('hidden'); }
+          if(deskUserName) deskUserName.textContent = short;
+          if(mobUserWrap){ mobUserWrap.classList.remove('hidden'); }
+          if(mobUserName) mobUserName.textContent = user.email;
+          // admin link
+          if(user.email === 'ichieisenheart@gmail.com'){
+            deskAdminLink?.classList.remove('hidden');
+            mobAdminLink?.classList.remove('hidden');
+          }
+          // CTA request hide
+          document.getElementById('ctaRequestBtn')?.classList.add('hidden');
+          // clicking Explore when logged in -> dashboard
+          openExplore?.addEventListener('click', (e)=>{ e.preventDefault(); location.href='/dashboard.html'; }, {once:true});
+        } else {
+          // logged out: Explore opens auth
+          openExplore?.addEventListener('click', (e)=>{ e.preventDefault(); openAuth('login'); });
+          deskEnterLink?.addEventListener('click', (e)=>{ e.preventDefault(); openAuth('login'); });
+        }
+      }
+      // dropdown toggle
+      deskUserBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); deskUserMenu.classList.toggle('hidden'); });
+      document.addEventListener('click', ()=> deskUserMenu?.classList.add('hidden'));
+      // settings & logout
+      document.getElementById('deskSettingsBtn')?.addEventListener('click', ()=> location.href='/dashboard.html#settings');
+      document.getElementById('deskLogoutBtn')?.addEventListener('click', async ()=>{
+        await fetch('/api/logout',{method:'POST'});
+        location.href='/';
+      });
+      document.getElementById('mobLogoutBtn')?.addEventListener('click', async ()=>{
+        await fetch('/api/logout',{method:'POST'});
+        location.href='/';
+      });
+      // ESC closes modals
+      document.addEventListener('keydown', e=>{
+        if(e.key==='Escape'){ closeAuthModal(); closeRequestModal(); deskUserMenu?.classList.add('hidden'); }
+      });
+      // fetch me
+      fetch('/api/me').then(r=>r.json()).then(j=>{
+        if(j.user) applyUser(j.user);
+        else applyUser(null);
+      }).catch(()=> applyUser(null));
+      // If URL has #atlas and logged in, allow atlas view; otherwise keep Explore handling
+      // Expose openAuth globally for other buttons
+      window.openAuth = openAuth;
+      window.openRequest = openRequest;
     })();
   </script>
 

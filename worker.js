@@ -74,6 +74,7 @@ export default {
         await env.DB.prepare(`CREATE TABLE IF NOT EXISTS invites (code TEXT PRIMARY KEY, used_by TEXT, used_at TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
         await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`).run();
         // seed defaults (ignore if exists)
+        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, message TEXT, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
         try { await env.DB.prepare(`INSERT OR IGNORE INTO invites (code) VALUES ('WELCOME_TO_GEOR_2026'), ('MIKHAIL_INVITE'), ('ARCADY_INVITE')`).run(); } catch {}
       }
       // CORS for same origin only
@@ -126,6 +127,22 @@ export default {
         }
       }
 
+      // POST /api/request-access  {email, message} — public, creates pending request
+      if (url.pathname === '/api/request-access' && request.method === 'POST') {
+        try {
+          await ensureTables();
+          const { email, message } = await request.json();
+          if (!email || !email.includes('@')) return json({ error: 'Valid email required' }, 400);
+          const norm = email.trim().toLowerCase();
+          const existsUser = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(norm).first();
+          if (existsUser) return json({ error: 'Email already registered — try login' }, 409);
+          const existsReq = await env.DB.prepare('SELECT id FROM requests WHERE email = ? AND status = "pending"').bind(norm).first();
+          if (existsReq) return json({ error: 'Request already pending — we will email you' }, 409);
+          await env.DB.prepare('INSERT INTO requests (email, message) VALUES (?, ?)').bind(norm, (message||'').slice(0,500)).run();
+          return json({ ok: true });
+        } catch (e) { return json({ error: 'Request failed', detail: String(e) }, 500); }
+      }
+
       // GET /api/me  -> {email} if logged in
       if (url.pathname === '/api/me' && request.method === 'GET') {
         const cookies = parseCookies(request);
@@ -170,6 +187,27 @@ export default {
         if (url.pathname === '/api/admin/users' && request.method === 'GET') {
           const { results } = await env.DB.prepare('SELECT id, email, invite_code, created_at FROM users ORDER BY created_at DESC').all();
           return json({ users: results });
+        }
+        if (url.pathname === '/api/admin/requests' && request.method === 'GET') {
+          await ensureTables();
+          const { results } = await env.DB.prepare('SELECT id, email, message, status, created_at FROM requests ORDER BY created_at DESC').all();
+          return json({ requests: results });
+        }
+        if (url.pathname === '/api/admin/requests/approve' && request.method === 'POST') {
+          const { id, code } = await request.json();
+          if (!id) return json({ error: 'id required' }, 400);
+          const req = await env.DB.prepare('SELECT email FROM requests WHERE id = ?').bind(id).first();
+          if (!req) return json({ error: 'Request not found' }, 404);
+          const inviteCode = (code || ('INVITE_' + Math.random().toString(36).slice(2,8).toUpperCase()));
+          const clean = inviteCode.trim().toUpperCase().replace(/\s+/g, '_');
+          await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
+          await env.DB.prepare('UPDATE requests SET status = ? WHERE id = ?').bind('approved:'+clean, id).run();
+          return json({ ok: true, code: clean, email: req.email });
+        }
+        if (url.pathname === '/api/admin/requests/reject' && request.method === 'POST') {
+          const { id } = await request.json();
+          await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ?').bind(id).run();
+          return json({ ok: true });
         }
         return json({ error: 'Not found' }, 404);
       }

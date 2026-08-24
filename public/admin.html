@@ -51,6 +51,14 @@
 
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
         <div class="px-5 py-3 border-b border-gold/10 flex justify-between items-center">
+          <h3 class="text-sm font-semibold tracking-widest">PENDING REQUESTS</h3>
+          <button id="refreshReq" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+        </div>
+        <div id="requests" class="divide-y divide-gold/10 text-sm"></div>
+      </div>
+
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
+        <div class="px-5 py-3 border-b border-gold/10 flex justify-between items-center">
           <h3 class="text-sm font-semibold tracking-widest">USERS</h3>
           <button id="refreshUsers" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
         </div>
@@ -73,6 +81,7 @@
         document.getElementById('me').textContent = me.user.email;
         document.getElementById('gate').classList.add('hidden');
         document.getElementById('panel').classList.remove('hidden');
+        await refreshRequests();
         await refreshInvites();
         await refreshUsers();
       } catch(e){
@@ -100,6 +109,30 @@
         </div>
       `).join('');
     }
+
+    async function refreshRequests(){
+      try{
+        const j = await api('/api/admin/requests');
+        const el = document.getElementById('requests');
+        if(!j.requests.length){ el.innerHTML='<div class="p-4 text-cream/50">No requests</div>'; return; }
+        el.innerHTML = j.requests.map(r=>`
+          <div class="px-5 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div class="flex-1"><b>${r.email}</b> <span class="text-cream/40 text-xs">— ${r.status} • ${new Date(r.created_at).toLocaleString()}</span><div class="text-xs text-cream/60 mt-1">${(r.message||'').replace(/</g,'&lt;')}</div></div>
+            <div class="flex gap-2">
+              ${r.status==='pending' ? `<button onclick="approveReq(${r.id})" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button onclick="rejectReq(${r.id})" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs text-cream/40">${r.status}</span>`}
+            </div>
+          </div>
+        `).join('');
+      }catch(e){ document.getElementById('requests').innerHTML='<div class="p-4 text-red-400 text-xs">'+e.message+'</div>'; }
+    }
+    async function approveReq(id){
+      const code = prompt('Invite code to create (leave blank for auto):') || '';
+      try{ const j=await api('/api/admin/requests/approve',{method:'POST', body:JSON.stringify({id, code})}); alert('Approved — invite: '+j.code+' for '+j.email+'\nEmail them this code!'); await refreshRequests(); await refreshInvites(); }catch(e){ alert(e.message); }
+    }
+    async function rejectReq(id){
+      if(!confirm('Reject request '+id+'?')) return;
+      await api('/api/admin/requests/reject',{method:'POST', body:JSON.stringify({id})}); await refreshRequests();
+    }
     async function delInvite(code){
       if(!confirm('Delete invite '+code+'?')) return;
       await api('/api/admin/invites/'+encodeURIComponent(code), { method:'DELETE' });
@@ -113,6 +146,7 @@
     });
     document.getElementById('refreshInv').onclick=refreshInvites;
     document.getElementById('refreshUsers').onclick=refreshUsers;
+    document.getElementById('refreshReq').onclick=refreshRequests;
     load();
   </script>
 </body>
