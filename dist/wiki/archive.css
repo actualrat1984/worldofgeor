@@ -1,0 +1,158 @@
+/* ============ Ge'or Archive — slate / amber (matches worldofgeor.com) ============ */
+:root {
+  --geor-ink: #0f0e0d;
+  --geor-cream: #f2e8d0;
+  --geor-gold: #d9b77a;
+  --geor-amber: #b8924a;
+}
+
+/* Material slate overrides to match landing */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #0f0e0d;
+  --md-primary-fg-color--light: #1a1a18;
+  --md-primary-fg-color--dark: #0a0908;
+  --md-primary-bg-color: #f2e8d0;
+  --md-accent-fg-color: #d9b77a;
+  --md-hue: 38;
+}
+
+/* ---- Hero ---- */
+.hero {
+  text-align: center;
+  padding: 4.5rem 1.5rem 3rem;
+  border-radius: 0.85rem;
+  margin-bottom: 2rem;
+  background:
+    linear-gradient(170deg, rgba(15,14,13,0.82) 0%, rgba(26,26,24,0.55) 55%, rgba(10,10,8,0.75) 100%),
+    url("Ge'or%20Arts/Geor_from_orbit.png") center 35% / cover no-repeat;
+  border: 1px solid rgba(217,183,122,0.22);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+}
+.hero h1 {
+  font-size: 3.4rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.12em;
+  font-family: "Cinzel", serif;
+  background: linear-gradient(120deg, #d9b77a, #b8924a, #d9b77a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-sub {
+  font-size: 1.05rem;
+  max-width: 46rem;
+  margin: 0 auto 1.8rem;
+  color: rgba(242,232,208,0.88);
+  line-height: 1.55;
+}
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+.hero-stats span {
+  background: rgba(242,232,208,0.06);
+  border: 1px solid rgba(217,183,122,0.18);
+  border-radius: 999px;
+  padding: 0.35rem 1.1rem;
+  font-size: 0.9rem;
+  color: rgba(242,232,208,0.92);
+}
+.hero-stats b {
+  color: #d9b77a;
+  font-size: 1.05rem;
+}
+.hero-actions {
+  display: flex;
+  gap: 0.9rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(217,183,122,0.35);
+  color: #d9b77a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn:hover {
+  border-color: #d9b77a;
+  background: rgba(217,183,122,0.12);
+  color: #f2e8d0;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #d9b77a, #b8924a);
+  border: none;
+  color: #0f0e0d;
+}
+.btn-primary:hover {
+  filter: brightness(1.08);
+  color: #0f0e0d;
+}
+
+/* ---- Quote ---- */
+.quote {
+  margin: 2.2rem auto 0.5rem;
+  max-width: 44rem;
+  text-align: center;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: rgba(217,183,122,0.9);
+  border-left: none;
+  padding: 0;
+}
+.quote::before {
+  content: "“";
+  color: rgba(217,183,122,0.4);
+  font-size: 1.6rem;
+  margin-right: 0.3rem;
+}
+
+/* ---- Audio ---- */
+.audio-list h2 {
+  font-size: 1.25rem;
+  margin-top: 1.8rem;
+  border-bottom: 1px solid rgba(217,183,122,0.18);
+  padding-bottom: 0.4rem;
+  color: #f2e8d0;
+}
+.audio-list audio {
+  width: 100%;
+  max-width: 42rem;
+  margin: 0.4rem 0 0.2rem;
+  accent-color: #d9b77a;
+}
+
+/* ---- Card grid ---- */
+.grid.cards {
+  margin-top: 0.4rem;
+}
+.grid.cards > * {
+  border: 1px solid rgba(217,183,122,0.15);
+  border-radius: 0.7rem;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  background: rgba(242,232,208,0.03);
+}
+.grid.cards > *:hover {
+  transform: translateY(-3px);
+  border-color: rgba(217,183,122,0.35);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+.grid.cards > * a {
+  color: #d9b77a;
+}
+
+/* Header / search polish to match landing */
+.md-header, .md-tabs {
+  background-color: rgba(15,14,13,0.96);
+  border-bottom: 1px solid rgba(217,183,122,0.08);
+}
+.md-search__input {
+  background-color: rgba(242,232,208,0.06);
+  border: 1px solid rgba(217,183,122,0.12);
+}
