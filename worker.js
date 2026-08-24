@@ -238,8 +238,30 @@ export default {
       return json({ error: 'Not found' }, 404);
     }
 
+    // --- Gated archive: /wiki/*, /atlas.html, /dashboard.html, /admin.html share same geor_token
+    const needsAuth = url.pathname === '/atlas.html' || url.pathname === '/dashboard.html' || url.pathname === '/admin.html' || url.pathname.startsWith('/wiki');
+    if (needsAuth) {
+      const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
+      const cookies = parseCookies(request);
+      const token = cookies.geor_token;
+      const payload = token ? await verifyJwt(token, secret) : null;
+      if (!payload) {
+        const accept = request.headers.get('Accept') || '';
+        // API-style requests get JSON 401, navigations get redirect to login
+        if (accept.includes('application/json') || url.pathname.startsWith('/api/')) {
+          return json({ error: 'Auth required — login at /' }, 401);
+        }
+        const next = encodeURIComponent(url.pathname + url.search);
+        return Response.redirect(`${url.origin}/?next=${next}`, 302);
+      }
+      // admin.html additionally requires ichieisenheart@gmail.com
+      if (url.pathname === '/admin.html' || url.pathname.startsWith('/admin')) {
+        if (payload.email !== 'ichieisenheart@gmail.com') return Response.redirect(`${url.origin}/dashboard.html`, 302);
+      }
+    }
+
     // --- Static assets fallback ---
-    // Let Cloudflare serve /dist (including /atlas.html, /world-map.jpg etc.)
+    // Let Cloudflare serve /dist (including /atlas.html etc. — now gated above)
     return env.ASSETS.fetch(request);
   }
 };
