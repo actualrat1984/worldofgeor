@@ -49,6 +49,18 @@
 .md-search__form { border-radius: 999px; }
 [data-md-toggle="search"]:checked ~ .md-header .md-search__input { background-color: rgba(242,232,208,0.08) !important; }
 
+/* Search highlight — premium amber on slate */
+.md-search-result__teaser mark,
+.md-typeset mark {
+  background-color: rgba(217,183,122,0.28) !important;
+  color: #f2e8d0 !important;
+  border-radius: 3px;
+  padding: 0 2px;
+  box-shadow: 0 0 0 1px rgba(217,183,122,0.18);
+}
+.md-search-result__title { color: #f2e8d0; }
+.md-search-result__teaser { color: rgba(242,232,208,0.72); }
+
 /* Sidebar */
 .md-nav__title { font-family: "Cinzel", serif; font-size: 0.72rem; letter-spacing: 0.1em; color: rgba(217,183,122,0.7); }
 .md-nav__link { font-size: 0.84rem; }
@@ -171,9 +183,13 @@
 .grid.cards > *:hover {
   transform: translateY(-3px);
   border-color: rgba(217,183,122,0.30) !important;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45), 0 0 0 1px rgba(217,183,122,0.08);
 }
 .grid.cards > * a { color: #d9b77a; font-weight: 600; }
+.grid.cards > *:focus-within {
+  border-color: rgba(217,183,122,0.42) !important;
+  box-shadow: 0 0 0 2px rgba(217,183,122,0.22);
+}
 
 /* Audio */
 .audio-list h2 { font-size: 1.18rem; margin-top: 1.6rem; border-bottom: 1px solid rgba(217,183,122,0.14); padding-bottom: 0.35rem; color: #f2e8d0; }
@@ -187,3 +203,14 @@
 
 /* Scrollbar */
 * { scrollbar-width: thin; scrollbar-color: rgba(217,183,122,0.22) transparent; }
+
+/* Mobile — premium polish (collapsed nav already, now thumb-friendly) */
+@media (max-width: 760px) {
+  .hero { padding: 2.2rem 1rem 1.6rem; border-radius: 0.8rem; }
+  .hero h1 { font-size: 2.1rem; letter-spacing: 0.08em; }
+  .hero-sub { font-size: 0.92rem; }
+  .hero-stats span { padding: 0.28rem 0.7rem; font-size: 0.78rem; }
+  .md-nav__link { font-size: 0.88rem; line-height: 1.5; }
+  .md-content { padding: 0 0.6rem; }
+  .md-typeset h1 { font-size: 1.55rem; }
+}

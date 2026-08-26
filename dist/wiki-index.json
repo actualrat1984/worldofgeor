@@ -589,7 +589,7 @@
   },
   {
     "url": "/wiki/World/History/Context/elvish states/",
-    "title": "Elvish states"
+    "title": "elvish states"
   },
   {
     "url": "/wiki/World/Nations/Demon Continent/Emberalden/",
@@ -1369,7 +1369,7 @@
   },
   {
     "url": "/wiki/World/History/Characters/Mad-Dog/",
-    "title": "Mad Dog"
+    "title": "Mad-Dog"
   },
   {
     "url": "/wiki/World/Species/Madarons/",
@@ -1385,7 +1385,7 @@
   },
   {
     "url": "/wiki/World/Systems/Mage-Cells/",
-    "title": "Mage Cells"
+    "title": "Mage-Cells"
   },
   {
     "url": "/wiki/World/Culture/Magic (Culture)/",
@@ -1681,7 +1681,7 @@
   },
   {
     "url": "/wiki/World/History/Events/near-extinction of the Elves/",
-    "title": "near extinction of the Elves"
+    "title": "near-extinction of the Elves"
   },
   {
     "url": "/wiki/World/Nations/Luminous Sea Islands/Neopao/",
@@ -1841,7 +1841,7 @@
   },
   {
     "url": "/wiki/World/Culture/polygamy/",
-    "title": "Polygamy"
+    "title": "polygamy"
   },
   {
     "url": "/wiki/World/Locations/Pontus/",
@@ -1885,7 +1885,7 @@
   },
   {
     "url": "/wiki/World/History/Events/Erisdar/religious crusades/",
-    "title": "Religious crusades"
+    "title": "religious crusades"
   },
   {
     "url": "/wiki/World/Locations/Cities/Central Erisdar/Remen/",
@@ -2386,6 +2386,10 @@
   {
     "url": "/wiki/World/Species/Wolvesfolk/",
     "title": "Wolvesfolk"
+  },
+  {
+    "url": "/wiki/World/World Dashboard/",
+    "title": "World Dashboard"
   },
   {
     "url": "/wiki/World/Nations/South Erisdar/Wrothri/",
@@ -5114,10 +5118,6 @@
   {
     "url": "/wiki/World/Economy, Demographics, Stats/",
     "title": "📈 Economy &amp; Statistics"
-  },
-  {
-    "url": "/wiki/World/World Dashboard/",
-    "title": "📊 World Dashboard"
   },
   {
     "url": "/wiki/World/Culture/Languages/Baoth Administrative/",

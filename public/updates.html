@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Updates & Features — World of Ge'or</title>
+  <meta name="description" content="The living log of worldofgeor.com — every feature the site offers and every update since it was founded." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ink: '#0f0e0d', cream: '#f2e8d0', gold: '#d9b77a', amberdeep: '#b8924a' }, fontFamily: { display: ['Cinzel','serif'], serif: ['"Cormorant Garamond"','serif'], sans: ['Inter','sans-serif'] } } } }
+  </script>
+  <style>
+    body{background:#0f0e0d;color:#f2e8d0}
+    .timeline{position:relative}
+    .timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom, rgba(217,183,122,.45), rgba(217,183,122,.08))}
+    @media (min-width:768px){.timeline::before{left:12px}}
+  </style>
+</head>
+<body class="bg-ink text-cream font-sans min-h-screen">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
+        <span class="font-display tracking-[0.18em] text-[13px] font-semibold">WORLD OF GE'OR</span>
+        <span class="hidden sm:inline text-gold/60 text-xs tracking-widest ml-1">— UPDATES &amp; FEATURES</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="#changelog" class="hidden md:inline text-xs tracking-widest text-cream/70 hover:text-cream transition">CHANGELOG</a>
+        <a href="/" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← BACK TO WORLD</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-gold/10">
+    <div class="absolute inset-0" style="background:radial-gradient(900px 420px at 70% -10%, rgba(217,183,122,0.12), transparent 60%), radial-gradient(700px 380px at 10% 110%, rgba(217,183,122,0.06), transparent 60%)"></div>
+    <div class="relative max-w-[1280px] mx-auto px-6 py-16 md:py-20">
+      <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">PUBLIC LOG • OPEN TO EVERYONE • EST. MAY 2026</p>
+      <h1 class="font-display text-[34px] md:text-[52px] font-bold tracking-tight leading-[0.95] mt-3">
+        WHAT THIS SITE IS,<br/>
+        <span class="text-gold">AND EVERYTHING</span> THAT'S BEEN ADDED.
+      </h1>
+      <p class="mt-5 text-[15px] leading-7 text-cream/80 max-w-[620px] font-light">
+        World of Ge'or is a private worldbuilding archive — a planet 1.37× the size of Earth, ringed by the Silver Bride, documented across three million years of history. This page is the open door: an overview of every part of the site, and the running log of everything built since the first stone was laid.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-2 text-[11px] tracking-widest">
+        <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">1,436</b> WIKI PAGES</span>
+        <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
+        <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
+        <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">60+</b> PEOPLES</span>
+        <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">12</b> AGES</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features overview -->
+  <section id="features" class="max-w-[1280px] mx-auto px-6 py-16 md:py-20">
+    <div class="flex items-end justify-between gap-4 mb-8">
+      <div>
+        <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">THE OVERVIEW</p>
+        <h2 class="font-display text-[26px] md:text-[34px] font-bold tracking-tight mt-1">EVERYTHING THE SITE OFFERS</h2>
+      </div>
+      <p class="hidden md:block text-xs text-cream/50 max-w-[280px] text-right leading-5">The world page is open to all. The archive itself is invite-only — the door is at the bottom.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- The World -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">◈</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-cream/10 border border-cream/15 text-cream/70">OPEN TO ALL</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">THE WORLD</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">worldofgeor.com</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">The public front door — the planet from orbit, the three pillars of the project, the twelve ages, the gallery. A world presented before you ever need to knock.</p>
+        <a href="/" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">VISIT →</a>
+      </div>
+
+      <!-- The Atlas -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">⌖</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">THE ATLAS</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/atlas.html</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">Political maps of the whole planet and the Grimmel Peninsula — drawn by the Cartographer Office of the Erisian Empire, 597 AGD.</p>
+        <a href="/atlas.html" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">OPEN ATLAS →</a>
+      </div>
+
+      <!-- The Wiki -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">▤</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">THE WIKI</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/wiki — 1,436 pages</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">The full archive. Nations, species, religions, magic systems, languages, culture, fauna and flora — searchable, cross-linked, growing. Every named thing in Ge'or has a page.</p>
+        <a href="/wiki/" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">ENTER WIKI →</a>
+      </div>
+
+      <!-- The Dashboard -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">✦</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">THE DASHBOARD</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/dashboard.html</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">Your hub inside the gate — one place with every tool, your account, and the way back to the world.</p>
+        <a href="/dashboard.html" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">OPEN DASHBOARD →</a>
+      </div>
+
+      <!-- Battlestation -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">⚒</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">BATTLESTATION WEB</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/app — beta</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">The workspace. Browse the whole vault with filters, open pages in a live editor with markdown preview, and study the maps. Edits are saved as additions with a changelog of their own.</p>
+        <a href="/app/" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">OPEN BATTLESTATION →</a>
+      </div>
+
+      <!-- The Gate -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">⚿</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-cream/10 border border-cream/15 text-cream/70">OPEN TO ALL</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">THE GATE</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">invite-only accounts</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">The archive is private — it opens with an invite code. Anyone can knock: request access from the world page and an invitation arrives when one is granted.</p>
+        <a href="/" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">REQUEST ACCESS →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Changelog -->
+  <section id="changelog" class="border-t border-gold/10 bg-cream/[0.015]">
+    <div class="max-w-[1280px] mx-auto px-6 py-16 md:py-20">
+      <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">THE LIVING LOG</p>
+      <h2 class="font-display text-[26px] md:text-[34px] font-bold tracking-tight mt-1">CHANGELOG — EVERYTHING ADDED, IN ORDER</h2>
+      <p class="mt-3 text-sm text-cream/60 max-w-[560px]">Newest first. Each entry is a real update that went live on this site.</p>
+
+      <div class="timeline mt-10 space-y-8">
+        <!-- 2026-08-24 -->
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 24, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">WIKI NAVIGATION MIRRORS THE VAULT</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The wiki's table of contents is now generated to match the archive's own structure — every section browsable in its natural order, nothing floating loose.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 24, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">BATTLESTATION — FOLDERS, DRAG &amp; DROP, CHANGES</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The editor grew a CHANGES tab: create folders, drag and drop files, rename, and pick map locations. Every edit is committed to the additions repository with its own history.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 24, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">BATTLESTATION MADE PERMANENT</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The web app is now a first-class citizen of the site at /app — it survives every build and always will.</p>
+        </div>
+        <!-- 2026-08-23 -->
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">BATTLESTATION — PREMIUM PASS</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">Vault browser with filters for nations, species and history. Split editor with live markdown preview, toolbar and word count. Interactive maps with a true scale. Mobile drawer, loading skeletons, toasts — a workspace, not a page.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE GATE MOVED TO THE EDGE</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The wiki and the app are now locked at the network edge itself — an uninvited request is turned away before it ever reaches a page. No back doors, no bypasses.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">BATTLESTATION WEB — BETA</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The desktop Battlestation came to the browser: browse the vault, edit pages, and study the maps from anywhere. Login now remembers where you were headed and takes you straight back.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE WIKI GOES LIVE</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The full lore archive arrives on the site — 720 pages at launch, now 1,436 — dressed in slate and amber, with search and a wiki button on the front page.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">PRIVATE POLISH</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">WebP imagery cut the hero's load by 83%. The valley got its label, the navigation learned to hide and highlight, the access modal became fully accessible, the age drawer arrived, and the contact button opened a direct line.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE RING, REPAINTED</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The Silver Bride redrawn as it truly is — a thin, fragmented debris ring. Earth and Saturn were never there to begin with; the continents are Ge'or's own. Access requests now reach the keeper by email the moment they're sent.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">DASHBOARD &amp; THE REQUEST QUEUE</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">A dropdown navigation and a member dashboard, plus a queue for access requests — every knock on the door is recorded and answered in order.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE GATE, FORGED</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">Invite-only accounts become real: registration, login, and an admin console, backed by a database that builds its own tables and never breaks on a fresh start.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE FIRST ATLAS</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">The first map of Ge'or, drawn with its own continents and its true ring, alongside the realm art.</p>
+        </div>
+        <div class="relative pl-8 md:pl-12">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">AUGUST 23, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE FOUNDATION — SITE V1</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">World of Ge'or opens its doors as a professional editorial site — slate and amber, built to endure, presenting the planet, the atlas, the history and the gallery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The door -->
+  <section class="border-t border-gold/10">
+    <div class="max-w-[1280px] mx-auto px-6 py-14 text-center">
+      <p class="font-serif italic text-xl md:text-2xl text-gold/90">"The archive opens with a word. Ask, and the gate remembers you."</p>
+      <p class="mt-4 text-sm text-cream/60">Reading this page is free — the wiki beyond it is by invitation.</p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a href="/" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-6 py-3 rounded-full font-semibold hover:brightness-110 transition">REQUEST ACCESS</a>
+        <a href="/" class="text-xs tracking-widest border border-cream/20 text-cream px-6 py-3 rounded-full hover:bg-cream/5 transition">RETURN TO THE WORLD</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gold/10 bg-cream/[0.015]">
+    <div class="max-w-[1280px] mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-3 text-[10px] tracking-[0.2em] text-cream/45">
+      <span>BUILT BY MIKHAIL &amp; ICHI — SINCE MAY 2026</span>
+      <span>PRIVATE ARCHIVE • INVITE ONLY</span>
+      <span class="text-gold/70">WORLDOFGEOR.COM</span>
+    </div>
+  </footer>
+</body>
+</html>
