@@ -14,5 +14,8 @@
 /_headers
   Cache-Control: no-cache
 
+/updates
+  Cache-Control: public, max-age=300, must-revalidate
+
 /updates.html
   Cache-Control: public, max-age=300, must-revalidate
