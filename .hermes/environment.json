@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "recipe": {
+    "name": "Vite",
+    "kind": "vite",
+    "bootstrap": [
+      "npm install"
+    ],
+    "build": [
+      "npm run build"
+    ],
+    "test": [],
+    "start": "npm run dev -- --host 127.0.0.1 --port 4180",
+    "port": 4180,
+    "readinessPath": "/",
+    "evidence": [
+      "Detected package.json",
+      "Package manager: npm",
+      "Scripts: dev, build, build:vite, build:wiki, preview"
+    ]
+  },
+  "updatedAt": "2026-08-27T00:09:06.092418+00:00"
+}
