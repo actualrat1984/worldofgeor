@@ -9,8 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="/site.css" />
-  <style>body{background:#0f0e0d;color:#f2e8d0}</style>
+  <style>body{background:#0f0e0d;color:#f2e8d0} .leaflet-container{background:#0b0b0a}</style>
 </head>
 <body class="bg-ink text-cream font-sans">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -59,6 +60,25 @@
     <div class="mt-10 rounded-xl border border-gold/10 bg-cream/[0.03] p-5 text-sm text-cream/60 leading-6">
       <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews — the vault holds the 57 MB / 43 MB masters for battlestation tiling at <code class="text-gold/80">C:\Users\pc\Downloads\Map</code>.
     </div>
+    <!-- Interactive viewer — Leaflet CRS.Simple (premium, in-page pan/zoom) -->
+    <section class="mt-10 rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03]">
+      <div class="px-6 py-5 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display tracking-[0.18em] text-xs font-semibold text-gold">INTERACTIVE VIEWER • LEAFLET • CRS.SIMPLE</h2>
+          <p class="text-sm text-cream/70 mt-1">Pan and zoom the world map right here — no new tab needed. Scale: 3.086 km / pixel.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="atlasWorldBtn" type="button" class="text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold">WORLD</button>
+          <button id="atlasGrimmelBtn" type="button" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">GRIMMEL</button>
+          <button id="atlasReset" type="button" class="text-xs tracking-widest border border-cream/15 text-cream/70 px-4 py-2 rounded-full hover:bg-cream/5 transition" title="Reset view">⟲</button>
+        </div>
+      </div>
+      <div id="atlasMap" class="w-full" style="height:520px"></div>
+      <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] tracking-widest border-t border-gold/10">
+        <span class="text-cream/50">DRAG to pan • SCROLL to zoom • <span class="text-gold">3.086 km/px</span> • Private — gated by geor_token</span>
+        <span class="text-cream/40">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
+      </div>
+    </section>
   </section>
 
   <footer class="border-t border-gold/10 mt-8">
@@ -68,5 +88,51 @@
     </div>
   </footer>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+  (function(){
+    const worldUrl = '/world-map.webp';
+    const worldFallback = '/world-map.jpg';
+    const grimmelUrl = '/grimmel-peninsula.webp';
+    const grimmelFallback = '/grimmel-peninsula.jpg';
+    // World 16000×8000 preview rendered at 3840×1920 — use that for Simple CRS bounds
+    const world = { w: 3840, h: 1920, url: worldUrl, fallback: worldFallback };
+    const grimmel = { w: 3840, h: 5715, url: grimmelUrl, fallback: grimmelFallback };
+    let current = world;
+    const map = L.map('atlasMap', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 4, zoomSnap: 0.25, attributionControl: false });
+    let overlay = null;
+    let grimmelMarker = null;
+    function boundsFor(cfg){ return [[0,0],[cfg.h, cfg.w]]; }
+    function loadMap(cfg){
+      current = cfg;
+      if(overlay) map.removeLayer(overlay);
+      if(grimmelMarker) map.removeLayer(grimmelMarker);
+      const b = boundsFor(cfg);
+      overlay = L.imageOverlay(cfg.url, b, { interactive: true }).addTo(map);
+      overlay.on('error', ()=>{ overlay.setUrl(cfg.fallback); });
+      map.fitBounds(b);
+      // Premium pins — approximate, visible at all zooms
+      if(cfg===world){
+        // Mark Grimmel Peninsula approx center (south-east quadrant) — invite to open detail
+        grimmelMarker = L.marker([cfg.h*0.62, cfg.w*0.78], { title:'Grimmel Peninsula' }).addTo(map)
+          .bindPopup('<b>Grimmel Peninsula</b><br/><span style="font-size:12px">The statue-level zoom — streets, forests, war’s edge.</span><br/><a href="/grimmel-peninsula.jpg" target="_blank" rel="noopener" style="color:#d9b77a">Open Grimmel →</a>');
+      }
+    }
+    loadMap(world);
+    document.getElementById('atlasWorldBtn')?.addEventListener('click', ()=>{
+      loadMap(world);
+      document.getElementById('atlasWorldBtn').className='text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold';
+      document.getElementById('atlasGrimmelBtn').className='text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition';
+    });
+    document.getElementById('atlasGrimmelBtn')?.addEventListener('click', ()=>{
+      loadMap(grimmel);
+      document.getElementById('atlasGrimmelBtn').className='text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold';
+      document.getElementById('atlasWorldBtn').className='text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition';
+    });
+    document.getElementById('atlasReset')?.addEventListener('click', ()=>{ map.fitBounds(boundsFor(current)); });
+    // keyboard accessible — focus map when tabbed
+    document.getElementById('atlasMap').setAttribute('tabindex','0');
+  })();
+  </script>
 </body>
 </html>
