@@ -40,7 +40,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <body class="bg-ink text-cream font-sans min-h-screen flex flex-col selection:bg-gold/30">
 <header class="h-[56px] border-b border-gold/10 bg-ink/90 backdrop-blur sticky top-0 z-40 flex items-center justify-between px-4 md:px-6 shrink-0">
 <div class="flex items-center gap-3 min-w-0">
-<button id="mobileMenu" class="md:hidden p-2 -ml-2 text-cream/70 hover:text-cream"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<button id="mobileMenu" type="button" aria-label="Hide Battlestation navigation" aria-controls="sidebar" aria-expanded="true" class="md:hidden p-2 -ml-2 text-cream/70 hover:text-cream"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <a href="/" class="font-display tracking-[0.16em] text-[11px] font-semibold shrink-0">WORLD OF GE'OR</a>
 <span class="text-gold/30 hidden sm:inline">/</span>
 <span class="font-display text-xs tracking-widest text-gold truncate">BATTLESTATION WEB</span>
@@ -64,12 +64,12 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 
 <div id="app" class="hidden flex-1 flex flex-col md:flex-row min-h-0">
-<aside id="sidebar" class="w-full md:w-[320px] border-b md:border-b-0 md:border-r border-gold/10 bg-ink flex flex-col md:sticky md:top-[56px] md:h-[calc(100vh-56px)] md:overflow-hidden">
-<div class="p-3 flex gap-1 border-b border-gold/10 shrink-0">
-<button data-tab="vault" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold">VAULT</button>
-<button data-tab="editor" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">EDITOR</button>
-<button data-tab="changes" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">CHANGES</button>
-<button data-tab="maps" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">MAPS</button>
+<aside id="sidebar" aria-hidden="false" class="w-full md:w-[320px] border-b md:border-b-0 md:border-r border-gold/10 bg-ink flex flex-col md:sticky md:top-[56px] md:h-[calc(100vh-56px)] md:overflow-hidden">
+<div class="p-3 flex gap-1 border-b border-gold/10 shrink-0" role="tablist" aria-label="Battlestation panes">
+<button id="tabVault" type="button" role="tab" aria-selected="true" aria-controls="panePreview" data-tab="vault" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold">VAULT</button>
+<button id="tabEditor" type="button" role="tab" aria-selected="false" aria-controls="paneEditor" data-tab="editor" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">EDITOR</button>
+<button id="tabChanges" type="button" role="tab" aria-selected="false" aria-controls="paneChanges" data-tab="changes" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">CHANGES</button>
+<button id="tabMaps" type="button" role="tab" aria-selected="false" aria-controls="paneMaps" data-tab="maps" class="tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10">MAPS</button>
 </div>
 <div class="p-3 border-b border-gold/10 shrink-0">
 <div class="relative">
@@ -105,13 +105,14 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </aside>
 
 <main class="flex-1 flex flex-col min-h-[60vh] md:min-h-0 bg-[#0b0b0a] min-w-0">
+<h1 class="sr-only">Battlestation Web</h1>
 <div id="crumbs" class="hidden md:flex items-center gap-2 px-4 h-9 border-b border-gold/10 text-xs text-cream/50 bg-ink/60 shrink-0">
 <a href="/" class="hover:text-gold">World</a><span class="text-gold/30">/</span><span id="crumbName" class="text-cream truncate">Select a file</span>
 <span id="dirtyDot" class="hidden w-1.5 h-1.5 rounded-full bg-gold ml-2 shrink-0"></span>
 <span id="editorStats" class="hidden ml-auto text-[11px] text-cream/40"></span>
 </div>
 
-<div id="panePreview" class="flex-1 overflow-auto">
+<div id="panePreview" role="tabpanel" aria-labelledby="tabVault" class="flex-1 overflow-auto">
 <div class="max-w-[820px] mx-auto p-4 md:p-6">
 <h2 class="font-display text-[22px] leading-none tracking-wide">Welcome to Battlestation Web</h2>
 <p class="text-sm text-cream/60 mt-2.5 leading-relaxed">No install, same login as wiki. Browse the vault on the left, edit with live preview in the center, and open the world map. Everything stays private behind <code class="text-gold">geor_token</code> — same as <a href="/wiki/" class="text-gold underline">wiki</a>.</p>
@@ -160,7 +161,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 </div>
 
-<div id="paneEditor" class="hidden flex-1 flex-col min-h-0">
+<div id="paneEditor" role="tabpanel" aria-labelledby="tabEditor" class="hidden flex-1 flex-col min-h-0">
 <div class="flex items-center justify-between px-3 md:px-4 h-11 border-b border-gold/10 bg-ink/60 shrink-0 gap-2">
 <div class="flex items-center gap-2 text-xs min-w-0 flex-1">
 <span class="text-cream/50 hidden sm:inline shrink-0">EDITOR</span>
@@ -193,7 +194,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 
 <!-- CHANGES pane -->
-<div id="paneChanges" class="hidden flex-1 flex-col min-h-0">
+<div id="paneChanges" role="tabpanel" aria-labelledby="tabChanges" class="hidden flex-1 flex-col min-h-0">
 <div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0">
 <div class="flex items-center gap-2 text-xs">
 <span class="text-cream/50 hidden sm:inline">CHANGES</span>
@@ -201,7 +202,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <span id="changesCount" class="text-[11px] text-cream/40">—</span>
 </div>
 <div class="flex items-center gap-2">
-<button id="btnNewFolder" class="text-xs bg-gold/15 border border-gold/20 text-gold px-3 py-1 rounded-full hover:bg-gold/20">+ New Folder</button><button id="btnChangesRefresh" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+<button id="btnNewFolder" type="button" class="text-xs bg-gold/15 border border-gold/20 text-gold px-3 py-1 rounded-full hover:bg-gold/20">+ New Folder</button><button id="btnChangesRefresh" type="button" aria-label="Refresh committed additions" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
 <a href="https://github.com/actualrat1984/Website-additions" target="_blank" rel="noopener" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10 hidden sm:inline">GitHub →</a>
 </div>
 </div>
@@ -215,7 +216,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 </div>
 
-<div id="paneMaps" class="hidden flex-1 flex-col min-h-0 relative">
+<div id="paneMaps" role="tabpanel" aria-labelledby="tabMaps" class="hidden flex-1 flex-col min-h-0 relative">
 <div class="flex items-center justify-between px-3 md:px-4 h-10 border-b border-gold/10 bg-ink/60 shrink-0">
 <div class="flex items-center gap-2">
 <button id="mapBackBtn" class="hidden text-xs border border-gold/20 px-2.5 py-1 rounded-full hover:bg-gold/10">← Selection</button>
@@ -290,9 +291,14 @@ fetch('/api/me',{credentials:'same-origin'}).then(r=>r.json()).then(j=>{
 document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST',credentials:'same-origin'}); location.href='/'; };
 document.getElementById('mobileMenu').onclick=()=>{
   const s=document.getElementById('sidebar');
-  s.classList.toggle('hidden'); s.classList.toggle('flex');
-  if(!s.classList.contains('hidden')) s.classList.add('fixed','inset-0','top-[56px]','z-30');
+  const open=s.classList.toggle('hidden')===false;
+  s.classList.toggle('flex', open);
+  if(open) s.classList.add('fixed','inset-0','top-[56px]','z-30');
   else s.classList.remove('fixed','inset-0','top-[56px]','z-30');
+  const menu=document.getElementById('mobileMenu');
+  menu.setAttribute('aria-expanded', String(open));
+  menu.setAttribute('aria-label', open ? 'Hide Battlestation navigation' : 'Show Battlestation navigation');
+  s.setAttribute('aria-hidden', String(!open));
 };
 function toast(msg, ok=true){
   const t=document.createElement('div');
@@ -384,7 +390,7 @@ function init(){
  const tabs=document.querySelectorAll('.tabBtn');
  const panes={vault:document.getElementById('panePreview'), editor:document.getElementById('paneEditor'), changes:document.getElementById('paneChanges'), maps:document.getElementById('paneMaps')};
  function showTab(t){
-   tabs.forEach(b=>{ const a=b.dataset.tab===t; b.className= a? 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold' : 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10'; });
+   tabs.forEach(b=>{ const a=b.dataset.tab===t; b.className= a? 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full bg-gold text-ink font-semibold' : 'tabBtn flex-1 text-xs tracking-widest py-2 rounded-full border border-gold/20 text-gold hover:bg-gold/10'; b.setAttribute('aria-selected',String(a)); });
    Object.entries(panes).forEach(([k,el])=>{ const is=k===t; el.classList.toggle('hidden', !is); el.classList.toggle('flex', is); });
    if(t==='maps') { /* don't auto-load; picker handles. invalidate if map exists */
      setTimeout(()=> map && map.invalidateSize(), 120);
@@ -392,7 +398,16 @@ function init(){
    if(t==='editor') document.getElementById('editor').focus();
    if(t==='changes') loadChanges(false);
  }
- tabs.forEach(b=> b.onclick=()=> showTab(b.dataset.tab));
+ tabs.forEach((b,index)=>{
+   b.onclick=()=> showTab(b.dataset.tab);
+   b.addEventListener('keydown',(e)=>{
+     if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key)) return;
+     e.preventDefault();
+     const next=e.key==='Home' ? 0 : e.key==='End' ? tabs.length-1 : (index+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+     tabs[next].focus();
+     showTab(tabs[next].dataset.tab);
+   });
+ });
  document.querySelectorAll('[data-jump="vault"]').forEach(b=> b.onclick=()=> showTab('vault'));
  document.querySelectorAll('[data-jump="editor"]').forEach(b=> b.onclick=()=> showTab('editor'));
  document.querySelectorAll('[data-jump="changes"]').forEach(b=> b.onclick=()=> showTab('changes'));
@@ -638,9 +653,15 @@ function init(){
    const path=fileInput.value||'untitled.md';
    const blob=new Blob([editor.value], {type:'text/markdown'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=path.split('/').pop()||'untitled.md'; a.click(); toast('Downloaded '+a.download);
  };
- document.getElementById('btnCopy').onclick=()=>{
-   navigator.clipboard.writeText(editor.value); toast('Copied');
- };
+document.getElementById('btnCopy').onclick=async()=>{
+  try{
+    if(!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(editor.value);
+    toast('Copied');
+  }catch{
+    toast('Copy unavailable — select the text manually', false);
+  }
+};
  // Ctrl+S
  document.addEventListener('keydown', e=>{
    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveEditor(true); }
@@ -696,11 +717,15 @@ function init(){
    }
    const root=buildTree(files);
    function fileButton(f){
-     const name=basename(f.path);
-     const isReadme=f.path.toLowerCase()==='readme.md';
+     const rawPath=typeof f.path==='string' ? f.path : '';
+     const name=basename(rawPath);
+     const isReadme=rawPath.toLowerCase()==='readme.md';
      const ext=name.includes('.')? name.split('.').pop().toLowerCase() : '';
      const icon = ext==='md' ? '◈' : ext==='txt' ? '≡' : '⬡';
-     return `<button draggable="true" data-path="${f.path}" class="changesItem w-full text-left px-3 py-2.5 rounded-xl border ${isReadme ? 'border-gold/10 bg-ink' : 'border-gold/10 bg-cream/[0.03] hover:bg-cream/[0.06] hover:border-gold/20'} flex items-center justify-between gap-3 group transition"><div class="min-w-0 flex items-center gap-2.5"><span class="w-7 h-7 rounded-lg bg-ink border border-gold/10 flex items-center justify-center text-gold text-xs shrink-0">${icon}</span><div class="min-w-0"><div class="text-sm truncate flex items-center gap-2"><span class="font-medium ${isReadme?'text-cream/70':'text-cream'}">${name}</span>${isReadme?'<span class="text-[10px] tracking-widest border border-gold/15 rounded-full px-2 py-0.5 text-cream/40">README</span>':''}</div><div class="text-[11px] text-cream/35 truncate">${f.path} • ${(f.size||0).toLocaleString()} B</div></div></div><span class="text-[11px] border border-gold/15 rounded-full px-2.5 py-1 text-gold group-hover:bg-gold/10 shrink-0">Edit →</span></button>`;
+     const safePath=escapeHtml(rawPath);
+     const safeName=escapeHtml(name);
+     const safeSize=escapeHtml(typeof f.size==='number' && Number.isFinite(f.size) && f.size>=0 ? f.size.toLocaleString() : '0');
+     return `<button type="button" draggable="true" data-path="${safePath}" class="changesItem w-full text-left px-3 py-2.5 rounded-xl border ${isReadme ? 'border-gold/10 bg-ink' : 'border-gold/10 bg-cream/[0.03] hover:bg-cream/[0.06] hover:border-gold/20'} flex items-center justify-between gap-3 group transition"><div class="min-w-0 flex items-center gap-2.5"><span aria-hidden="true" class="w-7 h-7 rounded-lg bg-ink border border-gold/10 flex items-center justify-center text-gold text-xs shrink-0">${icon}</span><div class="min-w-0"><div class="text-sm truncate flex items-center gap-2"><span class="font-medium ${isReadme?'text-cream/70':'text-cream'}">${safeName}</span>${isReadme?'<span class="text-[10px] tracking-widest border border-gold/15 rounded-full px-2 py-0.5 text-cream/40">README</span>':''}</div><div class="text-[11px] text-cream/35 truncate">${safePath} • ${safeSize} B</div></div></div><span class="text-[11px] border border-gold/15 rounded-full px-2.5 py-1 text-gold group-hover:bg-gold/10 shrink-0">Edit →</span></button>`;
    }
    function folderHTML(node, depth){
      let html='';
@@ -710,13 +735,15 @@ function init(){
        const totalFiles = (function count(n){ let c=n.files.length; for(const kk in n.folders) c+=count(n.folders[kk]); return c; })(child);
        const collapsed=collapsedFolders.has(child.path);
        const inner = folderHTML(child, depth+1);
-       html+=`<div class="folder ${collapsed?'collapsed':''}" data-folder="${child.path}">
-         <div class="folderHeader" data-toggle="${child.path}">
-           <span class="chev text-gold text-[11px]">▾</span>
-           <span class="w-6 h-6 rounded-lg bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-[11px] shrink-0">▦</span>
-           <span class="text-sm font-medium truncate">${child.name}</span>
+       const safePath=escapeHtml(child.path);
+       const safeName=escapeHtml(child.name);
+       html+=`<div class="folder ${collapsed?'collapsed':''}" data-folder="${safePath}">
+         <div class="folderHeader" data-toggle="${safePath}">
+         <span class="chev text-gold text-[11px]">▾</span>
+         <span class="w-6 h-6 rounded-lg bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-[11px] shrink-0">▦</span>
+           <span class="text-sm font-medium truncate">${safeName}</span>
            <span class="text-[11px] text-cream/35 ml-1">${totalFiles} ${totalFiles===1?'file':'files'}</span>
-           <span class="ml-auto text-[11px] text-cream/30 hidden sm:inline truncate max-w-[140px]">${child.path}</span>
+           <span class="ml-auto text-[11px] text-cream/30 hidden sm:inline truncate max-w-[140px]">${safePath}</span>
          </div>
          <div class="folderBody p-2 space-y-2 bg-ink/20">
            ${child.files.map(f=> fileButton(f)).join('')}
@@ -740,13 +767,20 @@ function init(){
 
  function bindChangesDnD(){
    changesListEl.querySelectorAll('[data-toggle]').forEach(el=>{
+     el.setAttribute('role','button');
+     el.setAttribute('tabindex','0');
+     el.setAttribute('aria-expanded',String(!el.closest('.folder')?.classList.contains('collapsed')));
      el.onclick=(e)=>{
        if(e.target.closest('button')) return;
        const p=el.dataset.toggle;
        if(collapsedFolders.has(p)) collapsedFolders.delete(p); else collapsedFolders.add(p);
        saveCollapsed();
        el.closest('.folder').classList.toggle('collapsed');
+       el.setAttribute('aria-expanded',String(!el.closest('.folder')?.classList.contains('collapsed')));
      };
+     el.addEventListener('keydown',(e)=>{
+       if(e.key==='Enter' || e.key===' '){ e.preventDefault(); el.click(); }
+     });
    });
    changesListEl.querySelectorAll('.changesItem[draggable]').forEach(el=>{
      el.addEventListener('dragstart', (e)=>{
@@ -898,12 +932,12 @@ function init(){
      const j=await r.json().catch(()=> ({}));
      if(!r.ok){
        const msg=j.error||('HTTP '+r.status);
-       changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Failed to load — ${msg}<br><span class="text-xs text-red-300/70">${(j.detail||'').slice(0,200)}</span><br><button onclick="document.getElementById('btnChangesRefresh').click()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>`;
+       changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Failed to load — ${escapeHtml(String(msg))}<br><span class="text-xs text-red-300/70">${escapeHtml(String(j.detail||'').slice(0,200))}</span><br><button onclick="document.getElementById('btnChangesRefresh').click()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>`;
        changesStatus.textContent='Error: '+msg;
        changesStatus.className='px-4 py-2 text-xs border-b border-red-900/30 bg-red-950/20 text-red-300';
        return;
      }
-     const files=j.files||[];
+     const files=(Array.isArray(j.files)?j.files:[]).filter(f=>f && typeof f.path==='string' && f.path.length<=180);
      changesFilesRaw=files.slice().sort((a,b)=>a.path.localeCompare(b.path));
      changesStatus.textContent= files.length ? `${files.length} file(s) in Website-additions — drag to move, drop files to upload` : 'No files yet — drag .md/.txt here or Save in Editor';
      changesStatus.className='px-4 py-2 text-xs border-b border-gold/10 text-gold/70';
@@ -911,7 +945,7 @@ function init(){
      renderTree();
      if(showToast && files.length) toast('Loaded '+files.length+' file(s) from Website-additions');
    }catch(e){
-     changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Network error<br><span class="text-xs">${String(e).slice(0,200)}</span></div>`;
+     changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Network error<br><span class="text-xs">${escapeHtml(String(e).slice(0,200))}</span></div>`;
      changesStatus.textContent='Network error';
    }
  }

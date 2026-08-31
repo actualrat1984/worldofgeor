@@ -7,7 +7,8 @@ const JWT_EXP_SEC = 60 * 60 * 24 * 30; // 30 days
 const JWT_ISSUER = 'worldofgeor';
 const COOKIE_NAME = 'geor_token';
 const ADMIN_EMAIL = 'ichieisenheart@gmail.com';
-const MAX_JSON_BYTES = 1_000_000;
+const MAX_JSON_BYTES = 4_096;
+const MAX_SAVE_JSON_BYTES = 1_000_000;
 const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
 const PRIVATE_ASSET_PATHS = new Set([
   '/wiki-index.json',
@@ -81,7 +82,7 @@ async function verifyJwt(token, secret) {
     const payload = JSON.parse(new TextDecoder().decode(b64urlDecode(parts[1])));
     const now = Math.floor(Date.now() / 1000);
     if (!Number.isSafeInteger(payload?.exp) || payload.exp <= now || payload.exp > now + JWT_EXP_SEC + 60) return null;
-    if (payload.iss && payload.iss !== JWT_ISSUER) return null;
+    if (payload.iss !== JWT_ISSUER) return null;
     if (typeof payload.email !== 'string' || !isValidEmail(payload.email)) return null;
     return payload;
   } catch { return null; }
@@ -92,6 +93,7 @@ function json(data, status = 200, extra = {}) {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store',
+      'X-Robots-Tag': 'noindex, nofollow, noarchive',
       'X-Content-Type-Options': 'nosniff',
       'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
       ...extra,
@@ -126,6 +128,9 @@ function authCookie(token, maxAge = JWT_EXP_SEC) {
 }
 function isValidEmail(value) {
   return typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+function isJsonObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 function normalizeEmail(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
@@ -165,12 +170,14 @@ function validPositiveId(value) {
   return Number.isSafeInteger(value) && value > 0 ? value : null;
 }
 function isPrivatePath(pathname) {
-  return pathname === '/wiki' || pathname.startsWith('/wiki/') ||
-    pathname === '/app' || pathname.startsWith('/app/') ||
-    pathname === '/atlas' || pathname === '/atlas.html' ||
-    pathname === '/dashboard' || pathname === '/dashboard.html' ||
-    pathname === '/admin' || pathname === '/admin.html' ||
-    PRIVATE_ASSET_PATHS.has(pathname);
+  let decoded = pathname;
+  try { decoded = decodeURIComponent(pathname); } catch {}
+  return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
+    decoded === '/app' || decoded.startsWith('/app/') ||
+    decoded === '/atlas' || decoded === '/atlas.html' ||
+    decoded === '/dashboard' || decoded === '/dashboard.html' ||
+    decoded === '/admin' || decoded === '/admin.html' ||
+    PRIVATE_ASSET_PATHS.has(decoded);
 }
 
 // --- Additions helpers ---
@@ -217,6 +224,15 @@ function sanitizeFolderPath(p) {
     if (seg === '.' || seg === '..' || seg.startsWith('.') || seg.endsWith('.')) return null;
   }
   return parts.join('/');
+}
+function safeAdditionListPath(value) {
+  if (typeof value !== 'string' || value.startsWith('.')) return null;
+  if (value.endsWith('/.gitkeep')) {
+    const folder = sanitizeFolderPath(value.slice(0, -'/.gitkeep'.length));
+    return folder ? value : null;
+  }
+  const safe = sanitizeAdditionsPath(value);
+  return safe === value ? safe : null;
 }
 function b64EncodeUtf8(str) {
   const bytes = new TextEncoder().encode(str);
@@ -293,7 +309,9 @@ export default {
         try {
           const secret = getJwtSecret(env);
           await ensureTables();
-          const { email, password, inviteCode } = await readJson(request, 16_384);
+          const body = await readJson(request);
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+          const { email, password, inviteCode } = body;
           if (!email || !password || !inviteCode) return json({ error: 'Missing fields' }, 400);
           if (typeof password !== 'string' || password.length < 12 || password.length > 256) return json({ error: 'Password must be 12–256 characters' }, 400);
           const normEmail = normalizeEmail(email);
@@ -330,7 +348,9 @@ export default {
       if (url.pathname === '/api/login' && request.method === 'POST') {
         try {
           await ensureTables();
-          const { email, password } = await readJson(request, 16_384);
+          const body = await readJson(request);
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+          const { email, password } = body;
           if (!email || !password) return json({ error: 'Missing fields' }, 400);
           if (typeof password !== 'string' || password.length > 256) return json({ error: 'Invalid email or password' }, 401);
           const normEmail = normalizeEmail(email);
@@ -372,7 +392,9 @@ export default {
       if (url.pathname === '/api/request-access' && request.method === 'POST') {
         try {
           await ensureTables();
-          const { email, message } = await readJson(request, 16_384);
+          const body = await readJson(request);
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+          const { email, message } = body;
           const norm = normalizeEmail(email);
           if (!isValidEmail(norm)) return json({ error: 'Valid email required' }, 400);
           if (message != null && typeof message !== 'string') return json({ error: 'Message must be text' }, 400);
@@ -447,6 +469,7 @@ export default {
         if (url.pathname === '/api/admin/invites' && request.method === 'POST') {
           let body;
           try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const clean = cleanInviteCode(body.code);
           if (!clean) return json({ error: 'Use 6–64 letters, numbers, underscores, or hyphens' }, 400);
           const result = await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
@@ -472,6 +495,7 @@ export default {
         if (url.pathname === '/api/admin/requests/approve' && request.method === 'POST') {
           let body;
           try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const id = validPositiveId(body.id);
           if (!id) return json({ error: 'Valid request id required' }, 400);
           const req = await env.DB.prepare('SELECT email, status FROM requests WHERE id = ?').bind(id).first();
@@ -487,6 +511,7 @@ export default {
         if (url.pathname === '/api/admin/requests/reject' && request.method === 'POST') {
           let body;
           try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const id = validPositiveId(body.id);
           if (!id) return json({ error: 'Valid request id required' }, 400);
           await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ? AND status = "pending"').bind(id).run();
@@ -524,9 +549,11 @@ export default {
             const j = await treeRes.json();
             const files = (j.tree || [])
               .filter(n => n.type === 'blob')
-              .map(n => ({ path: n.path, sha: n.sha, size: n.size || 0 }))
-              // hide .git internals and filter out directories that slipped
-              .filter(f => !f.path.startsWith('.'))
+              .map(n => {
+                const path = safeAdditionListPath(n.path);
+                return path ? { path, sha: n.sha, size: n.size || 0 } : null;
+              })
+              .filter(Boolean)
               .sort((a,b) => a.path.localeCompare(b.path));
             return json({ files, via: 'tree' });
           }
@@ -534,7 +561,13 @@ export default {
           const cRes = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents?ref=${ADDITIONS_BRANCH}`, { method: 'GET' }, env);
           if (cRes.ok) {
             const arr = await cRes.json();
-            const files = (Array.isArray(arr) ? arr : []).filter(x => x.type === 'file').map(x => ({ path: x.path, sha: x.sha, size: x.size }));
+            const files = (Array.isArray(arr) ? arr : [])
+              .filter(x => x.type === 'file')
+              .map(x => {
+                const path = safeAdditionListPath(x.path);
+                return path ? { path, sha: x.sha, size: x.size } : null;
+              })
+              .filter(Boolean);
             return json({ files, via: 'contents' });
           }
           const txt = await treeRes.text();
@@ -576,7 +609,8 @@ export default {
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
         let body;
-        try { body = await readJson(request); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        try { body = await readJson(request, MAX_SAVE_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
         const rawPath = typeof body.path === 'string' ? body.path.trim() : '';
         const rawOld = typeof body.oldPath === 'string' ? body.oldPath.trim() : '';
         const content = body.content;
@@ -649,6 +683,7 @@ export default {
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
         let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
         const p = sanitizeAdditionsPath(body.path || '');
         if (!p) return json({ error: 'Invalid path' }, 400);
         try {
@@ -676,6 +711,7 @@ export default {
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
         let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
         const raw = typeof body.path === 'string' ? body.path.trim() : '';
         const folder = sanitizeFolderPath(raw);
         if (!folder) return json({ error: 'Invalid folder — use A-Z 0-9 _ - / and space, e.g. lore/characters' }, 400);
@@ -722,10 +758,24 @@ export default {
         const destination = request.headers.get('Sec-Fetch-Dest');
         if (accept.includes('application/json') || (destination && destination !== 'document')) return json({ error: 'Authentication required' }, 401);
         const next = encodeURIComponent(url.pathname + url.search);
-        return Response.redirect(`${url.origin}/?next=${next}`, 302);
+        return new Response(null, {
+          status: 302,
+          headers: {
+            'Location': `${url.origin}/?next=${next}`,
+            'Cache-Control': 'no-store',
+            'X-Robots-Tag': 'noindex, nofollow, noarchive',
+          },
+        });
       }
       if (url.pathname === '/admin.html' || url.pathname === '/admin') {
-        if (payload.email !== ADMIN_EMAIL) return Response.redirect(`${url.origin}/dashboard.html`, 302);
+        if (payload.email !== ADMIN_EMAIL) return new Response(null, {
+          status: 302,
+          headers: {
+            'Location': `${url.origin}/dashboard.html`,
+            'Cache-Control': 'no-store',
+            'X-Robots-Tag': 'noindex, nofollow, noarchive',
+          },
+        });
       }
     }
 

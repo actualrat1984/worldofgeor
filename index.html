@@ -26,6 +26,7 @@
         <a href="#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
         <a href="/wiki/" class="text-gold hover:text-cream transition">WIKI</a>
         <a href="/updates" class="text-gold hover:text-cream transition">UPDATES</a>
+        <a href="#archive" class="text-cream/70 hover:text-cream transition">ARCHIVE</a>
         <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
         <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
       </nav>
@@ -33,8 +34,8 @@
         <button id="deskRequestBtn" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
         <a id="deskEnterLink" href="#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
         <div id="deskUserWrap" class="hidden relative">
-          <button id="deskUserBtn" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span class="text-[10px]">▼</span></button>
-          <div id="deskUserMenu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
+          <button id="deskUserBtn" type="button" aria-haspopup="menu" aria-expanded="false" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span aria-hidden="true" class="text-[10px]">▼</span></button>
+          <div id="deskUserMenu" role="menu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
             <a href="/dashboard.html" class="block px-4 py-2 text-sm hover:bg-gold/10">Enter Dashboard</a>
             <a href="/admin.html" id="deskAdminLink" class="hidden block px-4 py-2 text-sm hover:bg-gold/10 text-gold">Admin</a>
             <button id="deskSettingsBtn" class="w-full text-left px-4 py-2 text-sm hover:bg-gold/10">Settings</button>
@@ -44,7 +45,7 @@
         </div>
       </div>
       <button id="menuBtn" class="md:hidden p-2 text-cream/80" type="button" aria-label="Open navigation" aria-controls="mobileMenu" aria-expanded="false">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
     <div id="mobileMenu" class="hidden md:hidden border-t border-gold/10 bg-ink px-6 py-4 space-y-3">
@@ -52,6 +53,7 @@
       <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
       <a href="/wiki/" class="block text-sm tracking-widest text-gold">WIKI</a>
       <a href="/updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
+      <a href="#archive" class="block text-sm tracking-widest text-cream/80">ARCHIVE</a>
       <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
       <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
       <button id="mobRequestBtn" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
@@ -163,33 +165,34 @@
   </section>
 
   <!-- Timeline -->
-  <section id="history" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
+  <section id="history" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24" aria-labelledby="historyTitle">
     <div class="flex items-end justify-between gap-4 mb-8">
       <div>
         <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">CHRONOLOGY</p>
-        <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">THE AGES OF GE'OR</h2>
+        <h2 id="historyTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">THE AGES OF GE'OR</h2>
       </div>
-      <div class="hidden md:flex items-center gap-2">
-        <button id="agePrev" type="button" aria-label="Previous ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">←</button>
-        <button id="ageNext" type="button" aria-label="Next ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">→</button>
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="agePrev" type="button" aria-controls="ageGrid" aria-label="Scroll to earlier ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">←</button>
+        <button id="ageNext" type="button" aria-controls="ageGrid" aria-label="Scroll to later ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">→</button>
       </div>
     </div>
     <p class="text-sm text-cream/60 max-w-[620px] -mt-4 mb-6">From the Lost Era after the ancient crash to the unwritten Age of Strife. Select an age to open its place in the archive.</p>
-    <div id="ageGrid" class="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory" aria-label="Chronology of Ge'or">
+    <div id="ageGrid" class="age-scroller flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory" role="group" aria-label="Chronology of Ge'or">
     </div>
+    <p id="ageStatus" class="mt-2 text-xs text-cream/35" role="status">13 eras in the chronology • select one to open its archive entry.</p>
   </section>
 
   <!-- Age drawer (private archive teaser) -->
-  <div id="ageDrawer" class="hidden max-w-[1280px] mx-auto px-6 -mt-8 pb-16 md:pb-24">
-    <div class="rounded-2xl border border-gold/20 bg-[#1a1a18] p-6 md:p-7 flex justify-between gap-6">
+  <div id="ageDrawer" class="hidden max-w-[1280px] mx-auto px-6 -mt-8 pb-16 md:pb-24" role="region" aria-labelledby="ageDrawerTitle" aria-hidden="true">
+    <div class="rounded-2xl border border-gold/20 bg-[#1a1a18] p-6 md:p-7 flex flex-col sm:flex-row justify-between gap-6">
       <div>
         <p id="ageDrawerKicker" class="text-gold text-[11px] tracking-[0.28em] font-semibold"></p>
         <h3 id="ageDrawerTitle" class="font-display text-[22px] font-bold mt-1"></h3>
         <p id="ageDrawerText" class="text-sm leading-6 text-cream/70 mt-2 max-w-[640px]"></p>
         <div id="ageDrawerMeta" class="text-xs text-cream/50 mt-3"></div>
-        <button id="ageDrawerEnter" class="mt-4 inline-flex border border-gold/30 text-gold px-5 py-2 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">ENTER ARCHIVE →</button>
+        <button id="ageDrawerEnter" type="button" class="mt-4 inline-flex border border-gold/30 text-gold px-5 py-2 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">ENTER ARCHIVE →</button>
       </div>
-      <button id="ageDrawerClose" class="self-start text-cream/60 hover:text-cream text-xl leading-none" aria-label="Close">✕</button>
+      <button id="ageDrawerClose" type="button" class="self-start text-cream/60 hover:text-cream text-xl leading-none" aria-label="Close selected age">✕</button>
     </div>
   </div>
 
@@ -218,6 +221,34 @@
           <h3 class="font-display tracking-widest text-sm font-semibold">LUMINA</h3>
           <p class="text-sm text-cream/65 mt-2 leading-6">Ten nations in the trees, where light is currency and the ground is myth.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Archive overview -->
+  <section id="archive" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24" aria-labelledby="archiveTitle">
+    <div class="rounded-[20px] border border-gold/15 bg-gradient-to-br from-gold/[0.07] via-cream/[0.025] to-transparent p-7 md:p-10">
+      <div class="max-w-[700px]">
+        <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">INSIDE THE GATE</p>
+        <h2 id="archiveTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mt-2">THE WORLD HAS A BACK ROOM.</h2>
+        <p class="mt-3 text-sm leading-6 text-cream/65">The public page is the map room. Members get the shelves behind it: the complete wiki, the Battlestation workspace, and one quiet dashboard to keep the archive in order.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-3 mt-7">
+        <a href="/wiki/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Enter the private Ge'or wiki">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">01 / WIKI</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">THE FULL ARCHIVE</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">1,436 pages of nations, species, history, systems and the things between them.</p>
+        </a>
+        <a href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">02 / APP</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">BATTLESTATION WEB</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">Search, preview, write and commit additions to the living vault from the browser.</p>
+        </a>
+        <a href="/dashboard.html" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private member dashboard">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">YOUR WAY IN</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">A single home for your account, the wiki, the atlas, the workspace and the next thing to read.</p>
+        </a>
       </div>
     </div>
   </section>
@@ -260,12 +291,12 @@
 
 
   <!-- Request Access Modal -->
-  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="requestTitle">
+  <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="requestTitle" aria-describedby="requestDescription">
     <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
       <button id="closeRequest" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close request access dialog">✕</button>
       <h3 id="requestTitle" class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
-      <p class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
+      <p id="requestDescription" class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
       <form id="requestForm" class="mt-5 space-y-3">
         <label for="reqEmail" class="sr-only">Email address</label>
         <input id="reqEmail" type="email" placeholder="your email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
@@ -279,15 +310,15 @@
   </div>
 
   <!-- Login Modal -->
-  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="authTitle">
+  <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="authTitle" aria-describedby="authDescription">
     <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
       <button id="closeAuth" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close sign in dialog">✕</button>
       <h3 id="authTitle" class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
-      <p class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
+      <p id="authDescription" class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
       <div class="flex gap-2 mt-4 text-xs">
-        <button id="tabLogin" type="button" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
-        <button id="tabRegister" type="button" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
+        <button id="tabLogin" type="button" role="tab" aria-selected="true" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
+        <button id="tabRegister" type="button" role="tab" aria-selected="false" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
       </div>
       <form id="authForm" class="mt-5 space-y-3">
         <label for="authEmail" class="sr-only">Email address</label>
@@ -322,11 +353,21 @@
       let postAuthDestination = null;
       let authReturnFocus = null;
       let requestReturnFocus = null;
+      const allowedNextRoots = ['/wiki', '/app', '/atlas', '/atlas.html', '/dashboard', '/dashboard.html', '/admin', '/admin.html'];
+      function safeNext(){
+        const requested = new URLSearchParams(location.search).get('next');
+        if(!requested || !requested.startsWith('/') || requested.startsWith('//')) return null;
+        try{
+          const parsed=new URL(requested, location.origin);
+          if(parsed.origin!==location.origin) return null;
+          return allowedNextRoots.some(root => parsed.pathname===root || parsed.pathname.startsWith(root+'/')) ? parsed.pathname+parsed.search+parsed.hash : null;
+        }catch{ return null; }
+      }
       // a11y helpers — body lock + focus trap
       function lockBody(){ document.body.style.overflow='hidden' }
       function unlockBody(){ document.body.style.overflow='' }
       function trapFocus(modal){
-        const focusable = modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        const focusable = [...modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')].filter(el => el.offsetParent !== null);
         if(!focusable.length) return;
         const first = focusable[0], last = focusable[focusable.length-1];
         function onTab(e){
@@ -342,16 +383,18 @@
         if(modal._trapHandler){ modal.removeEventListener('keydown', modal._trapHandler); delete modal._trapHandler; }
       }
       function openAuth(m){ authReturnFocus=document.activeElement; mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
-      function closeAuthModal(){ if(authModal.classList.contains('hidden')) return; authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); unlockBody(); authReturnFocus?.focus?.(); }
+      function closeAuthModal(){ if(authModal.classList.contains('hidden')) return; authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); postAuthDestination=null; unlockBody(); authReturnFocus?.focus?.(); }
       function updateTabs(){
         if(mode==='login'){
           tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold';
           tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold';
+          tabLogin.setAttribute('aria-selected','true'); tabRegister.setAttribute('aria-selected','false');
           authInvite.style.display='none'; authInvite.required=false;
           authPassword.minLength=1; authPassword.placeholder='password'; authPassword.autocomplete='current-password';
         } else {
           tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold';
           tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold';
+          tabLogin.setAttribute('aria-selected','false'); tabRegister.setAttribute('aria-selected','true');
           authInvite.style.display='block'; authInvite.required=true;
           authPassword.minLength=12; authPassword.placeholder='password (12+ chars)'; authPassword.autocomplete='new-password';
         }
@@ -392,15 +435,17 @@
       const ageClose = document.getElementById('ageDrawerClose');
       const ageEnter = document.getElementById('ageDrawerEnter');
       const ageGrid = document.getElementById('ageGrid');
+      const ageStatus = document.getElementById('ageStatus');
+      const scrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
       ageGrid.innerHTML = Object.entries(AGE_DATA).map(([age, data])=>`
-        <button data-age="${age}" class="age-card min-w-[220px] md:min-w-[250px] snap-start text-left rounded-2xl border border-gold/15 bg-cream/[0.035] p-5 hover:border-gold/35 hover:bg-cream/[0.06] transition">
+        <button type="button" data-age="${age}" aria-pressed="false" class="age-card min-w-[220px] md:min-w-[250px] snap-start text-left rounded-2xl border border-gold/15 bg-cream/[0.035] p-5 hover:border-gold/35 hover:bg-cream/[0.06] transition">
           <span class="text-[10px] tracking-[0.28em] text-gold">AGE ${age}</span>
           <span class="block font-display text-[14px] leading-5 font-semibold mt-2">${data.title}</span>
           <span class="block text-xs leading-5 text-cream/50 mt-2">${data.meta}</span>
         </button>
       `).join('');
-      document.getElementById('agePrev')?.addEventListener('click',()=>ageGrid.scrollBy({left:-520,behavior:'smooth'}));
-      document.getElementById('ageNext')?.addEventListener('click',()=>ageGrid.scrollBy({left:520,behavior:'smooth'}));
+      document.getElementById('agePrev')?.addEventListener('click',()=>ageGrid.scrollBy({left:-520,behavior:scrollBehavior}));
+      document.getElementById('ageNext')?.addEventListener('click',()=>ageGrid.scrollBy({left:520,behavior:scrollBehavior}));
       document.querySelectorAll('.age-card').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           const d = AGE_DATA[btn.dataset.age];
@@ -410,13 +455,16 @@
           ageText.textContent = d.text;
           ageMeta.textContent = d.meta;
           ageDrawer.classList.remove('hidden');
-          ageDrawer.scrollIntoView({behavior:'smooth', block:'nearest'});
+          ageDrawer.setAttribute('aria-hidden','false');
+          ageDrawer.scrollIntoView({behavior:scrollBehavior, block:'nearest'});
           // highlight active
-          document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40'));
+          document.querySelectorAll('.age-card').forEach(b=>{ b.classList.remove('border-gold/40'); b.setAttribute('aria-pressed','false'); });
           btn.classList.add('border-gold/40');
+          btn.setAttribute('aria-pressed','true');
+          if(ageStatus) ageStatus.textContent = 'Selected: '+d.title+' • choose Enter Archive to open the private lore entry.';
         });
       });
-      ageClose?.addEventListener('click', ()=>{ ageDrawer.classList.add('hidden'); document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40')); });
+      ageClose?.addEventListener('click', ()=>{ ageDrawer.classList.add('hidden'); ageDrawer.setAttribute('aria-hidden','true'); document.querySelectorAll('.age-card').forEach(b=>{ b.classList.remove('border-gold/40'); b.setAttribute('aria-pressed','false'); }); if(ageStatus) ageStatus.textContent='13 eras in the chronology • select one to open its archive entry.'; });
       ageEnter?.addEventListener('click', ()=>{
         const active = [...document.querySelectorAll('.age-card')].find(button => button.classList.contains('border-gold/40'));
         const destination = AGE_DATA[active?.dataset.age]?.url || '/wiki/World/History/Events/Ages of Ge\'or/';
@@ -439,11 +487,8 @@
           let j={};
           try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300) || 'Failed'); }
           if(!r.ok) throw new Error((j.detail? j.error+': '+j.detail : j.error) || 'Failed');
-          const qp = new URLSearchParams(location.search);
-          const requested = qp.get('next');
-          const allowedPrefixes = ['/wiki', '/app', '/atlas', '/dashboard', '/admin'];
-          const safeRequested = requested && requested.startsWith('/') && !requested.startsWith('//') && allowedPrefixes.some(prefix => requested === prefix || requested.startsWith(prefix + '/') || requested.startsWith(prefix + '.')) ? requested : null;
-          const dest = postAuthDestination || safeRequested || '/dashboard.html';
+          const dest = postAuthDestination || safeNext() || '/dashboard.html';
+          postAuthDestination = null;
           authMsg.textContent = mode==='login' ? ('Welcome — entering ' + (dest === '/dashboard.html' ? 'dashboard' : dest) + '…') : ('Registered — entering ' + (dest === '/dashboard.html' ? 'dashboard' : dest) + '…');
           authMsg.className='text-xs text-center min-h-[1.2em] text-green-400';
           setTimeout(()=>{ location.href=dest; }, 700);
@@ -506,8 +551,15 @@
         }
       }
       // dropdown toggle
-      deskUserBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); deskUserMenu.classList.toggle('hidden'); });
-      document.addEventListener('click', ()=> deskUserMenu?.classList.add('hidden'));
+      deskUserBtn?.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const open=deskUserMenu.classList.toggle('hidden')===false;
+        deskUserBtn.setAttribute('aria-expanded',String(open));
+      });
+      document.addEventListener('click', ()=>{
+        deskUserMenu?.classList.add('hidden');
+        deskUserBtn?.setAttribute('aria-expanded','false');
+      });
       // settings & logout
       document.getElementById('deskSettingsBtn')?.addEventListener('click', ()=> location.href='/dashboard.html#settings');
       document.getElementById('deskLogoutBtn')?.addEventListener('click', async ()=>{
@@ -520,13 +572,16 @@
       });
       // ESC closes modals
       document.addEventListener('keydown', e=>{
-        if(e.key==='Escape'){ closeAuthModal(); closeRequestModal(); deskUserMenu?.classList.add('hidden'); }
+        if(e.key==='Escape'){
+          closeAuthModal(); closeRequestModal(); deskUserMenu?.classList.add('hidden');
+          deskUserBtn?.setAttribute('aria-expanded','false');
+        }
       });
       // fetch me
       fetch('/api/me').then(r=>r.json()).then(j=>{
         if(j.user) applyUser(j.user);
-        else applyUser(null);
-      }).catch(()=> applyUser(null));
+        else { applyUser(null); if(safeNext()) setTimeout(()=>openAuth('login'),80); }
+      }).catch(()=>{ applyUser(null); if(safeNext()) setTimeout(()=>openAuth('login'),80); });
       // If URL has #atlas and logged in, allow atlas view; otherwise keep Explore handling
       // Expose openAuth globally for other buttons
       window.openAuth = openAuth;

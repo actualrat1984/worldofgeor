@@ -15,6 +15,9 @@
     .timeline{position:relative}
     .timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom, rgba(217,183,122,.45), rgba(217,183,122,.08))}
     @media (min-width:768px){.timeline::before{left:12px}}
+    .feed-skeleton{background:linear-gradient(100deg,rgba(242,232,208,.045) 20%,rgba(217,183,122,.13) 45%,rgba(242,232,208,.045) 70%);background-size:240% 100%;animation:feed-shimmer 1.6s ease-in-out infinite}
+    @keyframes feed-shimmer{0%{background-position:140% 0}100%{background-position:-140% 0}}
+    @media (prefers-reduced-motion:reduce){.feed-skeleton{animation:none}}
   </style>
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
@@ -149,10 +152,11 @@
           <h2 class="font-display text-[26px] md:text-[34px] font-bold tracking-tight mt-1">RECENT ARCHIVE ACTIVITY</h2>
           <p class="mt-2 text-sm text-cream/60 max-w-[560px]">Every addition committed to the Website-additions repository — visible to everyone, updated live. No email addresses shown.</p>
         </div>
-        <button id="liveRefresh" type="button" class="hidden md:inline-flex text-xs tracking-widest border border-gold/20 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REFRESH ↻</button>
+        <button id="liveRefresh" type="button" aria-label="Refresh archive activity" class="inline-flex items-center gap-2 text-[11px] tracking-widest border border-gold/20 text-gold px-3 py-2 rounded-full hover:bg-gold/10 transition disabled:opacity-50 disabled:cursor-wait"><span class="hidden sm:inline">REFRESH</span><span aria-hidden="true" class="text-sm leading-none">↻</span></button>
       </div>
-      <div id="liveUpdates" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[96px]"></div>
+      <div id="liveUpdates" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[96px]" role="list" aria-label="Recent archive activity" aria-busy="true"></div>
       <p id="liveMeta" class="text-xs text-cream/40 mt-4 min-h-[1em]" aria-live="polite"></p>
+      <p id="liveStatus" class="sr-only" aria-live="polite"></p>
       <div class="mt-4 text-xs text-cream/35">This feed comes from <code class="text-gold/70">GET /api/updates?limit=18</code> — public cache 30s. Writes remain invite-only.</div>
     </div>
   </section>
@@ -160,49 +164,81 @@
   (function(){
     const list = document.getElementById('liveUpdates');
     const meta = document.getElementById('liveMeta');
+    const status = document.getElementById('liveStatus');
     const btn = document.getElementById('liveRefresh');
     if(!list) return;
     const icons = { create:'✚', edit:'◐', move:'⇄', delete:'✕', folder:'▭', default:'•' };
-    function fmt(iso){ try{ const d=new Date(iso); return d.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch{ return iso; } }
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
+    function fmt(iso){
+      const d=new Date(iso);
+      return Number.isNaN(d.getTime()) ? 'recently' : d.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+    function renderSkeleton(){
+      list.setAttribute('aria-busy','true');
+      list.innerHTML = Array.from({length:6}, () => '<div role="presentation" aria-hidden="true" class="rounded-2xl border border-gold/10 bg-cream/[0.025] p-5"><div class="flex items-center gap-2"><span class="feed-skeleton w-7 h-7 rounded-full"></span><span class="feed-skeleton h-3 rounded w-20"></span><span class="feed-skeleton h-3 rounded w-28 ml-auto"></span></div><div class="feed-skeleton h-4 rounded w-4/5 mt-4"></div><div class="feed-skeleton h-3 rounded w-2/5 mt-2"></div></div>').join('');
+    }
+    function renderEmpty(){
+      list.innerHTML = '<div role="listitem" class="col-span-full rounded-2xl border border-gold/15 bg-gradient-to-br from-gold/[0.08] to-cream/[0.02] p-7 md:p-8"><div class="flex items-start gap-4"><span aria-hidden="true" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold/25 bg-gold/10 text-gold text-lg">✦</span><div><h3 class="font-display text-sm tracking-widest text-cream">THE LEDGER IS WAITING</h3><p class="mt-2 max-w-[620px] text-sm leading-6 text-cream/60">No public activity has been recorded yet. The first addition committed inside the archive will leave a trace here.</p><a href="/" class="mt-4 inline-flex text-xs tracking-widest text-gold hover:text-cream transition">RETURN TO THE WORLD →</a></div></div></div>';
+    }
+    function renderError(){
+      list.innerHTML = '<div role="listitem" class="col-span-full rounded-2xl border border-red-300/20 bg-red-900/10 p-6"><div class="flex items-start gap-3"><span aria-hidden="true" class="text-red-200 text-lg">!</span><div><h3 class="font-display text-sm tracking-widest text-red-100">THE LEDGER IS RESTING</h3><p class="mt-2 text-sm leading-6 text-red-100/70">The live feed could not be reached. Try again in a moment; the archive itself remains private and intact.</p><button type="button" data-feed-retry class="mt-4 text-xs tracking-widest border border-red-200/30 text-red-100 px-4 py-2 rounded-full hover:bg-red-200/10 transition">TRY AGAIN</button></div></div></div>';
+      list.querySelector('[data-feed-retry]')?.addEventListener('click', load);
+    }
+    let inFlight = false;
     async function load(){
-      list.innerHTML = '<div class="col-span-full text-sm text-cream/50 py-6">Loading live activity…</div>';
-      if(meta) meta.textContent = '';
+      if(inFlight || document.hidden) return;
+      inFlight = true;
+      if(btn) { btn.disabled = true; btn.setAttribute('aria-busy','true'); }
+      renderSkeleton();
+      if(meta) meta.textContent = 'Checking the public ledger…';
+      if(status) status.textContent = 'Loading recent archive activity';
       try{
         const r = await fetch('/api/updates?limit=18', { headers:{ Accept:'application/json' } });
         const j = await r.json();
         if(!r.ok) throw new Error(j.error || 'Unavailable');
-        const updates = Array.isArray(j.updates) ? j.updates : [];
+        if(j.unavailable) throw new Error('Feed unavailable');
+        const updates = (Array.isArray(j.updates) ? j.updates : []).filter(update => update && typeof update === 'object');
         if(!updates.length){
-          list.innerHTML = '<div class="col-span-full rounded-2xl border border-gold/10 bg-cream/[0.03] p-6 text-sm text-cream/60">No activity yet — the next addition you commit will appear here.</div>';
+          renderEmpty();
         } else {
           list.innerHTML = updates.map(u=>{
             const icon = icons[u.action] || icons.default;
-            const path = (u.path || '').replace(/</g,'&lt;');
-            const summary = (u.summary || u.action || '').replace(/</g,'&lt;');
-            return `<div class="rounded-2xl border border-gold/12 bg-cream/[0.03] p-5 hover:border-gold/25 transition">
+            const action = escapeHtml((u.action || 'entry').toString().toUpperCase());
+            const path = escapeHtml(u.path || '');
+            const summary = escapeHtml(u.summary || u.action || 'Archive activity');
+            const created = escapeHtml(u.created_at || '');
+            return `<div role="listitem" class="rounded-2xl border border-gold/12 bg-cream/[0.03] p-5 hover:border-gold/25 transition">
               <div class="flex items-center gap-2 text-[11px] tracking-widest">
-                <span class="w-7 h-7 rounded-full bg-gold/15 border border-gold/20 flex items-center justify-center text-gold">${icon}</span>
-                <span class="text-gold">${(u.action||'').toUpperCase()}</span>
+                <span aria-hidden="true" class="w-7 h-7 rounded-full bg-gold/15 border border-gold/20 flex items-center justify-center text-gold">${icon}</span>
+                <span class="text-gold">${action}</span>
                 <span class="text-cream/40">•</span>
-                <span class="text-cream/50">${fmt(u.created_at)}</span>
+                <time class="text-cream/50" datetime="${created}">${escapeHtml(fmt(u.created_at))}</time>
               </div>
               <div class="font-display text-[13px] font-semibold tracking-wide mt-3">${summary}</div>
               ${path? `<div class="text-xs text-gold/70 mt-1 truncate" title="${path}">${path}</div>` : ''}
             </div>`;
           }).join('');
         }
+        list.setAttribute('aria-busy','false');
         if(meta){
           const when = j.refreshedAt ? fmt(j.refreshedAt) : '';
-          meta.textContent = when ? `Refreshed ${when} • ${updates.length} entr${updates.length===1?'y':'ies'}` : '';
+          meta.textContent = when ? 'Refreshed '+when+' • '+updates.length+' entr'+(updates.length===1?'y':'ies') : 'Ledger current';
         }
+        if(status) status.textContent = updates.length ? updates.length+' recent archive '+(updates.length === 1 ? 'entry' : 'entries')+' loaded' : 'The public ledger has no entries yet';
       } catch(e){
-        list.innerHTML = '<div class="col-span-full rounded-2xl border border-red-300/20 bg-red-900/10 p-6 text-sm text-red-200/80">Live feed is temporarily unavailable — the static changelog below is still available.</div>';
-        if(meta) meta.textContent = String(e.message||e).slice(0,120);
+        list.setAttribute('aria-busy','false');
+        renderError();
+        if(meta) meta.textContent = 'Live feed unavailable • static changelog remains below';
+        if(status) status.textContent = 'The live feed is unavailable';
+      } finally {
+        inFlight = false;
+        if(btn) { btn.disabled = false; btn.removeAttribute('aria-busy'); }
       }
     }
     btn?.addEventListener('click', load);
     load();
-    setInterval(load, 30000);
+    setInterval(() => { if(!document.hidden) load(); }, 30000);
+    document.addEventListener('visibilitychange', () => { if(!document.hidden) load(); });
   })();
   </script>
 

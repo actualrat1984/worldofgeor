@@ -22,6 +22,14 @@
 }
 
 @layer components {
+  .age-scroller {
+    scrollbar-color: rgb(217 183 122 / 0.34) transparent;
+    scrollbar-width: thin;
+    overscroll-behavior-inline: contain;
+  }
+  .age-scroller::-webkit-scrollbar { height: 6px; }
+  .age-scroller::-webkit-scrollbar-thumb { background: rgb(217 183 122 / 0.34); border-radius: 999px; }
+  .age-card { min-height: 132px; }
   .reveal-item {
     opacity: 0;
     transform: translateY(18px);

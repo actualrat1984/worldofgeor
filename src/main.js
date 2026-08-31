@@ -12,8 +12,10 @@ if (btn && menu) {
     menu.classList.toggle('hidden', !open)
     btn.setAttribute('aria-expanded', String(open))
     btn.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation')
+    menu.setAttribute('aria-hidden', String(!open))
   }
   const closeMenu = () => setMenu(false)
+  setMenu(false)
   btn.addEventListener('click', (e) => { e.stopPropagation(); setMenu(menu.classList.contains('hidden')) })
   menu.querySelectorAll('a, button').forEach(el => el.addEventListener('click', closeMenu))
   document.addEventListener('click', (e) => { if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) closeMenu() })
@@ -22,33 +24,35 @@ if (btn && menu) {
 
 // nav hide-on-scroll + active highlight
 const header = document.querySelector('header')
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 let lastY = window.scrollY
 let ticking = false
 if (header) {
-  header.style.transition = 'transform 0.28s ease'
+  header.style.transition = reduceMotion ? 'none' : 'transform 0.28s ease'
   window.addEventListener('scroll', () => {
     if (ticking) return
     ticking = true
     requestAnimationFrame(() => {
       const cur = window.scrollY
-      const goingDown = cur > lastY && cur > 80
+      const goingDown = cur > lastY && cur > 80 && !(menu && !menu.classList.contains('hidden'))
       header.style.transform = goingDown ? 'translateY(-100%)' : 'translateY(0)'
       lastY = cur
       ticking = false
     })
   }, { passive: true })
+  header.addEventListener('focusin', () => { header.style.transform = 'translateY(0)' })
 }
 
 // active section highlight
 const navLinks = document.querySelectorAll('header nav a[href^="#"], #mobileMenu a[href^="#"]')
-const sections = ['world','atlas','history','gallery'].map(id => document.getElementById(id)).filter(Boolean)
+const sections = ['world','atlas','history','gallery','archive'].map(id => document.getElementById(id)).filter(Boolean)
 if (navLinks.length && sections.length && 'IntersectionObserver' in window) {
   const setActive = (id) => {
     navLinks.forEach(a => {
       const isActive = a.getAttribute('href') === `#${id}`
       a.classList.toggle('text-cream', isActive)
       a.classList.toggle('text-cream/70', !isActive)
-      if (isActive) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current')
+      if (isActive) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current')
     })
   }
   const io = new IntersectionObserver((entries) => {
@@ -58,7 +62,7 @@ if (navLinks.length && sections.length && 'IntersectionObserver' in window) {
 }
 
 // subtle parallax for hero (respects reduced-motion)
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (!reduceMotion) {
   const heroImg = document.querySelector('section picture img')
   if (heroImg) {
     let heroTick = false
