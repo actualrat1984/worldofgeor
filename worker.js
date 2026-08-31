@@ -730,11 +730,21 @@ export default {
     }
 
     // --- Static assets fallback ---
-    const alias = ROUTE_ALIASES.get(url.pathname);
+    // ROUTE_ALIASES handles pretty URLs (/updates -> /updates.html etc).
+    // With html_handling:none we must also map wiki/app directories to index.html explicitly,
+    // otherwise /wiki/ would 404 -> SPA fallback serves /index.html (looks broken).
+    let targetPath = ROUTE_ALIASES.get(url.pathname);
+    if (!targetPath) {
+      if (url.pathname === '/wiki' || url.pathname === '/wiki/') targetPath = '/wiki/index.html';
+      else if (url.pathname === '/app/' ) targetPath = '/app/index.html';
+      else if (url.pathname.startsWith('/wiki/') && !url.pathname.split('/').pop().includes('.')) {
+        targetPath = url.pathname.endsWith('/') ? `${url.pathname}index.html` : `${url.pathname}/index.html`;
+      }
+    }
     let assetRequest = request;
-    if (alias) {
+    if (targetPath) {
       const assetUrl = new URL(request.url);
-      assetUrl.pathname = alias;
+      assetUrl.pathname = targetPath;
       assetRequest = new Request(assetUrl.toString(), request);
     }
     const response = await env.ASSETS.fetch(assetRequest);
