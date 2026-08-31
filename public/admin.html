@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Admin — World of Ge'or</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="/site.css" />
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -68,6 +68,9 @@
   </main>
 
   <script>
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
+    }
     async function api(path, opts={}) {
       const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) } });
       const j = await r.json().catch(()=>({}));
@@ -85,7 +88,7 @@
         await refreshInvites();
         await refreshUsers();
       } catch(e){
-        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${e.message}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
+        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${escapeHtml(e.message)}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
       }
     }
     async function refreshInvites(){
@@ -94,10 +97,11 @@
       if(!j.invites.length){ el.innerHTML='<div class="p-4 text-cream/50">No invites</div>'; return; }
       el.innerHTML = j.invites.map(i=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b class="text-gold">${i.code}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+i.used_by : 'unused'}</span></div>
-          <button onclick="delInvite('${i.code}')" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
+          <div><b class="text-gold">${escapeHtml(i.code)}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+escapeHtml(i.used_by) : 'unused'}</span></div>
+          <button data-delete-invite="${escapeHtml(i.code)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
         </div>
       `).join('');
+      el.querySelectorAll('[data-delete-invite]').forEach(button => button.addEventListener('click', () => delInvite(button.dataset.deleteInvite)));
     }
     async function refreshUsers(){
       const j = await api('/api/admin/users');
@@ -105,7 +109,7 @@
       if(!j.users.length){ el.innerHTML='<div class="p-4 text-cream/50">No users yet</div>'; return; }
       el.innerHTML = j.users.map(u=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b>${u.email}</b> <span class="text-cream/40 text-xs">via ${u.invite_code} • ${new Date(u.created_at).toLocaleDateString()}</span></div>
+          <div><b>${escapeHtml(u.email)}</b> <span class="text-cream/40 text-xs">via ${escapeHtml(u.invite_code || '—')} • ${escapeHtml(new Date(u.created_at).toLocaleDateString())}</span></div>
         </div>
       `).join('');
     }
@@ -117,13 +121,15 @@
         if(!j.requests.length){ el.innerHTML='<div class="p-4 text-cream/50">No requests</div>'; return; }
         el.innerHTML = j.requests.map(r=>`
           <div class="px-5 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
-            <div class="flex-1"><b>${r.email}</b> <span class="text-cream/40 text-xs">— ${r.status} • ${new Date(r.created_at).toLocaleString()}</span><div class="text-xs text-cream/60 mt-1">${(r.message||'').replace(/</g,'&lt;')}</div></div>
+            <div class="flex-1"><b>${escapeHtml(r.email)}</b> <span class="text-cream/40 text-xs">— ${escapeHtml(r.status)} • ${escapeHtml(new Date(r.created_at).toLocaleString())}</span><div class="text-xs text-cream/60 mt-1">${escapeHtml(r.message || '')}</div></div>
             <div class="flex gap-2">
-              ${r.status==='pending' ? `<button onclick="approveReq(${r.id})" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button onclick="rejectReq(${r.id})" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs text-cream/40">${r.status}</span>`}
+              ${r.status==='pending' ? `<button data-approve-request="${Number(r.id)}" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button data-reject-request="${Number(r.id)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs text-cream/40">${escapeHtml(r.status)}</span>`}
             </div>
           </div>
         `).join('');
-      }catch(e){ document.getElementById('requests').innerHTML='<div class="p-4 text-red-400 text-xs">'+e.message+'</div>'; }
+        el.querySelectorAll('[data-approve-request]').forEach(button => button.addEventListener('click', () => approveReq(Number(button.dataset.approveRequest))));
+        el.querySelectorAll('[data-reject-request]').forEach(button => button.addEventListener('click', () => rejectReq(Number(button.dataset.rejectRequest))));
+      }catch(e){ document.getElementById('requests').innerHTML='<div class="p-4 text-red-400 text-xs">'+escapeHtml(e.message)+'</div>'; }
     }
     async function approveReq(id){
       const code = prompt('Invite code to create (leave blank for auto):') || '';

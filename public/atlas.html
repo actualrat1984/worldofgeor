@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Atlas — World of Ge'or</title>
   <meta name="description" content="Choose your map — World of Ge'or (597 AGD) or Grimmel Peninsula. Political maps by the Cartographer Office of the Erisian Empire." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { theme: { extend: { colors: { ink: '#0f0e0d', cream: '#f2e8d0', gold: '#d9b77a', amberdeep: '#b8924a' }, fontFamily: { display: ['Cinzel','serif'], sans: ['Inter','sans-serif'] } } } }
-  </script>
+  <link rel="stylesheet" href="/site.css" />
   <style>body{background:#0f0e0d;color:#f2e8d0}</style>
 </head>
 <body class="bg-ink text-cream font-sans">
@@ -32,7 +30,7 @@
 
     <div class="grid md:grid-cols-2 gap-6 mt-10">
       <!-- World map -->
-      <a href="/world-map.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+      <a href="/world-map.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
           <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">WORLD MAP • 16000×8000 • 597 AGD</div>
@@ -45,7 +43,7 @@
       </a>
 
       <!-- Grimmel -->
-      <a href="/grimmel-peninsula.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+      <a href="/grimmel-peninsula.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[1.49/1] overflow-hidden bg-[#0b0b0a]">
           <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">GRIMMEL PENINSULA • STATUE LEVEL ZOOM</div>

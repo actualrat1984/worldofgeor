@@ -4,6 +4,27 @@
 // Additions: commits to https://github.com/actualrat1984/Website-additions via GITHUB_TOKEN secret
 
 const JWT_EXP_SEC = 60 * 60 * 24 * 30; // 30 days
+const JWT_ISSUER = 'worldofgeor';
+const COOKIE_NAME = 'geor_token';
+const ADMIN_EMAIL = 'ichieisenheart@gmail.com';
+const MAX_JSON_BYTES = 1_000_000;
+const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
+const PRIVATE_ASSET_PATHS = new Set([
+  '/wiki-index.json',
+  '/world-map.jpg',
+  '/world-map.webp',
+  '/world-map-thumb.jpg',
+  '/world-map-thumb.webp',
+  '/grimmel-peninsula.jpg',
+  '/grimmel-peninsula.webp',
+]);
+const ROUTE_ALIASES = new Map([
+  ['/updates', '/updates.html'],
+  ['/atlas', '/atlas.html'],
+  ['/dashboard', '/dashboard.html'],
+  ['/admin', '/admin.html'],
+  ['/app', '/app/index.html'],
+]);
 const ADDITIONS_OWNER = 'actualrat1984';
 const ADDITIONS_REPO = 'Website-additions';
 const ADDITIONS_BRANCH = 'main';
@@ -20,9 +41,13 @@ function b64urlDecode(str) {
   return Uint8Array.from(atob(str), c => c.charCodeAt(0));
 }
 async function hmacSha256(keyStr, data) {
-  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyStr), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyStr), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data));
   return new Uint8Array(sig);
+}
+async function verifyHmacSha256(keyStr, data, signature) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(keyStr), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+  return crypto.subtle.verify('HMAC', key, signature, new TextEncoder().encode(data));
 }
 async function pbkdf2Hash(password, saltB64, iterations = 100000) {
   const salt = b64urlDecode(saltB64);
@@ -43,73 +68,153 @@ async function signJwt(payload, secret) {
   return `${data}.${b64url(sig)}`;
 }
 async function verifyJwt(token, secret) {
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  const data = `${parts[0]}.${parts[1]}`;
-  const sig = await hmacSha256(secret, data);
-  if (b64url(sig) !== parts[2]) return null;
   try {
+    if (typeof token !== 'string' || token.length > 4096) return null;
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const header = JSON.parse(new TextDecoder().decode(b64urlDecode(parts[0])));
+    if (header?.alg !== 'HS256' || header?.typ !== 'JWT') return null;
+    const signature = b64urlDecode(parts[2]);
+    if (signature.length !== 32) return null;
+    const data = `${parts[0]}.${parts[1]}`;
+    if (!(await verifyHmacSha256(secret, data, signature))) return null;
     const payload = JSON.parse(new TextDecoder().decode(b64urlDecode(parts[1])));
-    if (payload.exp && Date.now() / 1000 > payload.exp) return null;
+    const now = Math.floor(Date.now() / 1000);
+    if (!Number.isSafeInteger(payload?.exp) || payload.exp <= now || payload.exp > now + JWT_EXP_SEC + 60) return null;
+    if (payload.iss && payload.iss !== JWT_ISSUER) return null;
+    if (typeof payload.email !== 'string' || !isValidEmail(payload.email)) return null;
     return payload;
   } catch { return null; }
 }
 function json(data, status = 200, extra = {}) {
-  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', ...extra } });
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+      'X-Content-Type-Options': 'nosniff',
+      'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
+      ...extra,
+    },
+  });
 }
 function parseCookies(req) {
   const h = req.headers.get('Cookie') || '';
   const o = {};
-  h.split(';').forEach(p => { const [k, ...v] = p.trim().split('='); if (k) o[k] = decodeURIComponent(v.join('=')); });
+  h.split(';').forEach(p => {
+    const [k, ...v] = p.trim().split('=');
+    if (!k) return;
+    try { o[k] = decodeURIComponent(v.join('=')); } catch { o[k] = ''; }
+  });
   return o;
+}
+
+function getJwtSecret(env) {
+  const secret = env.JWT_SECRET;
+  if (typeof secret !== 'string' || secret.length < 32) throw new Error('JWT configuration unavailable');
+  return secret;
+}
+function readBearerToken(request) {
+  const match = request.headers.get('Authorization')?.match(/^Bearer\s+([^\s]+)$/i);
+  return match?.[1] || null;
+}
+function readAuthToken(request) {
+  return parseCookies(request)[COOKIE_NAME] || readBearerToken(request);
+}
+function authCookie(token, maxAge = JWT_EXP_SEC) {
+  return `${COOKIE_NAME}=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${maxAge}`;
+}
+function isValidEmail(value) {
+  return typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+function normalizeEmail(value) {
+  return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+function constantTimeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  let left;
+  let right;
+  try { left = b64urlDecode(a); right = b64urlDecode(b); } catch { return false; }
+  const length = Math.max(left.length, right.length);
+  let diff = left.length ^ right.length;
+  for (let i = 0; i < length; i++) diff |= (left[i] || 0) ^ (right[i] || 0);
+  return diff === 0;
+}
+async function readJson(request, maxBytes = MAX_JSON_BYTES) {
+  const declared = Number(request.headers.get('Content-Length') || 0);
+  if (Number.isFinite(declared) && declared > maxBytes) throw new RangeError('Request too large');
+  const text = await request.text();
+  if (new TextEncoder().encode(text).length > maxBytes) throw new RangeError('Request too large');
+  try { return JSON.parse(text); } catch { throw new SyntaxError('Invalid JSON'); }
+}
+function isTrustedMutation(request, url) {
+  const origin = request.headers.get('Origin');
+  if (origin && origin !== url.origin) return false;
+  return request.headers.get('Sec-Fetch-Site') !== 'cross-site';
+}
+function cleanInviteCode(value) {
+  const code = typeof value === 'string' ? value.trim().toUpperCase().replace(/\s+/g, '_') : '';
+  return /^[A-Z0-9][A-Z0-9_-]{5,63}$/.test(code) ? code : null;
+}
+function randomInviteCode() {
+  const bytes = new Uint8Array(12);
+  crypto.getRandomValues(bytes);
+  return `GEOR_${b64url(bytes).toUpperCase()}`;
+}
+function validPositiveId(value) {
+  return Number.isSafeInteger(value) && value > 0 ? value : null;
+}
+function isPrivatePath(pathname) {
+  return pathname === '/wiki' || pathname.startsWith('/wiki/') ||
+    pathname === '/app' || pathname.startsWith('/app/') ||
+    pathname === '/atlas' || pathname === '/atlas.html' ||
+    pathname === '/dashboard' || pathname === '/dashboard.html' ||
+    pathname === '/admin' || pathname === '/admin.html' ||
+    PRIVATE_ASSET_PATHS.has(pathname);
 }
 
 // --- Additions helpers ---
 async function requireUser(request, env) {
-  const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
-  const cookies = parseCookies(request);
-  const token = cookies.geor_token || request.headers.get('Authorization')?.replace('Bearer ', '');
-  if (!token) return null;
-  return await verifyJwt(token, secret);
+  try {
+    const secret = getJwtSecret(env);
+    const token = readAuthToken(request);
+    if (!token) return null;
+    return await verifyJwt(token, secret);
+  } catch { return null; }
 }
 function sanitizeAdditionsPath(p) {
   if (p == null) return null;
   p = String(p).trim().replace(/^\/+/, '');
   if (!p) return null;
-  if (p.includes('..') || p.includes('\\')) return null;
-  // allow A-Z a-z 0-9 . _ - / and space (space will be kept but trimmed)
+  if (p.includes('\\') || p.includes('//')) return null;
   if (!/^[A-Za-z0-9._\-\/ ]+$/.test(p)) return null;
   if (p.length > 180) return null;
   if (p.startsWith('.') || p.startsWith('/')) return null;
-  // disallow leading slash, disallow double slash
-  if (p.includes('//')) return null;
-  // if no extension, add .md
-  if (!p.includes('.')) p += '.md';
-  // normalize: trim each segment
   const parts = p.split('/').map(s => s.trim()).filter(Boolean);
   if (!parts.length) return null;
-  // each segment length check
   for (const seg of parts) {
     if (seg.length > 80) return null;
-    if (seg === '.' || seg === '..') return null;
+    if (seg === '.' || seg === '..' || seg.startsWith('.') || seg.endsWith('.')) return null;
   }
+  const filename = parts.at(-1);
+  if (!filename.includes('.')) parts[parts.length - 1] += '.md';
+  const extension = parts.at(-1).split('.').pop().toLowerCase();
+  if (!ALLOWED_ADDITION_EXTENSIONS.has(extension)) return null;
   return parts.join('/');
 }
 function sanitizeFolderPath(p) {
   if (p == null) return null;
   p = String(p).trim().replace(/^\/+/, '').replace(/\/+$/, '');
   if (!p) return null;
-  if (p.includes('..') || p.includes('\\')) return null;
+  if (p.includes('\\') || p.includes('//')) return null;
   if (!/^[A-Za-z0-9._\-\/ ]+$/.test(p)) return null;
   if (p.length > 180) return null;
   if (p.startsWith('.') || p.startsWith('/')) return null;
-  if (p.includes('//')) return null;
   const parts = p.split('/').map(s => s.trim()).filter(Boolean);
   if (!parts.length) return null;
   for (const seg of parts) {
     if (seg.length > 80) return null;
-    if (seg === '.' || seg === '..') return null;
-    if (seg.startsWith('.')) return null;
+    if (seg === '.' || seg === '..' || seg.startsWith('.') || seg.endsWith('.')) return null;
   }
   return parts.join('/');
 }
@@ -131,7 +236,7 @@ function b64DecodeUtf8(b64) {
 }
 async function ghApi(path, init, env) {
   const token = env.GITHUB_TOKEN;
-  if (!token) throw new Error('GITHUB_TOKEN not configured on worker — set via wrangler secret put GITHUB_TOKEN');
+  if (!token) throw new Error('GitHub integration unavailable');
   const url = `https://api.github.com${path}`;
   return fetch(url, {
     ...init,
@@ -150,46 +255,74 @@ export default {
     if (url.pathname === '/favicon.ico') return new Response(null, { status: 204 });
     // --- API routes ---
     if (url.pathname.startsWith('/api/')) {
-      const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
       // auto-migrate tables if missing (so /api/register 500 never happens)
       async function ensureTables() {
-        if (!env.DB) throw new Error('D1 binding DB missing — add D1 database worldofgeor-db with variable name DB in Worker Settings → Bindings');
-        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, invite_code TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
-        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS invites (code TEXT PRIMARY KEY, used_by TEXT, used_at TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
-        await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)`).run();
-        // seed defaults (ignore if exists)
-        await env.DB.prepare(`CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, message TEXT, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`).run();
-        try { await env.DB.prepare(`INSERT OR IGNORE INTO invites (code) VALUES ('WELCOME_TO_GEOR_2026'), ('MIKHAIL_INVITE'), ('ARCADY_INVITE')`).run(); } catch {}
+        if (!env.DB) throw new Error('Database unavailable');
+        await env.DB.batch([
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, salt TEXT NOT NULL, invite_code TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS invites (code TEXT PRIMARY KEY, used_by TEXT, used_at TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, message TEXT, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, path TEXT, summary TEXT NOT NULL, actor_email TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
+        ]);
       }
-      // CORS for same origin only
+
+      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !isTrustedMutation(request, url)) {
+        return json({ error: 'Cross-origin request rejected' }, 403);
+      }
+      // CORS is granted only to this exact origin; other preflights fail closed.
       if (request.method === 'OPTIONS') {
-        return new Response(null, { headers: { 'Access-Control-Allow-Origin': url.origin, 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Credentials': 'true' } });
+        const origin = request.headers.get('Origin');
+        if (origin !== url.origin) return new Response(null, { status: 403 });
+        return new Response(null, {
+          status: 204,
+          headers: {
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Max-Age': '600',
+            'Vary': 'Origin',
+          },
+        });
       }
 
       // POST /api/register  {email, password, inviteCode}
       if (url.pathname === '/api/register' && request.method === 'POST') {
         try {
+          const secret = getJwtSecret(env);
           await ensureTables();
-          const { email, password, inviteCode } = await request.json();
+          const { email, password, inviteCode } = await readJson(request, 16_384);
           if (!email || !password || !inviteCode) return json({ error: 'Missing fields' }, 400);
-          if (password.length < 8) return json({ error: 'Password too short (8+)' }, 400);
-          const normEmail = email.trim().toLowerCase();
-          // check invite valid and not used
-          const invite = await env.DB.prepare('SELECT code, used_by FROM invites WHERE code = ?').bind(inviteCode.trim()).first();
-          if (!invite) return json({ error: 'Invalid invite code' }, 403);
-          if (invite.used_by) return json({ error: 'Invite already used' }, 403);
-          // allowlist check via env.INVITE_CODE fallback (if no D1 row)
-          // check user not exists
+          if (typeof password !== 'string' || password.length < 12 || password.length > 256) return json({ error: 'Password must be 12–256 characters' }, 400);
+          const normEmail = normalizeEmail(email);
+          if (!isValidEmail(normEmail)) return json({ error: 'Valid email required' }, 400);
+          const cleanCode = cleanInviteCode(inviteCode);
+          if (!cleanCode) return json({ error: 'Invalid or unavailable invite code' }, 403);
           const exists = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(normEmail).first();
           if (exists) return json({ error: 'Email already registered' }, 409);
           const salt = randomSalt();
           const hash = await pbkdf2Hash(password, salt);
-          await env.DB.prepare('INSERT INTO users (email, password_hash, salt, invite_code) VALUES (?, ?, ?, ?)').bind(normEmail, hash, salt, inviteCode.trim()).run();
-          await env.DB.prepare('UPDATE invites SET used_by = ?, used_at = strftime(\'%Y-%m-%dT%H:%M:%SZ\',\'now\') WHERE code = ?').bind(normEmail, inviteCode.trim()).run();
-          const token = await signJwt({ email: normEmail, exp: Math.floor(Date.now() / 1000) + JWT_EXP_SEC }, secret);
-          return json({ ok: true, email: normEmail }, 200, { 'Set-Cookie': `geor_token=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${JWT_EXP_SEC}` });
+          const results = await env.DB.batch([
+            env.DB.prepare(`INSERT INTO users (email, password_hash, salt, invite_code)
+              SELECT ?, ?, ?, ? WHERE EXISTS (
+                SELECT 1 FROM invites WHERE code = ? AND used_by IS NULL
+              )`).bind(normEmail, hash, salt, cleanCode, cleanCode),
+            env.DB.prepare(`UPDATE invites SET used_by = ?, used_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')
+              WHERE code = ? AND used_by IS NULL
+                AND EXISTS (SELECT 1 FROM users WHERE email = ? AND invite_code = ?)`).bind(normEmail, cleanCode, normEmail, cleanCode),
+          ]);
+          if (results[0]?.meta?.changes !== 1 || results[1]?.meta?.changes !== 1) {
+            return json({ error: 'Invalid or unavailable invite code' }, 403);
+          }
+          const now = Math.floor(Date.now() / 1000);
+          const token = await signJwt({ email: normEmail, iss: JWT_ISSUER, iat: now, exp: now + JWT_EXP_SEC }, secret);
+          return json({ ok: true, email: normEmail }, 200, { 'Set-Cookie': authCookie(token) });
         } catch (e) {
-          return json({ error: 'Register failed', detail: String(e) }, 500);
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Registration is temporarily unavailable' }, 500);
         }
       }
 
@@ -197,17 +330,41 @@ export default {
       if (url.pathname === '/api/login' && request.method === 'POST') {
         try {
           await ensureTables();
-          const { email, password } = await request.json();
+          const { email, password } = await readJson(request, 16_384);
           if (!email || !password) return json({ error: 'Missing fields' }, 400);
-          const normEmail = email.trim().toLowerCase();
+          if (typeof password !== 'string' || password.length > 256) return json({ error: 'Invalid email or password' }, 401);
+          const normEmail = normalizeEmail(email);
+          if (!isValidEmail(normEmail)) return json({ error: 'Invalid email or password' }, 401);
           const user = await env.DB.prepare('SELECT email, password_hash, salt FROM users WHERE email = ?').bind(normEmail).first();
           if (!user) return json({ error: 'Invalid email or password' }, 401);
           const hash = await pbkdf2Hash(password, user.salt);
-          if (hash !== user.password_hash) return json({ error: 'Invalid email or password' }, 401);
-          const token = await signJwt({ email: normEmail, exp: Math.floor(Date.now() / 1000) + JWT_EXP_SEC }, secret);
-          return json({ ok: true, email: normEmail }, 200, { 'Set-Cookie': `geor_token=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${JWT_EXP_SEC}` });
+          if (!constantTimeEqual(hash, user.password_hash)) return json({ error: 'Invalid email or password' }, 401);
+          const secret = getJwtSecret(env);
+          const now = Math.floor(Date.now() / 1000);
+          const token = await signJwt({ email: normEmail, iss: JWT_ISSUER, iat: now, exp: now + JWT_EXP_SEC }, secret);
+          return json({ ok: true, email: normEmail }, 200, { 'Set-Cookie': authCookie(token) });
         } catch (e) {
-          return json({ error: 'Login failed', detail: String(e) }, 500);
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Login is temporarily unavailable' }, 500);
+        }
+      }
+
+      // GET /api/updates — public, privacy-safe archive activity.
+      if (url.pathname === '/api/updates' && request.method === 'GET') {
+        try {
+          await ensureTables();
+          const requestedLimit = Number(url.searchParams.get('limit') || 18);
+          const limit = Number.isSafeInteger(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 18;
+          const { results } = await env.DB.prepare(`SELECT id, action, path, summary, created_at
+            FROM activity ORDER BY created_at DESC, id DESC LIMIT ?`).bind(limit).all();
+          return json({ updates: results || [], refreshedAt: new Date().toISOString() }, 200, {
+            'Cache-Control': 'public, max-age=30, stale-while-revalidate=120',
+          });
+        } catch {
+          return json({ updates: [], refreshedAt: new Date().toISOString(), unavailable: true }, 200, {
+            'Cache-Control': 'public, max-age=15',
+          });
         }
       }
 
@@ -215,9 +372,10 @@ export default {
       if (url.pathname === '/api/request-access' && request.method === 'POST') {
         try {
           await ensureTables();
-          const { email, message } = await request.json();
-          if (!email || !email.includes('@')) return json({ error: 'Valid email required' }, 400);
-          const norm = email.trim().toLowerCase();
+          const { email, message } = await readJson(request, 16_384);
+          const norm = normalizeEmail(email);
+          if (!isValidEmail(norm)) return json({ error: 'Valid email required' }, 400);
+          if (message != null && typeof message !== 'string') return json({ error: 'Message must be text' }, 400);
           const existsUser = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(norm).first();
           if (existsUser) return json({ error: 'Email already registered — try login' }, 409);
           const existsReq = await env.DB.prepare('SELECT id FROM requests WHERE email = ? AND status = "pending"').bind(norm).first();
@@ -243,47 +401,62 @@ export default {
             } catch {}
           })());
           return json({ ok: true });
-        } catch (e) { return json({ error: 'Request failed', detail: String(e) }, 500); }
+        } catch (e) {
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Request could not be saved' }, 500);
+        }
       }
 
       // GET /api/me  -> {email} if logged in
       if (url.pathname === '/api/me' && request.method === 'GET') {
-        const cookies = parseCookies(request);
-        const token = cookies.geor_token || request.headers.get('Authorization')?.replace('Bearer ', '');
-        if (!token) return json({ user: null }, 200);
-        const payload = await verifyJwt(token, secret);
-        if (!payload) return json({ user: null }, 200);
-        return json({ user: { email: payload.email } }, 200);
+        try {
+          const token = readAuthToken(request);
+          if (!token) return json({ error: 'Authentication required', user: null }, 401);
+          const payload = await verifyJwt(token, getJwtSecret(env));
+          if (!payload) return json({ error: 'Invalid or expired session', user: null }, 401, { 'Set-Cookie': authCookie('', 0) });
+          return json({ user: { email: payload.email } }, 200);
+        } catch {
+          return json({ error: 'Authentication unavailable', user: null }, 503);
+        }
       }
 
       // POST /api/logout
       if (url.pathname === '/api/logout' && request.method === 'POST') {
-        return json({ ok: true }, 200, { 'Set-Cookie': `geor_token=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0` });
+        return json({ ok: true }, 200, { 'Set-Cookie': authCookie('', 0) });
       }
 
       // --- Admin (only ichieisenheart@gmail.com) ---
       const isAdmin = async () => {
-        const cookies = parseCookies(request);
-        const token = cookies.geor_token || request.headers.get('Authorization')?.replace('Bearer ', '');
+        const token = readAuthToken(request);
         if (!token) return false;
-        const p = await verifyJwt(token, secret);
-        return p && p.email === 'ichieisenheart@gmail.com';
+        const p = await verifyJwt(token, getJwtSecret(env));
+        return p && p.email === ADMIN_EMAIL;
       };
       if (url.pathname.startsWith('/api/admin/')) {
-        if (!(await isAdmin())) return json({ error: 'Admin only — login as ichieisenheart@gmail.com' }, 403);
+        try {
+          if (!(await isAdmin())) return json({ error: 'Admin access required' }, 403);
+          await ensureTables();
+        } catch {
+          return json({ error: 'Admin service unavailable' }, 503);
+        }
         if (url.pathname === '/api/admin/invites' && request.method === 'GET') {
           const { results } = await env.DB.prepare('SELECT code, used_by, used_at, created_at FROM invites ORDER BY created_at DESC').all();
           return json({ invites: results });
         }
         if (url.pathname === '/api/admin/invites' && request.method === 'POST') {
-          const { code } = await request.json();
-          if (!code) return json({ error: 'code required' }, 400);
-          const clean = code.trim().toUpperCase().replace(/\s+/g, '_');
-          await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
+          let body;
+          try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          const clean = cleanInviteCode(body.code);
+          if (!clean) return json({ error: 'Use 6–64 letters, numbers, underscores, or hyphens' }, 400);
+          const result = await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
+          if (result.meta?.changes !== 1) return json({ error: 'Invite already exists' }, 409);
           return json({ ok: true, code: clean });
         }
         if (url.pathname.startsWith('/api/admin/invites/') && request.method === 'DELETE') {
-          const code = decodeURIComponent(url.pathname.split('/').pop());
+          let code;
+          try { code = cleanInviteCode(decodeURIComponent(url.pathname.split('/').pop())); } catch { code = null; }
+          if (!code) return json({ error: 'Invalid invite code' }, 400);
           await env.DB.prepare('DELETE FROM invites WHERE code = ?').bind(code).run();
           return json({ ok: true });
         }
@@ -297,20 +470,43 @@ export default {
           return json({ requests: results });
         }
         if (url.pathname === '/api/admin/requests/approve' && request.method === 'POST') {
-          const { id, code } = await request.json();
-          if (!id) return json({ error: 'id required' }, 400);
-          const req = await env.DB.prepare('SELECT email FROM requests WHERE id = ?').bind(id).first();
+          let body;
+          try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          const id = validPositiveId(body.id);
+          if (!id) return json({ error: 'Valid request id required' }, 400);
+          const req = await env.DB.prepare('SELECT email, status FROM requests WHERE id = ?').bind(id).first();
           if (!req) return json({ error: 'Request not found' }, 404);
-          const inviteCode = (code || ('INVITE_' + Math.random().toString(36).slice(2,8).toUpperCase()));
-          const clean = inviteCode.trim().toUpperCase().replace(/\s+/g, '_');
-          await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
-          await env.DB.prepare('UPDATE requests SET status = ? WHERE id = ?').bind('approved:'+clean, id).run();
+          if (req.status !== 'pending') return json({ error: 'Request has already been resolved' }, 409);
+          const clean = body.code ? cleanInviteCode(body.code) : randomInviteCode();
+          if (!clean) return json({ error: 'Invalid invite code' }, 400);
+          const result = await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
+          if (result.meta?.changes !== 1) return json({ error: 'Invite already exists' }, 409);
+          await env.DB.prepare('UPDATE requests SET status = ? WHERE id = ? AND status = ?').bind('approved', id, 'pending').run();
           return json({ ok: true, code: clean, email: req.email });
         }
         if (url.pathname === '/api/admin/requests/reject' && request.method === 'POST') {
-          const { id } = await request.json();
-          await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ?').bind(id).run();
+          let body;
+          try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          const id = validPositiveId(body.id);
+          if (!id) return json({ error: 'Valid request id required' }, 400);
+          await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ? AND status = "pending"').bind(id).run();
           return json({ ok: true });
+        }
+        if (url.pathname === '/api/admin/stats' && request.method === 'GET') {
+          const [users, openInvites, pendingRequests, additions] = await env.DB.batch([
+            env.DB.prepare('SELECT COUNT(*) AS count FROM users'),
+            env.DB.prepare('SELECT COUNT(*) AS count FROM invites WHERE used_by IS NULL'),
+            env.DB.prepare('SELECT COUNT(*) AS count FROM requests WHERE status = ?').bind('pending'),
+            env.DB.prepare('SELECT COUNT(*) AS count FROM activity'),
+          ]);
+          return json({
+            stats: {
+              users: users.results?.[0]?.count || 0,
+              openInvites: openInvites.results?.[0]?.count || 0,
+              pendingRequests: pendingRequests.results?.[0]?.count || 0,
+              additions: additions.results?.[0]?.count || 0,
+            },
+          });
         }
         return json({ error: 'Not found' }, 404);
       }
@@ -342,9 +538,10 @@ export default {
             return json({ files, via: 'contents' });
           }
           const txt = await treeRes.text();
-          return json({ error: 'GitHub list failed', detail: txt.slice(0,500) }, 502);
+          void txt;
+          return json({ error: 'Additions repository is unavailable' }, 502);
         } catch (e) {
-          return json({ error: 'Additions list failed', detail: String(e).slice(0,600) }, 500);
+          return json({ error: 'Additions list is temporarily unavailable' }, 500);
         }
       }
 
@@ -361,14 +558,15 @@ export default {
           if (r.status === 404) return json({ error: 'File not found' }, 404);
           if (!r.ok) {
             const t = await r.text();
-            return json({ error: 'GitHub fetch failed', detail: t.slice(0,600) }, 502);
+            void t;
+            return json({ error: 'Additions repository is unavailable' }, 502);
           }
           const j = await r.json();
           if (j.type !== 'file' || !j.content) return json({ error: 'Not a file' }, 400);
           const content = b64DecodeUtf8(j.content);
           return json({ path: j.path, sha: j.sha, size: j.size, html_url: j.html_url, content });
         } catch (e) {
-          return json({ error: 'Additions file fetch failed', detail: String(e).slice(0,600) }, 500);
+          return json({ error: 'Addition could not be loaded' }, 500);
         }
       }
 
@@ -378,16 +576,17 @@ export default {
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
         let body;
-        try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
-        const rawPath = (body.path || '').trim();
-        const rawOld = (body.oldPath || '').trim();
+        try { body = await readJson(request); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        const rawPath = typeof body.path === 'string' ? body.path.trim() : '';
+        const rawOld = typeof body.oldPath === 'string' ? body.oldPath.trim() : '';
         const content = body.content;
-        const message = (body.message || '').trim().slice(0,200) || `edit ${rawPath} via /app`;
+        const message = (typeof body.message === 'string' ? body.message : '').trim().slice(0,200) || `edit ${rawPath} via /app`;
         if (typeof content !== 'string') return json({ error: 'content required (string)' }, 400);
         if (content.length > 900000) return json({ error: 'File too large (900k char limit)' }, 413);
         const path = sanitizeAdditionsPath(rawPath);
         if (!path) return json({ error: 'Invalid path — use A-Z 0-9 . _ - / — e.g. my-idea.md' }, 400);
         const oldPath = rawOld && rawOld !== path ? sanitizeAdditionsPath(rawOld) : null;
+        if (rawOld && rawOld !== path && !oldPath) return json({ error: 'Invalid previous path' }, 400);
         try {
           // check existing sha for path (if file exists, we need sha to update)
           let existingSha = null;
@@ -397,8 +596,8 @@ export default {
             if (jc.sha) existingSha = jc.sha;
           } else if (check.status !== 404) {
             const t = await check.text();
-            // if 403 etc propagate
-            if (check.status !== 404) return json({ error: 'GitHub pre-check failed', detail: t.slice(0,600) }, 502);
+            void t;
+            return json({ error: 'Additions repository is unavailable' }, 502);
           }
           const b64 = b64EncodeUtf8(content);
           const putBody = {
@@ -414,7 +613,8 @@ export default {
           }, env);
           if (!putRes.ok) {
             const t = await putRes.text();
-            return json({ error: 'GitHub commit failed', detail: t.slice(0,800), status: putRes.status }, 502);
+            void t;
+            return json({ error: 'Commit could not be saved', status: putRes.status }, 502);
           }
           const pj = await putRes.json();
           // if rename: delete old file
@@ -433,9 +633,13 @@ export default {
               }
             } catch {}
           }
+          const action = oldPath ? 'move' : (existingSha ? 'edit' : 'create');
+          const activitySummary = oldPath ? 'Moved an archive addition' : (existingSha ? 'Revised an archive addition' : 'Created an archive addition');
+          if (env.DB) ctx.waitUntil(env.DB.prepare('INSERT INTO activity (action, path, summary, actor_email) VALUES (?, ?, ?, ?)')
+            .bind(action, path, activitySummary, user.email).run().catch(() => {}));
           return json({ ok: true, path, sha: pj.content?.sha || pj.commit?.sha, html_url: pj.content?.html_url, commit: pj.commit?.html_url });
         } catch (e) {
-          return json({ error: 'Save failed', detail: String(e).slice(0,800) }, 500);
+          return json({ error: 'Addition could not be saved' }, 500);
         }
       }
 
@@ -444,23 +648,25 @@ export default {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
-        let body; try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
+        let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
         const p = sanitizeAdditionsPath(body.path || '');
         if (!p) return json({ error: 'Invalid path' }, 400);
         try {
           const check = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(p).replace(/%2F/g,'/') }?ref=${ADDITIONS_BRANCH}`, { method: 'GET' }, env);
           if (check.status === 404) return json({ error: 'File not found' }, 404);
-          if (!check.ok) { const t = await check.text(); return json({ error: 'GitHub fetch failed', detail: t.slice(0,600) }, 502); }
+          if (!check.ok) { await check.text(); return json({ error: 'Additions repository is unavailable' }, 502); }
           const jc = await check.json();
           const del = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(p).replace(/%2F/g,'/')}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: `delete ${p} — by ${user.email}`, sha: jc.sha, branch: ADDITIONS_BRANCH })
           }, env);
-          if (!del.ok) { const t = await del.text(); return json({ error: 'GitHub delete failed', detail: t.slice(0,800) }, 502); }
+          if (!del.ok) { await del.text(); return json({ error: 'Addition could not be deleted' }, 502); }
+          if (env.DB) ctx.waitUntil(env.DB.prepare('INSERT INTO activity (action, path, summary, actor_email) VALUES (?, ?, ?, ?)')
+            .bind('delete', p, 'Removed an archive addition', user.email).run().catch(() => {}));
           return json({ ok: true, path: p });
         } catch (e) {
-          return json({ error: 'Delete failed', detail: String(e).slice(0,800) }, 500);
+          return json({ error: 'Addition could not be deleted' }, 500);
         }
       }
 
@@ -469,8 +675,8 @@ export default {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
         if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
-        let body; try { body = await request.json(); } catch { return json({ error: 'Invalid JSON' }, 400); }
-        const raw = (body.path || '').trim();
+        let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        const raw = typeof body.path === 'string' ? body.path.trim() : '';
         const folder = sanitizeFolderPath(raw);
         if (!folder) return json({ error: 'Invalid folder — use A-Z 0-9 _ - / and space, e.g. lore/characters' }, 400);
         const keepPath = folder + '/.gitkeep';
@@ -492,45 +698,61 @@ export default {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: `create folder ${folder} — by ${user.email}`, content: b64, branch: ADDITIONS_BRANCH })
           }, env);
-          if (!put.ok) { const t = await put.text(); return json({ error: 'GitHub mkdir failed', detail: t.slice(0,700) }, 502); }
+          if (!put.ok) { await put.text(); return json({ error: 'Folder could not be created' }, 502); }
           const pj = await put.json();
+          if (env.DB) ctx.waitUntil(env.DB.prepare('INSERT INTO activity (action, path, summary, actor_email) VALUES (?, ?, ?, ?)')
+            .bind('folder', folder, 'Created an archive folder', user.email).run().catch(() => {}));
           return json({ ok: true, path: folder, sha: pj.content?.sha });
         } catch (e) {
-          return json({ error: 'Mkdir failed', detail: String(e).slice(0,700) }, 500);
+          return json({ error: 'Folder could not be created' }, 500);
         }
-      }
-
-      if (url.pathname === '/api/debug' && request.method === 'GET') {
-        return json({ hasDB: !!env.DB, binding: env.DB ? 'ok' : 'missing — add D1 binding DB → worldofgeor-db', hasGithub: !!env.GITHUB_TOKEN, additionsRepo: `${ADDITIONS_OWNER}/${ADDITIONS_REPO}@${ADDITIONS_BRANCH}`, ts: new Date().toISOString() });
       }
 
       return json({ error: 'Not found' }, 404);
     }
 
-    // --- Gated archive: /wiki/*, /atlas.html, /dashboard.html, /admin.html share same geor_token
-    const needsAuth = url.pathname === '/atlas.html' || url.pathname === '/dashboard.html' || url.pathname === '/admin.html' || url.pathname.startsWith('/wiki') || url.pathname.startsWith('/app');
+    // --- Gated archive: private HTML, wiki/search indexes, and full-resolution maps.
+    const needsAuth = isPrivatePath(url.pathname);
     if (needsAuth) {
-      const secret = env.JWT_SECRET || 'dev-secret-change-me-in-dashboard';
-      const cookies = parseCookies(request);
-      const token = cookies.geor_token;
-      const payload = token ? await verifyJwt(token, secret) : null;
+      const token = parseCookies(request)[COOKIE_NAME];
+      let payload = null;
+      try { payload = token ? await verifyJwt(token, getJwtSecret(env)) : null; } catch {}
       if (!payload) {
         const accept = request.headers.get('Accept') || '';
-        // API-style requests get JSON 401, navigations get redirect to login
-        if (accept.includes('application/json') || url.pathname.startsWith('/api/')) {
-          return json({ error: 'Auth required — login at /' }, 401);
-        }
+        const destination = request.headers.get('Sec-Fetch-Dest');
+        if (accept.includes('application/json') || (destination && destination !== 'document')) return json({ error: 'Authentication required' }, 401);
         const next = encodeURIComponent(url.pathname + url.search);
         return Response.redirect(`${url.origin}/?next=${next}`, 302);
       }
-      // admin.html additionally requires ichieisenheart@gmail.com
-      if (url.pathname === '/admin.html' || url.pathname.startsWith('/admin')) {
-        if (payload.email !== 'ichieisenheart@gmail.com') return Response.redirect(`${url.origin}/dashboard.html`, 302);
+      if (url.pathname === '/admin.html' || url.pathname === '/admin') {
+        if (payload.email !== ADMIN_EMAIL) return Response.redirect(`${url.origin}/dashboard.html`, 302);
       }
     }
 
     // --- Static assets fallback ---
-    // Let Cloudflare serve /dist (including /atlas.html etc. — now gated above)
-    return env.ASSETS.fetch(request);
+    const alias = ROUTE_ALIASES.get(url.pathname);
+    let assetRequest = request;
+    if (alias) {
+      const assetUrl = new URL(request.url);
+      assetUrl.pathname = alias;
+      assetRequest = new Request(assetUrl.toString(), request);
+    }
+    const response = await env.ASSETS.fetch(assetRequest);
+    if (!needsAuth) return response;
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', 'private, no-store');
+    headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+    return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
+};
+
+export const __test = {
+  cleanInviteCode,
+  constantTimeEqual,
+  isPrivatePath,
+  isTrustedMutation,
+  sanitizeAdditionsPath,
+  sanitizeFolderPath,
+  signJwt,
+  verifyJwt,
 };

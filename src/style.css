@@ -4,5 +4,28 @@
 
 @layer base {
   html { scroll-behavior: smooth; }
-  body { @apply bg-ink text-cream font-sans antialiased; }
+  body {
+    @apply bg-ink text-cream font-sans antialiased;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(900px 520px at 12% -8%, rgb(217 183 122 / 0.075), transparent 62%),
+      radial-gradient(700px 460px at 92% 20%, rgb(184 146 74 / 0.045), transparent 66%);
+  }
+  ::selection { @apply bg-gold/30 text-cream; }
+  * { scrollbar-width: thin; scrollbar-color: rgb(217 183 122 / 0.28) transparent; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { @apply outline-none ring-2 ring-gold ring-offset-2 ring-offset-ink; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 700ms cubic-bezier(.22,1,.36,1), transform 700ms cubic-bezier(.22,1,.36,1);
+  }
+  .reveal-item.is-visible { opacity: 1; transform: translateY(0); }
 }

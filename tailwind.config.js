@@ -1,10 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./public/**/*.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         ink: "#0f0e0d",
+        ink2: "#1a1a18",
         cream: "#f2e8d0",
         gold: "#d9b77a",
         amberdeep: "#b8924a",
@@ -13,6 +14,7 @@ export default {
         serif: ['"Cormorant Garamond"', 'serif'],
         display: ['"Cinzel"', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
     },
   },

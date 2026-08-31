@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>World of Ge'or — A World Built to Endure</title>
   <meta name="description" content="World of Ge'or — 1.37× Earth, ringed by the Silver Bride. Three million years of war, shadow and stubborn freedom. A living worldbuilding archive by Mikhail & Ichi." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +43,7 @@
           </div>
         </div>
       </div>
-      <button id="menuBtn" class="md:hidden p-2 text-cream/80">
+      <button id="menuBtn" class="md:hidden p-2 text-cream/80" type="button" aria-label="Open navigation" aria-controls="mobileMenu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
@@ -64,7 +65,7 @@
   </header>
 
   <!-- Hero -->
-  <section class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
+  <section id="top" class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
     <div class="absolute inset-0">
       <picture>
         <source type="image/webp" srcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" sizes="100vw">
@@ -94,7 +95,7 @@
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">60+</b> PEOPLES</span>
-          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">12</b> AGES</span>
+          <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">12</b> AGES + LOST ERA</span>
         </div>
       </div>
     </div>
@@ -166,41 +167,15 @@
     <div class="flex items-end justify-between gap-4 mb-8">
       <div>
         <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">CHRONOLOGY</p>
-        <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">TWELVE AGES OF GE'OR</h2>
+        <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">THE AGES OF GE'OR</h2>
       </div>
-      <p class="hidden md:block text-sm text-cream/60 max-w-[360px] text-right">From the Great Divergence (Year 0) to 597 AGD — the present. No gaps, no ghosts.</p>
+      <div class="hidden md:flex items-center gap-2">
+        <button id="agePrev" type="button" aria-label="Previous ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">←</button>
+        <button id="ageNext" type="button" aria-label="Next ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">→</button>
+      </div>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="ageGrid">
-      <button data-age="0" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 0</div>
-        <div class="font-serif text-[15px] font-semibold">The Lost Era</div>
-        <div class="text-xs text-cream/60 mt-1">15,000 — 2,000 BGD</div>
-      </button>
-      <button data-age="1" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 1–3</div>
-        <div class="font-serif text-[15px] font-semibold">Nomads to Empires</div>
-        <div class="text-xs text-cream/60 mt-1">Kingdoms, tribes, first cities</div>
-      </button>
-      <button data-age="4" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 4–6</div>
-        <div class="font-serif text-[15px] font-semibold">Dragons & Divergence</div>
-        <div class="text-xs text-cream/60 mt-1">The Groom forms • Year 0</div>
-      </button>
-      <button data-age="7" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 7–9</div>
-        <div class="font-serif text-[15px] font-semibold">Eris Ascendant</div>
-        <div class="text-xs text-cream/60 mt-1">Empire, crusades, schism</div>
-      </button>
-      <button data-age="10" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 hover:border-gold/30 hover:bg-cream/[0.06] transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 10–11</div>
-        <div class="font-serif text-[15px] font-semibold">The Fracturing</div>
-        <div class="text-xs text-cream/60 mt-1">Present • 597 AGD</div>
-      </button>
-      <button data-age="12" class="age-card text-left rounded-xl border border-gold/12 bg-cream/[0.04] p-4 bg-gradient-to-br from-gold/10 to-transparent hover:border-gold/30 transition focus:outline-none focus:border-gold/40">
-        <div class="text-[11px] tracking-widest text-gold">AGE 12</div>
-        <div class="font-serif text-[15px] font-semibold">Age of Strife</div>
-        <div class="text-xs text-cream/60 mt-1">Future • unwritten</div>
-      </button>
+    <p class="text-sm text-cream/60 max-w-[620px] -mt-4 mb-6">From the Lost Era after the ancient crash to the unwritten Age of Strife. Select an age to open its place in the archive.</p>
+    <div id="ageGrid" class="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory" aria-label="Chronology of Ge'or">
     </div>
   </section>
 
@@ -288,14 +263,16 @@
   <div id="requestModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="requestTitle">
     <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
-      <button id="closeRequest" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <button id="closeRequest" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close request access dialog">✕</button>
       <h3 id="requestTitle" class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
       <p class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
       <form id="requestForm" class="mt-5 space-y-3">
-        <input id="reqEmail" type="email" placeholder="your email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
-        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none resize-none"></textarea>
+        <label for="reqEmail" class="sr-only">Email address</label>
+        <input id="reqEmail" type="email" placeholder="your email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <label for="reqMsg" class="sr-only">Why you want access (optional)</label>
+        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" maxlength="500" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none resize-none"></textarea>
         <button type="submit" id="reqSubmit" class="w-full bg-cream text-ink py-3 rounded-full text-sm font-semibold hover:bg-white transition">Send Request</button>
-        <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]"></p>
+        <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]" aria-live="polite"></p>
       </form>
       <p class="text-[11px] text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
     </div>
@@ -305,19 +282,22 @@
   <div id="authModal" class="fixed inset-0 hidden z-[60] items-center justify-center p-4" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="authTitle">
     <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
-      <button id="closeAuth" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close">✕</button>
+      <button id="closeAuth" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close sign in dialog">✕</button>
       <h3 id="authTitle" class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
       <p class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
       <div class="flex gap-2 mt-4 text-xs">
-        <button id="tabLogin" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
-        <button id="tabRegister" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
+        <button id="tabLogin" type="button" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
+        <button id="tabRegister" type="button" class="flex-1 py-2 rounded-full border border-gold/30 text-gold">REGISTER</button>
       </div>
       <form id="authForm" class="mt-5 space-y-3">
-        <input id="authEmail" type="email" placeholder="email" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
-        <input id="authPassword" type="password" placeholder="password (8+ chars)" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
-        <input id="authInvite" type="text" placeholder="invite code (for register)" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <label for="authEmail" class="sr-only">Email address</label>
+        <input id="authEmail" type="email" placeholder="email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <label for="authPassword" class="sr-only">Password</label>
+        <input id="authPassword" type="password" placeholder="password" autocomplete="current-password" minlength="1" maxlength="256" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <label for="authInvite" class="sr-only">Invite code</label>
+        <input id="authInvite" type="text" placeholder="invite code (for register)" autocomplete="off" maxlength="64" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
         <button type="submit" id="authSubmit" class="w-full bg-gradient-to-b from-gold to-amberdeep text-ink py-3 rounded-full text-sm font-semibold hover:brightness-110 transition">Continue</button>
-        <p id="authMsg" class="text-xs text-center min-h-[1.2em]"></p>
+        <p id="authMsg" class="text-xs text-center min-h-[1.2em]" aria-live="polite"></p>
         </form>
     </div>
   </div>
@@ -330,6 +310,7 @@
       const tabLogin = document.getElementById('tabLogin');
       const tabRegister = document.getElementById('tabRegister');
       const authInvite = document.getElementById('authInvite');
+      const authPassword = document.getElementById('authPassword');
       const authMsg = document.getElementById('authMsg');
       const authForm = document.getElementById('authForm');
       const requestModal = document.getElementById('requestModal');
@@ -338,6 +319,9 @@
       const requestForm = document.getElementById('requestForm');
       const reqMsgOut = document.getElementById('reqMsgOut');
       let mode='login';
+      let postAuthDestination = null;
+      let authReturnFocus = null;
+      let requestReturnFocus = null;
       // a11y helpers — body lock + focus trap
       function lockBody(){ document.body.style.overflow='hidden' }
       function unlockBody(){ document.body.style.overflow='' }
@@ -357,13 +341,23 @@
       function releaseTrap(modal){
         if(modal._trapHandler){ modal.removeEventListener('keydown', modal._trapHandler); delete modal._trapHandler; }
       }
-      function openAuth(m){ mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
-      function closeAuthModal(){ authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); unlockBody(); }
+      function openAuth(m){ authReturnFocus=document.activeElement; mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
+      function closeAuthModal(){ if(authModal.classList.contains('hidden')) return; authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); unlockBody(); authReturnFocus?.focus?.(); }
       function updateTabs(){
-        if(mode==='login'){ tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='none'; } else { tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold'; tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold'; authInvite.style.display='block'; }
+        if(mode==='login'){
+          tabLogin.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold';
+          tabRegister.className='flex-1 py-2 rounded-full border border-gold/30 text-gold';
+          authInvite.style.display='none'; authInvite.required=false;
+          authPassword.minLength=1; authPassword.placeholder='password'; authPassword.autocomplete='current-password';
+        } else {
+          tabRegister.className='flex-1 py-2 rounded-full bg-gold text-ink font-semibold';
+          tabLogin.className='flex-1 py-2 rounded-full border border-gold/30 text-gold';
+          authInvite.style.display='block'; authInvite.required=true;
+          authPassword.minLength=12; authPassword.placeholder='password (12+ chars)'; authPassword.autocomplete='new-password';
+        }
       }
-      function openRequest(){ requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); requestModal.setAttribute('aria-hidden','false'); reqMsgOut.textContent=''; lockBody(); trapFocus(requestModal); }
-      function closeRequestModal(){ requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); requestModal.setAttribute('aria-hidden','true'); releaseTrap(requestModal); unlockBody(); }
+      function openRequest(){ requestReturnFocus=document.activeElement; requestModal.classList.remove('hidden'); requestModal.classList.add('flex'); requestModal.setAttribute('aria-hidden','false'); reqMsgOut.textContent=''; lockBody(); trapFocus(requestModal); }
+      function closeRequestModal(){ if(requestModal.classList.contains('hidden')) return; requestModal.classList.add('hidden'); requestModal.classList.remove('flex'); requestModal.setAttribute('aria-hidden','true'); releaseTrap(requestModal); unlockBody(); requestReturnFocus?.focus?.(); }
       tabLogin?.addEventListener('click', ()=>{mode='login'; updateTabs();});
       tabRegister?.addEventListener('click', ()=>{mode='register'; updateTabs();});
       closeAuth?.addEventListener('click', closeAuthModal);
@@ -376,12 +370,19 @@
       // mobile menu handled in src/main.js (hide-on-scroll, outside-ESC, link-close)
       // age drawer — private archive teaser (no vault data exposed)
       const AGE_DATA = {
-        '0': { kicker:'AGE 0 • 15,000 — 2,000 BGD', title:'The Lost Era', text:'Before canon. Mage-cells emerge, first peoples scatter. Everything the later empires call "divine" is rubble from here.', meta:'Key: Baoth ruins • Traveler archive • no empire yet' },
-        '1': { kicker:'AGE 1–3 • 2,000 BGD — 800 BGD', title:'Nomads to Empires', text:'Tribes become kingdoms. The Erisian plain unites under dragon law; Kobre learns to count in brass. First cities, first conspiracies.', meta:'Key: Eris plain • Kobre gear-cult • first duchies' },
-        '4': { kicker:'AGE 4–6 • 800 BGD — Year 0', title:'Dragons & Divergence', text:'The Groom forms from the third moon — the Silver Bride is born. Year 0, the calendar resets. Dragons pick sides.', meta:'Key: Groom formation • Year 0 • Silver Bride visible' },
-        '7': { kicker:'AGE 7–9 • 0 — 411 AGD', title:'Eris Ascendant', text:'Eris at its height. Three duchies, crusades, schism. The Shadows learn that mage-cells can be farmed.', meta:'Key: 30 counties • crusades • schism • Shadows weaponize mage-cells' },
-        '10': { kicker:'AGE 10–11 • 411 — 597 AGD • PRESENT', title:'The Fracturing', text:'The Sword dulls. 300 nations now, no center. 597 AGD is today — you are here. Free people refuse to stay dead.', meta:'Present • 300 nations • 17 continents • 59k entries' },
-        '12': { kicker:'AGE 12 • FUTURE', title:'Age of Strife — Unwritten', text:'Not canon yet. When it starts, it will not start with a trumpet. It starts with a stubborn "no".', meta:'Future • unwritten • your play is here' }
+        '0': { title:'The Lost Era', text:'The ancient battleship falls and survival erases almost everything its people knew. The first migrations begin around the Formingar Ocean.', meta:'Crash • survival • the first dispersal', url:'/wiki/World/History/Events/Age 0 — The Lost Era/' },
+        '1': { title:'Age of Nomadism', text:'Languages fragment, writing disappears, and the memory of the crash survives only as stories carried between campfires.', meta:'Migration • oral tradition • lost knowledge', url:'/wiki/World/History/Events/Age 1 — Age of Nomadism/' },
+        '2': { title:'Age of First Tribes', text:'Settled peoples claim territory. Tribal strength, rivalry, and survival begin shaping reputations that will last for millennia.', meta:'First settlements • tribal law • expansion', url:'/wiki/World/History/Events/Age 2 — Age of First Tribes/' },
+        '3': { title:'Age of First Empires', text:'Agriculture becomes power. City-states and young kingdoms experiment with rule, trade, and catastrophic ambition.', meta:'Agriculture • city-states • early kingdoms', url:'/wiki/World/History/Events/Age 3 — Age of First Empires/' },
+        '4': { title:'Dragon Tyranny', text:'Twelve great dragon clans divide the world between them. Almost nothing moves without a dragon’s permission.', meta:'Twelve clans • conquest • draconic rule', url:'/wiki/World/History/Events/Age 4 — Dragon Tyranny/' },
+        '5': { title:'Dwarf Era', text:'Romanium transforms craft, trade, and war. Dwarven forges become the engine of an age of impossible durability.', meta:'Romanium • prosperity • master forges', url:'/wiki/World/History/Events/Age 5 — Dwarf Era/' },
+        '6': { title:'Iron Age', text:'The old material order breaks. Scarcity reshapes the world while the elves thrive through their bond with the land.', meta:'Scarcity • iron • elven ascent', url:'/wiki/World/History/Events/Age 6 — Iron Age/' },
+        '7': { title:'Human Age', text:'Trade returns, cities grow, and three great empires dominate a world that has found a fragile equilibrium.', meta:'Recovery • trade routes • human empires', url:'/wiki/World/History/Events/Age 7 — Human Age/' },
+        '8': { title:'Age of Baoth', text:'Goldenborn’s empire brings roads, law, and prosperity beneath an Obsidian Throne—until its order becomes a cage.', meta:'Baoth • Goldenborn • imperial order', url:'/wiki/World/History/Events/Age 8 — Age of Baoth/' },
+        '9': { title:'Age of Anarchy', text:'Baoth falls and takes its bureaucracy, currency, and safety with it. Freedom arrives wearing the face of chaos.', meta:'Collapse • lawlessness • fractured realms', url:'/wiki/World/History/Events/Age 9 — Age of Anarchy/' },
+        '10': { title:'Erisian Era', text:'The Erisian Church and Empire rise together, binding military force to a story powerful enough to govern a continent.', meta:'Eris • church • imperial ascent', url:'/wiki/World/History/Events/Age 10 — Erisian Era/' },
+        '11': { title:'Great Divergence', text:'The calendar resets. Six centuries later, 597 AGD is the present—and the stabilized world is beginning to crack.', meta:'Year 0 • Silver Bride • 597 AGD', url:'/wiki/World/History/Events/Age 11 — Great Divergence/' },
+        '12': { title:'Age of Strife', text:'The next age is visible only in pressure lines: old powers waking, institutions fracturing, and a story not yet written.', meta:'Future • pressure • unwritten', url:'/wiki/World/History/Events/Age 12 — Age of Strife/' }
       };
       const ageDrawer = document.getElementById('ageDrawer');
       const ageKicker = document.getElementById('ageDrawerKicker');
@@ -390,11 +391,21 @@
       const ageMeta = document.getElementById('ageDrawerMeta');
       const ageClose = document.getElementById('ageDrawerClose');
       const ageEnter = document.getElementById('ageDrawerEnter');
+      const ageGrid = document.getElementById('ageGrid');
+      ageGrid.innerHTML = Object.entries(AGE_DATA).map(([age, data])=>`
+        <button data-age="${age}" class="age-card min-w-[220px] md:min-w-[250px] snap-start text-left rounded-2xl border border-gold/15 bg-cream/[0.035] p-5 hover:border-gold/35 hover:bg-cream/[0.06] transition">
+          <span class="text-[10px] tracking-[0.28em] text-gold">AGE ${age}</span>
+          <span class="block font-display text-[14px] leading-5 font-semibold mt-2">${data.title}</span>
+          <span class="block text-xs leading-5 text-cream/50 mt-2">${data.meta}</span>
+        </button>
+      `).join('');
+      document.getElementById('agePrev')?.addEventListener('click',()=>ageGrid.scrollBy({left:-520,behavior:'smooth'}));
+      document.getElementById('ageNext')?.addEventListener('click',()=>ageGrid.scrollBy({left:520,behavior:'smooth'}));
       document.querySelectorAll('.age-card').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           const d = AGE_DATA[btn.dataset.age];
           if(!d) return;
-          ageKicker.textContent = d.kicker;
+          ageKicker.textContent = `AGE ${btn.dataset.age} • ARCHIVE CHRONOLOGY`;
           ageTitle.textContent = d.title;
           ageText.textContent = d.text;
           ageMeta.textContent = d.meta;
@@ -406,7 +417,12 @@
         });
       });
       ageClose?.addEventListener('click', ()=>{ ageDrawer.classList.add('hidden'); document.querySelectorAll('.age-card').forEach(b=>b.classList.remove('border-gold/40')); });
-      ageEnter?.addEventListener('click', ()=>{ if(currentUser) location.href='/dashboard.html'; else openAuth('login'); });
+      ageEnter?.addEventListener('click', ()=>{
+        const active = [...document.querySelectorAll('.age-card')].find(button => button.classList.contains('border-gold/40'));
+        const destination = AGE_DATA[active?.dataset.age]?.url || '/wiki/World/History/Events/Ages of Ge\'or/';
+        if(currentUser) location.href=destination;
+        else { postAuthDestination=destination; openAuth('login'); }
+      });
       // auth form
       authForm?.addEventListener('submit', async (e)=>{
         e.preventDefault();
@@ -424,9 +440,11 @@
           try{ j=await r.json(); } catch{ const t=await r.text(); throw new Error(t.slice(0,300) || 'Failed'); }
           if(!r.ok) throw new Error((j.detail? j.error+': '+j.detail : j.error) || 'Failed');
           const qp = new URLSearchParams(location.search);
-          const nxt = qp.get('next');
-          const dest = nxt ? decodeURIComponent(nxt) : '/dashboard.html';
-          authMsg.textContent = mode==='login' ? ('Welcome — entering ' + (nxt ? dest : 'dashboard') + '…') : ('Registered — entering ' + (nxt ? dest : 'dashboard') + '…');
+          const requested = qp.get('next');
+          const allowedPrefixes = ['/wiki', '/app', '/atlas', '/dashboard', '/admin'];
+          const safeRequested = requested && requested.startsWith('/') && !requested.startsWith('//') && allowedPrefixes.some(prefix => requested === prefix || requested.startsWith(prefix + '/') || requested.startsWith(prefix + '.')) ? requested : null;
+          const dest = postAuthDestination || safeRequested || '/dashboard.html';
+          authMsg.textContent = mode==='login' ? ('Welcome — entering ' + (dest === '/dashboard.html' ? 'dashboard' : dest) + '…') : ('Registered — entering ' + (dest === '/dashboard.html' ? 'dashboard' : dest) + '…');
           authMsg.className='text-xs text-center min-h-[1.2em] text-green-400';
           setTimeout(()=>{ location.href=dest; }, 700);
         }catch(err){ authMsg.textContent=err.message; authMsg.className='text-xs text-center min-h-[1.2em] text-red-400'; }

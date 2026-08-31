@@ -13,8 +13,20 @@ CREATE TABLE IF NOT EXISTS invites (
   used_at TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
 );
--- seed your default invite
-INSERT OR IGNORE INTO invites (code) VALUES ('WELCOME_TO_GEOR_2026');
-INSERT OR IGNORE INTO invites (code) VALUES ('MIKHAIL_INVITE');
-INSERT OR IGNORE INTO invites (code) VALUES ('ARCADY_INVITE');
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE TABLE IF NOT EXISTS requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL,
+  message TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE TABLE IF NOT EXISTS activity (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  action TEXT NOT NULL,
+  path TEXT,
+  summary TEXT NOT NULL,
+  actor_email TEXT,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+);
+CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC);

@@ -8,8 +8,13 @@ if (y) y.textContent = new Date().getFullYear()
 const btn = document.getElementById('menuBtn')
 const menu = document.getElementById('mobileMenu')
 if (btn && menu) {
-  const closeMenu = () => menu.classList.add('hidden')
-  btn.addEventListener('click', (e) => { e.stopPropagation(); menu.classList.toggle('hidden') })
+  const setMenu = (open) => {
+    menu.classList.toggle('hidden', !open)
+    btn.setAttribute('aria-expanded', String(open))
+    btn.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation')
+  }
+  const closeMenu = () => setMenu(false)
+  btn.addEventListener('click', (e) => { e.stopPropagation(); setMenu(menu.classList.contains('hidden')) })
   menu.querySelectorAll('a, button').forEach(el => el.addEventListener('click', closeMenu))
   document.addEventListener('click', (e) => { if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) closeMenu() })
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu() })
@@ -66,5 +71,20 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         heroTick = false
       })
     }, { passive: true })
+  }
+
+  if ('IntersectionObserver' in window) {
+    const revealTargets = document.querySelectorAll('body > section:not(:first-of-type), body > footer')
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('is-visible')
+        observer.unobserve(entry.target)
+      })
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 })
+    revealTargets.forEach((target) => {
+      target.classList.add('reveal-item')
+      revealObserver.observe(target)
+    })
   }
 }

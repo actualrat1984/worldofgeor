@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
 <title>Battlestation — World of Ge'or (Web)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',ink2:'#1a1a18',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],serif:['Cormorant Garamond','serif'],sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="/site.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <style>
 html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 ::-webkit-scrollbar{width:8px;height:8px}
@@ -302,6 +301,84 @@ function toast(msg, ok=true){
   document.getElementById('toast').appendChild(t);
   setTimeout(()=> t.remove(), 2600);
 }
+function escapeHtml(value){
+  return String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
+}
+function safeWikiPath(value){
+  if(typeof value !== 'string' || !value.startsWith('/wiki/') || value.startsWith('//')) return null;
+  try{
+    const parsed=new URL(value, location.origin);
+    return parsed.origin===location.origin && parsed.pathname.startsWith('/wiki/') ? parsed.pathname + parsed.search + parsed.hash : null;
+  }catch{ return null; }
+}
+function sanitizeRichHtml(html){
+  const doc=new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html');
+  doc.querySelectorAll('script,style,iframe,object,embed,link,meta,base,form,input,button,textarea,select,svg,math').forEach(node=>node.remove());
+  doc.querySelectorAll('*').forEach(node=>{
+    [...node.attributes].forEach(attr=>{
+      const name=attr.name.toLowerCase();
+      if(name.startsWith('on') || name==='srcdoc' || name==='formaction' || name==='style') node.removeAttribute(attr.name);
+    });
+    if(node.hasAttribute('href')){
+      try{
+        const href=new URL(node.getAttribute('href'), location.origin);
+        if(!['http:','https:'].includes(href.protocol)) node.removeAttribute('href');
+      }catch{ node.removeAttribute('href'); }
+    }
+    if(node.hasAttribute('src')){
+      try{
+        const src=new URL(node.getAttribute('src'), location.origin);
+        if(src.origin!==location.origin || !['http:','https:'].includes(src.protocol)) node.removeAttribute('src');
+      }catch{ node.removeAttribute('src'); }
+    }
+    if(node.getAttribute('target')==='_blank') node.setAttribute('rel','noopener noreferrer');
+  });
+  return doc.body.firstElementChild?.innerHTML || '';
+}
+function renderMarkdown(source){
+  const lines=String(source ?? '').replace(/\r\n?/g,'\n').split('\n');
+  const output=[];
+  let listType='';
+  let inCode=false;
+  const closeList=()=>{ if(listType){ output.push(`</${listType}>`); listType=''; } };
+  const inline=value=>{
+    let text=escapeHtml(value);
+    text=text.replace(/`([^`]+)`/g,'<code>$1</code>');
+    text=text.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/wiki\/[^)\s]+)\)/g,'<a href="$2" rel="noopener noreferrer">$1</a>');
+    text=text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    text=text.replace(/__([^_]+)__/g,'<strong>$1</strong>');
+    text=text.replace(/(^|[^*])\*([^*]+)\*/g,'$1<em>$2</em>');
+    return text;
+  };
+  for(const rawLine of lines){
+    const line=rawLine.replace(/\s+$/,'');
+    if(/^```/.test(line)){
+      closeList();
+      if(inCode){ output.push('</code></pre>'); inCode=false; }
+      else { output.push('<pre><code>'); inCode=true; }
+      continue;
+    }
+    if(inCode){ output.push(escapeHtml(rawLine)+'\n'); continue; }
+    const heading=line.match(/^(#{1,6})\s+(.+)$/);
+    if(heading){ closeList(); const level=heading[1].length; output.push(`<h${level}>${inline(heading[2])}</h${level}>`); continue; }
+    const unordered=line.match(/^\s*[-*+]\s+(.+)$/);
+    const ordered=line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if(unordered || ordered){
+      const nextType=unordered?'ul':'ol';
+      if(listType!==nextType){ closeList(); listType=nextType; output.push(`<${listType}>`); }
+      output.push(`<li>${inline((unordered||ordered)[1])}</li>`);
+      continue;
+    }
+    closeList();
+    if(!line.trim()){ output.push(''); continue; }
+    if(/^>\s?/.test(line)){ output.push(`<blockquote>${inline(line.replace(/^>\s?/,''))}</blockquote>`); continue; }
+    if(/^(-{3,}|\*{3,})$/.test(line.trim())){ output.push('<hr>'); continue; }
+    output.push(`<p>${inline(line)}</p>`);
+  }
+  closeList();
+  if(inCode) output.push('</code></pre>');
+  return output.join('\n');
+}
 
 function init(){
  const tabs=document.querySelectorAll('.tabBtn');
@@ -331,7 +408,7 @@ function init(){
      let entries=[];
      try{
        const r=await fetch('/wiki-index.json',{credentials:'same-origin'}); if(r.ok){ entries=await r.json(); }
-       entries=entries.map(e=> ({url:e.url, title:(e.title||'').replace(/¶/g,'').replace(/&para;/g,'').trim()}));
+       entries=entries.map(e=> ({url:safeWikiPath(e.url), title:String(e.title||'').replace(/¶/g,'').replace(/&para;/g,'').trim()})).filter(e=>e.url);
      }catch(e){}
      if(!entries.length){
        const r=await fetch('/wiki/sitemap.xml',{credentials:'same-origin'}); 
@@ -347,7 +424,8 @@ function init(){
      renderVault('');
    }catch(e){
      vaultStatus.textContent='';
-     vaultList.innerHTML='<div class="p-3 rounded-xl border border-red-900/50 bg-red-950/20 text-sm text-red-200">Failed to load wiki index.<br><span class="text-xs text-red-300/70">'+String(e).slice(0,120)+'</span><br><button onclick="location.reload()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>';
+     vaultList.innerHTML='<div class="p-3 rounded-xl border border-red-900/50 bg-red-950/20 text-sm text-red-200">Failed to load wiki index.<br><span class="text-xs text-red-300/70">'+escapeHtml(String(e).slice(0,120))+'</span><br><button id="vaultRetry" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>';
+     document.getElementById('vaultRetry')?.addEventListener('click',()=>location.reload());
      console.error(e);
    }
  }
@@ -365,11 +443,13 @@ function init(){
    if(!filtered.length){ vaultList.innerHTML='<div class="text-sm text-cream/40 p-3 text-center">No matches<br><span class="text-xs">Try another term or clear filters</span></div>'; return; }
    vaultList.innerHTML=filtered.map(e=>{
      const short=e.url.replace('/wiki/','').replace(/\/$/,'') || 'Home';
-     return `<button data-url="${e.url}" class="vaultItem w-full text-left px-3 py-2.5 rounded-xl hover:bg-cream/5 border border-transparent hover:border-gold/10 flex flex-col gap-0.5 group transition"><span class="text-sm leading-none truncate group-hover:text-cream">${highlight(e.title, f)}</span><span class="text-[11px] text-cream/35 truncate">${short}</span></button>`;
+     return `<button data-url="${escapeHtml(e.url)}" class="vaultItem w-full text-left px-3 py-2.5 rounded-xl hover:bg-cream/5 border border-transparent hover:border-gold/10 flex flex-col gap-0.5 group transition"><span class="text-sm leading-none truncate group-hover:text-cream">${highlight(escapeHtml(e.title), f)}</span><span class="text-[11px] text-cream/35 truncate">${escapeHtml(short)}</span></button>`;
    }).join('');
    vaultList.querySelectorAll('.vaultItem').forEach(b=> b.onclick=()=> openPreview(b.dataset.url));
  }
  function openPreview(url){
+   url=safeWikiPath(url);
+   if(!url){ toast('Blocked an invalid wiki path', false); return; }
    document.getElementById('crumbName').textContent=url;
    document.getElementById('crumbs').classList.remove('hidden');
    document.getElementById('panePreview').innerHTML='<div class="max-w-[820px] mx-auto p-6"><div class="skeleton h-7 rounded w-2/3"></div><div class="skeleton h-4 rounded mt-3"></div><div class="skeleton h-4 rounded mt-2 w-5/6"></div><div class="skeleton h-64 rounded-xl mt-6"></div></div>';
@@ -379,8 +459,9 @@ function init(){
      const title=(doc.querySelector('h1')?.textContent || url.split('/').filter(Boolean).pop() || 'Page').replace(/¶/g,'').trim();
      document.getElementById('crumbName').textContent=title;
      art.querySelectorAll('script').forEach(s=> s.remove());
-     const inner=art.innerHTML.slice(0,14000);
-     document.getElementById('panePreview').innerHTML=`<div class="max-w-[820px] mx-auto p-4 md:p-6"><div class="text-[11px] tracking-widest text-gold mb-2 flex items-center gap-2"><a href="${url}" class="underline">${url}</a><span class="text-cream/20">•</span><a href="/" class="text-cream/50 hover:text-gold">World</a></div><h1 class="font-display text-2xl leading-tight">${title}</h1><div class="prose prose-invert prose-sm max-w-none mt-4 leading-relaxed">${inner}</div><div class="mt-6 flex flex-wrap gap-2"><a href="${url}" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110">Open in Wiki →</a><button id="editFromPreview" class="text-xs border border-gold/20 px-4 py-1.5 rounded-full hover:bg-gold/10">Edit in Editor →</button><button onclick="document.getElementById('panePreview').innerHTML='<div class=\'max-w-[820px] mx-auto p-6 text-sm text-cream/40\'>Select a file from Vault</div>' " class="text-xs text-cream/50 px-3 py-1.5">Close</button></div></div>`;
+     const inner=sanitizeRichHtml(art.innerHTML.slice(0,14000));
+     document.getElementById('panePreview').innerHTML=`<div class="max-w-[820px] mx-auto p-4 md:p-6"><div class="text-[11px] tracking-widest text-gold mb-2 flex items-center gap-2"><a href="${escapeHtml(url)}" class="underline">${escapeHtml(url)}</a><span class="text-cream/20">•</span><a href="/" class="text-cream/50 hover:text-gold">World</a></div><h1 class="font-display text-2xl leading-tight">${escapeHtml(title)}</h1><div class="prose prose-invert prose-sm max-w-none mt-4 leading-relaxed">${inner}</div><div class="mt-6 flex flex-wrap gap-2"><a href="${escapeHtml(url)}" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110">Open in Wiki →</a><button id="editFromPreview" class="text-xs border border-gold/20 px-4 py-1.5 rounded-full hover:bg-gold/10">Edit in Editor →</button><button id="closeWikiPreview" class="text-xs text-cream/50 px-3 py-1.5">Close</button></div></div>`;
+     document.getElementById('closeWikiPreview').onclick=()=>{ document.getElementById('panePreview').innerHTML='<div class="max-w-[820px] mx-auto p-6 text-sm text-cream/40">Select a file from Vault</div>'; };
      document.getElementById('editFromPreview').onclick=()=>{
        const ed=document.getElementById('editor');
        ed.value='# '+title+'\n\nSource: '+url+'\n\n'+(doc.querySelector('article')?.innerText?.slice(0,4000)||'');
@@ -392,7 +473,7 @@ function init(){
      showTab('vault');
    }).catch(e=>{
      toast('Preview failed — opening wiki', false);
-     window.open(url,'_blank');
+     window.open(url,'_blank','noopener');
    });
  }
  let searchDebounce=null;
@@ -462,7 +543,7 @@ function init(){
    wordsEl.textContent=words+' words • '+chars+' chars • '+lines+' lines';
    statsEl.textContent=words+'w • '+chars+'c';
    statsEl.classList.remove('hidden');
-   if(previewOn){ try{ previewEl.innerHTML=marked.parse(txt) || '<p class="text-cream/30 text-sm">Preview…</p>'; }catch{ previewEl.textContent=txt; } }
+   if(previewOn){ try{ previewEl.innerHTML=renderMarkdown(txt) || '<p class="text-cream/30 text-sm">Preview…</p>'; }catch{ previewEl.textContent=txt; } }
  }
  updateEditorStats();
  previewEl.classList.remove('hidden');
@@ -607,7 +688,7 @@ function init(){
  function renderTree(){
    const files=changesFilesRaw;
    if(!files.length){
-     changesListEl.innerHTML=`<div class="text-sm text-cream/40 text-center py-12">No committed files yet<br><span class="text-xs">Go to <b class="text-gold">Editor</b>, name your file and click <b class="text-cream">Save → commit</b>, or drag .md/.txt files here.</span><br><div class="mt-4 flex justify-center gap-2"><button id="emptyNewFolder" class="text-xs bg-gold/15 border border-gold/20 text-gold px-3 py-1.5 rounded-full hover:bg-gold/20">+ New Folder</button><a href="https://github.com/actualrat1984/Website-additions" target="_blank" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">View repo →</a></div></div>`;
+     changesListEl.innerHTML=`<div class="text-sm text-cream/40 text-center py-12">No committed files yet<br><span class="text-xs">Go to <b class="text-gold">Editor</b>, name your file and click <b class="text-cream">Save → commit</b>, or drag .md/.txt files here.</span><br><div class="mt-4 flex justify-center gap-2"><button id="emptyNewFolder" class="text-xs bg-gold/15 border border-gold/20 text-gold px-3 py-1.5 rounded-full hover:bg-gold/20">+ New Folder</button><a href="https://github.com/actualrat1984/Website-additions" target="_blank" rel="noopener" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">View repo →</a></div></div>`;
      const b=document.getElementById('emptyNewFolder'); if(b) b.onclick=createFolder;
      changesListEl.ondragover=(e)=>{ if(e.dataTransfer.types.includes('Files')){ e.preventDefault(); e.dataTransfer.dropEffect='copy'; } };
      changesListEl.ondrop=async (e)=>{ e.preventDefault(); if(e.dataTransfer.files.length) await handleExternalFiles(e.dataTransfer.files, ''); };

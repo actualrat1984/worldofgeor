@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Dashboard — World of Ge'or</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="/site.css" />
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -32,11 +32,10 @@
         <h1 class="font-display text-2xl font-bold">Welcome, <span id="dashName" class="text-gold">—</span></h1>
         <p class="text-sm text-cream/60 mt-1">You are inside. Invite-only archive — 17 continents, 12 ages, Silver Bride overhead.</p>
         <div class="flex gap-2 mt-4 flex-wrap">
-          <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 720 pages</a>
+          <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 1,436 pages</a>
           <a href="/app/" class="text-xs border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10">Open Battlestation →</a>
           <a href="/atlas.html" class="text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Open Atlas</a>
           <a href="/admin.html" id="adminLink" class="hidden text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Admin</a>
-          <button id="copyInvite" class="hidden text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Copy my invite: WELCOME_TO_GEOR_2026</button>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-4">
@@ -47,7 +46,7 @@
         </div>
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
           <h3 class="text-xs tracking-widest font-semibold text-gold">WIKI — PRIVATE ARCHIVE</h3>
-          <p class="text-sm text-cream/70 mt-2">720 pages, 15 hubs. Search, read, no public leak — same login as here.</p>
+          <p class="text-sm text-cream/70 mt-2">1,436 pages, 15 hubs. Search, read, no public leak — same login as here.</p>
           <a href="/wiki/" class="inline-block mt-3 text-xs bg-gold text-ink px-3 py-1.5 rounded-full font-semibold">Enter Wiki →</a>
         </div>
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
@@ -93,14 +92,9 @@
       document.getElementById('setEmail').textContent=j.user.email;
       if(j.user.email==='ichieisenheart@gmail.com'){
         document.getElementById('adminLink').classList.remove('hidden');
-        document.getElementById('copyInvite').classList.remove('hidden');
       }
     });
     document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
-    document.getElementById('copyInvite').onclick=()=>{
-      navigator.clipboard.writeText('WELCOME_TO_GEOR_2026');
-      const b=document.getElementById('copyInvite'); b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy my invite: WELCOME_TO_GEOR_2026',1500);
-    };
     document.getElementById('changePwBtn').onclick=()=> alert('Password change coming next — for now create a new invite and re-register if needed.');
   </script>
 </body>
