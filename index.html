@@ -25,7 +25,8 @@
         <a href="#world" class="text-cream/70 hover:text-cream transition">WORLD</a>
         <a href="#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
         <a href="/wiki/" class="text-gold hover:text-cream transition">WIKI</a>
-        <a href="/updates" class="text-gold hover:text-cream transition">UPDATES</a>
+            <a href="/updates" class="text-gold hover:text-cream transition">UPDATES</a>
+            <a href="/search" class="text-gold hover:text-cream transition">SEARCH</a>
         <a href="#archive" class="text-cream/70 hover:text-cream transition">ARCHIVE</a>
         <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
         <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
@@ -52,7 +53,8 @@
       <a href="#world" class="block text-sm tracking-widest text-cream/80">WORLD</a>
       <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
       <a href="/wiki/" class="block text-sm tracking-widest text-gold">WIKI</a>
-      <a href="/updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
+        <a href="/updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
+        <a href="/search" class="block text-sm tracking-widest text-gold">SEARCH</a>
       <a href="#archive" class="block text-sm tracking-widest text-cream/80">ARCHIVE</a>
       <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
       <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
@@ -64,7 +66,9 @@
         <button id="mobLogoutBtn" class="block text-sm text-red-300">Logout</button>
       </div>
     </div>
-  </header>
+</header>
+
+<main>
 
   <!-- Hero -->
   <section id="top" class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
@@ -158,7 +162,10 @@
             <li class="flex gap-3"><span class="text-gold">—</span> Political map at 3.086 km / pixel • ~49,400 km world</li>
             <li class="flex gap-3"><span class="text-gold">—</span> World map & Grimmel zoom — choose your view in the Atlas</li>
           </ul>
-          <a href="/atlas.html" class="mt-7 inline-flex w-fit border border-gold/30 text-gold px-5 py-2.5 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">OPEN ATLAS PREVIEW</a>
+          <div class="mt-7 flex flex-wrap gap-2">
+            <a href="/atlas.html" class="inline-flex w-fit border border-gold/30 text-gold px-5 py-2.5 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">OPEN ATLAS</a>
+            <a href="/map-editor" class="inline-flex w-fit bg-gold text-ink px-5 py-2.5 rounded-full text-xs tracking-widest font-semibold hover:brightness-110 transition">OPEN ATLAS STUDIO</a>
+          </div>
         </div>
       </div>
     </div>
@@ -233,19 +240,29 @@
         <h2 id="archiveTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mt-2">THE WORLD HAS A BACK ROOM.</h2>
         <p class="mt-3 text-sm leading-6 text-cream/65">The public page is the map room. Members get the shelves behind it: the complete wiki, the Battlestation workspace, and one quiet dashboard to keep the archive in order.</p>
       </div>
-      <div class="grid md:grid-cols-3 gap-3 mt-7">
-        <a href="/wiki/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Enter the private Ge'or wiki">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-3 mt-7">
+        <a id="wiki" href="/wiki/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Enter the private Ge'or wiki">
           <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">01 / WIKI</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">THE FULL ARCHIVE</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">1,436 pages of nations, species, history, systems and the things between them.</p>
         </a>
-        <a href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
+        <a id="editor" href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
           <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">02 / APP</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">BATTLESTATION WEB</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Search, preview, write and commit additions to the living vault from the browser.</p>
         </a>
+        <a href="/search" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Search the private archive">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / SEARCH</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">KEEPER'S INDEX</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">Search all 1,436 titles by nation, species, history, system or archive path.</p>
+        </a>
+        <a id="updates" href="/updates" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Read public archive updates">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">04 / UPDATES</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">WHAT CHANGED</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">A privacy-safe public ledger of new pages, revisions and archive milestones.</p>
+        </a>
         <a href="/dashboard.html" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private member dashboard">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">05 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">YOUR WAY IN</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">A single home for your account, the wiki, the atlas, the workspace and the next thing to read.</p>
         </a>
@@ -277,6 +294,8 @@
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="border-t border-gold/10">

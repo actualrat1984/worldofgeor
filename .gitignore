@@ -2,5 +2,6 @@ node_modules
 dist
 .DS_Store
 .wrangler/
+.npm-cache/
 .codex-*.md
 .codex-*.json

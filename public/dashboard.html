@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css" />
+  <style>#passwordDialog::backdrop{background:rgba(15,14,13,.82);backdrop-filter:blur(6px)}</style>
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -16,6 +17,7 @@
       <div class="flex items-center gap-2">
         <span id="who" class="text-xs text-cream/60 hidden"></span>
         <a href="/wiki/" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">WIKI</a>
+        <a href="/search" class="text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">SEARCH</a>
         <a href="/app/" class="text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">APP</a>
         <a href="/atlas.html" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">ATLAS</a>
         <a href="/" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">WORLD</a>
@@ -35,6 +37,7 @@
           <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 1,436 pages</a>
           <a href="/app/" class="text-xs border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10">Open Battlestation →</a>
           <a href="/atlas.html" class="text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Open Atlas</a>
+          <a href="/map-editor" class="text-xs border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10">Open Atlas Studio</a>
           <a href="/admin.html" id="adminLink" class="hidden text-xs border border-gold/20 px-4 py-2 rounded-full hover:bg-gold/10">Admin</a>
         </div>
       </div>
@@ -54,13 +57,27 @@
           <p class="text-sm text-cream/70 mt-2">Vault, editor, maps, XP — web version of your desktop Battlestation. No install.</p>
           <a href="/app/" class="inline-block mt-3 text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">Open App →</a>
         </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">ATLAS STUDIO</h3>
+          <p class="text-sm text-cream/70 mt-2">Draw markers, regions, labels and symbols on shared D1-backed map folios.</p>
+          <a href="/map-editor" class="inline-block mt-3 text-xs bg-gold text-ink px-3 py-1.5 rounded-full font-semibold">Open Studio →</a>
+        </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
+          <h3 class="text-xs tracking-widest font-semibold text-gold">GLOBAL SEARCH</h3>
+          <p class="text-sm text-cream/70 mt-2">A keyboard-first index across 1,436 private archive entries.</p>
+          <a href="/search" class="inline-block mt-3 text-xs border border-gold/30 text-gold px-3 py-1.5 rounded-full hover:bg-gold/10">Search Archive →</a>
+        </div>
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5" id="settings">
           <h3 class="text-xs tracking-widest font-semibold text-gold">SETTINGS</h3>
           <div class="mt-3 space-y-2 text-sm">
             <div class="text-cream/70">Email: <span id="setEmail" class="text-cream">—</span></div>
-            <button id="changePwBtn" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">Change password (soon)</button>
+            <button id="changePwBtn" class="text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">Change password</button>
           </div>
         </div>
+      </div>
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
+        <div class="px-5 py-3 border-b border-gold/10 flex items-center justify-between"><div><p class="text-[10px] tracking-[.22em] text-gold">RECENT ARCHIVE MOTION</p><h3 class="text-sm font-semibold mt-1">What changed lately</h3></div><a href="/updates" class="text-xs border border-gold/20 rounded-full px-3 py-1.5">Full ledger</a></div>
+        <div id="recentActivity" class="divide-y divide-gold/10"><div class="p-5 text-sm text-cream/45">Opening the ledger…</div></div>
       </div>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
         <h3 class="text-sm font-semibold tracking-widest">What’s inside</h3>
@@ -72,6 +89,17 @@
       </div>
     </div>
   </main>
+  <dialog id="passwordDialog" class="w-[min(92vw,460px)] rounded-2xl border border-gold/20 bg-[#191a18] p-0 text-cream shadow-2xl">
+    <form id="passwordForm" method="dialog" class="p-6">
+      <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] tracking-[.24em] text-gold">ACCOUNT SECURITY</p><h2 class="font-display text-xl mt-1">Change password</h2></div><button id="closePassword" type="button" class="text-xl text-cream/50 hover:text-cream" aria-label="Close">×</button></div>
+      <p class="text-sm text-cream/55 mt-3">Use at least 12 characters. Your current archive session will remain open.</p>
+      <label class="block mt-5 text-[10px] tracking-widest text-cream/60">CURRENT PASSWORD<input id="currentPassword" type="password" autocomplete="current-password" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <label class="block mt-4 text-[10px] tracking-widest text-cream/60">NEW PASSWORD<input id="newPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <label class="block mt-4 text-[10px] tracking-widest text-cream/60">CONFIRM NEW PASSWORD<input id="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <p id="passwordMessage" class="min-h-[1.25rem] mt-3 text-xs" role="status" aria-live="polite"></p>
+      <button id="savePassword" type="submit" class="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold text-ink">Update password</button>
+    </form>
+  </dialog>
   <script>
     async function api(path, opts={}) {
       const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) } });
@@ -95,7 +123,27 @@
       }
     }).catch(()=>{ location.href='/?next='+encodeURIComponent('/dashboard.html'); });
     document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
-    document.getElementById('changePwBtn').onclick=()=> alert('Password change coming next — for now create a new invite and re-register if needed.');
+    const passwordDialog=document.getElementById('passwordDialog');
+    document.getElementById('changePwBtn').onclick=()=>{ document.getElementById('passwordMessage').textContent=''; passwordDialog.showModal(); document.getElementById('currentPassword').focus(); };
+    document.getElementById('closePassword').onclick=()=>passwordDialog.close();
+    document.getElementById('passwordForm').onsubmit=async(event)=>{
+      event.preventDefault();
+      const currentPassword=document.getElementById('currentPassword').value;
+      const newPassword=document.getElementById('newPassword').value;
+      const confirmPassword=document.getElementById('confirmPassword').value;
+      const message=document.getElementById('passwordMessage');
+      if(newPassword!==confirmPassword){ message.textContent='New passwords do not match.'; message.className='min-h-[1.25rem] mt-3 text-xs text-red-300'; return; }
+      const button=document.getElementById('savePassword'); button.disabled=true; message.textContent='Updating securely…'; message.className='min-h-[1.25rem] mt-3 text-xs text-gold';
+      try{ await api('/api/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword})}); message.textContent='Password updated.'; message.className='min-h-[1.25rem] mt-3 text-xs text-green-300'; event.target.reset(); setTimeout(()=>passwordDialog.close(),900); }
+      catch(error){ message.textContent=error.message; message.className='min-h-[1.25rem] mt-3 text-xs text-red-300'; }
+      finally{ button.disabled=false; }
+    };
+    fetch('/api/updates?limit=5').then(r=>r.json()).then(data=>{
+      const list=document.getElementById('recentActivity'); list.replaceChildren();
+      const updates=Array.isArray(data.updates)?data.updates:[];
+      if(!updates.length){ const row=document.createElement('div'); row.className='p-5 text-sm text-cream/45'; row.textContent='The ledger is quiet.'; list.append(row); return; }
+      updates.forEach(update=>{ const row=document.createElement('div'); row.className='px-5 py-4 flex items-center justify-between gap-4'; const copy=document.createElement('div'); const title=document.createElement('p'); title.className='text-sm text-cream/80'; title.textContent=update.summary||'Archive updated'; const path=document.createElement('p'); path.className='text-xs text-cream/40 mt-1'; path.textContent=update.path||'World of Ge’or'; const time=document.createElement('time'); time.className='text-[10px] text-gold/70 whitespace-nowrap'; time.dateTime=update.created_at||''; time.textContent=update.created_at?new Date(update.created_at).toLocaleDateString():'Recent'; copy.append(title,path); row.append(copy,time); list.append(row); });
+    }).catch(()=>{ document.getElementById('recentActivity').textContent='The ledger is temporarily unavailable.'; });
   </script>
 </body>
 </html>

@@ -49,6 +49,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div class="flex items-center gap-2 shrink-0">
 <span id="who" class="hidden lg:inline text-xs text-cream/60 max-w-[160px] truncate"></span>
 <span id="xpBadge" class="hidden text-[11px] tracking-widest bg-gold text-ink px-3 py-1 rounded-full font-semibold">LV 42 • 0 XP</span>
+<a href="/search" class="hidden lg:inline text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">SEARCH</a>
 <a href="/wiki/" class="hidden md:inline text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">WIKI</a>
 <a href="/dashboard.html" class="hidden sm:inline text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10 transition">DASHBOARD</a>
 <button id="logout" class="text-xs bg-cream text-ink px-3 py-1.5 rounded-full font-semibold hover:bg-white transition">Logout</button>
@@ -227,6 +228,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <span id="mapTitle" class="text-xs tracking-widest text-gold hidden">—</span>
 </div>
 <div class="flex items-center gap-2">
+<a href="/map-editor" class="text-[11px] border border-gold/25 text-gold rounded-full px-2.5 py-1 hover:bg-gold/10">ATLAS STUDIO</a>
 <button id="mapReset" class="hidden text-[11px] border border-gold/15 text-cream/60 hover:text-gold hover:border-gold/30 rounded-full px-2.5 py-0.5 transition">RESET</button>
 <span class="hidden sm:inline text-[11px] text-cream/40">Leaflet • CRS.Simple • 3.086 km/px</span>
 <span id="mapScale" class="text-[11px] text-gold border border-gold/15 rounded-full px-2 py-0.5 hidden">— km</span>
@@ -240,7 +242,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div class="mt-5 grid sm:grid-cols-2 gap-4">
 <button data-pick="world" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
 <div class="h-[150px] overflow-hidden bg-ink relative">
-<img src="/world-map.jpg" alt="World map" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<img src="/world-map.jpg" alt="World map" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="1920" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
 <div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">World • /world-map.jpg</div>
 <div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">49,400 km • WORLD</div>
 </div>
@@ -252,7 +254,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </button>
 <button data-pick="grimmel" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
 <div class="h-[150px] overflow-hidden bg-ink relative">
-<img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="5715" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
 <div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">Grimmel • /grimmel-peninsula.jpg</div>
 <div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">GRIMMEL PENINSULA</div>
 </div>
@@ -323,7 +325,7 @@ function sanitizeRichHtml(html){
   doc.querySelectorAll('*').forEach(node=>{
     [...node.attributes].forEach(attr=>{
       const name=attr.name.toLowerCase();
-      if(name.startsWith('on') || name==='srcdoc' || name==='formaction' || name==='style') node.removeAttribute(attr.name);
+      if(name.startsWith('on') || ['srcdoc','formaction','style','srcset','poster','background'].includes(name)) node.removeAttribute(attr.name);
     });
     if(node.hasAttribute('href')){
       try{
@@ -932,7 +934,8 @@ document.getElementById('btnCopy').onclick=async()=>{
      const j=await r.json().catch(()=> ({}));
      if(!r.ok){
        const msg=j.error||('HTTP '+r.status);
-       changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Failed to load — ${escapeHtml(String(msg))}<br><span class="text-xs text-red-300/70">${escapeHtml(String(j.detail||'').slice(0,200))}</span><br><button onclick="document.getElementById('btnChangesRefresh').click()" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>`;
+        changesListEl.innerHTML=`<div class="p-4 rounded-xl border border-red-900/40 bg-red-950/20 text-sm text-red-200">Failed to load — ${escapeHtml(String(msg))}<br><span class="text-xs text-red-300/70">${escapeHtml(String(j.detail||'').slice(0,200))}</span><br><button id="changesRetry" class="mt-2 text-xs border border-red-800 px-3 py-1 rounded-full">Retry</button></div>`;
+        document.getElementById('changesRetry').addEventListener('click',()=>loadChanges(true));
        changesStatus.textContent='Error: '+msg;
        changesStatus.className='px-4 py-2 text-xs border-b border-red-900/30 bg-red-950/20 text-red-300';
        return;

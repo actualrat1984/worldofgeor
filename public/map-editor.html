@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Atlas Studio — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="/map-editor.css" />
+</head>
+<body>
+  <a class="skip-link" href="#editorMap">Skip to map</a>
+  <header class="studio-header">
+    <div class="brand-block">
+      <a href="/atlas" class="eyebrow">WORLD OF GE'OR • ATLAS</a>
+      <div class="title-line"><h1>ATLAS STUDIO</h1><span class="private-seal">PRIVATE WORKROOM</span></div>
+    </div>
+    <div class="header-actions">
+      <span id="saveState" class="save-state" role="status" aria-live="polite">Opening the folio…</span>
+      <button id="undoBtn" type="button" class="ghost-button" title="Undo (Ctrl+Z)" disabled>↶ <span>Undo</span></button>
+      <button id="redoBtn" type="button" class="ghost-button" title="Redo (Ctrl+Y)" disabled>↷ <span>Redo</span></button>
+      <button id="exportBtn" type="button" class="ghost-button">Export PNG</button>
+      <button id="saveBtn" type="button" class="gold-button">Save to Archive</button>
+      <a href="/dashboard" class="round-link" aria-label="Return to dashboard">×</a>
+    </div>
+  </header>
+  <main class="studio-shell" aria-busy="true">
+    <aside class="tool-rail" aria-label="Drawing tools">
+      <p class="rail-label">TOOLS</p>
+      <button class="tool-button is-active" type="button" data-tool="select" aria-pressed="true"><span aria-hidden="true">↖</span><small>Select</small></button>
+      <button class="tool-button" type="button" data-tool="marker" aria-pressed="false"><span aria-hidden="true">•</span><small>Marker</small></button>
+      <button class="tool-button" type="button" data-tool="polygon" aria-pressed="false"><span aria-hidden="true">◇</span><small>Region</small></button>
+      <button class="tool-button" type="button" data-tool="label" aria-pressed="false"><span aria-hidden="true">Aa</span><small>Label</small></button>
+      <button class="tool-button" type="button" data-tool="icon" aria-pressed="false"><span aria-hidden="true">♜</span><small>Icon</small></button>
+      <div class="rail-rule"></div><label class="icon-picker-label" for="iconPicker">ICON</label>
+      <select id="iconPicker" class="icon-picker"><option value="keep">Keep</option><option value="city">City</option><option value="port">Port</option><option value="ruin">Ruin</option><option value="star">Star</option></select>
+    </aside>
+    <section class="map-workspace" aria-label="Map canvas">
+      <div class="map-commandbar">
+        <div class="map-switcher" role="group" aria-label="Base map"><button type="button" data-map="world" class="map-choice is-active" aria-pressed="true">WORLD</button><button type="button" data-map="grimmel" class="map-choice" aria-pressed="false">GRIMMEL</button></div>
+        <label class="document-title-label" for="documentTitle">FOLIO</label><input id="documentTitle" class="document-title" maxlength="100" value="World Atlas" aria-label="Map document title" />
+        <button id="resetViewBtn" type="button" class="icon-button" title="Reset view" aria-label="Reset map view">⌂</button>
+      </div>
+      <div id="editorMap" tabindex="0" role="application" aria-label="Editable map of Ge'or. Use drawing tools, then click the map." aria-describedby="mapHelp"></div>
+      <div class="map-footer"><p id="mapHelp"><span id="toolHint">Select a feature or choose a drawing tool.</span> <b>Snap:</b> 1 px = 3.086 km.</p><p id="coordinateReadout" aria-live="polite">X 0 • Y 0 • 0 km</p></div>
+      <div id="loadingVeil" class="loading-veil"><span class="loading-ring"></span><p>Unrolling the atlas…</p></div>
+    </section>
+    <aside class="inspector-panel" aria-label="Layers and selected feature">
+      <section class="panel-section">
+        <div class="section-heading"><div><p class="eyebrow">COMPOSITION</p><h2>LAYERS</h2></div><button id="addLayerBtn" type="button" class="icon-button" aria-label="Add layer" title="Add layer">+</button></div>
+        <p class="panel-note">Drag rows to reorder. The selected layer receives new marks.</p><div id="layerList" class="layer-list"></div>
+      </section>
+      <section class="panel-section feature-section">
+        <div class="section-heading"><div><p class="eyebrow">DETAILS</p><h2>INSPECTOR</h2></div></div>
+        <div id="emptyInspector" class="empty-inspector"><span aria-hidden="true">✦</span><p>Select a marker, region, label, or icon to edit its archive details.</p></div>
+        <form id="featureForm" class="feature-form" hidden>
+          <div class="field-grid two"><label><span>TYPE</span><input id="featureType" disabled></label><label><span>LAYER</span><select id="featureLayer"></select></label></div>
+          <label><span>NAME</span><input id="featureName" maxlength="100" placeholder="Unnamed place"></label>
+          <label><span>WIKI LINK</span><input id="featureWiki" maxlength="240" list="wikiSuggestions" placeholder="/wiki/World/…/"></label><datalist id="wikiSuggestions"></datalist>
+          <label><span>ARCHIVE NOTE</span><textarea id="featureNote" maxlength="500" rows="4" placeholder="What should a keeper know?"></textarea></label>
+          <div class="field-grid two"><label><span>COLOR</span><input id="featureColor" type="color" value="#d9b77a"></label><label id="featureIconWrap"><span>SYMBOL</span><select id="featureIcon"><option value="keep">Keep</option><option value="city">City</option><option value="port">Port</option><option value="ruin">Ruin</option><option value="star">Star</option></select></label></div>
+          <div class="coordinate-card"><span>SNAPPED POSITION</span><b id="featureCoordinates">—</b></div>
+          <div class="inspector-actions"><a id="openWikiBtn" class="ghost-button is-disabled" href="/wiki/" target="_blank" rel="noopener">Open lore</a><button id="deleteFeatureBtn" type="button" class="danger-button">Delete feature</button></div>
+        </form>
+      </section>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script type="module" src="/map-editor.js"></script>
+</body>
+</html>

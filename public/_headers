@@ -45,6 +45,12 @@
 /atlas.html
   Cache-Control: private, no-store
 
+/map-editor*
+  Cache-Control: private, no-store
+
+/search*
+  Cache-Control: private, no-store
+
 /wiki-index.json
   Cache-Control: private, no-store
 

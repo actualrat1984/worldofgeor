@@ -9,6 +9,9 @@ const COOKIE_NAME = 'geor_token';
 const ADMIN_EMAIL = 'ichieisenheart@gmail.com';
 const MAX_JSON_BYTES = 4_096;
 const MAX_SAVE_JSON_BYTES = 1_000_000;
+const MAX_MAP_JSON_BYTES = 512_000;
+const MAP_SLUGS = new Set(['world', 'grimmel']);
+const DUMMY_PASSWORD_SALT = 'AAAAAAAAAAAAAAAAAAAAAA';
 const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
 const PRIVATE_ASSET_PATHS = new Set([
   '/wiki-index.json',
@@ -22,6 +25,8 @@ const PRIVATE_ASSET_PATHS = new Set([
 const ROUTE_ALIASES = new Map([
   ['/updates', '/updates.html'],
   ['/atlas', '/atlas.html'],
+  ['/map-editor', '/map-editor.html'],
+  ['/search', '/search.html'],
   ['/dashboard', '/dashboard.html'],
   ['/admin', '/admin.html'],
   ['/app', '/app/index.html'],
@@ -82,6 +87,7 @@ async function verifyJwt(token, secret) {
     const payload = JSON.parse(new TextDecoder().decode(b64urlDecode(parts[1])));
     const now = Math.floor(Date.now() / 1000);
     if (!Number.isSafeInteger(payload?.exp) || payload.exp <= now || payload.exp > now + JWT_EXP_SEC + 60) return null;
+    if (!Number.isSafeInteger(payload.iat) || payload.iat > now + 60 || payload.iat >= payload.exp) return null;
     if (payload.iss !== JWT_ISSUER) return null;
     if (typeof payload.email !== 'string' || !isValidEmail(payload.email)) return null;
     return payload;
@@ -175,9 +181,72 @@ function isPrivatePath(pathname) {
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
     decoded === '/atlas' || decoded === '/atlas.html' ||
+    decoded === '/map-editor' || decoded === '/map-editor.html' ||
+    decoded === '/search' || decoded === '/search.html' ||
     decoded === '/dashboard' || decoded === '/dashboard.html' ||
     decoded === '/admin' || decoded === '/admin.html' ||
     PRIVATE_ASSET_PATHS.has(decoded);
+}
+
+function cleanMapSlug(value) {
+  return typeof value === 'string' && MAP_SLUGS.has(value) ? value : null;
+}
+function cleanMapText(value, maxLength) {
+  return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
+}
+function cleanMapPoint(value) {
+  if (!isJsonObject(value)) return null;
+  const lat = Number(value.lat);
+  const lng = Number(value.lng);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 20_000 || Math.abs(lng) > 20_000) return null;
+  return { lat: Math.round(lat), lng: Math.round(lng) };
+}
+function sanitizeMapDocument(value, slug) {
+  if (!isJsonObject(value) || value.version !== 1 || value.slug !== slug || !Array.isArray(value.layers)) return null;
+  if (value.layers.length < 1 || value.layers.length > 12) return null;
+  const seenLayers = new Set();
+  const seenFeatures = new Set();
+  let featureCount = 0;
+  const layers = [];
+  for (const layer of value.layers) {
+    if (!isJsonObject(layer) || !Array.isArray(layer.features) || layer.features.length > 250) return null;
+    const id = cleanMapText(layer.id, 48);
+    const name = cleanMapText(layer.name, 64);
+    if (!/^[a-z0-9][a-z0-9_-]{0,47}$/i.test(id) || !name || seenLayers.has(id)) return null;
+    seenLayers.add(id);
+    const features = [];
+    for (const feature of layer.features) {
+      featureCount++;
+      if (featureCount > 500 || !isJsonObject(feature)) return null;
+      const featureId = cleanMapText(feature.id, 64);
+      const type = feature.type;
+      if (!/^[a-z0-9][a-z0-9_-]{5,63}$/i.test(featureId) || seenFeatures.has(featureId) || !['marker', 'label', 'polygon'].includes(type)) return null;
+      seenFeatures.add(featureId);
+      const nameValue = cleanMapText(feature.name, 100);
+      const note = cleanMapText(feature.note, 500);
+      const wikiUrl = cleanMapText(feature.wikiUrl, 240);
+      if (wikiUrl && (!wikiUrl.startsWith('/wiki/') || wikiUrl.includes('..') || wikiUrl.includes('\\'))) return null;
+      const color = /^#[0-9a-f]{6}$/i.test(feature.color) ? feature.color.toLowerCase() : '#d9b77a';
+      const icon = ['keep', 'city', 'port', 'ruin', 'star'].includes(feature.icon) ? feature.icon : 'keep';
+      if (type === 'polygon') {
+        if (!Array.isArray(feature.points) || feature.points.length < 3 || feature.points.length > 250) return null;
+        const points = feature.points.map(cleanMapPoint);
+        if (points.some(point => !point)) return null;
+        features.push({ id: featureId, type, name: nameValue, note, wikiUrl, color, points });
+      } else {
+        const point = cleanMapPoint(feature.point);
+        if (!point) return null;
+        features.push({ id: featureId, type, name: nameValue, note, wikiUrl, color, icon, point });
+      }
+    }
+    layers.push({ id, name, visible: layer.visible !== false, locked: layer.locked === true, features });
+  }
+  return {
+    version: 1,
+    slug,
+    title: cleanMapText(value.title, 100) || (slug === 'world' ? 'World Atlas' : 'Grimmel Peninsula'),
+    layers,
+  };
 }
 
 // --- Additions helpers ---
@@ -279,6 +348,7 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS invites (code TEXT PRIMARY KEY, used_by TEXT, used_at TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, message TEXT, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, path TEXT, summary TEXT NOT NULL, actor_email TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS map_documents (slug TEXT PRIMARY KEY, title TEXT NOT NULL, document_json TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
         ]);
@@ -356,9 +426,8 @@ export default {
           const normEmail = normalizeEmail(email);
           if (!isValidEmail(normEmail)) return json({ error: 'Invalid email or password' }, 401);
           const user = await env.DB.prepare('SELECT email, password_hash, salt FROM users WHERE email = ?').bind(normEmail).first();
-          if (!user) return json({ error: 'Invalid email or password' }, 401);
-          const hash = await pbkdf2Hash(password, user.salt);
-          if (!constantTimeEqual(hash, user.password_hash)) return json({ error: 'Invalid email or password' }, 401);
+          const hash = await pbkdf2Hash(password, user?.salt || DUMMY_PASSWORD_SALT);
+          if (!user || !constantTimeEqual(hash, user.password_hash)) return json({ error: 'Invalid email or password' }, 401);
           const secret = getJwtSecret(env);
           const now = Math.floor(Date.now() / 1000);
           const token = await signJwt({ email: normEmail, iss: JWT_ISSUER, iat: now, exp: now + JWT_EXP_SEC }, secret);
@@ -376,7 +445,7 @@ export default {
           await ensureTables();
           const requestedLimit = Number(url.searchParams.get('limit') || 18);
           const limit = Number.isSafeInteger(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 18;
-          const { results } = await env.DB.prepare(`SELECT id, action, path, summary, created_at
+          const { results } = await env.DB.prepare(`SELECT id, action, summary, created_at
             FROM activity ORDER BY created_at DESC, id DESC LIMIT ?`).bind(limit).all();
           return json({ updates: results || [], refreshedAt: new Date().toISOString() }, 200, {
             'Cache-Control': 'public, max-age=30, stale-while-revalidate=120',
@@ -448,6 +517,32 @@ export default {
         return json({ ok: true }, 200, { 'Set-Cookie': authCookie('', 0) });
       }
 
+      // POST /api/change-password {currentPassword, newPassword}
+      if (url.pathname === '/api/change-password' && request.method === 'POST') {
+        const session = await requireUser(request, env);
+        if (!session) return json({ error: 'Authentication required' }, 401);
+        let body;
+        try { body = await readJson(request); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const { currentPassword, newPassword } = body;
+        if (typeof currentPassword !== 'string' || currentPassword.length > 256) return json({ error: 'Current password is incorrect' }, 401);
+        if (typeof newPassword !== 'string' || newPassword.length < 12 || newPassword.length > 256) return json({ error: 'New password must be 12–256 characters' }, 400);
+        if (currentPassword === newPassword) return json({ error: 'Choose a different password' }, 400);
+        try {
+          await ensureTables();
+          const user = await env.DB.prepare('SELECT password_hash, salt FROM users WHERE email = ?').bind(session.email).first();
+          if (!user) return json({ error: 'Account not found' }, 404);
+          const currentHash = await pbkdf2Hash(currentPassword, user.salt);
+          if (!constantTimeEqual(currentHash, user.password_hash)) return json({ error: 'Current password is incorrect' }, 401);
+          const salt = randomSalt();
+          const passwordHash = await pbkdf2Hash(newPassword, salt);
+          await env.DB.prepare('UPDATE users SET password_hash = ?, salt = ? WHERE email = ?').bind(passwordHash, salt, session.email).run();
+          return json({ ok: true });
+        } catch {
+          return json({ error: 'Password could not be changed' }, 500);
+        }
+      }
+
       // --- Admin (only ichieisenheart@gmail.com) ---
       const isAdmin = async () => {
         const token = readAuthToken(request);
@@ -503,9 +598,14 @@ export default {
           if (req.status !== 'pending') return json({ error: 'Request has already been resolved' }, 409);
           const clean = body.code ? cleanInviteCode(body.code) : randomInviteCode();
           if (!clean) return json({ error: 'Invalid invite code' }, 400);
-          const result = await env.DB.prepare('INSERT OR IGNORE INTO invites (code) VALUES (?)').bind(clean).run();
-          if (result.meta?.changes !== 1) return json({ error: 'Invite already exists' }, 409);
-          await env.DB.prepare('UPDATE requests SET status = ? WHERE id = ? AND status = ?').bind('approved', id, 'pending').run();
+          const [created, resolved] = await env.DB.batch([
+            env.DB.prepare(`INSERT OR IGNORE INTO invites (code)
+              SELECT ? WHERE EXISTS (SELECT 1 FROM requests WHERE id = ? AND status = 'pending')`).bind(clean, id),
+            env.DB.prepare(`UPDATE requests SET status = 'approved' WHERE id = ? AND status = 'pending'
+              AND changes() = 1 AND EXISTS (SELECT 1 FROM invites WHERE code = ?)`).bind(id, clean),
+          ]);
+          if (created.meta?.changes !== 1) return json({ error: 'Invite already exists' }, 409);
+          if (resolved.meta?.changes !== 1) return json({ error: 'Request could not be resolved' }, 409);
           return json({ ok: true, code: clean, email: req.email });
         }
         if (url.pathname === '/api/admin/requests/reject' && request.method === 'POST') {
@@ -514,7 +614,8 @@ export default {
           if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const id = validPositiveId(body.id);
           if (!id) return json({ error: 'Valid request id required' }, 400);
-          await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ? AND status = "pending"').bind(id).run();
+          const result = await env.DB.prepare('UPDATE requests SET status = "rejected" WHERE id = ? AND status = "pending"').bind(id).run();
+          if (result.meta?.changes !== 1) return json({ error: 'Request not found or already resolved' }, 409);
           return json({ ok: true });
         }
         if (url.pathname === '/api/admin/stats' && request.method === 'GET') {
@@ -534,6 +635,51 @@ export default {
           });
         }
         return json({ error: 'Not found' }, 404);
+      }
+
+      // --- Atlas map documents — archive members may view and save shared overlays. ---
+      const mapMatch = url.pathname.match(/^\/api\/maps\/([a-z0-9_-]+)$/);
+      if (mapMatch && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Auth required' }, 401);
+        const slug = cleanMapSlug(mapMatch[1]);
+        if (!slug) return json({ error: 'Map not found' }, 404);
+        try {
+          await ensureTables();
+          const record = await env.DB.prepare('SELECT title, document_json, updated_by, updated_at FROM map_documents WHERE slug = ?').bind(slug).first();
+          if (!record) return json({ map: null, slug });
+          const document = sanitizeMapDocument(JSON.parse(record.document_json), slug);
+          if (!document) return json({ error: 'Stored map document is invalid' }, 500);
+          return json({ map: document, updatedBy: record.updated_by, updatedAt: record.updated_at });
+        } catch {
+          return json({ error: 'Map could not be loaded' }, 500);
+        }
+      }
+      if (mapMatch && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Auth required' }, 401);
+        const slug = cleanMapSlug(mapMatch[1]);
+        if (!slug) return json({ error: 'Map not found' }, 404);
+        let body;
+        try { body = await readJson(request, MAX_MAP_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const document = sanitizeMapDocument(body.map, slug);
+        if (!document) return json({ error: 'Invalid map document' }, 400);
+        try {
+          await ensureTables();
+          const encoded = JSON.stringify(document);
+          await env.DB.prepare(`INSERT INTO map_documents (slug, title, document_json, updated_by)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(slug) DO UPDATE SET title = excluded.title, document_json = excluded.document_json,
+              updated_by = excluded.updated_by, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+            .bind(slug, document.title, encoded, user.email).run();
+          ctx.waitUntil(env.DB.prepare('INSERT INTO activity (action, path, summary, actor_email) VALUES (?, ?, ?, ?)')
+            .bind('map', `maps/${slug}.json`, 'Updated an atlas overlay', user.email).run().catch(() => {}));
+          const saved = await env.DB.prepare('SELECT updated_at FROM map_documents WHERE slug = ?').bind(slug).first();
+          return json({ ok: true, slug, updatedAt: saved?.updated_at || new Date().toISOString() });
+        } catch {
+          return json({ error: 'Map could not be saved' }, 500);
+        }
       }
 
       // --- Additions (Website-additions repo) — requires auth ---
@@ -767,6 +913,7 @@ export default {
           },
         });
       }
+
       if (url.pathname === '/admin.html' || url.pathname === '/admin') {
         if (payload.email !== ADMIN_EMAIL) return new Response(null, {
           status: 302,
@@ -808,11 +955,13 @@ export default {
 
 export const __test = {
   cleanInviteCode,
+  cleanMapSlug,
   constantTimeEqual,
   isPrivatePath,
   isTrustedMutation,
   sanitizeAdditionsPath,
   sanitizeFolderPath,
+  sanitizeMapDocument,
   signJwt,
   verifyJwt,
 };

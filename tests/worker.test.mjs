@@ -16,6 +16,9 @@ test('JWT verification accepts an intact token and rejects tampering', async () 
 test('JWT verification requires an expiry and the expected algorithm', async () => {
   const token = await __test.signJwt({ email: 'keeper@example.com' }, SECRET)
   assert.equal(await __test.verifyJwt(token, SECRET), null)
+  const now = Math.floor(Date.now() / 1000)
+  const missingIssuedAt = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', exp: now + 60 }, SECRET)
+  assert.equal(await __test.verifyJwt(missingIssuedAt, SECRET), null)
 })
 
 test('addition paths normalize safe files and reject traversal or hidden segments', () => {
@@ -38,7 +41,13 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.cleanInviteCode('short'), null)
   assert.equal(__test.isPrivatePath('/wiki-index.json'), true)
   assert.equal(__test.isPrivatePath('/world-map.jpg'), true)
+  assert.equal(__test.isPrivatePath('/map-editor'), true)
+  assert.equal(__test.isPrivatePath('/search'), true)
   assert.equal(__test.isPrivatePath('/updates'), false)
+  assert.equal(__test.cleanMapSlug('world'), 'world')
+  assert.equal(__test.cleanMapSlug('../world'), null)
+  assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', title: 'Atlas', layers: [{ id: 'political', name: 'Political', features: [] }] }, 'world')?.title, 'Atlas')
+  assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', layers: [{ id: '../bad', name: 'Bad', features: [] }] }, 'world'), null)
 })
 
 test('cross-origin mutations are rejected', () => {
@@ -58,6 +67,19 @@ test('/api/me returns 401 without a session', async () => {
   const response = await worker.fetch(new Request('https://worldofgeor.com/api/me'), { JWT_SECRET: SECRET }, {})
   assert.equal(response.status, 401)
   assert.equal((await response.json()).user, null)
+  const mapResponse = await worker.fetch(new Request('https://worldofgeor.com/api/maps/world'), { JWT_SECRET: SECRET }, {})
+  assert.equal(mapResponse.status, 401)
+  const passwordResponse = await worker.fetch(new Request('https://worldofgeor.com/api/change-password', { method: 'POST', body: '{}' }), { JWT_SECRET: SECRET }, {})
+  assert.equal(passwordResponse.status, 401)
+
+  const now = Math.floor(Date.now() / 1000)
+  const token = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
+  const invalidMapResponse = await worker.fetch(new Request('https://worldofgeor.com/api/maps/world', {
+    method: 'POST',
+    headers: { Cookie: `geor_token=${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ map: { version: 1, slug: 'world', layers: [] } }),
+  }), { JWT_SECRET: SECRET }, { waitUntil() {} })
+  assert.equal(invalidMapResponse.status, 400)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
