@@ -14,7 +14,13 @@ const $$ = selector => [...document.querySelectorAll(selector)]
 const clone = value => JSON.parse(JSON.stringify(value))
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char])
 const idFor = prefix => `${prefix}_${crypto.randomUUID().replaceAll('-', '').slice(0, 18)}`
-const snapped = latlng => ({ lat: Math.round(latlng.lat), lng: Math.round(latlng.lng) })
+const snapped = latlng => {
+  const config = currentConfig()
+  return {
+    lat: Math.min(config.height, Math.max(0, Math.round(latlng.lat))),
+    lng: Math.min(config.width, Math.max(0, Math.round(latlng.lng))),
+  }
+}
 const defaultDocument = slug => ({ version: 1, slug, title: MAPS[slug].title, layers: clone(DEFAULT_LAYERS) })
 
 let state = defaultDocument('world')
@@ -154,7 +160,7 @@ function renderInspector() {
   $('#featureForm').setAttribute('aria-disabled', String(layer.locked))
   const point = feature.point || feature.points[0]
   $('#featureCoordinates').textContent = feature.type === 'polygon' ? `${feature.points.length} vertices` : `X ${point.lng} • Y ${point.lat} • ${Math.round(point.lng * KM_PER_PIXEL).toLocaleString()} km E`
-  const link = $('#openWikiBtn'); link.href = feature.wikiUrl || '/wiki/'; link.classList.toggle('is-disabled', !feature.wikiUrl)
+  const link = $('#openWikiBtn'); link.href = feature.wikiUrl || '/wiki/'; link.classList.toggle('is-disabled', !feature.wikiUrl); link.setAttribute('aria-disabled', String(!feature.wikiUrl)); link.tabIndex = feature.wikiUrl ? 0 : -1
 }
 function renderAll() { renderFeatures(); renderLayers(); renderInspector() }
 function selectFeature(id) { selectedFeatureId = id; const found = locateFeature(id); if (found) activeLayerId = found.layer.id; selectTool('select'); renderAll(); rendered.get(id)?.openPopup() }
@@ -196,6 +202,7 @@ $$('.map-choice').forEach(button => button.addEventListener('click', () => switc
 $('#resetViewBtn').addEventListener('click', () => map.fitBounds(bounds(), { padding: [12, 12], animate: false }))
 $('#undoBtn').addEventListener('click', () => restoreHistory(historyIndex - 1)); $('#redoBtn').addEventListener('click', () => restoreHistory(historyIndex + 1))
 $('#saveBtn').addEventListener('click', saveDocument); $('#exportBtn').addEventListener('click', () => globalThis.exportMapPNG())
+$('#documentTitle').addEventListener('input', event => { state.title = event.target.value.slice(0, 100); dirty = true; setSaveState('Unsaved changes') })
 $('#documentTitle').addEventListener('change', event => { state.title = event.target.value.trim() || currentConfig().title; event.target.value = state.title; commit('Folio title updated') })
 $('#addLayerBtn').addEventListener('click', () => {
   if (state.layers.length >= 12) return toast('The atlas supports up to twelve layers')
@@ -210,7 +217,7 @@ for (const id of ['featureName', 'featureWiki', 'featureNote', 'featureColor', '
     const found = locateFeature(selectedFeatureId); if (!found || found.layer.locked) return
     const key = { featureName: 'name', featureWiki: 'wikiUrl', featureNote: 'note', featureColor: 'color', featureIcon: 'icon' }[id]
     const value = event.target.value.trim?.() ?? event.target.value
-    if (key === 'wikiUrl' && value && (!value.startsWith('/wiki/') || value.includes('..'))) { toast('Wiki links must begin with /wiki/'); event.target.value = found.feature.wikiUrl; return }
+    if (key === 'wikiUrl' && value && (!value.startsWith('/wiki/') || value.includes('..') || value.includes('\\'))) { toast('Wiki links must be safe /wiki/ paths'); event.target.value = found.feature.wikiUrl; return }
     found.feature[key] = value; commit('Feature details updated')
   })
 }
@@ -238,12 +245,14 @@ async function loadDocument(slug) {
     const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Map could not be loaded')
     state = payload.map || defaultDocument(slug); activeLayerId = state.layers[0].id; selectedFeatureId = null; dirty = false; history = [JSON.stringify(state)]; historyIndex = 0
     $('#documentTitle').value = state.title; loadBaseMap(true); renderAll(); updateHistoryButtons(); setSaveState(payload.updatedAt ? `Saved ${new Date(payload.updatedAt).toLocaleString()}` : 'New folio — not yet saved', payload.updatedAt ? 'saved' : '')
+    const params = new URLSearchParams(location.search); params.set('map', slug); globalThis.history.replaceState(null, '', `${location.pathname}?${params.toString()}`)
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { $('#loadingVeil').classList.add('is-hidden'); $('.studio-shell').setAttribute('aria-busy', 'false'); setTimeout(() => map.invalidateSize(), 50) }
 }
 async function saveDocument() {
   const button = $('#saveBtn'); button.disabled = true; button.setAttribute('aria-busy', 'true'); setSaveState('Sealing changes…')
   try {
-    const response = await fetch(`/api/maps/${state.slug}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ map: state }) }); const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Save failed')
+    state.title = $('#documentTitle').value.trim() || currentConfig().title; $('#documentTitle').value = state.title; snapshot(true)
+    const response = await fetch(`/api/maps/${state.slug}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ map: state }) }); if (response.status === 401) { location.href = `/?next=${encodeURIComponent(`/map-editor?map=${state.slug}`)}`; return } const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Save failed')
     dirty = false; setSaveState(`Saved ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas folio saved to the private archive')
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { button.disabled = false; button.removeAttribute('aria-busy') }
 }

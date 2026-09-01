@@ -25,14 +25,14 @@ test('JWT verification requires an expiry and the expected algorithm', async () 
 test('addition paths normalize safe files and reject traversal or hidden segments', () => {
   assert.equal(__test.sanitizeAdditionsPath('Lore/New Page'), 'Lore/New Page.md')
   assert.equal(__test.sanitizeAdditionsPath('Lore/data.json'), 'Lore/data.json')
-  for (const value of ['../secret.md', 'Lore/../secret.md', 'Lore/.env', 'Lore//page.md', 'Lore\\page.md', 'Lore/page.html']) {
+  for (const value of ['/Lore/page.md', '../secret.md', 'Lore/../secret.md', 'Lore/.env', 'Lore//page.md', 'Lore\\page.md', 'Lore/page.html']) {
     assert.equal(__test.sanitizeAdditionsPath(value), null, value)
   }
 })
 
 test('folder paths reject traversal, empty segments, and dot-folders', () => {
   assert.equal(__test.sanitizeFolderPath('Lore/Characters'), 'Lore/Characters')
-  for (const value of ['../Lore', 'Lore//People', 'Lore/.private', 'Lore\\People']) {
+  for (const value of ['/Lore/People', '../Lore', 'Lore//People', 'Lore/.private', 'Lore\\People']) {
     assert.equal(__test.sanitizeFolderPath(value), null, value)
   }
 })
@@ -43,15 +43,19 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/wiki-index.json'), true)
   assert.equal(__test.isPrivatePath('/world-map.jpg'), true)
   assert.equal(__test.isPrivatePath('/map-editor'), true)
+  assert.equal(__test.isPrivatePath('/map-editor/'), true)
   assert.equal(__test.isPrivatePath('/map-editor.js'), true)
   assert.equal(__test.isPrivatePath('/species'), true)
   assert.equal(__test.isPrivatePath('/species.js'), true)
   assert.equal(__test.isPrivatePath('/search'), true)
+  assert.equal(__test.isPrivatePath('/search.js'), true)
   assert.equal(__test.isPrivatePath('/updates'), false)
   assert.equal(__test.cleanMapSlug('world'), 'world')
   assert.equal(__test.cleanMapSlug('../world'), null)
   assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', title: 'Atlas', layers: [{ id: 'political', name: 'Political', features: [] }] }, 'world')?.title, 'Atlas')
   assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', layers: [{ id: '../bad', name: 'Bad', features: [] }] }, 'world'), null)
+  assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', layers: [{ id: 'political', name: 'Political', features: [{ id: 'marker_123456', type: 'marker', point: { lat: -1, lng: 12 } }] }] }, 'world'), null)
+  assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', layers: [{ id: 'political', name: 'Political', features: [{ id: 'marker_123456', type: 'marker', point: { lat: 120, lng: 3841 } }] }] }, 'world'), null)
 })
 
 test('cross-origin mutations are rejected', () => {
@@ -141,7 +145,10 @@ test('/api/me returns 401 without a session', async () => {
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
   const env = {
     JWT_SECRET: SECRET,
-    ASSETS: { fetch: async request => new Response(new URL(request.url).pathname) },
+    ASSETS: { fetch: async request => {
+      const pathname = new URL(request.url).pathname
+      return new Response(pathname, { headers: { 'Content-Type': pathname.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain' } })
+    } },
   }
   const privateResponse = await worker.fetch(new Request('https://worldofgeor.com/wiki-index.json', { headers: { Accept: 'text/html' } }), env, {})
   assert.equal(privateResponse.status, 302)
@@ -154,6 +161,9 @@ test('private files redirect to the gate and public aliases reach the intended a
   assert.equal(studioResponse.status, 302)
   assert.match(studioResponse.headers.get('location'), /next=%2Fmap-editor/)
   assert.equal(studioResponse.headers.get('cache-control'), 'no-store')
+  const studioSlashResponse = await worker.fetch(new Request('https://worldofgeor.com/map-editor/', { headers: { Accept: 'text/html' } }), env, {})
+  assert.equal(studioSlashResponse.status, 302)
+  assert.equal(studioSlashResponse.headers.get('cache-control'), 'no-store')
   const speciesResponse = await worker.fetch(new Request('https://worldofgeor.com/species', { headers: { Accept: 'text/html' } }), env, {})
   assert.equal(speciesResponse.status, 302)
   assert.equal(speciesResponse.headers.get('cache-control'), 'no-store')
@@ -161,16 +171,32 @@ test('private files redirect to the gate and public aliases reach the intended a
   const publicResponse = await worker.fetch(new Request('https://worldofgeor.com/updates'), env, {})
   assert.equal(publicResponse.status, 200)
   assert.equal(await publicResponse.text(), '/updates.html')
+  assert.equal(publicResponse.headers.get('cache-control'), 'public, max-age=300, must-revalidate')
+  const publicSlashResponse = await worker.fetch(new Request('https://worldofgeor.com/updates/'), env, {})
+  assert.equal(publicSlashResponse.status, 200)
+  assert.equal(await publicSlashResponse.text(), '/updates.html')
 
   const studioHtml = readFileSync(new URL('../public/map-editor.html', import.meta.url), 'utf8')
   const studioScript = readFileSync(new URL('../public/map-editor.js', import.meta.url), 'utf8')
   const atlasHtml = readFileSync(new URL('../public/atlas.html', import.meta.url), 'utf8')
+  const appHtml = readFileSync(new URL('../public/app/index.html', import.meta.url), 'utf8')
+  const updatesHtml = readFileSync(new URL('../public/updates.html', import.meta.url), 'utf8')
+  const workerSource = readFileSync(new URL('../worker.js', import.meta.url), 'utf8')
   assert.match(studioHtml, /unpkg\.com\/leaflet@1\.9\.4\/dist\/leaflet\.js/)
   assert.match(studioHtml, /integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/)
   assert.match(studioScript, /world: \{ slug: 'world', title: 'World Atlas', width: 3840, height: 1920/)
   assert.match(studioScript, /L\.map\('editorMap', \{ crs: L\.CRS\.Simple/)
   assert.match(studioScript, /method: 'POST'.+body: JSON\.stringify\(\{ map: state \}\)/)
+  assert.match(studioScript, /Math\.min\(config\.height, Math\.max\(0, Math\.round\(latlng\.lat\)\)\)/)
+  assert.match(studioScript, /globalThis\.history\.replaceState/)
   assert.match(atlasHtml, /L\.map\(mapEl, \{ crs:L\.CRS\.Simple/)
+  assert.doesNotMatch(atlasHtml, /C:\\Users\\/)
+  assert.match(appHtml, /leaflet\.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/)
+  assert.match(appHtml, /const allowed = \['md','txt','json','yaml','yml','csv'\]/)
+  for (const releaseId of ['release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
+    assert.match(workerSource, new RegExp(releaseId))
+    assert.match(updatesHtml, new RegExp(releaseId))
+  }
 })
 
 test('cross-origin logout is blocked before cookies are changed', async () => {

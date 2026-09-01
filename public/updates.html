@@ -31,6 +31,9 @@
       </a>
       <div class="flex items-center gap-3">
         <a href="#changelog" class="hidden md:inline text-xs tracking-widest text-cream/70 hover:text-cream transition">CHANGELOG</a>
+        <a href="/atlas" class="hidden lg:inline text-xs tracking-widest text-cream/70 hover:text-cream transition">ATLAS</a>
+        <a href="/wiki/" class="hidden lg:inline text-xs tracking-widest text-gold hover:text-cream transition">WIKI</a>
+        <a href="/map-editor" class="hidden xl:inline text-xs tracking-widest text-gold hover:text-cream transition">STUDIO</a>
         <a href="/" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← BACK TO WORLD</a>
       </div>
     </div>
@@ -131,6 +134,42 @@
         <a href="/app/" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">OPEN BATTLESTATION →</a>
       </div>
 
+      <!-- Species Gallery -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">◇</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">SPECIES GALLERY</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/species · 34 folios</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">A filterable keeper's bestiary of every sentient people, organized by lineage, origin, and form with direct archive links.</p>
+        <a href="/species" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">BROWSE SPECIES →</a>
+      </div>
+
+      <!-- Keeper's Index -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">⌕</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">KEEPER'S INDEX</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/search · keyboard-first</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">Search titles and archive paths across the complete private wiki, then move through results without leaving the keyboard.</p>
+        <a href="/search" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">SEARCH THE ARCHIVE →</a>
+      </div>
+
+      <!-- Atlas Studio -->
+      <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold text-lg">✦</div>
+          <span class="text-[10px] tracking-widest px-2.5 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold">MEMBERS</span>
+        </div>
+        <h3 class="font-display text-[15px] tracking-widest font-semibold">ATLAS STUDIO</h3>
+        <p class="text-[10px] tracking-[0.22em] text-gold/60 mt-1">/map-editor · shared folios</p>
+        <p class="text-sm leading-6 text-cream/70 mt-3 flex-1">Draw markers, labels, regions, and symbols on World or Grimmel, then seal the shared folio into the private archive.</p>
+        <a href="/map-editor" class="mt-4 text-xs tracking-widest text-gold hover:text-cream transition">OPEN THE STUDIO →</a>
+      </div>
+
       <!-- The Gate -->
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7 flex flex-col">
         <div class="flex items-center justify-between mb-4">
@@ -188,6 +227,10 @@
       list.innerHTML = Array.from({length:6}, () => '<div role="presentation" aria-hidden="true" class="rounded-2xl border border-gold/10 bg-cream/[0.025] p-5"><div class="flex items-center gap-2"><span class="feed-skeleton w-7 h-7 rounded-full"></span><span class="feed-skeleton h-3 rounded w-20"></span><span class="feed-skeleton h-3 rounded w-28 ml-auto"></span></div><div class="feed-skeleton h-4 rounded w-4/5 mt-4"></div><div class="feed-skeleton h-3 rounded w-2/5 mt-2"></div></div>').join('');
     }
     function renderUpdates(updates){
+      if(!updates.length){
+        list.innerHTML = '<div role="listitem" class="md:col-span-2 lg:col-span-3 rounded-2xl border border-gold/15 bg-cream/[0.03] px-6 py-10 text-center"><div class="text-gold text-xl" aria-hidden="true">◇</div><p class="font-display text-sm tracking-widest mt-3">THE LEDGER IS QUIET</p><p class="text-sm text-cream/50 mt-2">The next archive milestone will appear here automatically.</p></div>';
+        return;
+      }
       list.innerHTML = updates.map(u=>{
         const icon = icons[u.action] || icons.default;
         const action = escapeHtml((u.action || 'entry').toString().toUpperCase());
@@ -207,21 +250,26 @@
       }).join('');
     }
     let inFlight = false;
+    let hasRendered = false;
     async function load(){
       if(inFlight || document.hidden) return;
       inFlight = true;
       if(btn) { btn.disabled = true; btn.setAttribute('aria-busy','true'); }
-      renderSkeleton();
-      if(meta) meta.textContent = 'Checking the public ledger…';
+      list.setAttribute('aria-busy','true');
+      if(!hasRendered) renderSkeleton();
+      if(meta) meta.textContent = hasRendered ? 'Refreshing the public ledger…' : 'Checking the public ledger…';
       if(status) status.textContent = 'Loading recent archive activity';
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
       try{
-        const r = await fetch('/api/updates?limit=18', { headers:{ Accept:'application/json' } });
+        const r = await fetch('/api/updates?limit=18', { headers:{ Accept:'application/json' }, signal:controller.signal });
         const j = await r.json();
         if(!r.ok) throw new Error(j.error || 'Unavailable');
-        const apiUpdates = (Array.isArray(j.updates) ? j.updates : []).filter(update => update && typeof update === 'object');
+        const apiUpdates = (Array.isArray(j.updates) ? j.updates : []).filter(update => update && typeof update === 'object').slice(0,18);
         const usingFallback = !apiUpdates.length || j.source === 'changelog';
         const updates = apiUpdates.length ? apiUpdates : fallbackUpdates;
         renderUpdates(updates);
+        hasRendered = true;
         list.setAttribute('aria-busy','false');
         if(meta){
           const when = j.refreshedAt ? fmt(j.refreshedAt) : '';
@@ -230,10 +278,12 @@
         if(status) status.textContent = updates.length+' recent archive '+(updates.length === 1 ? 'entry' : 'entries')+' loaded';
       } catch(e){
         renderUpdates(fallbackUpdates);
+        hasRendered = true;
         list.setAttribute('aria-busy','false');
         if(meta) meta.textContent = 'Live feed unavailable • showing the launch changelog';
         if(status) status.textContent = fallbackUpdates.length+' changelog entries loaded while the live feed is unavailable';
       } finally {
+        clearTimeout(timeout);
         inFlight = false;
         if(btn) { btn.disabled = false; btn.removeAttribute('aria-busy'); }
       }

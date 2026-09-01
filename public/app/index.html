@@ -7,8 +7,8 @@
 <title>Battlestation — World of Ge'or (Web)</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/site.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3LuqMZfMZc3G6v9K4GQZLlQp1Ns0M=" crossorigin="anonymous"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
 <style>
 html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 ::-webkit-scrollbar{width:8px;height:8px}
@@ -242,7 +242,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div class="mt-5 grid sm:grid-cols-2 gap-4">
 <button data-pick="world" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
 <div class="h-[150px] overflow-hidden bg-ink relative">
-<img src="/world-map.jpg" alt="World map" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="1920" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<img src="/world-map.webp" alt="World map" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="1920" onerror="this.src='/world-map.jpg';this.onerror=()=>{this.style.display='none';this.nextElementSibling.style.display='flex'}"/>
 <div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">World • /world-map.jpg</div>
 <div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">49,400 km • WORLD</div>
 </div>
@@ -254,7 +254,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </button>
 <button data-pick="grimmel" class="pickCard text-left rounded-xl overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 hover:bg-cream/[0.06] transition group">
 <div class="h-[150px] overflow-hidden bg-ink relative">
-<img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="5715" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+<img src="/grimmel-peninsula.webp" alt="Grimmel Peninsula" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.02] transition" loading="lazy" decoding="async" width="3840" height="5715" onerror="this.src='/grimmel-peninsula.jpg';this.onerror=()=>{this.style.display='none';this.nextElementSibling.style.display='flex'}"/>
 <div class="hidden absolute inset-0 items-center justify-center text-xs text-cream/40">Grimmel • /grimmel-peninsula.jpg</div>
 <div class="absolute bottom-2 left-2 text-[11px] tracking-widest bg-ink/80 backdrop-blur border border-gold/20 rounded-full px-2.5 py-1">GRIMMEL PENINSULA</div>
 </div>
@@ -898,16 +898,14 @@ document.getElementById('btnCopy').onclick=async()=>{
  }
 
  async function handleExternalFiles(fileList, targetFolder){
-   const allowed = ['md','txt','json','yaml','yml','js','ts','css','html','csv','xml','ini','cfg','log'];
+    const allowed = ['md','txt','json','yaml','yml','csv'];
    const files=[...fileList];
    if(!files.length) return;
    let ok=0, skipped=0;
    for(const file of files){
      const ext=(file.name.split('.').pop()||'').toLowerCase();
-     const isAllowed= allowed.includes(ext) || file.type.startsWith('text/');
-     if(!isAllowed){
-       if(file.size> 900*1024){ toast('Skip '+file.name+' — unsupported / too large', false); skipped++; continue; }
-     }
+      const isAllowed=allowed.includes(ext);
+      if(!isAllowed){ toast('Skip '+file.name+' — unsupported file type', false); skipped++; continue; }
      try{
        const text=await file.text();
        if(text.length> 900000){ toast('Skip '+file.name+' — too large (>900k)', false); skipped++; continue; }
@@ -1003,7 +1001,7 @@ function mapError(msg){
   let el=document.getElementById('mapError');
   if(!el){ el=document.createElement('div'); el.id='mapError'; el.className='absolute inset-0 top-10 bottom-11 flex items-center justify-center z-[500]'; document.getElementById('paneMaps').appendChild(el); }
   el.classList.remove('hidden');
-  el.innerHTML='<div class="text-center bg-ink/95 border border-red-900/40 rounded-xl p-5"><div class="text-sm text-red-200">'+msg+'</div><button id="mapRetry" class="mt-3 text-xs border border-gold/30 text-gold px-4 py-1.5 rounded-full hover:bg-gold/10">Retry</button></div>';
+  el.innerHTML='<div class="text-center bg-ink/95 border border-red-900/40 rounded-xl p-5"><div class="text-sm text-red-200">'+escapeHtml(msg)+'</div><button id="mapRetry" class="mt-3 text-xs border border-gold/30 text-gold px-4 py-1.5 rounded-full hover:bg-gold/10">Retry</button></div>';
   el.querySelector('#mapRetry').onclick=()=>{ el.classList.add('hidden'); if(lastMap) loadMap(lastMap); };
 }
 function mapClearError(){ const el=document.getElementById('mapError'); if(el) el.classList.add('hidden'); }
@@ -1043,15 +1041,16 @@ function loadMap(which){
   mapBusy(true); mapClearError();
   initMap();
   map.eachLayer(l=> { if(l instanceof L.ImageOverlay) map.removeLayer(l); });
-  const url= which==='world' ? '/world-map.jpg' : '/grimmel-peninsula.jpg';
-  const fallback= which==='world' ? '/world-map.webp' : '/grimmel-peninsula.webp';
-  const img=new Image(); img.src=url;
-  const onLoad=()=>{
-    const w=img.naturalWidth||16000, h=img.naturalHeight||8000;
+  const url= which==='world' ? '/world-map.webp' : '/grimmel-peninsula.webp';
+  const fallback= which==='world' ? '/world-map.jpg' : '/grimmel-peninsula.jpg';
+  const img=new Image(); let activeUrl=url; let settled=false; img.src=url;
+  const onLoad=(loadedImage=img)=>{
+    if(settled) return; settled=true;
+    const w=loadedImage.naturalWidth||16000, h=loadedImage.naturalHeight||8000;
     const bounds=[[0,0],[h,w]];
     currentBounds=bounds;
     mapBusy(false);
-    L.imageOverlay(url, bounds).addTo(map);
+    L.imageOverlay(activeUrl, bounds).addTo(map);
     map.fitBounds(bounds, {padding:[12,12]});
     const kmW=Math.round(w*3.086), kmH=Math.round(h*3.086);
     document.getElementById('mapScale').textContent=kmW.toLocaleString()+' x '+kmH.toLocaleString()+' km';
@@ -1068,11 +1067,11 @@ function loadMap(which){
   };
   const onErr=()=>{
     const img2=new Image(); img2.src=fallback;
-    img2.onload=()=>{ img.src=fallback; onLoad(); };
+    img2.onload=()=>{ activeUrl=fallback; onLoad(img2); };
     img2.onerror=()=>{ mapBusy(false); mapError('Map image missing — '+url); };
   };
-  img.onload=onLoad; img.onerror=onErr;
-  if(img.complete && img.naturalWidth) onLoad();
+  img.onload=()=>onLoad(img); img.onerror=onErr;
+  if(img.complete && img.naturalWidth) onLoad(img);
 }
 document.querySelectorAll('.pickCard').forEach(b=> b.onclick=()=> loadMap(b.dataset.pick));
 document.querySelectorAll('.mapBtn').forEach(b=> b.onclick=()=> loadMap(b.dataset.map));

@@ -37,8 +37,10 @@
         <span class="font-display tracking-[0.18em] text-[13px] font-semibold">WORLD OF GE'OR</span>
       </a>
       <div class="flex items-center gap-2">
+        <a href="/updates" class="hidden lg:inline text-xs tracking-widest text-cream/60 hover:text-cream transition">UPDATES</a>
+        <a href="/wiki/" class="hidden md:inline text-xs tracking-widest text-gold hover:text-cream transition">WIKI</a>
         <a href="/map-editor" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">ATLAS STUDIO</a>
-        <a href="/" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← BACK TO WORLD</a>
+        <a href="/" class="hidden sm:inline text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← WORLD</a>
       </div>
     </div>
   </header>
@@ -78,7 +80,7 @@
     </div>
 
     <div class="mt-10 rounded-xl border border-gold/10 bg-cream/[0.03] p-5 text-sm text-cream/60 leading-6">
-      <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews — the vault holds the 57 MB / 43 MB masters for battlestation tiling at <code class="text-gold/80">C:\Users\pc\Downloads\Map</code>.
+      <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews; the private vault preserves the high-resolution masters for future tiling.
     </div>
     <!-- Interactive viewer — Leaflet CRS.Simple (premium, in-page pan/zoom) -->
     <section class="mt-10 rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03]">
@@ -97,14 +99,14 @@
         <div class="max-w-[620px]">
           <label for="atlasSearch" class="block text-[10px] tracking-[0.24em] text-gold/80">FIND A MAPPED PLACE</label>
           <div class="relative mt-2">
-            <input id="atlasSearch" type="search" autocomplete="off" spellcheck="false" placeholder="Search the current map…" aria-controls="atlasSearchResults" aria-expanded="false" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-2.5 pr-10 text-sm text-cream placeholder:text-cream/35 outline-none transition focus:border-gold/45 focus:bg-cream/[0.04]" />
+            <input id="atlasSearch" type="search" role="combobox" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the current map…" aria-controls="atlasSearchResults" aria-expanded="false" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-2.5 pr-10 text-sm text-cream placeholder:text-cream/35 outline-none transition focus:border-gold/45 focus:bg-cream/[0.04]" />
             <span aria-hidden="true" class="pointer-events-none absolute right-3 top-2.5 text-xs text-cream/30">⌕</span>
           </div>
           <div id="atlasSearchResults" role="listbox" aria-label="Mapped places" class="atlas-search-results hidden mt-2 rounded-xl border border-gold/15 bg-ink/95 p-1 shadow-2xl"></div>
           <p id="atlasSearchStatus" class="mt-2 min-h-[1em] text-xs text-cream/45" role="status">Choose a map to load its named places.</p>
         </div>
       </div>
-      <div id="atlasMap" class="w-full" style="height:clamp(360px,62vh,560px)" role="region" aria-label="Interactive map of Ge'or" aria-describedby="atlasMapHelp atlasMapStatus" tabindex="0"></div>
+      <div id="atlasMap" class="w-full" style="height:clamp(360px,62vh,560px)" role="region" aria-label="Interactive map of Ge'or" aria-describedby="atlasMapHelp atlasMapStatus" aria-busy="true" tabindex="0"></div>
       <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] tracking-widest border-t border-gold/10">
         <span id="atlasMapHelp" class="text-cream/50">DRAG to pan • SCROLL to zoom • ARROW KEYS to pan • <span class="text-gold">3.086 km/px</span> • Private — gated by geor_token</span>
         <span class="text-cream/40">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
@@ -124,7 +126,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
   <script>
   (function(){
-    if(typeof L === 'undefined') return;
     const mapEl = document.getElementById('atlasMap');
     const searchEl = document.getElementById('atlasSearch');
     const resultsEl = document.getElementById('atlasSearchResults');
@@ -133,6 +134,12 @@
     const worldBtn = document.getElementById('atlasWorldBtn');
     const grimmelBtn = document.getElementById('atlasGrimmelBtn');
     const resetBtn = document.getElementById('atlasReset');
+    if(typeof L === 'undefined'){
+      mapEl.setAttribute('aria-busy','false');
+      mapEl.innerHTML='<div class="h-full grid place-items-center p-8 text-center"><div><p class="font-display text-sm tracking-widest text-gold">MAP LIBRARY UNAVAILABLE</p><p class="text-sm text-cream/55 mt-2">Reload the atlas to try opening the interactive folio again.</p></div></div>';
+      if(mapStatus) mapStatus.textContent='The interactive map library could not be loaded.';
+      return;
+    }
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const world = { id:'world', label:'World Map', w:3840, h:1920, url:'/world-map.webp', fallback:'/world-map.jpg' };
     const grimmel = { id:'grimmel', label:'Grimmel Peninsula', w:3840, h:5715, url:'/grimmel-peninsula.webp', fallback:'/grimmel-peninsula.jpg' };
@@ -200,6 +207,7 @@
         return { pin, marker, latlng:[cfg.h*pin.y,cfg.w*pin.x] };
       });
       renderSearchResults();
+      mapEl.setAttribute('aria-busy','false');
       setStatus(cfg.label+' loaded with '+markerEntries.length+' named lore pins. Use the search field or focus a pin.');
       if(requestedPlace){
         const index=(pins[cfg.id]||[]).findIndex(pin=>pin.name.toLowerCase()===requestedPlace.toLowerCase());
@@ -249,6 +257,7 @@
       const requestedPlace=new URLSearchParams(location.search).get('place');
       setMapButtons(cfg);
       clearMarkers();
+      mapEl.setAttribute('aria-busy','true');
       if(overlay) map.removeLayer(overlay);
       map.setMaxBounds(bounds);
       map.fitBounds(bounds,{padding:[12,12],animate:false});
@@ -260,7 +269,7 @@
       next.on('error',()=>{
         if(nonce!==loadNonce) return;
         if(!usedFallback){ usedFallback=true; next.setUrl(cfg.fallback); }
-        else { setStatus('The '+cfg.label.toLowerCase()+' image could not be loaded. Try again or open the full map above.'); if(searchStatus) searchStatus.textContent='Map image unavailable.'; }
+        else { mapEl.setAttribute('aria-busy','false'); setStatus('The '+cfg.label.toLowerCase()+' image could not be loaded. Try again or open the full map above.'); if(searchStatus) searchStatus.textContent='Map image unavailable.'; }
       });
       overlay=next.addTo(map);
       const params=new URLSearchParams(location.search); params.set('map',cfg.id); params.delete('place');
@@ -277,6 +286,18 @@
       } else if(event.key==='Escape'){
         searchEl.value=''; renderSearchResults(); mapEl.focus({preventScroll:true});
       }
+    });
+    resultsEl?.addEventListener('keydown',event=>{
+      const options=[...resultsEl.querySelectorAll('[data-pin-index]')];
+      const currentIndex=options.indexOf(document.activeElement);
+      if(event.key==='ArrowDown' && options.length){ event.preventDefault(); options[(currentIndex+1+options.length)%options.length].focus(); }
+      else if(event.key==='ArrowUp' && options.length){ event.preventDefault(); (currentIndex<=0 ? searchEl : options[currentIndex-1]).focus(); }
+      else if(event.key==='Escape'){ event.preventDefault(); resultsEl.classList.add('hidden'); searchEl.setAttribute('aria-expanded','false'); searchEl.focus(); }
+    });
+    document.addEventListener('click',event=>{
+      if(event.target===searchEl || resultsEl?.contains(event.target)) return;
+      resultsEl?.classList.add('hidden');
+      searchEl?.setAttribute('aria-expanded','false');
     });
     worldBtn?.addEventListener('click',()=>loadMap(world));
     grimmelBtn?.addEventListener('click',()=>loadMap(grimmel));

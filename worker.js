@@ -11,6 +11,10 @@ const MAX_JSON_BYTES = 4_096;
 const MAX_SAVE_JSON_BYTES = 1_000_000;
 const MAX_MAP_JSON_BYTES = 512_000;
 const MAP_SLUGS = new Set(['world', 'grimmel']);
+const MAP_DIMENSIONS = Object.freeze({
+  world: { width: 3840, height: 1920 },
+  grimmel: { width: 3840, height: 5715 },
+});
 const RELEASE_CHANGELOG = Object.freeze([
   { id: 'release-species', action: 'feature', path: '/species', summary: 'Species Gallery opened with 34 filterable folios', created_at: '2026-09-01T03:56:24Z' },
   { id: 'release-stats', action: 'feature', path: '/dashboard', summary: 'World Stats joined the private member dashboard', created_at: '2026-09-01T03:56:23Z' },
@@ -33,15 +37,23 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/map-editor.js',
   '/species.css',
   '/species.js',
+  '/search.js',
 ]);
 const ROUTE_ALIASES = new Map([
   ['/updates', '/updates.html'],
+  ['/updates/', '/updates.html'],
   ['/atlas', '/atlas.html'],
+  ['/atlas/', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
+  ['/map-editor/', '/map-editor.html'],
   ['/species', '/species.html'],
+  ['/species/', '/species.html'],
   ['/search', '/search.html'],
+  ['/search/', '/search.html'],
   ['/dashboard', '/dashboard.html'],
+  ['/dashboard/', '/dashboard.html'],
   ['/admin', '/admin.html'],
+  ['/admin/', '/admin.html'],
   ['/app', '/app/index.html'],
 ]);
 const ADDITIONS_OWNER = 'actualrat1984';
@@ -193,12 +205,8 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    decoded === '/atlas' || decoded === '/atlas.html' ||
-    decoded === '/map-editor' || decoded === '/map-editor.html' ||
-    decoded === '/species' || decoded === '/species.html' ||
-    decoded === '/search' || decoded === '/search.html' ||
-    decoded === '/dashboard' || decoded === '/dashboard.html' ||
-    decoded === '/admin' || decoded === '/admin.html' ||
+    ['/atlas', '/map-editor', '/species', '/search', '/dashboard', '/admin']
+      .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
 
@@ -208,11 +216,12 @@ function cleanMapSlug(value) {
 function cleanMapText(value, maxLength) {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 }
-function cleanMapPoint(value) {
+function cleanMapPoint(value, slug) {
   if (!isJsonObject(value)) return null;
   const lat = Number(value.lat);
   const lng = Number(value.lng);
-  if (!Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 20_000 || Math.abs(lng) > 20_000) return null;
+  const dimensions = MAP_DIMENSIONS[slug];
+  if (!dimensions || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < 0 || lng < 0 || lat > dimensions.height || lng > dimensions.width) return null;
   return { lat: Math.round(lat), lng: Math.round(lng) };
 }
 function sanitizeMapDocument(value, slug) {
@@ -244,11 +253,11 @@ function sanitizeMapDocument(value, slug) {
       const icon = ['keep', 'city', 'port', 'ruin', 'star'].includes(feature.icon) ? feature.icon : 'keep';
       if (type === 'polygon') {
         if (!Array.isArray(feature.points) || feature.points.length < 3 || feature.points.length > 250) return null;
-        const points = feature.points.map(cleanMapPoint);
+        const points = feature.points.map(point => cleanMapPoint(point, slug));
         if (points.some(point => !point)) return null;
         features.push({ id: featureId, type, name: nameValue, note, wikiUrl, color, points });
       } else {
-        const point = cleanMapPoint(feature.point);
+        const point = cleanMapPoint(feature.point, slug);
         if (!point) return null;
         features.push({ id: featureId, type, name: nameValue, note, wikiUrl, color, icon, point });
       }
@@ -274,7 +283,8 @@ async function requireUser(request, env) {
 }
 function sanitizeAdditionsPath(p) {
   if (p == null) return null;
-  p = String(p).trim().replace(/^\/+/, '');
+  p = String(p).trim();
+  if (p.startsWith('/')) return null;
   if (!p) return null;
   if (p.includes('\\') || p.includes('//')) return null;
   if (!/^[A-Za-z0-9._\-\/ ]+$/.test(p)) return null;
@@ -294,7 +304,9 @@ function sanitizeAdditionsPath(p) {
 }
 function sanitizeFolderPath(p) {
   if (p == null) return null;
-  p = String(p).trim().replace(/^\/+/, '').replace(/\/+$/, '');
+  p = String(p).trim();
+  if (p.startsWith('/')) return null;
+  p = p.replace(/\/+$/, '');
   if (!p) return null;
   if (p.includes('\\') || p.includes('//')) return null;
   if (!/^[A-Za-z0-9._\-\/ ]+$/.test(p)) return null;
@@ -402,10 +414,12 @@ export default {
           if (!isValidEmail(normEmail)) return json({ error: 'Valid email required' }, 400);
           const cleanCode = cleanInviteCode(inviteCode);
           if (!cleanCode) return json({ error: 'Invalid or unavailable invite code' }, 403);
-          const exists = await env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(normEmail).first();
-          if (exists) return json({ error: 'Email already registered' }, 409);
           const salt = randomSalt();
-          const hash = await pbkdf2Hash(password, salt);
+          const [exists, hash] = await Promise.all([
+            env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(normEmail).first(),
+            pbkdf2Hash(password, salt),
+          ]);
+          if (exists) return json({ error: 'Invalid or unavailable invite code' }, 403);
           const results = await env.DB.batch([
             env.DB.prepare(`INSERT INTO users (email, password_hash, salt, invite_code)
               SELECT ?, ?, ?, ? WHERE EXISTS (
@@ -742,7 +756,7 @@ export default {
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
-        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
         try {
           // try git trees recursive — most complete
           const treeRes = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/git/trees/${ADDITIONS_BRANCH}?recursive=1`, { method: 'GET' }, env);
@@ -783,7 +797,7 @@ export default {
       if (url.pathname === '/api/additions/file' && request.method === 'GET') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
-        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
         const rawPath = url.searchParams.get('path') || '';
         const path = sanitizeAdditionsPath(rawPath);
         if (!path) return json({ error: 'Invalid path' }, 400);
@@ -808,7 +822,7 @@ export default {
       if (url.pathname === '/api/additions/save' && request.method === 'POST') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
-        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
         let body;
         try { body = await readJson(request, MAX_SAVE_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
         if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
@@ -882,7 +896,7 @@ export default {
       if (url.pathname === '/api/additions/delete' && request.method === 'POST') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
-        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
         let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
         if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
         const p = sanitizeAdditionsPath(body.path || '');
@@ -910,7 +924,7 @@ export default {
       if (url.pathname === '/api/additions/mkdir' && request.method === 'POST') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Auth required' }, 401);
-        if (!env.GITHUB_TOKEN) return json({ error: 'GITHUB_TOKEN not configured' }, 503);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
         let body; try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
         if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
         const raw = typeof body.path === 'string' ? body.path.trim() : '';
@@ -1000,7 +1014,14 @@ export default {
       assetRequest = new Request(assetUrl.toString(), request);
     }
     const response = await env.ASSETS.fetch(assetRequest);
-    if (!needsAuth) return response;
+    if (!needsAuth) {
+      const contentType = response.headers.get('Content-Type') || '';
+      if (!contentType.toLowerCase().includes('text/html')) return response;
+      const headers = new Headers(response.headers);
+      headers.set('Cache-Control', 'public, max-age=300, must-revalidate');
+      headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    }
     const headers = new Headers(response.headers);
     headers.set('Cache-Control', 'private, no-store');
     headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
