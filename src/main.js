@@ -52,15 +52,31 @@ if (header) {
   header.addEventListener('focusin', () => { header.style.transform = 'translateY(0)' })
 }
 
-// active section highlight
-const navLinks = document.querySelectorAll('header nav a[href^="#"], #mobileMenu a[href^="#"]')
+// Active section/page highlight. Hash links follow the landing sections; route
+// links retain page semantics when this navigation is reused on another route.
+const navLinks = [...document.querySelectorAll('header nav a[href^="#"], #mobileMenu a[href^="#"]')]
+const pageLinks = [...document.querySelectorAll('header nav a[href^="/"], #mobileMenu a[href^="/"]')]
+const normalizePath = pathname => pathname.replace(/\.html$/, '').replace(/\/+$/, '') || '/'
+const currentPath = normalizePath(window.location.pathname)
+pageLinks.forEach(link => {
+  const target = new URL(link.href, window.location.href)
+  if (target.origin === window.location.origin && normalizePath(target.pathname) === currentPath) {
+    link.setAttribute('aria-current', 'page')
+  } else if (link.getAttribute('aria-current') === 'page') {
+    link.removeAttribute('aria-current')
+  }
+})
+navLinks.forEach(link => {
+  link.dataset.inactiveTextClass = link.classList.contains('text-cream/80') ? 'text-cream/80' : 'text-cream/70'
+})
 const sections = ['world','atlas','history','gallery','archive'].map(id => document.getElementById(id)).filter(Boolean)
 if (navLinks.length && sections.length && 'IntersectionObserver' in window) {
   const setActive = (id) => {
     navLinks.forEach(a => {
       const isActive = a.getAttribute('href') === `#${id}`
+      const inactiveClass = a.dataset.inactiveTextClass
       a.classList.toggle('text-cream', isActive)
-      a.classList.toggle('text-cream/70', !isActive)
+      a.classList.toggle(inactiveClass, !isActive)
       if (isActive) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current')
     })
   }

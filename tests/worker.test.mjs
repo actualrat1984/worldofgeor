@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import worker, { __test } from '../worker.js'
 
 const SECRET = 'test-only-secret-that-is-longer-than-32-characters'
@@ -76,6 +77,12 @@ test('/api/me returns 401 without a session', async () => {
   assert.equal(passwordResponse.status, 401)
   const statsResponse = await worker.fetch(new Request('https://worldofgeor.com/api/world-stats'), { JWT_SECRET: SECRET }, {})
   assert.equal(statsResponse.status, 401)
+  const changelogResponse = await worker.fetch(new Request('https://worldofgeor.com/api/updates?limit=2'), { JWT_SECRET: SECRET }, {})
+  assert.equal(changelogResponse.status, 200)
+  assert.equal(changelogResponse.headers.get('cache-control'), 'public, max-age=15')
+  const changelog = await changelogResponse.json()
+  assert.equal(changelog.source, 'changelog')
+  assert.equal(changelog.updates.length, 2)
 
   const now = Math.floor(Date.now() / 1000)
   const token = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
@@ -122,6 +129,13 @@ test('/api/me returns 401 without a session', async () => {
   assert.equal(worldStats.canonical.species, 34)
   assert.equal(worldStats.live.activity, 7)
   assert.equal(worldStats.live.mapFolios, 1)
+  const updatesResponse = await worker.fetch(new Request('https://worldofgeor.com/api/updates?limit=3'), { JWT_SECRET: SECRET, DB: db }, ctx)
+  assert.equal(updatesResponse.status, 200)
+  assert.equal(updatesResponse.headers.get('cache-control'), 'public, max-age=15, stale-while-revalidate=120')
+  const updates = await updatesResponse.json()
+  assert.equal(updates.source, 'changelog')
+  assert.equal(updates.updates.length, 3)
+  assert.match(updates.updates[0].summary, /Species Gallery/)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -136,6 +150,10 @@ test('private files redirect to the gate and public aliases reach the intended a
 
   const protectedAssetResponse = await worker.fetch(new Request('https://worldofgeor.com/map-editor.js', { headers: { 'Sec-Fetch-Dest': 'script' } }), env, {})
   assert.equal(protectedAssetResponse.status, 401)
+  const studioResponse = await worker.fetch(new Request('https://worldofgeor.com/map-editor', { headers: { Accept: 'text/html' } }), env, {})
+  assert.equal(studioResponse.status, 302)
+  assert.match(studioResponse.headers.get('location'), /next=%2Fmap-editor/)
+  assert.equal(studioResponse.headers.get('cache-control'), 'no-store')
   const speciesResponse = await worker.fetch(new Request('https://worldofgeor.com/species', { headers: { Accept: 'text/html' } }), env, {})
   assert.equal(speciesResponse.status, 302)
   assert.equal(speciesResponse.headers.get('cache-control'), 'no-store')
@@ -143,6 +161,16 @@ test('private files redirect to the gate and public aliases reach the intended a
   const publicResponse = await worker.fetch(new Request('https://worldofgeor.com/updates'), env, {})
   assert.equal(publicResponse.status, 200)
   assert.equal(await publicResponse.text(), '/updates.html')
+
+  const studioHtml = readFileSync(new URL('../public/map-editor.html', import.meta.url), 'utf8')
+  const studioScript = readFileSync(new URL('../public/map-editor.js', import.meta.url), 'utf8')
+  const atlasHtml = readFileSync(new URL('../public/atlas.html', import.meta.url), 'utf8')
+  assert.match(studioHtml, /unpkg\.com\/leaflet@1\.9\.4\/dist\/leaflet\.js/)
+  assert.match(studioHtml, /integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/)
+  assert.match(studioScript, /world: \{ slug: 'world', title: 'World Atlas', width: 3840, height: 1920/)
+  assert.match(studioScript, /L\.map\('editorMap', \{ crs: L\.CRS\.Simple/)
+  assert.match(studioScript, /method: 'POST'.+body: JSON\.stringify\(\{ map: state \}\)/)
+  assert.match(atlasHtml, /L\.map\(mapEl, \{ crs:L\.CRS\.Simple/)
 })
 
 test('cross-origin logout is blocked before cookies are changed', async () => {

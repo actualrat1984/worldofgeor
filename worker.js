@@ -11,6 +11,14 @@ const MAX_JSON_BYTES = 4_096;
 const MAX_SAVE_JSON_BYTES = 1_000_000;
 const MAX_MAP_JSON_BYTES = 512_000;
 const MAP_SLUGS = new Set(['world', 'grimmel']);
+const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-species', action: 'feature', path: '/species', summary: 'Species Gallery opened with 34 filterable folios', created_at: '2026-09-01T03:56:24Z' },
+  { id: 'release-stats', action: 'feature', path: '/dashboard', summary: 'World Stats joined the private member dashboard', created_at: '2026-09-01T03:56:23Z' },
+  { id: 'release-studio', action: 'map', path: '/map-editor', summary: 'Atlas Studio and archive search went live', created_at: '2026-09-01T02:53:10Z' },
+  { id: 'release-reserve', action: 'security', path: '/', summary: 'Reserve hardening strengthened the private archive', created_at: '2026-08-31T07:03:16Z' },
+  { id: 'release-atlas', action: 'map', path: '/atlas', summary: 'The interactive Leaflet Atlas opened its first folios', created_at: '2026-08-31T03:58:50Z' },
+  { id: 'release-ledger', action: 'launch', path: '/updates', summary: 'The public, privacy-safe updates ledger launched', created_at: '2026-08-31T03:58:49Z' },
+]);
 const DUMMY_PASSWORD_SALT = 'AAAAAAAAAAAAAAAAAAAAAA';
 const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
 const PRIVATE_ASSET_PATHS = new Set([
@@ -447,17 +455,22 @@ export default {
 
       // GET /api/updates — public, privacy-safe archive activity.
       if (url.pathname === '/api/updates' && request.method === 'GET') {
+        const requestedLimit = Number(url.searchParams.get('limit') || 18);
+        const limit = Number.isSafeInteger(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 18;
         try {
           await ensureTables();
-          const requestedLimit = Number(url.searchParams.get('limit') || 18);
-          const limit = Number.isSafeInteger(requestedLimit) ? Math.min(50, Math.max(1, requestedLimit)) : 18;
           const { results } = await env.DB.prepare(`SELECT id, action, summary, created_at
             FROM activity ORDER BY created_at DESC, id DESC LIMIT ?`).bind(limit).all();
-          return json({ updates: results || [], refreshedAt: new Date().toISOString() }, 200, {
-            'Cache-Control': 'public, max-age=30, stale-while-revalidate=120',
+          const hasActivity = Array.isArray(results) && results.length > 0;
+          return json({
+            updates: hasActivity ? results : RELEASE_CHANGELOG.slice(0, limit),
+            source: hasActivity ? 'activity' : 'changelog',
+            refreshedAt: new Date().toISOString(),
+          }, 200, {
+            'Cache-Control': 'public, max-age=15, stale-while-revalidate=120',
           });
         } catch {
-          return json({ updates: [], refreshedAt: new Date().toISOString(), unavailable: true }, 200, {
+          return json({ updates: RELEASE_CHANGELOG.slice(0, limit), source: 'changelog', liveUnavailable: true, refreshedAt: new Date().toISOString() }, 200, {
             'Cache-Control': 'public, max-age=15',
           });
         }

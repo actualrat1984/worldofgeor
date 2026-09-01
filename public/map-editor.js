@@ -65,7 +65,13 @@ function restoreHistory(index) {
 function updateHistoryButtons() { $('#undoBtn').disabled = historyIndex <= 0; $('#redoBtn').disabled = historyIndex >= history.length - 1 }
 function commit(message) { snapshot(true); renderAll(); if (message) toast(message) }
 
-if (typeof L === 'undefined') { setSaveState('Map library unavailable', 'error'); throw new Error('Leaflet unavailable') }
+const L = globalThis.L
+if (!L) {
+  setSaveState('Map library unavailable — reload to try again', 'error')
+  $('#loadingVeil').innerHTML = '<p>Atlas map library unavailable. Reload this private workroom to try again.</p>'
+  $('.studio-shell').setAttribute('aria-busy', 'false')
+  throw new Error('Leaflet unavailable')
+}
 const map = L.map('editorMap', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 4, zoomSnap: .25, zoomDelta: .5, attributionControl: false, doubleClickZoom: false, maxBoundsViscosity: .8 })
 L.control.zoom({ position: 'bottomleft' }).addTo(map)
 function bounds() { const cfg = currentConfig(); return [[0, 0], [cfg.height, cfg.width]] }

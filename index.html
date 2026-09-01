@@ -27,9 +27,9 @@
         <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
         <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
         <a href="/species" class="text-gold hover:text-cream transition">SPECIES</a>
-        <a href="#wiki" class="text-gold hover:text-cream transition">WIKI</a>
-        <a href="#updates" class="text-gold hover:text-cream transition">UPDATES</a>
-        <a href="#editor" class="text-gold hover:text-cream transition">STUDIO</a>
+        <a href="/wiki/" class="text-gold hover:text-cream transition">WIKI</a>
+        <a href="/updates" class="text-gold hover:text-cream transition">UPDATES</a>
+        <a href="/map-editor" class="text-gold hover:text-cream transition">STUDIO</a>
       </nav>
       <div class="hidden xl:flex items-center gap-3" id="navRight">
         <button id="deskRequestBtn" type="button" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
@@ -55,9 +55,9 @@
       <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
       <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
       <a href="/species" class="block text-sm tracking-widest text-gold">SPECIES</a>
-      <a href="#wiki" class="block text-sm tracking-widest text-gold">WIKI</a>
-      <a href="#updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
-      <a href="#editor" class="block text-sm tracking-widest text-gold">ATLAS STUDIO</a>
+      <a href="/wiki/" class="block text-sm tracking-widest text-gold">WIKI</a>
+      <a href="/updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
+      <a href="/map-editor" class="block text-sm tracking-widest text-gold">ATLAS STUDIO</a>
       <button id="mobRequestBtn" type="button" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
       <div id="mobUserWrap" class="hidden mt-3 border-t border-gold/10 pt-3 space-y-2">
         <div class="text-xs text-gold tracking-widest" id="mobUserName">USER</div>
@@ -364,6 +364,8 @@
     (function(){
       let currentUser = null;
       const authModal = document.getElementById('authModal');
+      const authTitle = document.getElementById('authTitle');
+      const authDescription = document.getElementById('authDescription');
       const authBackdrop = document.getElementById('authBackdrop');
       const closeAuth = document.getElementById('closeAuth');
       const tabLogin = document.getElementById('tabLogin');
@@ -410,7 +412,15 @@
       function releaseTrap(modal){
         if(modal._trapHandler){ modal.removeEventListener('keydown', modal._trapHandler); delete modal._trapHandler; }
       }
-      function openAuth(m){ authReturnFocus=document.activeElement; mode=m; authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal); }
+      function openAuth(m){
+        authReturnFocus=document.activeElement;
+        mode=m;
+        const destination=postAuthDestination || safeNext();
+        const studioRequested=destination?.startsWith('/map-editor');
+        if(authTitle) authTitle.textContent=studioRequested ? 'PRIVATE WORKROOM' : "ENTER GE'OR";
+        if(authDescription) authDescription.textContent=studioRequested ? 'Atlas Studio is private — log in to open the cartographer workroom.' : 'Invite-only. You need an invite code.';
+        authModal.classList.remove('hidden'); authModal.classList.add('flex'); authModal.setAttribute('aria-hidden','false'); updateTabs(); authMsg.textContent=''; lockBody(); trapFocus(authModal);
+      }
       function closeAuthModal(){ if(authModal.classList.contains('hidden')) return; authModal.classList.add('hidden'); authModal.classList.remove('flex'); authModal.setAttribute('aria-hidden','true'); releaseTrap(authModal); postAuthDestination=null; unlockBody(); authReturnFocus?.focus?.(); }
       function updateTabs(){
         if(mode==='login'){
