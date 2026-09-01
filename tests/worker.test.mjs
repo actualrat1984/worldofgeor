@@ -42,6 +42,9 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/wiki-index.json'), true)
   assert.equal(__test.isPrivatePath('/world-map.jpg'), true)
   assert.equal(__test.isPrivatePath('/map-editor'), true)
+  assert.equal(__test.isPrivatePath('/map-editor.js'), true)
+  assert.equal(__test.isPrivatePath('/species'), true)
+  assert.equal(__test.isPrivatePath('/species.js'), true)
   assert.equal(__test.isPrivatePath('/search'), true)
   assert.equal(__test.isPrivatePath('/updates'), false)
   assert.equal(__test.cleanMapSlug('world'), 'world')
@@ -71,6 +74,8 @@ test('/api/me returns 401 without a session', async () => {
   assert.equal(mapResponse.status, 401)
   const passwordResponse = await worker.fetch(new Request('https://worldofgeor.com/api/change-password', { method: 'POST', body: '{}' }), { JWT_SECRET: SECRET }, {})
   assert.equal(passwordResponse.status, 401)
+  const statsResponse = await worker.fetch(new Request('https://worldofgeor.com/api/world-stats'), { JWT_SECRET: SECRET }, {})
+  assert.equal(statsResponse.status, 401)
 
   const now = Math.floor(Date.now() / 1000)
   const token = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
@@ -80,6 +85,43 @@ test('/api/me returns 401 without a session', async () => {
     body: JSON.stringify({ map: { version: 1, slug: 'world', layers: [] } }),
   }), { JWT_SECRET: SECRET }, { waitUntil() {} })
   assert.equal(invalidMapResponse.status, 400)
+
+  const records = new Map()
+  const db = {
+    prepare(sql) {
+      let args = []
+      return {
+        bind(...values) { args = values; return this },
+        async run() {
+          if (sql.includes('INSERT INTO map_documents')) records.set(args[0], { title: args[1], document_json: args[2], updated_by: args[3], updated_at: '2026-08-31T12:00:00Z' })
+          if (sql.includes('COUNT(*) AS count FROM activity')) return { results: [{ count: 7 }] }
+          if (sql.includes('COUNT(*) AS count FROM map_documents')) return { results: [{ count: records.size }] }
+          return { meta: { changes: 1 } }
+        },
+        async first() {
+          if (sql.includes('FROM map_documents')) return records.get(args[0]) || null
+          return null
+        },
+        async all() { return { results: [] } },
+      }
+    },
+    async batch(statements) { return Promise.all(statements.map(statement => statement.run())) },
+  }
+  const map = { version: 1, slug: 'world', title: 'Keeper Atlas', layers: [{ id: 'political', name: 'Political', visible: true, locked: false, features: [{ id: 'marker_123456', type: 'marker', name: 'Dissenbarg', note: '', wikiUrl: '/wiki/World/', color: '#d9b77a', icon: 'city', point: { lat: 420, lng: 840 } }] }] }
+  const ctx = { waitUntil() {} }
+  const saveResponse = await worker.fetch(new Request('https://worldofgeor.com/api/maps/world', { method: 'POST', headers: { Cookie: `geor_token=${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ map }) }), { JWT_SECRET: SECRET, DB: db }, ctx)
+  assert.equal(saveResponse.status, 200)
+  const loadResponse = await worker.fetch(new Request('https://worldofgeor.com/api/maps/world', { headers: { Cookie: `geor_token=${token}` } }), { JWT_SECRET: SECRET, DB: db }, ctx)
+  assert.equal(loadResponse.status, 200)
+  assert.deepEqual((await loadResponse.json()).map, map)
+  const archiveIndex = [{ url: '/wiki/World/Nations/A/' }, { url: '/wiki/World/Species/Elves/' }, { url: '/wiki/World/History/Ages/' }, { url: '/wiki/World/Systems/Magic/' }]
+  const worldStatsResponse = await worker.fetch(new Request('https://worldofgeor.com/api/world-stats', { headers: { Cookie: `geor_token=${token}` } }), { JWT_SECRET: SECRET, DB: db, ASSETS: { fetch: async () => Response.json(archiveIndex) } }, ctx)
+  assert.equal(worldStatsResponse.status, 200)
+  const worldStats = await worldStatsResponse.json()
+  assert.equal(worldStats.archive.pages, archiveIndex.length)
+  assert.equal(worldStats.canonical.species, 34)
+  assert.equal(worldStats.live.activity, 7)
+  assert.equal(worldStats.live.mapFolios, 1)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -90,6 +132,13 @@ test('private files redirect to the gate and public aliases reach the intended a
   const privateResponse = await worker.fetch(new Request('https://worldofgeor.com/wiki-index.json', { headers: { Accept: 'text/html' } }), env, {})
   assert.equal(privateResponse.status, 302)
   assert.match(privateResponse.headers.get('location'), /next=%2Fwiki-index\.json/)
+  assert.equal(privateResponse.headers.get('cache-control'), 'no-store')
+
+  const protectedAssetResponse = await worker.fetch(new Request('https://worldofgeor.com/map-editor.js', { headers: { 'Sec-Fetch-Dest': 'script' } }), env, {})
+  assert.equal(protectedAssetResponse.status, 401)
+  const speciesResponse = await worker.fetch(new Request('https://worldofgeor.com/species', { headers: { Accept: 'text/html' } }), env, {})
+  assert.equal(speciesResponse.status, 302)
+  assert.equal(speciesResponse.headers.get('cache-control'), 'no-store')
 
   const publicResponse = await worker.fetch(new Request('https://worldofgeor.com/updates'), env, {})
   assert.equal(publicResponse.status, 200)

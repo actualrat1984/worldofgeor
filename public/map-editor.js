@@ -108,7 +108,7 @@ function renderFeatures() {
 }
 function renderLayers() {
   const list = $('#layerList')
-  list.innerHTML = state.layers.map(layer => `<div class="layer-row${layer.id === activeLayerId ? ' is-active' : ''}" draggable="true" data-layer-id="${escapeHtml(layer.id)}"><button type="button" class="layer-visibility" data-action="visibility" aria-label="${layer.visible ? 'Hide' : 'Show'} ${escapeHtml(layer.name)}">${layer.visible ? '◉' : '○'}</button><button type="button" class="layer-name" data-action="activate">${escapeHtml(layer.name)}<span class="layer-meta">${layer.features.length} feature${layer.features.length === 1 ? '' : 's'}</span></button><button type="button" class="layer-lock" data-action="lock" aria-label="${layer.locked ? 'Unlock' : 'Lock'} ${escapeHtml(layer.name)}">${layer.locked ? '◆' : '◇'}</button></div>`).join('')
+  list.innerHTML = state.layers.map(layer => `<div class="layer-row${layer.id === activeLayerId ? ' is-active' : ''}" draggable="true" data-layer-id="${escapeHtml(layer.id)}"><button type="button" class="layer-visibility" data-action="visibility" aria-label="${layer.visible ? 'Hide' : 'Show'} ${escapeHtml(layer.name)}">${layer.visible ? '◉' : '○'}</button><button type="button" class="layer-name" data-action="activate" aria-label="Activate ${escapeHtml(layer.name)} layer. Use Alt plus Arrow Up or Arrow Down to reorder.">${escapeHtml(layer.name)}<span class="layer-meta">${layer.features.length} feature${layer.features.length === 1 ? '' : 's'}</span></button><button type="button" class="layer-lock" data-action="lock" aria-label="${layer.locked ? 'Unlock' : 'Lock'} ${escapeHtml(layer.name)}">${layer.locked ? '◆' : '◇'}</button></div>`).join('')
   list.querySelectorAll('.layer-row').forEach(row => {
     row.addEventListener('click', event => {
       const layer = state.layers.find(item => item.id === row.dataset.layerId); if (!layer) return
@@ -125,6 +125,15 @@ function renderLayers() {
       if (from < 0 || to < 0 || from === to) return
       const [moved] = state.layers.splice(from, 1); state.layers.splice(to, 0, moved); commit('Layer order changed')
     })
+    row.querySelector('.layer-name').addEventListener('keydown', event => {
+      if (!event.altKey || !['ArrowUp', 'ArrowDown'].includes(event.key)) return
+      const from = state.layers.findIndex(item => item.id === row.dataset.layerId)
+      const to = event.key === 'ArrowUp' ? from - 1 : from + 1
+      if (from < 0 || to < 0 || to >= state.layers.length) return
+      event.preventDefault()
+      const [moved] = state.layers.splice(from, 1); state.layers.splice(to, 0, moved); commit('Layer order changed')
+      requestAnimationFrame(() => list.querySelector(`[data-layer-id="${CSS.escape(moved.id)}"] .layer-name`)?.focus())
+    })
   })
 }
 function renderInspector() {
@@ -135,6 +144,8 @@ function renderInspector() {
   $('#featureLayer').innerHTML = state.layers.map(item => `<option value="${escapeHtml(item.id)}"${item.id === layer.id ? ' selected' : ''}>${escapeHtml(item.name)}</option>`).join('')
   $('#featureName').value = feature.name; $('#featureWiki').value = feature.wikiUrl; $('#featureNote').value = feature.note; $('#featureColor').value = feature.color; $('#featureIcon').value = feature.icon || 'keep'
   $('#featureIconWrap').hidden = feature.type === 'polygon' || feature.type === 'label'
+  for (const id of ['featureLayer', 'featureName', 'featureWiki', 'featureNote', 'featureColor', 'featureIcon', 'deleteFeatureBtn']) $(`#${id}`).disabled = layer.locked
+  $('#featureForm').setAttribute('aria-disabled', String(layer.locked))
   const point = feature.point || feature.points[0]
   $('#featureCoordinates').textContent = feature.type === 'polygon' ? `${feature.points.length} vertices` : `X ${point.lng} • Y ${point.lat} • ${Math.round(point.lng * KM_PER_PIXEL).toLocaleString()} km E`
   const link = $('#openWikiBtn'); link.href = feature.wikiUrl || '/wiki/'; link.classList.toggle('is-disabled', !feature.wikiUrl)
@@ -150,18 +161,21 @@ function selectTool(tool) {
 }
 function createPointFeature(type, point) {
   const layer = activeLayer(); if (layer.locked) return toast('Unlock the active layer before drawing')
+  if (!layer.visible) return toast('Show the active layer before drawing')
   const icon = $('#iconPicker').value; const name = type === 'label' ? 'New label' : type === 'icon' ? `New ${icon}` : 'New marker'
   const feature = { id: idFor(type === 'icon' ? 'marker' : type), type: type === 'icon' ? 'marker' : type, name, note: '', wikiUrl: '', color: '#d9b77a', icon, point }
   layer.features.push(feature); selectedFeatureId = feature.id; selectTool('select'); commit(`${name} placed`); setTimeout(() => $('#featureName').focus(), 0)
 }
 function addPolygonPoint(point) {
   const layer = activeLayer(); if (layer.locked) return toast('Unlock the active layer before drawing')
+  if (!layer.visible) return toast('Show the active layer before drawing')
   drawingPoints.push(point); if (drawingPreview) map.removeLayer(drawingPreview)
   drawingPreview = L.polyline(drawingPoints.map(item => [item.lat, item.lng]), { color: '#d9b77a', dashArray: '5 6', weight: 2 }).addTo(map)
   $('#toolHint').textContent = `${drawingPoints.length} ${drawingPoints.length === 1 ? 'vertex' : 'vertices'} placed. Double-click to finish.`
 }
 function finishPolygon() {
   if (selectedTool !== 'polygon' || drawingPoints.length < 3) return
+  if (activeLayer().locked || !activeLayer().visible) return cancelPolygon(true)
   const points = drawingPoints.filter((point, index, all) => index === 0 || point.lat !== all[index - 1].lat || point.lng !== all[index - 1].lng)
   if (points.length < 3) return toast('A region needs three distinct vertices')
   const feature = { id: idFor('polygon'), type: 'polygon', name: 'New region', note: '', wikiUrl: '', color: '#d9b77a', points }
@@ -184,25 +198,27 @@ $('#addLayerBtn').addEventListener('click', () => {
   while (state.layers.some(layer => layer.id === id)) id = `${id}-${state.layers.length + 1}`
   state.layers.push({ id, name: name.slice(0, 64), visible: true, locked: false, features: [] }); activeLayerId = id; commit(`${name} layer added`)
 })
-$('#deleteFeatureBtn').addEventListener('click', () => { const found = locateFeature(selectedFeatureId); if (!found || !confirm(`Delete “${found.feature.name || 'this feature'}”?`)) return; found.layer.features.splice(found.index, 1); selectedFeatureId = null; commit('Feature deleted') })
+$('#deleteFeatureBtn').addEventListener('click', () => { const found = locateFeature(selectedFeatureId); if (!found || found.layer.locked || !confirm(`Delete “${found.feature.name || 'this feature'}”?`)) return; found.layer.features.splice(found.index, 1); selectedFeatureId = null; commit('Feature deleted') })
 for (const id of ['featureName', 'featureWiki', 'featureNote', 'featureColor', 'featureIcon']) {
   $(`#${id}`).addEventListener('change', event => {
-    const found = locateFeature(selectedFeatureId); if (!found) return
+    const found = locateFeature(selectedFeatureId); if (!found || found.layer.locked) return
     const key = { featureName: 'name', featureWiki: 'wikiUrl', featureNote: 'note', featureColor: 'color', featureIcon: 'icon' }[id]
     const value = event.target.value.trim?.() ?? event.target.value
     if (key === 'wikiUrl' && value && (!value.startsWith('/wiki/') || value.includes('..'))) { toast('Wiki links must begin with /wiki/'); event.target.value = found.feature.wikiUrl; return }
     found.feature[key] = value; commit('Feature details updated')
   })
 }
-$('#featureLayer').addEventListener('change', event => { const found = locateFeature(selectedFeatureId); const target = state.layers.find(layer => layer.id === event.target.value); if (!found || !target || target === found.layer) return; found.layer.features.splice(found.index, 1); target.features.push(found.feature); activeLayerId = target.id; commit(`Moved to ${target.name}`) })
+$('#featureLayer').addEventListener('change', event => { const found = locateFeature(selectedFeatureId); const target = state.layers.find(layer => layer.id === event.target.value); if (!found || found.layer.locked || !target || target.locked || target === found.layer) { if (found) event.target.value = found.layer.id; return }; found.layer.features.splice(found.index, 1); target.features.push(found.feature); activeLayerId = target.id; commit(`Moved to ${target.name}`) })
 $('#featureWiki').addEventListener('input', async event => {
   if (!wikiIndex) { try { const response = await fetch('/wiki-index.json', { credentials: 'same-origin' }); wikiIndex = response.ok ? await response.json() : [] } catch { wikiIndex = [] } }
   const query = event.target.value.toLowerCase().replace('/wiki/', '').trim(); const matches = query.length > 1 ? wikiIndex.filter(item => item.title.toLowerCase().includes(query) || item.url.toLowerCase().includes(query)).slice(0, 12) : []
   $('#wikiSuggestions').innerHTML = matches.map(item => `<option value="${escapeHtml(item.url)}">${escapeHtml(item.title)}</option>`).join('')
 })
 document.addEventListener('keydown', event => {
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); restoreHistory(event.shiftKey ? historyIndex + 1 : historyIndex - 1) }
-  else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); restoreHistory(historyIndex + 1) }
+  const editing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable
+  if (!editing && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); restoreHistory(event.shiftKey ? historyIndex + 1 : historyIndex - 1) }
+  else if (!editing && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); restoreHistory(historyIndex + 1) }
+  else if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); if (!$('#saveBtn').disabled) saveDocument() }
   else if (event.key === 'Escape' && selectedTool !== 'select') { selectTool('select'); toast('Drawing cancelled') }
   else if ((event.key === 'Delete' || event.key === 'Backspace') && selectedFeatureId && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) $('#deleteFeatureBtn').click()
 })
@@ -219,11 +235,11 @@ async function loadDocument(slug) {
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { $('#loadingVeil').classList.add('is-hidden'); $('.studio-shell').setAttribute('aria-busy', 'false'); setTimeout(() => map.invalidateSize(), 50) }
 }
 async function saveDocument() {
-  const button = $('#saveBtn'); button.disabled = true; setSaveState('Sealing changes…')
+  const button = $('#saveBtn'); button.disabled = true; button.setAttribute('aria-busy', 'true'); setSaveState('Sealing changes…')
   try {
     const response = await fetch(`/api/maps/${state.slug}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ map: state }) }); const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Save failed')
     dirty = false; setSaveState(`Saved ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas folio saved to the private archive')
-  } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { button.disabled = false }
+  } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { button.disabled = false; button.removeAttribute('aria-busy') }
 }
 async function loadExportImage(config) {
   for (const url of [config.image, config.fallback]) { try { const image = new Image(); image.decoding = 'async'; image.src = url; await image.decode(); return image } catch {} }

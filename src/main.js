@@ -16,10 +16,19 @@ if (btn && menu) {
   }
   const closeMenu = () => setMenu(false)
   setMenu(false)
-  btn.addEventListener('click', (e) => { e.stopPropagation(); setMenu(menu.classList.contains('hidden')) })
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation()
+    const opening = menu.classList.contains('hidden')
+    setMenu(opening)
+    if (opening && e.detail === 0) requestAnimationFrame(() => menu.querySelector('a, button')?.focus())
+  })
   menu.querySelectorAll('a, button').forEach(el => el.addEventListener('click', closeMenu))
   document.addEventListener('click', (e) => { if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn) closeMenu() })
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu() })
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || menu.classList.contains('hidden')) return
+    closeMenu()
+    btn.focus()
+  })
 }
 
 // nav hide-on-scroll + active highlight
@@ -34,7 +43,7 @@ if (header) {
     ticking = true
     requestAnimationFrame(() => {
       const cur = window.scrollY
-      const goingDown = cur > lastY && cur > 80 && !(menu && !menu.classList.contains('hidden'))
+      const goingDown = !reduceMotion && cur > lastY && cur > 80 && !header.contains(document.activeElement) && !(menu && !menu.classList.contains('hidden'))
       header.style.transform = goingDown ? 'translateY(-100%)' : 'translateY(0)'
       lastY = cur
       ticking = false

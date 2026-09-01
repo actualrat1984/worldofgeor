@@ -21,11 +21,16 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/world-map-thumb.webp',
   '/grimmel-peninsula.jpg',
   '/grimmel-peninsula.webp',
+  '/map-editor.css',
+  '/map-editor.js',
+  '/species.css',
+  '/species.js',
 ]);
 const ROUTE_ALIASES = new Map([
   ['/updates', '/updates.html'],
   ['/atlas', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
+  ['/species', '/species.html'],
   ['/search', '/search.html'],
   ['/dashboard', '/dashboard.html'],
   ['/admin', '/admin.html'],
@@ -182,6 +187,7 @@ function isPrivatePath(pathname) {
     decoded === '/app' || decoded.startsWith('/app/') ||
     decoded === '/atlas' || decoded === '/atlas.html' ||
     decoded === '/map-editor' || decoded === '/map-editor.html' ||
+    decoded === '/species' || decoded === '/species.html' ||
     decoded === '/search' || decoded === '/search.html' ||
     decoded === '/dashboard' || decoded === '/dashboard.html' ||
     decoded === '/admin' || decoded === '/admin.html' ||
@@ -454,6 +460,42 @@ export default {
           return json({ updates: [], refreshedAt: new Date().toISOString(), unavailable: true }, 200, {
             'Cache-Control': 'public, max-age=15',
           });
+        }
+      }
+
+      // GET /api/world-stats — authenticated rollup of the built vault index + D1 activity.
+      if (url.pathname === '/api/world-stats' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const indexResponse = await env.ASSETS.fetch(new Request(new URL('/wiki-index.json', url), { headers: { Accept: 'application/json' } }));
+          if (!indexResponse.ok) throw new Error('Archive index unavailable');
+          const index = await indexResponse.json();
+          if (!Array.isArray(index) || !index.every(item => typeof item?.url === 'string')) throw new Error('Archive index invalid');
+          const countPrefix = prefix => index.reduce((total, item) => total + Number(item.url.startsWith(prefix)), 0);
+          const [activity, mapFolios] = await env.DB.batch([
+            env.DB.prepare('SELECT COUNT(*) AS count FROM activity'),
+            env.DB.prepare('SELECT COUNT(*) AS count FROM map_documents'),
+          ]);
+          return json({
+            canonical: { nations: 243, species: 34, ages: 13, continents: 17 },
+            archive: {
+              pages: index.length,
+              nations: countPrefix('/wiki/World/Nations/'),
+              species: countPrefix('/wiki/World/Species/'),
+              history: countPrefix('/wiki/World/History/'),
+              locations: countPrefix('/wiki/World/Locations/'),
+              systems: countPrefix('/wiki/World/Systems/'),
+            },
+            live: {
+              activity: activity.results?.[0]?.count || 0,
+              mapFolios: mapFolios.results?.[0]?.count || 0,
+            },
+            refreshedAt: new Date().toISOString(),
+          });
+        } catch {
+          return json({ error: 'World ledger is temporarily unavailable' }, 503);
         }
       }
 

@@ -10,32 +10,32 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="/Geor_from_orbit-1280.webp" imagesrcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high">
-  <style>html{scroll-padding-top:72px}</style>
+  <style>html{scroll-padding-top:72px}section[id],a[id]{scroll-margin-top:80px}</style>
 </head>
 <body class="bg-ink text-cream">
   <!-- Nav -->
   <header class="fixed top-0 inset-x-0 z-50 bg-ink/80 backdrop-blur-md border-b border-gold/10">
     <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3">
+      <a href="#top" class="flex items-center gap-3" aria-label="World of Ge'or home">
         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
         <span class="font-display tracking-[0.18em] text-[13px] font-semibold text-cream">WORLD OF GE'OR</span>
         <span class="hidden sm:inline text-gold/60 text-xs tracking-widest ml-2">EST. 597 AGD</span>
       </a>
-      <nav class="hidden md:flex items-center gap-7 text-[13px] tracking-widest font-medium">
+      <nav class="hidden xl:flex items-center gap-5 text-[11px] tracking-widest font-medium" aria-label="Primary navigation">
         <a href="#world" class="text-cream/70 hover:text-cream transition">WORLD</a>
         <a href="#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
-        <a href="/wiki/" class="text-gold hover:text-cream transition">WIKI</a>
-            <a href="/updates" class="text-gold hover:text-cream transition">UPDATES</a>
-            <a href="/search" class="text-gold hover:text-cream transition">SEARCH</a>
-        <a href="#archive" class="text-cream/70 hover:text-cream transition">ARCHIVE</a>
         <a href="#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
         <a href="#gallery" class="text-cream/70 hover:text-cream transition">GALLERY</a>
+        <a href="/species" class="text-gold hover:text-cream transition">SPECIES</a>
+        <a href="#wiki" class="text-gold hover:text-cream transition">WIKI</a>
+        <a href="#updates" class="text-gold hover:text-cream transition">UPDATES</a>
+        <a href="#editor" class="text-gold hover:text-cream transition">STUDIO</a>
       </nav>
-      <div class="hidden md:flex items-center gap-3" id="navRight">
-        <button id="deskRequestBtn" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
+      <div class="hidden xl:flex items-center gap-3" id="navRight">
+        <button id="deskRequestBtn" type="button" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
         <a id="deskEnterLink" href="#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
         <div id="deskUserWrap" class="hidden relative">
-          <button id="deskUserBtn" type="button" aria-haspopup="menu" aria-expanded="false" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span aria-hidden="true" class="text-[10px]">▼</span></button>
+          <button id="deskUserBtn" type="button" aria-haspopup="menu" aria-controls="deskUserMenu" aria-expanded="false" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span aria-hidden="true" class="text-[10px]">▼</span></button>
           <div id="deskUserMenu" role="menu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
             <a href="/dashboard.html" class="block px-4 py-2 text-sm hover:bg-gold/10">Enter Dashboard</a>
             <a href="/admin.html" id="deskAdminLink" class="hidden block px-4 py-2 text-sm hover:bg-gold/10 text-gold">Admin</a>
@@ -45,20 +45,20 @@
           </div>
         </div>
       </div>
-      <button id="menuBtn" class="md:hidden p-2 text-cream/80" type="button" aria-label="Open navigation" aria-controls="mobileMenu" aria-expanded="false">
+      <button id="menuBtn" class="xl:hidden p-2 text-cream/80" type="button" aria-label="Open navigation" aria-controls="mobileMenu" aria-expanded="false">
         <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
-    <div id="mobileMenu" class="hidden md:hidden border-t border-gold/10 bg-ink px-6 py-4 space-y-3">
+    <div id="mobileMenu" class="hidden xl:hidden border-t border-gold/10 bg-ink px-6 py-4 space-y-3">
       <a href="#world" class="block text-sm tracking-widest text-cream/80">WORLD</a>
       <a href="#atlas" class="block text-sm tracking-widest text-cream/80">ATLAS</a>
-      <a href="/wiki/" class="block text-sm tracking-widest text-gold">WIKI</a>
-        <a href="/updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
-        <a href="/search" class="block text-sm tracking-widest text-gold">SEARCH</a>
-      <a href="#archive" class="block text-sm tracking-widest text-cream/80">ARCHIVE</a>
       <a href="#history" class="block text-sm tracking-widest text-cream/80">HISTORY</a>
       <a href="#gallery" class="block text-sm tracking-widest text-cream/80">GALLERY</a>
-      <button id="mobRequestBtn" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
+      <a href="/species" class="block text-sm tracking-widest text-gold">SPECIES</a>
+      <a href="#wiki" class="block text-sm tracking-widest text-gold">WIKI</a>
+      <a href="#updates" class="block text-sm tracking-widest text-gold">UPDATES</a>
+      <a href="#editor" class="block text-sm tracking-widest text-gold">ATLAS STUDIO</a>
+      <button id="mobRequestBtn" type="button" class="inline-block mt-2 text-xs tracking-widest bg-gold text-ink px-5 py-2.5 rounded-full font-semibold">REQUEST ACCESS</button>
       <div id="mobUserWrap" class="hidden mt-3 border-t border-gold/10 pt-3 space-y-2">
         <div class="text-xs text-gold tracking-widest" id="mobUserName">USER</div>
         <a href="/dashboard.html" class="block text-sm text-cream">Enter Dashboard</a>
@@ -230,6 +230,10 @@
         </div>
       </div>
     </div>
+    <div class="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-gold/15 bg-gradient-to-r from-gold/[0.08] to-transparent p-5">
+      <div><p class="text-[10px] tracking-[0.24em] text-gold">THE KEEPER'S BESTIARY</p><p class="mt-1 text-sm text-cream/65">Browse 34 sentient peoples by lineage, origin, and form.</p></div>
+      <a href="/species" class="shrink-0 rounded-full bg-gold px-5 py-2.5 text-xs font-semibold text-ink hover:brightness-110 transition">OPEN SPECIES GALLERY →</a>
+    </div>
   </section>
 
   <!-- Archive overview -->
@@ -240,29 +244,34 @@
         <h2 id="archiveTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mt-2">THE WORLD HAS A BACK ROOM.</h2>
         <p class="mt-3 text-sm leading-6 text-cream/65">The public page is the map room. Members get the shelves behind it: the complete wiki, the Battlestation workspace, and one quiet dashboard to keep the archive in order.</p>
       </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-3 mt-7">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mt-7">
         <a id="wiki" href="/wiki/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Enter the private Ge'or wiki">
           <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">01 / WIKI</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">THE FULL ARCHIVE</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">1,436 pages of nations, species, history, systems and the things between them.</p>
         </a>
-        <a id="editor" href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
+        <a id="app" href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
           <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">02 / APP</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">BATTLESTATION WEB</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Search, preview, write and commit additions to the living vault from the browser.</p>
         </a>
+        <a id="editor" href="/map-editor" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Atlas Studio map editor">
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / STUDIO</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <h3 class="font-display text-sm tracking-widest font-semibold mt-3">ATLAS STUDIO</h3>
+          <p class="text-sm leading-6 text-cream/55 mt-2">Draw shared markers, regions and labels on the world and Grimmel folios.</p>
+        </a>
         <a href="/search" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Search the private archive">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / SEARCH</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">04 / SEARCH</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">KEEPER'S INDEX</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Search all 1,436 titles by nation, species, history, system or archive path.</p>
         </a>
         <a id="updates" href="/updates" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Read public archive updates">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">04 / UPDATES</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">05 / UPDATES</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">WHAT CHANGED</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">A privacy-safe public ledger of new pages, revisions and archive milestones.</p>
         </a>
         <a href="/dashboard.html" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private member dashboard">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">05 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">06 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">YOUR WAY IN</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">A single home for your account, the wiki, the atlas, the workspace and the next thing to read.</p>
         </a>
@@ -372,7 +381,7 @@
       let postAuthDestination = null;
       let authReturnFocus = null;
       let requestReturnFocus = null;
-      const allowedNextRoots = ['/wiki', '/app', '/atlas', '/atlas.html', '/dashboard', '/dashboard.html', '/admin', '/admin.html'];
+      const allowedNextRoots = ['/wiki', '/app', '/atlas', '/atlas.html', '/map-editor', '/map-editor.html', '/search', '/search.html', '/species', '/species.html', '/dashboard', '/dashboard.html', '/admin', '/admin.html'];
       function safeNext(){
         const requested = new URLSearchParams(location.search).get('next');
         if(!requested || !requested.startsWith('/') || requested.startsWith('//')) return null;

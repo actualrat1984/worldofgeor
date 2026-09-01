@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3LuqMZfMZc3G6v9K4GQZLlQp1Ns0M=" crossorigin="anonymous" />
   <link rel="stylesheet" href="/map-editor.css" />
 </head>
 <body>
@@ -51,7 +51,7 @@
     <aside class="inspector-panel" aria-label="Layers and selected feature">
       <section class="panel-section">
         <div class="section-heading"><div><p class="eyebrow">COMPOSITION</p><h2>LAYERS</h2></div><button id="addLayerBtn" type="button" class="icon-button" aria-label="Add layer" title="Add layer">+</button></div>
-        <p class="panel-note">Drag rows to reorder. The selected layer receives new marks.</p><div id="layerList" class="layer-list"></div>
+        <p class="panel-note">Drag rows to reorder, or focus a layer name and use Alt + ↑/↓. The selected layer receives new marks.</p><div id="layerList" class="layer-list"></div>
       </section>
       <section class="panel-section feature-section">
         <div class="section-heading"><div><p class="eyebrow">DETAILS</p><h2>INSPECTOR</h2></div></div>
@@ -69,6 +69,6 @@
     </aside>
   </main>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script type="module" src="/map-editor.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script><script type="module" src="/map-editor.js"></script>
 </body>
 </html>

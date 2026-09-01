@@ -20,6 +20,7 @@ const aliases = new Map([
   ['/updates', '/updates.html'],
   ['/atlas', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
+  ['/species', '/species.html'],
   ['/search', '/search.html'],
   ['/dashboard', '/dashboard.html'],
   ['/admin', '/admin.html'],
@@ -61,6 +62,14 @@ function verifyUrl(file, raw, kind) {
 for (const file of sourceFiles) {
   const html = fs.readFileSync(file, 'utf8')
   const markup = html.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<style\b[\s\S]*?<\/style>/gi, '')
+  const ids = [...markup.matchAll(/\bid=["']([^"']+)["']/gi)].map(match => match[1])
+  const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index)
+  for (const id of new Set(duplicateIds)) failures.push(`${path.relative(root, file)}: duplicate id ${id}`)
+  if (file === path.join(root, 'index.html')) {
+    for (const id of ['world', 'atlas', 'history', 'gallery', 'wiki', 'updates', 'editor']) {
+      if (!ids.includes(id)) failures.push(`index.html: missing feature anchor #${id}`)
+    }
+  }
   for (const match of markup.matchAll(/\b(href|src)\s*=\s*["']([^"']+)["']/gi)) {
     verifyUrl(file, match[2], match[1].toLowerCase() === 'src' ? 'img' : 'link')
   }

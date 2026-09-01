@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Species Gallery — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/species.css" />
+</head>
+<body>
+  <a class="skip-link" href="#speciesGrid">Skip to species</a>
+  <header class="gallery-header">
+    <a class="brand" href="/"><span aria-hidden="true">G</span><b>WORLD OF GE'OR</b></a>
+    <nav aria-label="Archive navigation">
+      <a href="/dashboard">Dashboard</a><a href="/atlas">Atlas</a><a href="/map-editor">Studio</a><a href="/wiki/">Wiki</a>
+    </nav>
+  </header>
+  <main>
+    <section class="gallery-hero" aria-labelledby="galleryTitle">
+      <div>
+        <p class="eyebrow">THE KEEPER'S BESTIARY · 34 SENTIENT PEOPLES</p>
+        <h1 id="galleryTitle">SPECIES OF <em>GE'OR</em></h1>
+        <p class="lede">Civilizations born of soil, sea, flame, craft, and stranger origins. Each folio opens directly into the private archive.</p>
+      </div>
+      <div class="index-seal" aria-hidden="true"><strong>34</strong><span>ARCHIVE<br>FOLIOS</span></div>
+    </section>
+    <section class="gallery-controls" aria-label="Filter species">
+      <label class="search-field" for="speciesSearch"><span>SEARCH THE INDEX</span><input id="speciesSearch" type="search" autocomplete="off" placeholder="Name, origin, or trait…" aria-describedby="searchHint"><kbd>/</kbd></label>
+      <p id="searchHint" class="sr-only">Press slash anywhere on the page to focus search. Press Escape to clear.</p>
+      <div id="filterBar" class="filter-bar" role="group" aria-label="Species family"></div>
+      <div class="sort-wrap"><label for="speciesSort">ORDER</label><select id="speciesSort"><option value="archive">Archive order</option><option value="az">A–Z</option><option value="family">By family</option></select></div>
+    </section>
+    <div class="results-line"><p id="resultsCount" role="status" aria-live="polite">34 folios in view</p><span>SELECT A FOLIO TO ENTER THE WIKI</span></div>
+    <section id="speciesGrid" class="species-grid" aria-label="Species folios" aria-busy="true"></section>
+    <div id="emptyState" class="empty-state" hidden><span aria-hidden="true">◇</span><h2>No folio answers that description.</h2><button id="clearFilters" type="button">Clear filters</button></div>
+  </main>
+  <footer><p>PRIVATE ARCHIVE · MIKHAIL & ICHI</p><a href="/wiki/World/Species/Species/">Open the species hub →</a></footer>
+  <script type="module" src="/species.js"></script>
+</body>
+</html>

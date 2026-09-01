@@ -48,6 +48,9 @@
 /map-editor*
   Cache-Control: private, no-store
 
+/species*
+  Cache-Control: private, no-store
+
 /search*
   Cache-Control: private, no-store
 
