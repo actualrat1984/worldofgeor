@@ -78,17 +78,26 @@ if (!L) {
   $('.studio-shell').setAttribute('aria-busy', 'false')
   throw new Error('Leaflet unavailable')
 }
-const map = L.map('editorMap', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 4, zoomSnap: .25, zoomDelta: .5, attributionControl: false, doubleClickZoom: false, maxBoundsViscosity: .8 })
+const map = L.map('editorMap', { crs: L.CRS.Simple, minZoom: -2, maxZoom: 3, zoomSnap: .25, zoomDelta: .5, attributionControl: false, doubleClickZoom: false, maxBoundsViscosity: 1, zoomAnimation: true, fadeAnimation: false, markerZoomAnimation: true })
 L.control.zoom({ position: 'bottomleft' }).addTo(map)
 function bounds() { const cfg = currentConfig(); return [[0, 0], [cfg.height, cfg.width]] }
 function loadBaseMap(fit = true) {
   const cfg = currentConfig()
   if (overlay) map.removeLayer(overlay)
   map.setMaxBounds(bounds())
-  overlay = L.imageOverlay(cfg.image, bounds(), { alt: `${cfg.title} base map`, interactive: false })
+  overlay = L.imageOverlay(cfg.image, bounds(), { alt: `${cfg.title} base map`, interactive: false, crossOrigin: true })
   let retried = false
+  overlay.on('load', () => {
+    requestAnimationFrame(() => map.invalidateSize({ animate: false }))
+  })
   overlay.on('error', () => { if (!retried) { retried = true; overlay.setUrl(cfg.fallback) } else setSaveState('Base map image unavailable', 'error') }).addTo(map)
-  if (fit) map.fitBounds(bounds(), { padding: [12, 12], animate: false })
+  if (fit) {
+    requestAnimationFrame(() => {
+      map.invalidateSize({ animate: false })
+      map.fitBounds(bounds(), { padding: [12, 12], animate: false })
+      requestAnimationFrame(() => map.invalidateSize({ animate: false }))
+    })
+  }
   $$('.map-choice').forEach(button => { const on = button.dataset.map === state.slug; button.classList.toggle('is-active', on); button.setAttribute('aria-pressed', String(on)) })
 }
 function clearRendered() { rendered.forEach(layer => map.removeLayer(layer)); rendered.clear() }
@@ -169,14 +178,20 @@ function selectTool(tool) {
   selectedTool = tool; cancelPolygon(false)
   $$('.tool-button').forEach(button => { const on = button.dataset.tool === tool; button.classList.toggle('is-active', on); button.setAttribute('aria-pressed', String(on)) })
   $('#editorMap').classList.toggle('drawing-crosshair', tool !== 'select')
-  $('#toolHint').textContent = { select: 'Select a feature, drag an unlocked marker, or pan the atlas.', marker: 'Click the map to place a marker.', polygon: 'Click vertices; double-click to close the region. Escape cancels.', label: 'Click the map to place a text label.', icon: 'Choose a symbol, then click the map.' }[tool]
+  $('#toolHint').textContent = {
+    select: 'Select a feature, drag an unlocked marker, or pan the atlas. Esc cancels drawing.',
+    marker: 'Click the map to place a marker — placed markers stay selected, click again for another. Esc to finish.',
+    polygon: 'Click vertices; double-click to close the region. Escape cancels.',
+    label: 'Click the map to place a text label — click again for another. Esc to finish.',
+    icon: 'Choose a symbol, then click the map — click again for another. Esc to finish.'
+  }[tool]
 }
 function createPointFeature(type, point) {
   const layer = activeLayer(); if (layer.locked) return toast('Unlock the active layer before drawing')
   if (!layer.visible) return toast('Show the active layer before drawing')
   const icon = $('#iconPicker').value; const name = type === 'label' ? 'New label' : type === 'icon' ? `New ${icon}` : 'New marker'
   const feature = { id: idFor(type === 'icon' ? 'marker' : type), type: type === 'icon' ? 'marker' : type, name, note: '', wikiUrl: '', color: '#d9b77a', icon, point }
-  layer.features.push(feature); selectedFeatureId = feature.id; selectTool('select'); commit(`${name} placed`); setTimeout(() => $('#featureName').focus(), 0)
+  layer.features.push(feature); selectedFeatureId = feature.id; commit(`${name} placed — click again or press Esc`); setTimeout(() => $('#featureName').focus(), 0)
 }
 function addPolygonPoint(point) {
   const layer = activeLayer(); if (layer.locked) return toast('Unlock the active layer before drawing')
@@ -236,6 +251,20 @@ document.addEventListener('keydown', event => {
   else if ((event.key === 'Delete' || event.key === 'Backspace') && selectedFeatureId && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) $('#deleteFeatureBtn').click()
 })
 window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = '' } }); window.addEventListener('resize', () => map.invalidateSize(), { passive: true })
+if ('ResizeObserver' in window) {
+  try {
+    const ro = new ResizeObserver(() => map.invalidateSize({ animate: false }))
+    const workspace = document.querySelector('.map-workspace')
+    const mapEl = document.getElementById('editorMap')
+    if (workspace) ro.observe(workspace)
+    if (mapEl) ro.observe(mapEl)
+  } catch {}
+}
+if (document.fonts?.ready) {
+  document.fonts.ready.then(() => map.invalidateSize({ animate: false })).catch(() => {})
+}
+window.addEventListener('load', () => map.invalidateSize({ animate: false }), { once: true })
+document.addEventListener('visibilitychange', () => { if (!document.hidden) map.invalidateSize({ animate: false }) })
 
 async function switchMap(slug) { if (!MAPS[slug] || slug === state.slug) return; if (dirty && !confirm('Leave this folio with unsaved changes?')) return; await loadDocument(slug) }
 async function loadDocument(slug) {
