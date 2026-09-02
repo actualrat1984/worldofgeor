@@ -6,10 +6,11 @@ Private, invite-only worldbuilding archive for Mikhail & Ichi. The public landin
 
 - Vite 6 + Tailwind 3 + vanilla JavaScript, built into `dist/`
 - Cloudflare Workers + Assets, configured by `wrangler.jsonc`
-- D1-backed invitations, accounts, activity, shared maps, and privacy-preserving abuse throttles
+- D1-backed invitations, accounts, activity, shared maps, cross-device reading collections, editorial workflow, and privacy-preserving abuse throttles
 - PBKDF2 password hashes with transparent upgrades from the legacy format
 - HttpOnly, Secure, SameSite=Strict JWT session cookie
 - Private additions published to `actualrat1984/Website-additions` through the GitHub API
+- A unified private archive shell with an omnibox, contextual wiki reading tools, Atlas split view, PWA shell, and mobile dock
 - No public indexing: pages and responses carry `noindex`, and private files are gated in the Worker
 
 ## Local development

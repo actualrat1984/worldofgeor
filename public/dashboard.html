@@ -72,12 +72,22 @@
       </section>
       <section class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden" aria-labelledby="yourArchiveTitle">
         <div class="px-5 md:px-6 py-4 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
-          <div><p class="text-[10px] tracking-[.24em] text-gold">DEVICE-LOCAL · PRIVATE TO YOU</p><h2 id="yourArchiveTitle" class="font-display text-lg mt-1">Your archive trail</h2></div>
+          <div><p class="text-[10px] tracking-[.24em] text-gold">SYNCED · PRIVATE TO YOU</p><h2 id="yourArchiveTitle" class="font-display text-lg mt-1">Your archive trail</h2></div>
           <a href="/search" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Find another folio</a>
         </div>
         <div class="grid lg:grid-cols-2">
           <div class="p-5 md:p-6 lg:border-r border-gold/10"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">CONTINUE READING</h3><button id="clearTrail" type="button" class="text-xs text-cream/35 hover:text-cream">Clear trail</button></div><div id="readingTrail" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Your recently opened folios will appear here.</p></div></div>
           <div class="p-5 md:p-6"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">SAVED FOLIOS</h3><span id="savedCount" class="text-[10px] text-cream/35">0 saved</span></div><div id="savedFolios" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Save a wiki folio from its reading toolbar to keep it here.</p></div></div>
+        </div>
+      </section>
+      <section class="grid lg:grid-cols-2 gap-4" aria-label="Personal archive overview">
+        <div class="rounded-2xl border border-gold/15 bg-gradient-to-br from-gold/[0.07] to-transparent overflow-hidden">
+          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-[10px] tracking-[.22em] text-gold">SINCE YOUR LAST VISIT</p><h2 class="font-display text-lg mt-1">New in the archive</h2></div><button id="markArchiveSeen" type="button" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Mark seen</button></div>
+          <div id="newSinceVisit" class="divide-y divide-gold/10"><p class="p-5 text-sm text-cream/40">Checking the newest folios…</p></div>
+        </div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
+          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-[10px] tracking-[.22em] text-gold">SHARED EDITORIAL DESK</p><h2 class="font-display text-lg mt-1">Drafts and reviews</h2></div><a href="/app/" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Create</a></div>
+          <div id="workflowQueue" class="divide-y divide-gold/10"><p class="p-5 text-sm text-cream/40">Opening the review queue…</p></div>
         </div>
       </section>
       <div class="grid md:grid-cols-3 gap-4">
@@ -156,13 +166,25 @@
     const who=document.getElementById('who');
     const numberFormat=new Intl.NumberFormat();
     const safeLocalItems=(key,limit=8)=>{ try{ const items=JSON.parse(localStorage.getItem(key)||'[]'); return Array.isArray(items)?items.filter(item=>item&&typeof item.title==='string'&&typeof item.url==='string'&&item.url.startsWith('/')).slice(0,limit):[] }catch{return[]} };
+    let syncedArchive=null;
     const renderArchiveTrail=()=>{
-      const trail=safeLocalItems('geor_archive_trail_v1',6); const saved=safeLocalItems('geor_archive_bookmarks_v1',8);
+      const localTrail=safeLocalItems('geor_archive_trail_v1',6); const localSaved=safeLocalItems('geor_archive_bookmarks_v1',8);
+      const merge=(local,remote,limit)=>{ const seen=new Set(); return [...local,...(remote||[]).map(item=>({title:item.title,url:item.path,progress:item.progress}))].filter(item=>item.url&&!seen.has(item.url)&&seen.add(item.url)).slice(0,limit) };
+      const trail=merge(localTrail,syncedArchive?.recent,6); const saved=merge(localSaved,syncedArchive?.saved,8);
       const makeRows=(target,items,empty)=>{ target.replaceChildren(); if(!items.length){ const p=document.createElement('p'); p.className='text-sm text-cream/40'; p.textContent=empty; target.append(p); return } items.forEach((item,index)=>{ const link=document.createElement('a'); link.href=item.url; link.className='group flex items-center justify-between gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-3 hover:border-gold/30'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block truncate text-sm font-medium text-cream/80'; title.textContent=item.title; const path=document.createElement('small'); path.className='block truncate mt-1 text-[10px] text-cream/35'; path.textContent=decodeURIComponent(item.url).replace(/^\/wiki\//,'').replace(/\/$/,'').replaceAll('/',' › ')||'Archive'; const arrow=document.createElement('span'); arrow.className='text-gold group-hover:translate-x-1 transition'; arrow.ariaHidden='true'; arrow.textContent=index===0&&target.id==='readingTrail'?'CONTINUE →':'→'; copy.append(title,path); link.append(copy,arrow); target.append(link) }) };
       makeRows(document.getElementById('readingTrail'),trail,'Your recently opened folios will appear here.'); makeRows(document.getElementById('savedFolios'),saved,'Save a wiki folio from its reading toolbar to keep it here.'); document.getElementById('savedCount').textContent=`${saved.length} saved`;
     };
     renderArchiveTrail(); window.addEventListener('geor:trail-updated',renderArchiveTrail); window.addEventListener('geor:bookmarks-updated',renderArchiveTrail);
+    window.addEventListener('geor:archive-synced',event=>{ syncedArchive=event.detail; renderArchiveTrail(); renderNewSinceVisit(); });
     document.getElementById('clearTrail').onclick=()=>{ localStorage.removeItem('geor_archive_trail_v1'); renderArchiveTrail(); };
+    const renderNewSinceVisit=()=>{
+      const target=document.getElementById('newSinceVisit'); const unseen=Array.isArray(syncedArchive?.unseen)?syncedArchive.unseen:[]; target.replaceChildren();
+      if(!unseen.length){ const empty=document.createElement('p'); empty.className='p-5 text-sm text-cream/45'; empty.textContent='You are caught up. The archive is quiet for now.'; target.append(empty); return; }
+      unseen.slice(0,8).forEach(item=>{ const row=item.path&&item.path.startsWith('/')?document.createElement('a'):document.createElement('div'); if(row.tagName==='A') row.href=item.path; row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block text-sm text-cream/80'; title.textContent=item.summary||'Archive updated'; const path=document.createElement('small'); path.className='block truncate text-[10px] text-cream/35 mt-1'; path.textContent=item.path||item.action||'Archive'; const time=document.createElement('time'); time.className='text-[10px] text-gold/70 whitespace-nowrap'; time.dateTime=item.created_at||''; time.textContent=item.created_at?new Date(item.created_at).toLocaleDateString():'New'; copy.append(title,path); row.append(copy,time); target.append(row); });
+    };
+    document.getElementById('markArchiveSeen').onclick=async()=>{ try{ await api('/api/archive-state',{method:'POST',body:JSON.stringify({action:'seen'})}); if(syncedArchive) syncedArchive.unseen=[]; renderNewSinceVisit(); }catch{} };
+    const loadPersonalArchive=async()=>{ try{ syncedArchive=await api('/api/archive-state'); renderArchiveTrail(); renderNewSinceVisit(); }catch{ renderNewSinceVisit(); } };
+    const loadWorkflow=async()=>{ const target=document.getElementById('workflowQueue'); try{ const data=await api('/api/workflow'); const items=(data.items||[]).filter(item=>item.status!=='published').slice(0,8); target.replaceChildren(); if(!items.length){ const empty=document.createElement('p'); empty.className='p-5 text-sm text-cream/45'; empty.textContent='No drafts are waiting. The editorial desk is clear.'; target.append(empty); return; } items.forEach(item=>{ const row=document.createElement('div'); row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const link=document.createElement('a'); link.href=item.kind==='map'?`/map-editor?map=${encodeURIComponent(item.path)}`:'/app/'; link.className='min-w-0 flex-1'; const title=document.createElement('b'); title.className='block truncate text-sm text-cream/80'; title.textContent=item.title; const meta=document.createElement('small'); meta.className='block truncate text-[10px] text-cream/35 mt-1'; meta.textContent=`${item.kind.toUpperCase()} · ${item.path}`; link.append(title,meta); const actions=document.createElement('span'); actions.className='flex items-center gap-2'; const badge=document.createElement('span'); badge.className='text-[9px] tracking-widest text-gold border border-gold/20 rounded-full px-2 py-1'; badge.textContent=item.status.toUpperCase(); actions.append(badge); if(item.status==='review'){ const approve=document.createElement('button'); approve.type='button'; approve.className='text-[9px] tracking-widest bg-gold text-ink rounded-full px-2 py-1 font-semibold'; approve.textContent='APPROVE'; approve.onclick=async()=>{ approve.disabled=true; try{ await api('/api/workflow',{method:'POST',body:JSON.stringify({id:item.id,status:'approved',summary:`${item.title} approved for publication`})}); loadWorkflow(); }catch{ approve.disabled=false; } }; actions.append(approve); } row.append(link,actions); target.append(row); }); }catch{ target.innerHTML='<p class="p-5 text-sm text-cream/45">The editorial desk is temporarily unavailable.</p>'; } };
     async function loadWorldStats(){
       const section=document.getElementById('worldStats');
       const refresh=document.getElementById('statsRefresh');
@@ -202,6 +224,8 @@
         document.getElementById('adminLink').classList.remove('hidden');
       }
       loadWorldStats();
+      loadPersonalArchive();
+      loadWorkflow();
     }).catch(()=>{ location.href='/?next='+encodeURIComponent('/dashboard.html'); });
     document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
     const passwordDialog=document.getElementById('passwordDialog');

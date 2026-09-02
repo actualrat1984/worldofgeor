@@ -213,6 +213,7 @@
     if(!list) return;
     const icons = { create:'✚', edit:'◐', move:'⇄', delete:'✕', folder:'▭', feature:'✦', map:'⌖', security:'◆', launch:'✧', default:'•' };
     const fallbackUpdates = [
+      { id:'release-unified-archive', action:'feature', path:'/dashboard', summary:'A unified archive shell, cross-device collections, contextual lore tools, deep links, and an editorial workflow connected every room', created_at:'2026-09-02T20:00:00Z' },
       { id:'release-reader-experience', action:'feature', path:'/dashboard', summary:'Personal reading trails, saved folios, richer search, fullscreen maps, and recoverable Atlas drafts joined the archive', created_at:'2026-09-02T12:00:00Z' },
       { id:'release-compass', action:'feature', path:'/search', summary:'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at:'2026-09-01T13:10:00Z' },
       { id:'release-auth-v2', action:'security', path:'/', summary:'Password hashing and abuse protection received a transparent security upgrade', created_at:'2026-09-01T13:09:59Z' },
@@ -313,6 +314,12 @@
       <p class="mt-3 text-sm text-cream/60 max-w-[560px]">Newest first. Each entry is a real update that went live on this site.</p>
 
       <div class="timeline mt-10 space-y-8">
+        <div class="relative pl-8 md:pl-12" id="release-unified-archive">
+          <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>
+          <div class="text-[11px] tracking-[0.22em] text-gold/70">SEPTEMBER 2, 2026</div>
+          <h3 class="font-display text-[16px] md:text-[18px] font-semibold tracking-wide mt-1">THE ARCHIVE BECOMES ONE PLACE</h3>
+          <p class="text-sm leading-6 text-cream/70 mt-2 max-w-[720px]">A permanent navigation shell now joins every private room. Saved folios and reading progress follow members across devices; wiki pages gained connected lore, hover previews and an Atlas split view; maps gained durable deep links; and additions now move through Draft, Review, Approved and Published with revision diffs.</p>
+        </div>
         <!-- 2026-08-24 -->
         <div class="relative pl-8 md:pl-12">
           <div class="absolute left-0 md:left-2 top-1.5 w-[19px] h-[19px] md:w-[21px] md:h-[21px] rounded-full border border-gold/60 bg-ink flex items-center justify-center"><div class="w-[7px] h-[7px] md:w-2 md:h-2 rounded-full bg-gold"></div></div>

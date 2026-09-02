@@ -14,7 +14,8 @@ Private, invite-only worldbuilding archive for Mikhail & Ichi. **Never add SEO, 
 - **Additions:** Authenticated users commit markdown via `worker.js` → `actualrat1984/Website-additions` (branch main) via GitHub API. Sanitize paths strictly — no `..`, no `//`, max 180 chars, segments max 80.
 - **Wiki:** MkDocs build from `C:/Users/pc/Documents/Lore/Lore/site/` into `dist/wiki/` via `npm run build:wiki` (generate_nav.py + mkdocs build + optimize_assets.py + generate-wiki-index.py). Never break wiki generation.
 - **Design:** Premium, not functional. `slate/amber` + `gold/cream/ink` palette, Cinzel + Cormorant + Inter. Polish matters — concierge feel, not stock.
-- **Archive shell:** Authenticated HTML responses receive `/archive-compass.css` + `/archive-compass.js` through `HTMLRewriter`, providing global Cmd/Ctrl+K navigation and a device-local recent trail.
+- **Archive shell:** Authenticated HTML responses receive `/archive-compass.css` + `/archive-compass.js` through `HTMLRewriter`, providing unified desktop/mobile navigation, the Cmd/Ctrl+K omnibox, cross-device member collections, wiki context/preview/split-view tools, and reading progress.
+- **Editorial workflow:** D1-backed `workflow_items` and `workflow_history` connect Battlestation and Atlas Studio through Draft → Review → Approved → Published. Published additions also expose GitHub-backed revision diffs.
 
 ## Rules
 

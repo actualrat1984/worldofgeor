@@ -1,0 +1,13 @@
+{
+  "name": "World of Ge’or Archive",
+  "short_name": "Ge’or",
+  "description": "The private living archive of World of Ge’or.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f0e0d",
+  "theme_color": "#0f0e0d",
+  "icons": [
+    { "src": "/Geor_from_orbit-640.webp", "sizes": "640x640", "type": "image/webp", "purpose": "any maskable" }
+  ]
+}

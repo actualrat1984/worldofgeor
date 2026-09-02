@@ -10,6 +10,7 @@ let activeFilter = 'all'
 let selected = -1
 let visibleResults = []
 let timer = null
+let syncedBookmarks = new Set()
 
 function categoryFor(url) {
   const parts = url.split('/').filter(Boolean)
@@ -54,7 +55,7 @@ function setSelected(next) {
 }
 function renderSearch(query) {
   const normalized = query.trim().toLowerCase(); selected = -1
-  const bookmarks = new Set((()=>{ try { const value=JSON.parse(localStorage.getItem('geor_archive_bookmarks_v1')||'[]'); return Array.isArray(value)?value.map(item=>item?.url).filter(Boolean):[] } catch { return [] } })())
+  const bookmarks = new Set([...syncedBookmarks, ...(()=>{ try { const value=JSON.parse(localStorage.getItem('geor_archive_bookmarks_v1')||'[]'); return Array.isArray(value)?value.map(item=>item?.url).filter(Boolean):[] } catch { return [] } })()])
   if (normalized.length < 2 && activeFilter !== 'saved') { visibleResults = []; results.innerHTML = ''; empty.classList.add('hidden'); status.textContent = `${index.length.toLocaleString()} entries ready`; renderRecent(); return }
   visibleResults = index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: normalized.length >= 2 ? scoreEntry(entry, normalized) : 0 })).filter(entry => entry.score >= 0 && (activeFilter === 'all' || activeFilter === 'saved' ? activeFilter !== 'saved' || bookmarks.has(entry.url) : entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
   status.textContent = `${visibleResults.length}${visibleResults.length === 60 ? '+' : ''} result${visibleResults.length === 1 ? '' : 's'}`
@@ -69,6 +70,7 @@ input.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { ev
 document.addEventListener('keydown', event => { if (event.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) { event.preventDefault(); input.focus() } })
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { activeFilter = button.dataset.filter; document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button))); renderSearch(input.value) }))
 window.addEventListener('geor:bookmarks-updated', () => { if (activeFilter === 'saved') renderSearch(input.value) })
+window.addEventListener('geor:archive-synced', event => { syncedBookmarks = new Set((event.detail?.saved || []).map(item => item.path)); if (activeFilter === 'saved') renderSearch(input.value) })
 document.getElementById('clearRecent').addEventListener('click', () => { localStorage.removeItem('geor_recent_searches'); renderRecent() })
 
 try {
@@ -77,5 +79,6 @@ try {
   if (response.status === 401) { location.href='/?next='+encodeURIComponent('/search'); throw new Error('Authentication required') }
   if (!response.ok) throw new Error('The index could not be opened')
   const data = await response.json(); index = Array.isArray(data) ? data.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : []
+  fetch('/api/archive-state',{credentials:'same-origin'}).then(response=>response.ok?response.json():null).then(data=>{ if(data){ syncedBookmarks=new Set((data.saved||[]).map(item=>item.path)); if(activeFilter==='saved') renderSearch(input.value) } }).catch(()=>{})
   input.value = new URLSearchParams(location.search).get('q') || ''; results.innerHTML = ''; renderRecent(); renderSearch(input.value); input.focus({preventScroll:true})
 } catch (error) { results.innerHTML = `<div class="rounded-xl border border-red-400/20 bg-red-400/5 p-5 text-sm text-red-200">${escapeHtml(error.message)}</div>`; status.textContent='Index unavailable' }

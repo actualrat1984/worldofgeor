@@ -19,6 +19,7 @@ const MAP_DIMENSIONS = Object.freeze({
   grimmel: { width: 3840, height: 5715 },
 });
 const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-unified-archive', action: 'feature', path: '/dashboard', summary: 'A unified archive shell, cross-device collections, contextual lore tools, deep links, and an editorial workflow connected every room', created_at: '2026-09-02T20:00:00Z' },
   { id: 'release-reader-experience', action: 'feature', path: '/dashboard', summary: 'Personal reading trails, saved folios, richer search, fullscreen maps, and recoverable Atlas drafts joined the archive', created_at: '2026-09-02T12:00:00Z' },
   { id: 'release-compass', action: 'feature', path: '/search', summary: 'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at: '2026-09-01T13:10:00Z' },
   { id: 'release-auth-v2', action: 'security', path: '/', summary: 'Password hashing and abuse protection received a transparent security upgrade', created_at: '2026-09-01T13:09:59Z' },
@@ -202,6 +203,30 @@ function isValidEmail(value) {
 }
 function isJsonObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function cleanArchivePath(value) {
+  if (typeof value !== 'string') return null;
+  const path = value.trim();
+  if (!path.startsWith('/') || path.startsWith('//') || path.includes('\\') || path.includes('\0') || path.length > 500) return null;
+  let decoded;
+  try { decoded = decodeURIComponent(path); } catch { return null; }
+  if (decoded.split('/').some(segment => segment === '..')) return null;
+  return path;
+}
+
+function cleanArchiveTitle(value) {
+  if (typeof value !== 'string') return null;
+  const title = value.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+  return title ? title.slice(0, 180) : null;
+}
+
+function cleanWorkflowKind(value) {
+  return value === 'map' || value === 'addition' ? value : null;
+}
+
+function cleanWorkflowStatus(value) {
+  return ['draft', 'review', 'approved', 'published'].includes(value) ? value : null;
 }
 function normalizeEmail(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
@@ -435,7 +460,7 @@ function withPrivateArchiveShell(response) {
   const contentType = response.headers.get('Content-Type') || '';
   if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
   return new HTMLRewriter()
-    .on('head', { element(element) { element.append('<link rel="stylesheet" href="/archive-compass.css">', { html: true }); } })
+    .on('head', { element(element) { element.append('<link rel="stylesheet" href="/archive-compass.css"><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0f0e0d">', { html: true }); } })
     .on('body', { element(element) { element.append('<script type="module" src="/archive-compass.js"></script>', { html: true }); } })
     .transform(response);
 }
@@ -456,9 +481,16 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, path TEXT, summary TEXT NOT NULL, actor_email TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS map_documents (slug TEXT PRIMARY KEY, title TEXT NOT NULL, document_json TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS member_library (user_email TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, kind TEXT NOT NULL DEFAULT 'folio', progress INTEGER NOT NULL DEFAULT 0, saved INTEGER NOT NULL DEFAULT 0, last_visited_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (user_email, path))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_items (id TEXT PRIMARY KEY, kind TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', content_json TEXT NOT NULL, created_by TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), UNIQUE(kind, path))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_history (id INTEGER PRIMARY KEY AUTOINCREMENT, workflow_id TEXT NOT NULL, status TEXT NOT NULL, summary TEXT NOT NULL, actor_email TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_rate_limits_reset ON rate_limits(reset_at)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_member_library_recent ON member_library(user_email, last_visited_at DESC)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_member_library_saved ON member_library(user_email, saved, updated_at DESC) WHERE saved = 1`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_workflow_status_updated ON workflow_items(status, updated_at DESC)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_workflow_history_item ON workflow_history(workflow_id, created_at DESC)`),
         ]);
       }
 
@@ -597,9 +629,11 @@ export default {
           const index = await indexResponse.json();
           if (!Array.isArray(index) || !index.every(item => typeof item?.url === 'string')) throw new Error('Archive index invalid');
           const countPrefix = prefix => index.reduce((total, item) => total + Number(item.url.startsWith(prefix)), 0);
-          const [activity, mapFolios] = await env.DB.batch([
+          const [activity, mapFolios, workflow, savedFolios] = await env.DB.batch([
             env.DB.prepare('SELECT COUNT(*) AS count FROM activity'),
             env.DB.prepare('SELECT COUNT(*) AS count FROM map_documents'),
+            env.DB.prepare("SELECT COUNT(*) AS count FROM workflow_items WHERE status != 'published'"),
+            env.DB.prepare("SELECT COUNT(*) AS count FROM member_library WHERE saved = 1 AND kind != 'system'"),
           ]);
           return json({
             canonical: { nations: 243, species: 34, ages: 13, continents: 17 },
@@ -614,6 +648,8 @@ export default {
             live: {
               activity: activity.results?.[0]?.count || 0,
               mapFolios: mapFolios.results?.[0]?.count || 0,
+              workflow: workflow.results?.[0]?.count || 0,
+              savedFolios: savedFolios.results?.[0]?.count || 0,
             },
             refreshedAt: new Date().toISOString(),
           });
@@ -707,6 +743,136 @@ export default {
           return json({ ok: true });
         } catch {
           return json({ error: 'Password could not be changed' }, 500);
+        }
+      }
+
+      // Member reading state and saved folios, synchronized across signed-in devices.
+      if (url.pathname === '/api/archive-state' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const [recent, saved, marker] = await env.DB.batch([
+            env.DB.prepare(`SELECT path, title, kind, progress, saved, last_visited_at, updated_at FROM member_library
+              WHERE user_email = ? AND kind != 'system' ORDER BY last_visited_at DESC LIMIT 20`).bind(user.email),
+            env.DB.prepare(`SELECT path, title, kind, progress, saved, last_visited_at, updated_at FROM member_library
+              WHERE user_email = ? AND saved = 1 AND kind != 'system' ORDER BY updated_at DESC LIMIT 50`).bind(user.email),
+            env.DB.prepare(`SELECT updated_at FROM member_library WHERE user_email = ? AND path = '/__archive_last_seen__'`).bind(user.email),
+          ]);
+          const since = marker.results?.[0]?.updated_at || '1970-01-01T00:00:00Z';
+          const unseen = await env.DB.prepare(`SELECT id, action, path, summary, created_at FROM activity
+            WHERE created_at > ? ORDER BY created_at DESC, id DESC LIMIT 24`).bind(since).all();
+          return json({ recent: recent.results || [], saved: saved.results || [], unseen: unseen.results || [], lastSeenAt: since, syncedAt: new Date().toISOString() });
+        } catch {
+          return json({ error: 'Archive state is temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/archive-state' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        let body;
+        try { body = await readJson(request, 16_384); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const action = body.action;
+        try {
+          await ensureTables();
+          if (action === 'seen') {
+            await env.DB.prepare(`INSERT INTO member_library (user_email, path, title, kind, progress, saved)
+              VALUES (?, '/__archive_last_seen__', 'Archive activity marker', 'system', 0, 0)
+              ON CONFLICT(user_email, path) DO UPDATE SET updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`).bind(user.email).run();
+            return json({ ok: true, seenAt: new Date().toISOString() });
+          }
+          const path = cleanArchivePath(body.path);
+          const title = cleanArchiveTitle(body.title);
+          if (!path || !title) return json({ error: 'Valid archive path and title required' }, 400);
+          const kind = ['folio', 'atlas', 'species', 'workspace'].includes(body.kind) ? body.kind : 'folio';
+          const progress = Number.isFinite(Number(body.progress)) ? Math.min(100, Math.max(0, Math.round(Number(body.progress)))) : 0;
+          const saved = action === 'save' ? 1 : action === 'unsave' ? 0 : Number(Boolean(body.saved));
+          await env.DB.prepare(`INSERT INTO member_library (user_email, path, title, kind, progress, saved)
+            VALUES (?, ?, ?, ?, ?, ?)
+            ON CONFLICT(user_email, path) DO UPDATE SET title = excluded.title, kind = excluded.kind,
+              progress = MAX(member_library.progress, excluded.progress), saved = CASE WHEN ? = 'visit' THEN member_library.saved ELSE excluded.saved END,
+              last_visited_at = CASE WHEN ? = 'visit' THEN strftime('%Y-%m-%dT%H:%M:%SZ','now') ELSE member_library.last_visited_at END,
+              updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+            .bind(user.email, path, title, kind, progress, saved, action, action).run();
+          return json({ ok: true, path, saved: Boolean(saved), progress });
+        } catch {
+          return json({ error: 'Archive state could not be saved' }, 500);
+        }
+      }
+
+      // Shared Draft → Review → Approved → Published queue for additions and maps.
+      if (url.pathname === '/api/workflow' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const requestedId = typeof url.searchParams.get('id') === 'string' ? url.searchParams.get('id') : '';
+          if (requestedId) {
+            const item = await env.DB.prepare(`SELECT id, kind, path, title, status, content_json, created_by, updated_by, created_at, updated_at
+              FROM workflow_items WHERE id = ?`).bind(requestedId.slice(0, 80)).first();
+            if (!item) return json({ error: 'Workflow item not found' }, 404);
+            const history = await env.DB.prepare(`SELECT status, summary, actor_email, created_at FROM workflow_history
+              WHERE workflow_id = ? ORDER BY created_at DESC, id DESC LIMIT 50`).bind(item.id).all();
+            return json({ item: { ...item, content: JSON.parse(item.content_json), content_json: undefined }, history: history.results || [] });
+          }
+          const status = url.searchParams.get('status');
+          const query = cleanWorkflowStatus(status)
+            ? env.DB.prepare(`SELECT id, kind, path, title, status, created_by, updated_by, created_at, updated_at FROM workflow_items WHERE status = ? ORDER BY updated_at DESC LIMIT 80`).bind(status)
+            : env.DB.prepare(`SELECT id, kind, path, title, status, created_by, updated_by, created_at, updated_at FROM workflow_items ORDER BY updated_at DESC LIMIT 80`);
+          const { results } = await query.all();
+          return json({ items: results || [] });
+        } catch {
+          return json({ error: 'Workflow is temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/workflow' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        let body;
+        try { body = await readJson(request, MAX_SAVE_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const transitionStatus = cleanWorkflowStatus(body.status);
+        if (typeof body.id === 'string' && body.id && transitionStatus && body.content == null) {
+          try {
+            await ensureTables();
+            const id = body.id.slice(0, 80);
+            const existing = await env.DB.prepare('SELECT id, title, status FROM workflow_items WHERE id = ?').bind(id).first();
+            if (!existing) return json({ error: 'Workflow item not found' }, 404);
+            await env.DB.batch([
+              env.DB.prepare(`UPDATE workflow_items SET status = ?, updated_by = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?`).bind(transitionStatus, user.email, id),
+              env.DB.prepare('INSERT INTO workflow_history (workflow_id, status, summary, actor_email) VALUES (?, ?, ?, ?)').bind(id, transitionStatus, cleanArchiveTitle(body.summary) || `Moved ${existing.title} to ${transitionStatus}`, user.email),
+            ]);
+            return json({ ok: true, id, status: transitionStatus, updatedAt: new Date().toISOString() });
+          } catch {
+            return json({ error: 'Workflow status could not be changed' }, 500);
+          }
+        }
+        const kind = cleanWorkflowKind(body.kind);
+        const path = kind === 'map' ? cleanMapSlug(body.path) : sanitizeAdditionsPath(body.path);
+        const title = cleanArchiveTitle(body.title);
+        const status = cleanWorkflowStatus(body.status);
+        if (!kind || !path || !title || !status || !isJsonObject(body.content)) return json({ error: 'Valid workflow item required' }, 400);
+        const contentJson = JSON.stringify(body.content);
+        if (contentJson.length > 900_000) return json({ error: 'Workflow item is too large' }, 413);
+        try {
+          await ensureTables();
+          const existing = await env.DB.prepare('SELECT id, status FROM workflow_items WHERE kind = ? AND path = ?').bind(kind, path).first();
+          const id = existing?.id || crypto.randomUUID();
+          await env.DB.batch([
+            env.DB.prepare(`INSERT INTO workflow_items (id, kind, path, title, status, content_json, created_by, updated_by)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+              ON CONFLICT(kind, path) DO UPDATE SET title = excluded.title, status = excluded.status,
+                content_json = excluded.content_json, updated_by = excluded.updated_by, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+              .bind(id, kind, path, title, status, contentJson, user.email, user.email),
+            env.DB.prepare('INSERT INTO workflow_history (workflow_id, status, summary, actor_email) VALUES (?, ?, ?, ?)')
+              .bind(id, status, cleanArchiveTitle(body.summary) || `Moved ${title} to ${status}`, user.email),
+          ]);
+          return json({ ok: true, id, kind, path, title, status, updatedAt: new Date().toISOString() });
+        } catch {
+          return json({ error: 'Workflow item could not be saved' }, 500);
         }
       }
 
@@ -913,6 +1079,44 @@ export default {
           return json({ path: j.path, sha: j.sha, size: j.size, html_url: j.html_url, content });
         } catch (e) {
           return json({ error: 'Addition could not be loaded' }, 500);
+        }
+      }
+
+      // GET /api/additions/history?path=foo.md[&sha=...] — commit history and safe textual diffs.
+      if (url.pathname === '/api/additions/history' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Auth required' }, 401);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive history is unavailable' }, 503);
+        const path = sanitizeAdditionsPath(url.searchParams.get('path') || '');
+        if (!path) return json({ error: 'Invalid path' }, 400);
+        const sha = (url.searchParams.get('sha') || '').trim();
+        if (sha && !/^[a-f0-9]{7,40}$/i.test(sha)) return json({ error: 'Invalid revision' }, 400);
+        try {
+          if (sha) {
+            const response = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/commits/${sha}`, { method: 'GET' }, env);
+            if (!response.ok) return json({ error: 'Revision could not be loaded' }, response.status === 404 ? 404 : 502);
+            const commit = await response.json();
+            const files = (commit.files || []).filter(file => file.filename === path || file.previous_filename === path).slice(0, 10).map(file => ({
+              filename: file.filename,
+              previousFilename: file.previous_filename || null,
+              status: file.status,
+              additions: file.additions,
+              deletions: file.deletions,
+              patch: typeof file.patch === 'string' ? file.patch.slice(0, 120_000) : '',
+            }));
+            return json({ revision: { sha: commit.sha, message: commit.commit?.message || '', author: commit.commit?.author?.name || 'Archive member', date: commit.commit?.author?.date || '', files } });
+          }
+          const response = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/commits?path=${encodeURIComponent(path)}&sha=${ADDITIONS_BRANCH}&per_page=40`, { method: 'GET' }, env);
+          if (!response.ok) return json({ error: 'History could not be loaded' }, 502);
+          const commits = await response.json();
+          return json({ path, revisions: (Array.isArray(commits) ? commits : []).map(commit => ({
+            sha: commit.sha,
+            message: commit.commit?.message || '',
+            author: commit.commit?.author?.name || 'Archive member',
+            date: commit.commit?.author?.date || '',
+          })) });
+        } catch {
+          return json({ error: 'History is temporarily unavailable' }, 500);
         }
       }
 
@@ -1128,8 +1332,12 @@ export default {
 };
 
 export const __test = {
+  cleanArchivePath,
+  cleanArchiveTitle,
   cleanInviteCode,
   cleanMapSlug,
+  cleanWorkflowKind,
+  cleanWorkflowStatus,
   constantTimeEqual,
   createPasswordHash,
   isPrivatePath,

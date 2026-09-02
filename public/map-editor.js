@@ -224,7 +224,7 @@ $$('.tool-button').forEach(button => button.addEventListener('click', () => sele
 $$('.map-choice').forEach(button => button.addEventListener('click', () => switchMap(button.dataset.map)))
 $('#resetViewBtn').addEventListener('click', () => map.fitBounds(bounds(), { padding: [12, 12], animate: false }))
 $('#undoBtn').addEventListener('click', () => restoreHistory(historyIndex - 1)); $('#redoBtn').addEventListener('click', () => restoreHistory(historyIndex + 1))
-$('#saveBtn').addEventListener('click', saveDocument); $('#exportBtn').addEventListener('click', () => globalThis.exportMapPNG())
+$('#draftBtn').addEventListener('click', () => saveMapWorkflow('draft')); $('#reviewBtn').addEventListener('click', () => saveMapWorkflow('review')); $('#saveBtn').addEventListener('click', saveDocument); $('#exportBtn').addEventListener('click', () => globalThis.exportMapPNG())
 $('#fullscreenBtn').addEventListener('click', async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen() } catch { toast('Fullscreen is unavailable in this browser') } })
 document.addEventListener('fullscreenchange', () => { $('#fullscreenBtn').firstChild.textContent = document.fullscreenElement ? '× ' : '⛶ '; setTimeout(() => map.invalidateSize(), 80) })
 $('#documentTitle').addEventListener('input', event => { state.title = event.target.value.slice(0, 100); dirty = true; setSaveState('Draft saved on this device'); saveLocalDraft() })
@@ -295,8 +295,18 @@ async function saveDocument() {
   try {
     state.title = $('#documentTitle').value.trim() || currentConfig().title; $('#documentTitle').value = state.title; snapshot(true)
     const response = await fetch(`/api/maps/${state.slug}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ map: state }) }); if (response.status === 401) { location.href = `/?next=${encodeURIComponent(`/map-editor?map=${state.slug}`)}`; return } const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Save failed')
-    dirty = false; clearLocalDraft(); setSaveState(`Saved ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas folio saved to the private archive')
+    dirty = false; clearLocalDraft(); await saveMapWorkflow('published', false); setSaveState(`Published ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas overlay published to the private archive')
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { button.disabled = false; button.removeAttribute('aria-busy') }
+}
+async function saveMapWorkflow(status, announce = true) {
+  const title = ($('#documentTitle').value.trim() || currentConfig().title).slice(0, 100)
+  setSaveState(status === 'review' ? 'Sending to review…' : status === 'draft' ? 'Saving draft…' : 'Recording publication…')
+  try {
+    const response = await fetch('/api/workflow', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: 'map', path: state.slug, title, status, content: { map: state }, summary: `${title} moved to ${status}` }) })
+    const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Workflow update failed')
+    if (status !== 'published') { saveLocalDraft(); setSaveState(status === 'review' ? 'Waiting for review' : 'Draft saved across devices', 'saved'); if (announce) toast(status === 'review' ? 'Atlas folio sent to the shared review desk' : 'Atlas draft saved across your devices') }
+    return true
+  } catch (error) { setSaveState(error.message, 'error'); if (announce) toast(error.message); return false }
 }
 async function loadExportImage(config) {
   for (const url of [config.image, config.fallback]) { try { const image = new Image(); image.decoding = 'async'; image.src = url; await image.decode(); return image } catch {} }

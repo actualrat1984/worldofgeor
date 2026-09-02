@@ -28,6 +28,7 @@
     .atlas-search-results{max-height:220px;overflow:auto}
     .atlas-search-results:empty{display:none}
     .atlas-viewer:fullscreen{background:#0f0e0d;display:flex;flex-direction:column}.atlas-viewer:fullscreen #atlasMap{height:auto!important;flex:1}.atlas-viewer:fullscreen .atlas-fullscreen-hide{display:none}
+    body.atlas-embedded>header,body.atlas-embedded>section:not(:has(#atlasViewer)),body.atlas-embedded>footer{display:none!important}body.atlas-embedded #atlasViewer{margin-top:0!important;border-radius:0!important;border:0!important;min-height:100vh}body.atlas-embedded #atlasMap{height:calc(100vh - 150px)!important}body.atlas-embedded>section:has(#atlasViewer){padding:0!important;max-width:none!important}
     @media (prefers-reduced-motion:reduce){.atlas-marker{transition:none}}
   </style>
 </head>
@@ -130,6 +131,8 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
   <script>
   (function(){
+    const initialParams = new URLSearchParams(location.search);
+    if(initialParams.get('embedded')==='1') document.body.classList.add('atlas-embedded','geor-no-shell-offset');
     const mapEl = document.getElementById('atlasMap');
     const searchEl = document.getElementById('atlasSearch');
     const resultsEl = document.getElementById('atlasSearchResults');
@@ -198,7 +201,7 @@
       markerEntries.forEach(entry=>map.removeLayer(entry.marker));
       markerEntries=[];
     }
-    function addPins(cfg, nonce, requestedPlace){
+    function addPins(cfg, nonce, requestedPlace, requestedView){
       if(nonce!==loadNonce) return;
       clearMarkers();
       markerEntries=(pins[cfg.id]||[]).map(pin=>{
@@ -218,7 +221,7 @@
       if(requestedPlace){
         const index=(pins[cfg.id]||[]).findIndex(pin=>pin.name.toLowerCase()===requestedPlace.toLowerCase());
         if(index>=0) setTimeout(()=>focusPin(index),80);
-      }
+      } else if(requestedView) map.setView([requestedView.y,requestedView.x],requestedView.z,{animate:false});
     }
     function renderSearchResults(){
       if(!resultsEl || !searchEl) return;
@@ -261,6 +264,7 @@
       const nonce=++loadNonce;
       const bounds=boundsFor(cfg);
       const requestedPlace=new URLSearchParams(location.search).get('place');
+      const viewParams=new URLSearchParams(location.search); const x=Number(viewParams.get('x')), y=Number(viewParams.get('y')), z=Number(viewParams.get('z')); const requestedView=Number.isFinite(x)&&Number.isFinite(y)&&Number.isFinite(z)?{x,y,z}:null;
       setMapButtons(cfg);
       clearMarkers();
       mapEl.setAttribute('aria-busy','true');
@@ -271,16 +275,18 @@
       if(searchStatus) searchStatus.textContent='Loading named places…';
       const next=L.imageOverlay(cfg.url,bounds,{interactive:false,alt:cfg.label+' political map'});
       let usedFallback=false;
-      next.on('load',()=>{ if(nonce!==loadNonce) return; addPins(cfg,nonce,requestedPlace); });
+      next.on('load',()=>{ if(nonce!==loadNonce) return; addPins(cfg,nonce,requestedPlace,requestedView); });
       next.on('error',()=>{
         if(nonce!==loadNonce) return;
         if(!usedFallback){ usedFallback=true; next.setUrl(cfg.fallback); }
         else { mapEl.setAttribute('aria-busy','false'); setStatus('The '+cfg.label.toLowerCase()+' image could not be loaded. Try again or open the full map above.'); if(searchStatus) searchStatus.textContent='Map image unavailable.'; }
       });
       overlay=next.addTo(map);
-      const params=new URLSearchParams(location.search); params.set('map',cfg.id); params.delete('place');
+      const params=new URLSearchParams(location.search); params.set('map',cfg.id); if(!requestedPlace) params.delete('place');
       history.replaceState(null,'',location.pathname+'?'+params.toString());
     }
+    let viewTimer;
+    map.on('moveend zoomend',()=>{ clearTimeout(viewTimer); viewTimer=setTimeout(()=>{ if(mapEl.getAttribute('aria-busy')==='true') return; const center=map.getCenter(), params=new URLSearchParams(location.search); params.set('map',current.id); params.set('x',center.lng.toFixed(1)); params.set('y',center.lat.toFixed(1)); params.set('z',map.getZoom().toFixed(2)); history.replaceState(null,'',location.pathname+'?'+params.toString()); },180); });
     searchEl?.addEventListener('input',renderSearchResults);
     searchEl?.addEventListener('keydown',event=>{
       if(event.key==='ArrowDown'){

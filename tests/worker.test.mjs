@@ -37,6 +37,17 @@ test('folder paths reject traversal, empty segments, and dot-folders', () => {
   }
 })
 
+test('archive state and workflow values are normalized safely', () => {
+  assert.equal(__test.cleanArchivePath('/wiki/World/Nations/?view=wide'), '/wiki/World/Nations/?view=wide')
+  assert.equal(__test.cleanArchivePath('//attacker.example/wiki'), null)
+  assert.equal(__test.cleanArchivePath('/wiki/%2e%2e/secret'), null)
+  assert.equal(__test.cleanArchiveTitle('  A\nConnected   Folio  '), 'A Connected Folio')
+  assert.equal(__test.cleanWorkflowKind('addition'), 'addition')
+  assert.equal(__test.cleanWorkflowKind('admin'), null)
+  assert.equal(__test.cleanWorkflowStatus('approved'), 'approved')
+  assert.equal(__test.cleanWorkflowStatus('deleted'), null)
+})
+
 test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.cleanInviteCode(' keeper 2026 '), 'KEEPER_2026')
   assert.equal(__test.cleanInviteCode('short'), null)
@@ -96,6 +107,9 @@ test('/api/me returns 401 without a session', async () => {
   assert.equal(passwordResponse.status, 401)
   const statsResponse = await worker.fetch(new Request('https://worldofgeor.com/api/world-stats'), { JWT_SECRET: SECRET }, {})
   assert.equal(statsResponse.status, 401)
+  assert.equal((await worker.fetch(new Request('https://worldofgeor.com/api/archive-state'), { JWT_SECRET: SECRET }, {})).status, 401)
+  assert.equal((await worker.fetch(new Request('https://worldofgeor.com/api/workflow'), { JWT_SECRET: SECRET }, {})).status, 401)
+  assert.equal((await worker.fetch(new Request('https://worldofgeor.com/api/additions/history?path=test.md'), { JWT_SECRET: SECRET }, {})).status, 401)
   const changelogResponse = await worker.fetch(new Request('https://worldofgeor.com/api/updates?limit=2'), { JWT_SECRET: SECRET }, {})
   assert.equal(changelogResponse.status, 200)
   assert.equal(changelogResponse.headers.get('cache-control'), 'public, max-age=15')
@@ -154,7 +168,7 @@ test('/api/me returns 401 without a session', async () => {
   const updates = await updatesResponse.json()
   assert.equal(updates.source, 'changelog')
   assert.equal(updates.updates.length, 3)
-  assert.match(updates.updates[0].summary, /Personal reading trails/)
+  assert.match(updates.updates[0].summary, /unified archive shell/)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -214,10 +228,15 @@ test('private files redirect to the gate and public aliases reach the intended a
   assert.match(compassScript, /wiki-index\.json/)
   assert.match(compassScript, /geor_archive_bookmarks_v1/)
   assert.match(compassScript, /geor-reading-progress/)
+  assert.match(compassScript, /geor-archive-rail/)
+  assert.match(compassScript, /geor-split-panel/)
+  assert.match(workerSource, /\/api\/archive-state/)
+  assert.match(workerSource, /\/api\/workflow/)
+  assert.match(workerSource, /\/api\/additions\/history/)
   assert.match(studioScript, /geor_atlas_draft_v1_/)
   assert.match(atlasHtml, /atlasFullscreen/)
   assert.match(updatesHtml, /data-update-filter="security"/)
-  for (const releaseId of ['release-reader-experience', 'release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
+  for (const releaseId of ['release-unified-archive', 'release-reader-experience', 'release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
     assert.match(workerSource, new RegExp(releaseId))
     assert.match(updatesHtml, new RegExp(releaseId))
   }

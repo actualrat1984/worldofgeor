@@ -175,7 +175,10 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 </div>
 <div class="flex gap-1 shrink-0">
 <button id="btnPreviewToggle" class="hidden md:inline text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Preview</button>
-<button id="btnSave" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110 flex items-center gap-1.5"><span id="btnSaveLabel">Save → commit</span><span id="btnSaveSpin" class="hidden w-3 h-3 border-2 border-ink/30 border-t-ink rounded-full animate-spin"></span></button>
+<button id="btnDraft" class="hidden sm:inline text-xs border border-gold/20 text-gold px-3 py-1 rounded-full hover:bg-gold/10">Save draft</button>
+<button id="btnReview" class="hidden md:inline text-xs border border-gold/30 text-gold px-3 py-1 rounded-full hover:bg-gold/10">Send to review</button>
+<button id="btnHistory" class="hidden lg:inline text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">History</button>
+<button id="btnSave" class="text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold hover:brightness-110 flex items-center gap-1.5"><span id="btnSaveLabel">Publish</span><span id="btnSaveSpin" class="hidden w-3 h-3 border-2 border-ink/30 border-t-ink rounded-full animate-spin"></span></button>
 <button id="btnDownload" class="hidden sm:inline text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Download</button>
 <button id="btnCopy" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Copy</button>
 </div>
@@ -590,7 +593,7 @@ function init(){
      toast('Commit failed: '+String(e).slice(0,120), false);
      return false;
    } finally {
-     spin.classList.add('hidden'); label.textContent='Save → commit'; btn.disabled=false;
+     spin.classList.add('hidden'); label.textContent='Publish'; btn.disabled=false;
    }
  }
  let lastGithubSave=0;
@@ -605,7 +608,7 @@ function init(){
    const oldPath = editorOriginalPath;
    editorOriginalPath=path;
    dirty.classList.add('hidden'); dot.classList.add('hidden'); dirtyFlag=false;
-   if(showToast) toast('Saved locally ✓ — committing…');
+   if(showToast) toast('Saved locally ✓ — publishing…');
    const b=document.getElementById('btnSave'); const old=b.querySelector('#btnSaveLabel').textContent;
    // do github push async
    saveToGithub(path, content, oldPath !== path ? oldPath : null).then(ok=>{
@@ -613,11 +616,29 @@ function init(){
        // remember new path as original for future rename detection
        editorOriginalPath=path;
        localStorage.setItem('geor_editor_path', path);
+       saveWorkflow('published', false);
        // also refresh changes list silently
        if(!document.getElementById('paneChanges').classList.contains('hidden')) loadChanges(false);
      }
    });
  }
+
+ async function saveWorkflow(status, announce=true){
+   const path=(fileInput.value||'untitled.md').trim()||'untitled.md'; const title=(editor.value.match(/^#\s+(.+)$/m)?.[1]||path.split('/').pop().replace(/\.[^.]+$/,'')).slice(0,180);
+   try{
+     const response=await fetch('/api/workflow',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:'addition',path,title,status,content:{markdown:editor.value},summary:`${title} moved to ${status}`})});
+     const data=await response.json().catch(()=>({})); if(!response.ok) throw new Error(data.error||'Workflow update failed');
+     setGitStatus(status==='published'?'✓ published':`✓ ${status}`,true); if(announce) toast(status==='review'?'Sent to the shared review desk':'Draft saved across your devices'); return true;
+   }catch(error){ if(announce) toast(error.message,false); return false; }
+ }
+
+ function showHistory(){
+   const path=(fileInput.value||'').trim(); if(!path) return toast('Name the folio before opening history',false);
+   let dialog=document.getElementById('historyDialog'); if(!dialog){ dialog=document.createElement('dialog'); dialog.id='historyDialog'; dialog.className='w-[min(92vw,760px)] max-h-[80vh] rounded-2xl border border-gold/20 bg-[#171815] text-cream shadow-2xl p-0'; dialog.innerHTML='<div class="p-5 border-b border-gold/10 flex items-center justify-between"><div><p class="text-[10px] tracking-widest text-gold">ARTICLE HISTORY</p><h2 id="historyTitle" class="font-display text-lg mt-1"></h2></div><button id="historyClose" class="text-xl text-cream/50" aria-label="Close history">×</button></div><div id="historyBody" class="p-5 overflow-auto max-h-[62vh]"></div>'; document.body.append(dialog); dialog.querySelector('#historyClose').onclick=()=>dialog.close(); }
+   dialog.querySelector('#historyTitle').textContent=path; const body=dialog.querySelector('#historyBody'); body.innerHTML='<p class="text-sm text-cream/45">Opening revisions…</p>'; if(!dialog.open) dialog.showModal();
+   fetch('/api/additions/history?path='+encodeURIComponent(path),{credentials:'same-origin'}).then(response=>response.json().then(data=>({response,data}))).then(({response,data})=>{ if(!response.ok) throw new Error(data.error||'History unavailable'); const revisions=data.revisions||[]; body.replaceChildren(); if(!revisions.length){ body.innerHTML='<p class="text-sm text-cream/45">No published revisions yet. Draft changes live in the review desk.</p>'; return; } revisions.forEach(revision=>{ const row=document.createElement('button'); row.type='button'; row.className='w-full text-left rounded-xl border border-gold/10 bg-cream/[0.03] p-4 mb-2 hover:border-gold/30'; const title=document.createElement('b'); title.className='block text-sm'; title.textContent=(revision.message||'Archive revision').split('\n')[0]; const meta=document.createElement('small'); meta.className='block text-[10px] text-cream/40 mt-1'; meta.textContent=`${new Date(revision.date).toLocaleString()} · ${revision.author} · ${revision.sha.slice(0,7)}`; row.append(title,meta); row.onclick=()=>loadRevisionDiff(path,revision.sha,body); body.append(row); }); }).catch(error=>{ body.textContent=error.message; });
+ }
+ function loadRevisionDiff(path,sha,target){ target.innerHTML='<p class="text-sm text-cream/45">Reading revision…</p>'; fetch(`/api/additions/history?path=${encodeURIComponent(path)}&sha=${encodeURIComponent(sha)}`,{credentials:'same-origin'}).then(response=>response.json().then(data=>({response,data}))).then(({response,data})=>{ if(!response.ok) throw new Error(data.error||'Revision unavailable'); const revision=data.revision; target.replaceChildren(); const back=document.createElement('button'); back.className='text-xs border border-gold/20 rounded-full px-3 py-1.5 mb-4'; back.textContent='← All revisions'; back.onclick=showHistory; target.append(back); (revision.files||[]).forEach(file=>{ const heading=document.createElement('p'); heading.className='text-xs text-gold mb-2'; heading.textContent=`${file.filename} · +${file.additions} −${file.deletions}`; const diff=document.createElement('pre'); diff.className='overflow-auto rounded-xl bg-ink p-4 text-xs leading-5 text-cream/70 whitespace-pre-wrap'; diff.textContent=file.patch||'A textual diff is unavailable for this revision.'; target.append(heading,diff); }); }).catch(error=>{ target.textContent=error.message; }); }
  editor.addEventListener('input', ()=>{
    const len=editor.value.length;
    const prev=parseInt(localStorage.getItem('geor_editor_len')||'0');
@@ -644,6 +665,9 @@ function init(){
    editor.focus(); editor.setSelectionRange(before.length+ins.length, before.length+ins.length);
    editor.dispatchEvent(new Event('input'));
  });
+ document.getElementById('btnDraft').onclick=()=>saveWorkflow('draft');
+ document.getElementById('btnReview').onclick=()=>saveWorkflow('review');
+ document.getElementById('btnHistory').onclick=showHistory;
  document.getElementById('btnSave').onclick=()=> saveEditor(true);
  document.getElementById('btnPreviewToggle').onclick=()=>{
    previewOn=!previewOn;
@@ -667,7 +691,7 @@ document.getElementById('btnCopy').onclick=async()=>{
 };
  // Ctrl+S
  document.addEventListener('keydown', e=>{
-   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveEditor(true); }
+   if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveWorkflow('draft'); }
    if((e.ctrlKey||e.metaKey) && e.shiftKey && e.key.toLowerCase()==='p'){ e.preventDefault(); document.getElementById('btnPreviewToggle').click(); }
  });
  // auto-save every 12s if dirty (local only, no github spam)
