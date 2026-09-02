@@ -52,9 +52,9 @@
   <section class="max-w-[1280px] mx-auto px-6 py-12 md:py-16">
     <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">CARTOGRAPHER OFFICE • 597 AGD</p>
     <h1 class="font-display text-[36px] md:text-[48px] font-bold tracking-tight leading-[0.95] mt-2">CHOOSE YOUR MAP</h1>
-    <p class="mt-4 text-cream/70 max-w-[640px] leading-7">Two views of the same world. The World Map shows all 17 continents at 3.086 km / pixel. The Grimmel Peninsula is the zoom where Mikhail and Ichi will awaken — streets, forests and the war’s edge at statue level. Tap a card to open the full-resolution map.</p>
+    <p class="mt-4 text-cream/70 max-w-[640px] leading-7">Three views of the same world. The World Map shows all 17 continents at 3.086 km / pixel. Central Erisdar is the imperial heartland zoom — 246 recorded countries at 597 AGD. The Grimmel Peninsula is the zoom where Mikhail and Ichi will awaken — streets, forests and the war's edge at statue level. Tap a card to open the full-resolution map.</p>
 
-    <div class="grid md:grid-cols-2 gap-6 mt-10">
+    <div class="grid md:grid-cols-3 gap-6 mt-10">
       <!-- World map -->
       <a href="/world-map.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
@@ -80,6 +80,19 @@
           <span class="inline-flex mt-4 text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold group-hover:brightness-110 transition">OPEN GRIMMEL →</span>
         </div>
       </a>
+
+      <!-- Central Erisdar -->
+      <a href="/central-erisdar.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+        <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
+          <img src="/central-erisdar-thumb.jpg" alt="Central Erisdar map — imperial heartland, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="1200" height="600" />
+          <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">CENTRAL ERISDAR • 15988×7994 • 597 AGD</div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-display tracking-widest text-sm font-semibold">CENTRAL ERISDAR — IMPERIAL HEARTLAND</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">The imperial heartland zoom: 203 countries inside the border, 43 beyond it, 23 enclaves. Every label filed in the vault. Full view: 3840×1920.</p>
+          <span class="inline-flex mt-4 text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full group-hover:bg-gold/10 transition">OPEN ERISDAR →</span>
+        </div>
+      </a>
     </div>
 
     <div class="mt-10 rounded-xl border border-gold/10 bg-cream/[0.03] p-5 text-sm text-cream/60 leading-6">
@@ -95,6 +108,7 @@
         <div class="flex items-center gap-2">
           <button id="atlasWorldBtn" type="button" aria-pressed="true" class="text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold">WORLD</button>
           <button id="atlasGrimmelBtn" type="button" aria-pressed="false" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">GRIMMEL</button>
+          <button id="atlasErisdarBtn" type="button" aria-pressed="false" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">ERISDAR</button>
           <button id="atlasReset" type="button" aria-label="Reset map view" class="text-xs tracking-widest border border-cream/15 text-cream/70 px-4 py-2 rounded-full hover:bg-cream/5 transition" title="Reset view">⟲</button>
           <button id="atlasFullscreen" type="button" aria-label="Open fullscreen atlas" class="text-xs tracking-widest border border-cream/15 text-cream/70 px-4 py-2 rounded-full hover:bg-cream/5 transition" title="Fullscreen map">⛶</button>
         </div>
@@ -140,6 +154,7 @@
     const mapStatus = document.getElementById('atlasMapStatus');
     const worldBtn = document.getElementById('atlasWorldBtn');
     const grimmelBtn = document.getElementById('atlasGrimmelBtn');
+    const erisdarBtn = document.getElementById('atlasErisdarBtn');
     const resetBtn = document.getElementById('atlasReset');
     const fullscreenBtn = document.getElementById('atlasFullscreen');
     const viewerEl = document.getElementById('atlasViewer');
@@ -152,7 +167,8 @@
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const world = { id:'world', label:'World Map', w:3840, h:1920, url:'/world-map.webp', fallback:'/world-map.jpg' };
     const grimmel = { id:'grimmel', label:'Grimmel Peninsula', w:3840, h:5715, url:'/grimmel-peninsula.webp', fallback:'/grimmel-peninsula.jpg' };
-    const configs = { world, grimmel };
+    const erisdar = { id:'erisdar', label:'Central Erisdar', w:3840, h:1920, url:'/central-erisdar.webp', fallback:'/central-erisdar.jpg' };
+    const configs = { world, grimmel, erisdar };
     const pins = {
       world: [
         { name:'Grimmel Peninsula', x:.44, y:.54, detail:'The statue-level zoom: the western frontier where the story breathes.', url:'/wiki/World/Nations/South Erisdar/Grimmel Peninsula/' },
@@ -178,6 +194,20 @@
         { name:'Scarlet Order', x:.38, y:.70, detail:'The great southern order, marked by red borders and old force.', url:'/wiki/World/Nations/South Erisdar/Scarlet Order/' },
         { name:'Evern', x:.32, y:.79, detail:'A southern country at the edge of the Scarlet sphere.', url:'/wiki/World/Nations/South Erisdar/Evern/' },
         { name:'Limese League', x:.70, y:.21, detail:'A trading power whose territory reaches down the eastern coast.', url:'/wiki/World/Nations/South Erisdar/Limese League/' }
+      ],
+      erisdar: [
+        { name:'Erisian Empire', x:.50, y:.45, detail:'The imperial heartland: 203 recorded countries inside the border at 597 AGD.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/' },
+        { name:'Olfensban', x:.46, y:.40, detail:'Imperial county containing the enclave of Aidon.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Counties/Olfensban/' },
+        { name:'Aidon', x:.46, y:.42, detail:'Enclave inside Olfensban; its only country border is Olfensban.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Counties/Aidon/' },
+        { name:'Prassen-Albridge', x:.55, y:.38, detail:'Imperial duchy surrounding the dwarf enclave Abelik Dwarnov.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Duchies/Prassen-Albridge/' },
+        { name:'Kennberg', x:.48, y:.30, detail:'Archduchy of the Empire, recorded in two map branches.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Duchies/Kennberg/' },
+        { name:'Mirenburg', x:.52, y:.50, detail:'Electorate of the Empire, central and imperial.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Duchies/Mirenburg/' },
+        { name:'Jonnesfort', x:.44, y:.52, detail:'Imperial county on the western marches.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Counties/Jonnesfort/' },
+        { name:'Roffran Church', x:.58, y:.55, detail:'Church state of the Empire.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Church States/Roffran Church/' },
+        { name:'Kosled', x:.62, y:.47, detail:'Sovereign county beyond the border, containing the enclave of Tenac.', url:'/wiki/World/Nations/Central Erisdar/Kosled/' },
+        { name:'Marisco Church State', x:.60, y:.60, detail:'Sovereign church state beyond the imperial border.', url:'/wiki/World/Nations/Central Erisdar/Marisco Church State/' },
+        { name:'Yabel', x:.42, y:.62, detail:'Sovereign nation beyond the border, south of Lemer and Deboria.', url:'/wiki/World/Nations/Central Erisdar/Yabel/' },
+        { name:'Sperdia', x:.50, y:.68, detail:'Central Erisdar sovereign, recorded in the 597 AGD ledger.', url:'/wiki/World/Nations/Central Erisdar/Sperdia/' }
       ]
     };
     const escapeHtml = value => String(value ?? '').replace(/[&<>\"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
@@ -193,6 +223,7 @@
       const idle='text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition';
       if(worldBtn){ worldBtn.className=cfg===world?active:idle; worldBtn.setAttribute('aria-pressed',String(cfg===world)); }
       if(grimmelBtn){ grimmelBtn.className=cfg===grimmel?active:idle; grimmelBtn.setAttribute('aria-pressed',String(cfg===grimmel)); }
+      if(erisdarBtn){ erisdarBtn.className=cfg===erisdar?active:idle; erisdarBtn.setAttribute('aria-pressed',String(cfg===erisdar)); }
     }
     function popupFor(pin){
       return '<div class=\"atlas-popup\"><div class=\"text-[10px] tracking-[0.22em] text-gold\">'+escapeHtml(current.label.toUpperCase())+'</div><h3 class=\"font-display text-sm font-semibold mt-1\">'+escapeHtml(pin.name)+'</h3><p class=\"text-xs leading-5 mt-2\">'+escapeHtml(pin.detail)+'</p><a class=\"inline-block mt-3\" href=\"'+escapeHtml(pin.url)+'\">Open lore entry →</a></div>';
@@ -249,7 +280,7 @@
     function focusPin(index){
       const entry=markerEntries[index];
       if(!entry) return;
-      const zoom=Math.min(map.getMaxZoom(),current===world ? 0.5 : 0.25);
+      const zoom=Math.min(map.getMaxZoom(),current===grimmel ? 0.25 : 0.5);
       map.setView(entry.latlng,zoom,{animate:!reduceMotion});
       entry.marker.openPopup();
       if(searchEl) searchEl.value=entry.pin.name;
@@ -313,6 +344,7 @@
     });
     worldBtn?.addEventListener('click',()=>loadMap(world));
     grimmelBtn?.addEventListener('click',()=>loadMap(grimmel));
+    erisdarBtn?.addEventListener('click',()=>loadMap(erisdar));
     resetBtn?.addEventListener('click',()=>{ map.fitBounds(boundsFor(current),{padding:[12,12],animate:!reduceMotion}); mapEl.focus({preventScroll:true}); setStatus(current.label+' view reset.'); });
     fullscreenBtn?.addEventListener('click',async()=>{
       try { if(document.fullscreenElement) await document.exitFullscreen(); else await viewerEl.requestFullscreen(); }
@@ -332,7 +364,7 @@
     });
     window.addEventListener('resize',()=>map.invalidateSize(),{passive:true});
     const params=new URLSearchParams(location.search);
-    const initial=configs[params.get('map')==='grimmel'?'grimmel':'world'];
+    const initial=configs[params.get('map')]||world;
     setStatus('Map viewer ready. Loading '+initial.label.toLowerCase()+'…');
     const boot=()=>loadMap(initial);
     if('requestIdleCallback' in window) window.requestIdleCallback(boot,{timeout:700}); else setTimeout(boot,80);
