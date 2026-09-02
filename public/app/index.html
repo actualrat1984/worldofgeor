@@ -147,7 +147,7 @@ html{scrollbar-width:thin;scrollbar-color:rgba(217,183,122,0.22) transparent}
 <div class="text-xs tracking-widest text-gold">TIPS</div>
 <div class="text-sm text-cream/60 mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
 <span><span class="text-gold">/</span> focus search</span>
-<span><span class="text-gold">Ctrl+K</span> focus search</span>
+<span><span class="text-gold">Ctrl+K</span> archive compass</span>
 <span><span class="text-gold">Ctrl+S</span> save→commit</span>
 <span><span class="text-gold">Esc</span> close preview</span>
 </div>
@@ -501,7 +501,6 @@ function init(){
  search.addEventListener('input', ()=>{ clearTimeout(searchDebounce); searchDebounce=setTimeout(()=> renderVault(search.value), 140); });
  document.addEventListener('keydown', e=>{
    if(e.key==='/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){ e.preventDefault(); search.focus(); }
-   if(e.key==='k' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); search.focus(); }
    if(e.key==='Escape'){ const pp=document.getElementById('panePreview'); if(!pp.classList.contains('hidden')){ document.getElementById('crumbName').textContent='Select a file'; } }
  });
  document.querySelectorAll('.vaultFilter').forEach(b=> b.onclick=()=>{

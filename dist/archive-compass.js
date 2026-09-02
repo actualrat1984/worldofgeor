@@ -6,7 +6,8 @@ const MAX_RECENT = 20
 const MAX_BOOKMARKS = 50
 
 if (!document.getElementById(COMPASS_ID)) {
-  if (location.pathname.startsWith('/app') || location.pathname.startsWith('/map-editor')) document.body.classList.add('geor-no-shell-offset')
+  if (location.pathname.startsWith('/app')) document.body.classList.add('geor-workroom')
+  if (location.pathname.startsWith('/map-editor')) document.body.classList.add('geor-no-shell-offset')
   const commands = [
     { title: 'Member Home', subtitle: 'Your trail, collections, and new archive activity', url: '/dashboard', sigil: '▦', group: 'ROOM', keywords: 'dashboard home recent new activity' },
     { title: 'Keeper’s Index', subtitle: 'Search every private archive folio', url: '/search', sigil: '⌕', group: 'ROOM', keywords: 'search index find lore omnibox' },
