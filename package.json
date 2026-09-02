@@ -9,7 +9,7 @@
   "scripts": {
     "predev": "npm run build:css",
     "dev": "vite --configLoader bundle",
-    "build": "npm run build:vite && npm run build:wiki",
+    "build": "npm run build:vite",
     "build:css": "tailwindcss -c tailwind.config.js -i src/style.css -o public/site.css --minify",
     "build:vite": "npm run build:css && vite build --configLoader bundle",
     "build:wiki": "node scripts/build-wiki.mjs",
