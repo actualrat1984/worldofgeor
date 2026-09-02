@@ -36,6 +36,14 @@ let drawingPoints = []
 let drawingPreview = null
 let toastTimer = null
 let wikiIndex = null
+const draftKey = slug => `geor_atlas_draft_v1_${slug}`
+function saveLocalDraft() {
+  try { localStorage.setItem(draftKey(state.slug), JSON.stringify({ savedAt: Date.now(), data: state })) } catch {}
+}
+function clearLocalDraft(slug = state.slug) { try { localStorage.removeItem(draftKey(slug)) } catch {} }
+function readLocalDraft(slug) {
+  try { const draft = JSON.parse(localStorage.getItem(draftKey(slug)) || 'null'); return draft?.data?.slug === slug && Array.isArray(draft.data.layers) ? draft : null } catch { return null }
+}
 
 const currentConfig = () => MAPS[state.slug]
 const activeLayer = () => state.layers.find(layer => layer.id === activeLayerId) || state.layers[0]
@@ -60,7 +68,7 @@ function snapshot(markDirty = true) {
   history = history.slice(0, historyIndex + 1); history.push(encoded)
   if (history.length > 60) history.shift()
   historyIndex = history.length - 1; dirty = markDirty; updateHistoryButtons()
-  if (dirty) setSaveState('Unsaved changes')
+  if (dirty) { setSaveState('Draft saved on this device'); saveLocalDraft() }
 }
 function restoreHistory(index) {
   if (index < 0 || index >= history.length) return
@@ -217,7 +225,9 @@ $$('.map-choice').forEach(button => button.addEventListener('click', () => switc
 $('#resetViewBtn').addEventListener('click', () => map.fitBounds(bounds(), { padding: [12, 12], animate: false }))
 $('#undoBtn').addEventListener('click', () => restoreHistory(historyIndex - 1)); $('#redoBtn').addEventListener('click', () => restoreHistory(historyIndex + 1))
 $('#saveBtn').addEventListener('click', saveDocument); $('#exportBtn').addEventListener('click', () => globalThis.exportMapPNG())
-$('#documentTitle').addEventListener('input', event => { state.title = event.target.value.slice(0, 100); dirty = true; setSaveState('Unsaved changes') })
+$('#fullscreenBtn').addEventListener('click', async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen() } catch { toast('Fullscreen is unavailable in this browser') } })
+document.addEventListener('fullscreenchange', () => { $('#fullscreenBtn').firstChild.textContent = document.fullscreenElement ? '× ' : '⛶ '; setTimeout(() => map.invalidateSize(), 80) })
+$('#documentTitle').addEventListener('input', event => { state.title = event.target.value.slice(0, 100); dirty = true; setSaveState('Draft saved on this device'); saveLocalDraft() })
 $('#documentTitle').addEventListener('change', event => { state.title = event.target.value.trim() || currentConfig().title; event.target.value = state.title; commit('Folio title updated') })
 $('#addLayerBtn').addEventListener('click', () => {
   if (state.layers.length >= 12) return toast('The atlas supports up to twelve layers')
@@ -272,7 +282,10 @@ async function loadDocument(slug) {
   try {
     const response = await fetch(`/api/maps/${slug}`, { credentials: 'same-origin' }); if (response.status === 401) { location.href = `/?next=${encodeURIComponent('/map-editor')}`; return }
     const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Map could not be loaded')
-    state = payload.map || defaultDocument(slug); activeLayerId = state.layers[0].id; selectedFeatureId = null; dirty = false; history = [JSON.stringify(state)]; historyIndex = 0
+    state = payload.map || defaultDocument(slug); activeLayerId = state.layers[0].id; selectedFeatureId = null; dirty = false
+    const draft = readLocalDraft(slug)
+    if (draft && JSON.stringify(draft.data) !== JSON.stringify(state) && confirm(`A device-local draft from ${new Date(draft.savedAt).toLocaleString()} was found. Restore it?`)) { state = draft.data; dirty = true; toast('Device-local draft restored') }
+    history = [JSON.stringify(state)]; historyIndex = 0
     $('#documentTitle').value = state.title; loadBaseMap(true); renderAll(); updateHistoryButtons(); setSaveState(payload.updatedAt ? `Saved ${new Date(payload.updatedAt).toLocaleString()}` : 'New folio — not yet saved', payload.updatedAt ? 'saved' : '')
     const params = new URLSearchParams(location.search); params.set('map', slug); globalThis.history.replaceState(null, '', `${location.pathname}?${params.toString()}`)
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { $('#loadingVeil').classList.add('is-hidden'); $('.studio-shell').setAttribute('aria-busy', 'false'); setTimeout(() => map.invalidateSize(), 50) }
@@ -282,7 +295,7 @@ async function saveDocument() {
   try {
     state.title = $('#documentTitle').value.trim() || currentConfig().title; $('#documentTitle').value = state.title; snapshot(true)
     const response = await fetch(`/api/maps/${state.slug}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ map: state }) }); if (response.status === 401) { location.href = `/?next=${encodeURIComponent(`/map-editor?map=${state.slug}`)}`; return } const payload = await response.json().catch(() => ({})); if (!response.ok) throw new Error(payload.error || 'Save failed')
-    dirty = false; setSaveState(`Saved ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas folio saved to the private archive')
+    dirty = false; clearLocalDraft(); setSaveState(`Saved ${new Date(payload.updatedAt).toLocaleString()}`, 'saved'); toast('Atlas folio saved to the private archive')
   } catch (error) { setSaveState(error.message, 'error'); toast(error.message) } finally { button.disabled = false; button.removeAttribute('aria-busy') }
 }
 async function loadExportImage(config) {

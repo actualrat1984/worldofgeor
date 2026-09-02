@@ -17,6 +17,7 @@ function categoryFor(url) {
   if (parts.includes('Species') || parts.includes('Races')) return 'Species'
   if (parts.includes('History') || parts.includes('Timeline') || parts.includes('Ages')) return 'History'
   if (parts.includes('Systems')) return 'Systems'
+  if (parts.includes('Locations') || parts.includes('Continents') || parts.includes('Seas')) return 'Locations'
   return parts[2] || 'Archive'
 }
 function tokens(value) { return value.toLowerCase().normalize('NFKD').replace(/[’']/g, '').split(/[^a-z0-9]+/).filter(Boolean) }
@@ -53,8 +54,9 @@ function setSelected(next) {
 }
 function renderSearch(query) {
   const normalized = query.trim().toLowerCase(); selected = -1
-  if (normalized.length < 2) { visibleResults = []; results.innerHTML = ''; empty.classList.add('hidden'); status.textContent = `${index.length.toLocaleString()} entries ready`; renderRecent(); return }
-  visibleResults = index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: scoreEntry(entry, normalized) })).filter(entry => entry.score >= 0 && (activeFilter === 'all' || entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
+  const bookmarks = new Set((()=>{ try { const value=JSON.parse(localStorage.getItem('geor_archive_bookmarks_v1')||'[]'); return Array.isArray(value)?value.map(item=>item?.url).filter(Boolean):[] } catch { return [] } })())
+  if (normalized.length < 2 && activeFilter !== 'saved') { visibleResults = []; results.innerHTML = ''; empty.classList.add('hidden'); status.textContent = `${index.length.toLocaleString()} entries ready`; renderRecent(); return }
+  visibleResults = index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: normalized.length >= 2 ? scoreEntry(entry, normalized) : 0 })).filter(entry => entry.score >= 0 && (activeFilter === 'all' || activeFilter === 'saved' ? activeFilter !== 'saved' || bookmarks.has(entry.url) : entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
   status.textContent = `${visibleResults.length}${visibleResults.length === 60 ? '+' : ''} result${visibleResults.length === 1 ? '' : 's'}`
   empty.classList.toggle('hidden', visibleResults.length > 0); recentSection.classList.add('hidden')
   results.innerHTML = visibleResults.map((entry, i) => `<a data-result="${i}" aria-selected="false" href="${escapeHtml(entry.url)}" class="result-row group grid sm:grid-cols-[1fr_auto] gap-2 rounded-xl border border-gold/10 bg-cream/[.025] p-4 hover:border-gold/35 transition"><div class="min-w-0"><div class="flex items-center gap-2"><span class="text-[9px] tracking-[.2em] text-gold">${escapeHtml(entry.category.toUpperCase())}</span></div><h2 class="font-display text-base mt-1">${highlight(entry.title, normalized)}</h2><p class="archive-path text-xs text-cream/35 mt-1"><span>${escapeHtml(decodeURIComponent(entry.url).replace(/^\/wiki\//,'').replace(/\/$/, '').replaceAll('/',' › '))}</span></p></div><span class="self-center text-gold group-hover:translate-x-1 transition" aria-hidden="true">→</span></a>`).join('')
@@ -66,6 +68,7 @@ input.addEventListener('input', runSearch)
 input.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); setSelected(selected + 1) } else if (event.key === 'ArrowUp') { event.preventDefault(); setSelected(selected - 1) } else if (event.key === 'Enter' && selected >= 0) { event.preventDefault(); saveRecent(input.value); location.href = visibleResults[selected].url } else if (event.key === 'Escape') { input.value = ''; runSearch() } })
 document.addEventListener('keydown', event => { if (event.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) { event.preventDefault(); input.focus() } })
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { activeFilter = button.dataset.filter; document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button))); renderSearch(input.value) }))
+window.addEventListener('geor:bookmarks-updated', () => { if (activeFilter === 'saved') renderSearch(input.value) })
 document.getElementById('clearRecent').addEventListener('click', () => { localStorage.removeItem('geor_recent_searches'); renderRecent() })
 
 try {

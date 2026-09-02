@@ -124,3 +124,21 @@ if (!reduceMotion) {
     })
   }
 }
+
+// A device-local continuation link gives returning members a useful first step
+// without exposing or sending their reading history anywhere.
+const continueLink = document.getElementById('continueArchive')
+if (continueLink) {
+  try {
+    const trail = JSON.parse(localStorage.getItem('geor_archive_trail_v1') || '[]')
+    const latest = Array.isArray(trail) ? trail.find(item => item && typeof item.title === 'string' && typeof item.url === 'string' && item.url.startsWith('/')) : null
+    if (latest) {
+      const destination = new URL(latest.url, location.origin)
+      if (destination.origin === location.origin) {
+        continueLink.href = destination.pathname + destination.search + destination.hash
+        continueLink.querySelector('span').textContent = `CONTINUE: ${latest.title.slice(0, 42).toUpperCase()}`
+        continueLink.classList.remove('hidden')
+      }
+    }
+  } catch {}
+}

@@ -19,6 +19,7 @@ const MAP_DIMENSIONS = Object.freeze({
   grimmel: { width: 3840, height: 5715 },
 });
 const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-reader-experience', action: 'feature', path: '/dashboard', summary: 'Personal reading trails, saved folios, richer search, fullscreen maps, and recoverable Atlas drafts joined the archive', created_at: '2026-09-02T12:00:00Z' },
   { id: 'release-compass', action: 'feature', path: '/search', summary: 'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at: '2026-09-01T13:10:00Z' },
   { id: 'release-auth-v2', action: 'security', path: '/', summary: 'Password hashing and abuse protection received a transparent security upgrade', created_at: '2026-09-01T13:09:59Z' },
   { id: 'release-species', action: 'feature', path: '/species', summary: 'Species Gallery opened with 34 filterable folios', created_at: '2026-09-01T03:56:24Z' },

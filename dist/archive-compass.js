@@ -1,6 +1,8 @@
 const COMPASS_ID = 'georArchiveCompass'
 const RECENT_KEY = 'geor_archive_trail_v1'
-const MAX_RECENT = 8
+const BOOKMARK_KEY = 'geor_archive_bookmarks_v1'
+const MAX_RECENT = 12
+const MAX_BOOKMARKS = 40
 
 if (!document.getElementById(COMPASS_ID)) {
   const commands = [
@@ -37,7 +39,7 @@ if (!document.getElementById(COMPASS_ID)) {
         try {
           const url = new URL(item.url, location.origin)
           if (url.origin !== location.origin || !url.pathname.startsWith('/')) return null
-          return { title: item.title.trim().slice(0, 180), url: url.pathname + url.search + url.hash }
+          return { title: item.title.trim().slice(0, 180), url: url.pathname + url.search + url.hash, visitedAt: Number(item.visitedAt) || 0 }
         } catch { return null }
       }).filter(Boolean).slice(0, MAX_RECENT)
     } catch { return [] }
@@ -48,9 +50,35 @@ if (!document.getElementById(COMPASS_ID)) {
     const title = normalizeTitle(document.title)
     if (!title || !path.startsWith('/')) return
     try {
-      const recent = [{ title, url: path }, ...readRecent().filter(item => item.url !== path)].slice(0, MAX_RECENT)
+      const recent = [{ title, url: path, visitedAt: Date.now() }, ...readRecent().filter(item => item.url !== path)].slice(0, MAX_RECENT)
       localStorage.setItem(RECENT_KEY, JSON.stringify(recent))
+      window.dispatchEvent(new CustomEvent('geor:trail-updated', { detail: recent }))
     } catch {}
+  }
+
+  const readBookmarks = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]')
+      if (!Array.isArray(value)) return []
+      return value.map(item => {
+        if (!item || typeof item.title !== 'string' || typeof item.url !== 'string') return null
+        try {
+          const url = new URL(item.url, location.origin)
+          if (url.origin !== location.origin || !url.pathname.startsWith('/')) return null
+          return { title: item.title.trim().slice(0, 180), url: url.pathname + url.search + url.hash, savedAt: Number(item.savedAt) || 0 }
+        } catch { return null }
+      }).filter(Boolean).slice(0, MAX_BOOKMARKS)
+    } catch { return [] }
+  }
+  const isBookmarked = path => readBookmarks().some(item => item.url === path)
+  const toggleBookmark = (title, path) => {
+    const existing = readBookmarks()
+    const next = isBookmarked(path)
+      ? existing.filter(item => item.url !== path)
+      : [{ title: normalizeTitle(title) || 'Archive folio', url: path, savedAt: Date.now() }, ...existing].slice(0, MAX_BOOKMARKS)
+    try { localStorage.setItem(BOOKMARK_KEY, JSON.stringify(next)) } catch {}
+    window.dispatchEvent(new CustomEvent('geor:bookmarks-updated', { detail: next }))
+    return next.some(item => item.url === path)
   }
 
   const root = document.createElement('div')
@@ -77,6 +105,32 @@ if (!document.getElementById(COMPASS_ID)) {
       </section>
     </div>`
   document.body.append(root)
+
+  const skip = document.createElement('a')
+  skip.className = 'geor-skip-link'
+  skip.href = '#main'
+  skip.textContent = 'Skip to archive content'
+  skip.addEventListener('click', event => {
+    const target = document.querySelector('main, #main, [role="main"]')
+    if (!target) return
+    event.preventDefault(); target.tabIndex = -1; target.focus({ preventScroll: true }); target.scrollIntoView({ block: 'start' })
+  })
+  document.body.prepend(skip)
+
+  const connection = document.createElement('div')
+  connection.className = 'geor-connection-status'
+  connection.setAttribute('role', 'status')
+  connection.setAttribute('aria-live', 'polite')
+  connection.hidden = navigator.onLine
+  connection.textContent = 'Archive connection lost — your device-local trail is safe.'
+  document.body.append(connection)
+  const updateConnection = () => {
+    connection.hidden = navigator.onLine
+    connection.textContent = navigator.onLine ? 'Archive connection restored.' : 'Archive connection lost — your device-local trail is safe.'
+    if (navigator.onLine) { connection.hidden = false; setTimeout(() => { connection.hidden = true }, 2200) }
+  }
+  window.addEventListener('online', updateConnection)
+  window.addEventListener('offline', updateConnection)
 
   const launcher = root.querySelector('.geor-compass-launcher')
   const backdrop = root.querySelector('.geor-compass-backdrop')
@@ -203,4 +257,49 @@ if (!document.getElementById(COMPASS_ID)) {
   })
 
   saveCurrentPage()
+
+  const path = location.pathname + location.search
+  const isWikiPage = location.pathname.startsWith('/wiki/')
+  if (isWikiPage) {
+    const progress = document.createElement('div')
+    progress.className = 'geor-reading-progress'
+    progress.setAttribute('aria-hidden', 'true')
+    progress.innerHTML = '<span></span>'
+    document.body.prepend(progress)
+    const updateProgress = () => {
+      const maximum = Math.max(1, document.documentElement.scrollHeight - innerHeight)
+      progress.firstElementChild.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollY / maximum))})`
+    }
+    addEventListener('scroll', updateProgress, { passive: true }); updateProgress()
+
+    const parts = decodeURIComponent(location.pathname).split('/').filter(Boolean).slice(1)
+    const toolbar = document.createElement('nav')
+    toolbar.className = 'geor-folio-toolbar'
+    toolbar.setAttribute('aria-label', 'Folio tools')
+    const crumb = document.createElement('div'); crumb.className = 'geor-folio-crumbs'
+    const home = document.createElement('a'); home.href = '/wiki/'; home.textContent = 'Archive'; crumb.append(home)
+    parts.slice(0, -1).forEach((part, index) => {
+      const divider = document.createElement('span'); divider.ariaHidden = 'true'; divider.textContent = '›'
+      const link = document.createElement('a'); link.href = '/wiki/' + parts.slice(0, index + 1).map(encodeURIComponent).join('/') + '/'; link.textContent = part.replaceAll('_', ' ')
+      crumb.append(divider, link)
+    })
+    const tools = document.createElement('div'); tools.className = 'geor-folio-actions'
+    const previous = document.createElement('a'); previous.className = 'geor-folio-neighbor'; previous.hidden = true; previous.textContent = '← Previous'
+    const bookmark = document.createElement('button'); bookmark.type = 'button'; bookmark.className = 'geor-bookmark-button'
+    const setBookmarkLabel = active => { bookmark.classList.toggle('is-saved', active); bookmark.setAttribute('aria-pressed', String(active)); bookmark.textContent = active ? '★ Saved' : '☆ Save folio' }
+    setBookmarkLabel(isBookmarked(path))
+    bookmark.addEventListener('click', () => setBookmarkLabel(toggleBookmark(document.title, path)))
+    const next = document.createElement('a'); next.className = 'geor-folio-neighbor'; next.hidden = true; next.textContent = 'Next →'
+    tools.append(previous, bookmark, next); toolbar.append(crumb, tools)
+    const content = document.querySelector('main, [role="main"], .md-main')
+    if (content?.parentNode) content.parentNode.insertBefore(toolbar, content)
+    loadWikiIndex().then(() => {
+      const entries = wikiIndex || []
+      const currentIndex = entries.findIndex(item => new URL(item.url, location.origin).pathname === location.pathname)
+      if (currentIndex > 0) { previous.href = entries[currentIndex - 1].url; previous.title = entries[currentIndex - 1].title; previous.hidden = false }
+      if (currentIndex >= 0 && currentIndex < entries.length - 1) { next.href = entries[currentIndex + 1].url; next.title = entries[currentIndex + 1].title; next.hidden = false }
+    })
+  }
+
+  window.GeorArchive = Object.freeze({ readRecent, readBookmarks, toggleBookmark })
 }

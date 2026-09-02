@@ -70,6 +70,16 @@
           </div>
         </div>
       </section>
+      <section class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden" aria-labelledby="yourArchiveTitle">
+        <div class="px-5 md:px-6 py-4 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
+          <div><p class="text-[10px] tracking-[.24em] text-gold">DEVICE-LOCAL · PRIVATE TO YOU</p><h2 id="yourArchiveTitle" class="font-display text-lg mt-1">Your archive trail</h2></div>
+          <a href="/search" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Find another folio</a>
+        </div>
+        <div class="grid lg:grid-cols-2">
+          <div class="p-5 md:p-6 lg:border-r border-gold/10"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">CONTINUE READING</h3><button id="clearTrail" type="button" class="text-xs text-cream/35 hover:text-cream">Clear trail</button></div><div id="readingTrail" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Your recently opened folios will appear here.</p></div></div>
+          <div class="p-5 md:p-6"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">SAVED FOLIOS</h3><span id="savedCount" class="text-[10px] text-cream/35">0 saved</span></div><div id="savedFolios" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Save a wiki folio from its reading toolbar to keep it here.</p></div></div>
+        </div>
+      </section>
       <div class="grid md:grid-cols-3 gap-4">
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
           <h3 class="text-xs tracking-widest font-semibold text-gold">ATLAS</h3>
@@ -145,6 +155,14 @@
     const dash=document.getElementById('dash');
     const who=document.getElementById('who');
     const numberFormat=new Intl.NumberFormat();
+    const safeLocalItems=(key,limit=8)=>{ try{ const items=JSON.parse(localStorage.getItem(key)||'[]'); return Array.isArray(items)?items.filter(item=>item&&typeof item.title==='string'&&typeof item.url==='string'&&item.url.startsWith('/')).slice(0,limit):[] }catch{return[]} };
+    const renderArchiveTrail=()=>{
+      const trail=safeLocalItems('geor_archive_trail_v1',6); const saved=safeLocalItems('geor_archive_bookmarks_v1',8);
+      const makeRows=(target,items,empty)=>{ target.replaceChildren(); if(!items.length){ const p=document.createElement('p'); p.className='text-sm text-cream/40'; p.textContent=empty; target.append(p); return } items.forEach((item,index)=>{ const link=document.createElement('a'); link.href=item.url; link.className='group flex items-center justify-between gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-3 hover:border-gold/30'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block truncate text-sm font-medium text-cream/80'; title.textContent=item.title; const path=document.createElement('small'); path.className='block truncate mt-1 text-[10px] text-cream/35'; path.textContent=decodeURIComponent(item.url).replace(/^\/wiki\//,'').replace(/\/$/,'').replaceAll('/',' › ')||'Archive'; const arrow=document.createElement('span'); arrow.className='text-gold group-hover:translate-x-1 transition'; arrow.ariaHidden='true'; arrow.textContent=index===0&&target.id==='readingTrail'?'CONTINUE →':'→'; copy.append(title,path); link.append(copy,arrow); target.append(link) }) };
+      makeRows(document.getElementById('readingTrail'),trail,'Your recently opened folios will appear here.'); makeRows(document.getElementById('savedFolios'),saved,'Save a wiki folio from its reading toolbar to keep it here.'); document.getElementById('savedCount').textContent=`${saved.length} saved`;
+    };
+    renderArchiveTrail(); window.addEventListener('geor:trail-updated',renderArchiveTrail); window.addEventListener('geor:bookmarks-updated',renderArchiveTrail);
+    document.getElementById('clearTrail').onclick=()=>{ localStorage.removeItem('geor_archive_trail_v1'); renderArchiveTrail(); };
     async function loadWorldStats(){
       const section=document.getElementById('worldStats');
       const refresh=document.getElementById('statsRefresh');

@@ -195,6 +195,7 @@
         </div>
         <button id="liveRefresh" type="button" aria-label="Refresh archive activity" class="inline-flex items-center gap-2 text-[11px] tracking-widest border border-gold/20 text-gold px-3 py-2 rounded-full hover:bg-gold/10 transition disabled:opacity-50 disabled:cursor-wait"><span class="hidden sm:inline">REFRESH</span><span aria-hidden="true" class="text-sm leading-none">↻</span></button>
       </div>
+      <div class="flex flex-wrap gap-2 mb-5" role="group" aria-label="Filter archive activity"><button type="button" data-update-filter="all" aria-pressed="true" class="update-filter text-[10px] tracking-widest border border-gold/20 rounded-full px-3 py-1.5 bg-gold text-ink">ALL</button><button type="button" data-update-filter="feature" aria-pressed="false" class="update-filter text-[10px] tracking-widest border border-gold/20 rounded-full px-3 py-1.5 text-gold">FEATURES</button><button type="button" data-update-filter="map" aria-pressed="false" class="update-filter text-[10px] tracking-widest border border-gold/20 rounded-full px-3 py-1.5 text-gold">MAPS</button><button type="button" data-update-filter="security" aria-pressed="false" class="update-filter text-[10px] tracking-widest border border-gold/20 rounded-full px-3 py-1.5 text-gold">SECURITY</button><button type="button" data-update-filter="edit" aria-pressed="false" class="update-filter text-[10px] tracking-widest border border-gold/20 rounded-full px-3 py-1.5 text-gold">LORE CHANGES</button></div>
       <div id="liveUpdates" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-[96px]" role="list" aria-label="Recent archive activity" aria-busy="true"></div>
       <p id="liveMeta" class="text-xs text-cream/40 mt-4 min-h-[1em]" aria-live="polite"></p>
       <p id="liveStatus" class="sr-only" aria-live="polite"></p>
@@ -207,9 +208,12 @@
     const meta = document.getElementById('liveMeta');
     const status = document.getElementById('liveStatus');
     const btn = document.getElementById('liveRefresh');
+    let activeFilter = 'all';
+    let latestUpdates = [];
     if(!list) return;
     const icons = { create:'✚', edit:'◐', move:'⇄', delete:'✕', folder:'▭', feature:'✦', map:'⌖', security:'◆', launch:'✧', default:'•' };
     const fallbackUpdates = [
+      { id:'release-reader-experience', action:'feature', path:'/dashboard', summary:'Personal reading trails, saved folios, richer search, fullscreen maps, and recoverable Atlas drafts joined the archive', created_at:'2026-09-02T12:00:00Z' },
       { id:'release-compass', action:'feature', path:'/search', summary:'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at:'2026-09-01T13:10:00Z' },
       { id:'release-auth-v2', action:'security', path:'/', summary:'Password hashing and abuse protection received a transparent security upgrade', created_at:'2026-09-01T13:09:59Z' },
       { id:'release-species', action:'feature', path:'/species', summary:'Species Gallery opened with 34 filterable folios', created_at:'2026-09-01T03:56:24Z' },
@@ -229,14 +233,17 @@
       list.innerHTML = Array.from({length:6}, () => '<div role="presentation" aria-hidden="true" class="rounded-2xl border border-gold/10 bg-cream/[0.025] p-5"><div class="flex items-center gap-2"><span class="feed-skeleton w-7 h-7 rounded-full"></span><span class="feed-skeleton h-3 rounded w-20"></span><span class="feed-skeleton h-3 rounded w-28 ml-auto"></span></div><div class="feed-skeleton h-4 rounded w-4/5 mt-4"></div><div class="feed-skeleton h-3 rounded w-2/5 mt-2"></div></div>').join('');
     }
     function renderUpdates(updates){
-      if(!updates.length){
+      latestUpdates = updates;
+      const visibleUpdates = activeFilter === 'all' ? updates : updates.filter(update => update.action === activeFilter || (activeFilter === 'edit' && ['create','move','folder'].includes(update.action)));
+      if(!visibleUpdates.length){
         list.innerHTML = '<div role="listitem" class="md:col-span-2 lg:col-span-3 rounded-2xl border border-gold/15 bg-cream/[0.03] px-6 py-10 text-center"><div class="text-gold text-xl" aria-hidden="true">◇</div><p class="font-display text-sm tracking-widest mt-3">THE LEDGER IS QUIET</p><p class="text-sm text-cream/50 mt-2">The next archive milestone will appear here automatically.</p></div>';
         return;
       }
-      list.innerHTML = updates.map(u=>{
+      list.innerHTML = visibleUpdates.map(u=>{
         const icon = icons[u.action] || icons.default;
         const action = escapeHtml((u.action || 'entry').toString().toUpperCase());
-        const path = escapeHtml(u.path || '');
+        const rawPath = typeof u.path === 'string' && /^\/[a-z0-9_\-./ ]*$/i.test(u.path) && !u.path.includes('..') ? u.path : '';
+        const path = escapeHtml(rawPath);
         const summary = escapeHtml(u.summary || u.action || 'Archive activity');
         const created = escapeHtml(u.created_at || '');
         return `<div role="listitem" class="rounded-2xl border border-gold/12 bg-cream/[0.03] p-5 hover:border-gold/25 transition">
@@ -247,7 +254,7 @@
             <time class="text-cream/50" datetime="${created}">${escapeHtml(fmt(u.created_at))}</time>
           </div>
           <div class="font-display text-[13px] font-semibold tracking-wide mt-3">${summary}</div>
-          ${path? `<div class="text-xs text-gold/70 mt-1 truncate" title="${path}">${path}</div>` : ''}
+          ${path? `<a href="${path}" class="inline-block text-xs text-gold/70 mt-2 truncate hover:text-gold" title="${path}">${path} →</a>` : ''}
         </div>`;
       }).join('');
     }
@@ -291,6 +298,7 @@
       }
     }
     btn?.addEventListener('click', load);
+    document.querySelectorAll('[data-update-filter]').forEach(button=>button.addEventListener('click',()=>{ activeFilter=button.dataset.updateFilter; document.querySelectorAll('[data-update-filter]').forEach(item=>{ const on=item===button; item.setAttribute('aria-pressed',String(on)); item.classList.toggle('bg-gold',on); item.classList.toggle('text-ink',on); item.classList.toggle('text-gold',!on) }); renderUpdates(latestUpdates); if(status) status.textContent=`Showing ${activeFilter === 'all' ? 'all' : activeFilter} archive activity`; }));
     load();
     setInterval(() => { if(!document.hidden) load(); }, 30000);
     document.addEventListener('visibilitychange', () => { if(!document.hidden) load(); });

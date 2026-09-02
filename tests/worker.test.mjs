@@ -154,7 +154,7 @@ test('/api/me returns 401 without a session', async () => {
   const updates = await updatesResponse.json()
   assert.equal(updates.source, 'changelog')
   assert.equal(updates.updates.length, 3)
-  assert.match(updates.updates[0].summary, /Archive Compass/)
+  assert.match(updates.updates[0].summary, /Personal reading trails/)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -212,7 +212,12 @@ test('private files redirect to the gate and public aliases reach the intended a
   assert.match(workerSource, /archive-compass\.js/)
   assert.match(compassScript, /ctrlKey/)
   assert.match(compassScript, /wiki-index\.json/)
-  for (const releaseId of ['release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
+  assert.match(compassScript, /geor_archive_bookmarks_v1/)
+  assert.match(compassScript, /geor-reading-progress/)
+  assert.match(studioScript, /geor_atlas_draft_v1_/)
+  assert.match(atlasHtml, /atlasFullscreen/)
+  assert.match(updatesHtml, /data-update-filter="security"/)
+  for (const releaseId of ['release-reader-experience', 'release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
     assert.match(workerSource, new RegExp(releaseId))
     assert.match(updatesHtml, new RegExp(releaseId))
   }

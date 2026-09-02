@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="/Geor_from_orbit-1280.webp" imagesrcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high">
   <style>html{scroll-padding-top:72px}section[id],a[id]{scroll-margin-top:80px}</style>
-  <script type="module" crossorigin src="/assets/index-CXqg4ON_.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-PNvQ7rjf.css">
+  <script type="module" crossorigin src="/assets/index-BLwHU_F0.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DHHmGrkM.css">
 </head>
 <body class="bg-ink text-cream">
   <!-- Nav -->
@@ -95,9 +95,9 @@
           Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <button id="openExplore" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Explore the World</button>
-          <a href="/#atlas" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">View the Atlas</a>
-          <a href="/updates" class="border border-gold/30 text-gold px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-gold/10 transition">Updates & Features</a>
+          <a href="/#start" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Begin with Ge'or</a>
+          <button id="openExplore" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">Member Sign In</button>
+          <a href="/#atlas" class="border border-gold/30 text-gold px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-gold/10 transition">Explore the Atlas</a>
         </div>
         <div class="mt-10 flex flex-wrap gap-2 text-[11px] tracking-widest">
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
@@ -118,6 +118,19 @@
       <span>PRIVATE ARCHIVE • INVITE ONLY • BUILT TO ENDURE</span>
       <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
       <span class="text-gold">WORLDOFGEOR.COM</span>
+    </div>
+  </section>
+
+  <!-- Clear first-visit routes -->
+  <section id="start" class="max-w-[1280px] mx-auto px-6 py-16 md:py-20" aria-labelledby="startTitle">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+      <div class="max-w-[680px]"><p class="text-gold text-[11px] tracking-[0.28em] font-semibold">START HERE</p><h2 id="startTitle" class="font-display text-[28px] md:text-[38px] font-bold mt-2">CHOOSE YOUR DOORWAY.</h2><p class="mt-3 text-sm leading-6 text-cream/65">See the world without an account, enter the archive if you are already a member, or continue from your last private folio on this device.</p></div>
+      <a id="continueArchive" href="/dashboard" class="hidden rounded-full border border-gold/25 px-5 py-2.5 text-xs text-gold hover:bg-gold/10"><span>CONTINUE READING</span> →</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+      <a href="/#world" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-[9px] tracking-[.24em] text-gold">PUBLIC · NO ACCOUNT</span><h3 class="font-display text-base mt-3">Discover the World</h3><p class="text-sm leading-6 text-cream/55 mt-2">Begin with its scale, chronology, peoples, and visual identity.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">START THE TOUR →</span></a>
+      <a href="/atlas" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-[9px] tracking-[.24em] text-gold">MEMBERS · INTERACTIVE</span><h3 class="font-display text-base mt-3">Open the Atlas</h3><p class="text-sm leading-6 text-cream/55 mt-2">Pan, zoom, search named places, and move directly into their archive entries.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">VIEW THE MAP →</span></a>
+      <a href="/dashboard" class="group rounded-2xl border border-gold/35 bg-gradient-to-br from-gold/[.13] to-transparent p-6 hover:border-gold/60 transition"><span class="text-[9px] tracking-[.24em] text-gold">MEMBERS · PRIVATE</span><h3 class="font-display text-base mt-3">Enter the Archive</h3><p class="text-sm leading-6 text-cream/60 mt-2">Return to recent folios, saved pages, search, maps, and the Battlestation.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">ENTER YOUR DASHBOARD →</span></a>
     </div>
   </section>
 
