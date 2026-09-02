@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3LuqMZfMZc3G6v9K4GQZLlQp1Ns0M=" crossorigin="anonymous">
   <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
   <style>
     body{background:#0f0e0d;color:#f2e8d0}
     .leaflet-container{background:#0b0b0a}
@@ -321,5 +322,6 @@
     if('requestIdleCallback' in window) window.requestIdleCallback(boot,{timeout:700}); else setTimeout(boot,80);
   })();
   </script>
+  <script type="module" src="/archive-compass.js"></script>
 </body>
 </html>

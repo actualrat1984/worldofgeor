@@ -3,17 +3,20 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "predev": "npm run build:css",
     "dev": "vite --configLoader bundle",
     "build": "npm run build:vite && npm run build:wiki",
     "build:css": "tailwindcss -c tailwind.config.js -i src/style.css -o public/site.css --minify",
     "build:vite": "npm run build:css && vite build --configLoader bundle",
-    "build:wiki": "python \"C:/Users/pc/Documents/Lore/Lore/site/generate_nav.py\" --write && python -m mkdocs build -f \"C:/Users/pc/Documents/Lore/Lore/site/mkdocs.yml\" --site-dir \"C:/Users/pc/Documents/worldofgeor/dist/wiki\" && python \"C:/Users/pc/Documents/Lore/Lore/site/optimize_assets.py\" \"C:/Users/pc/Documents/worldofgeor/dist/wiki\" && python \"C:/Users/pc/Documents/worldofgeor/scripts/generate-wiki-index.py\"",
+    "build:wiki": "node scripts/build-wiki.mjs",
     "check:site": "node scripts/check-site.mjs",
     "preview": "vite preview",
     "test": "node --test tests/*.test.mjs",
-    "verify": "npm test && npm run check:site"
+    "verify": "node --test tests/*.test.mjs && node scripts/check-site.mjs"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

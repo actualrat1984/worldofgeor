@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
   <style>#passwordDialog::backdrop{background:rgba(15,14,13,.82);backdrop-filter:blur(6px)}</style>
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
@@ -207,5 +208,6 @@
       updates.forEach(update=>{ const row=document.createElement('div'); row.className='px-5 py-4 flex items-center justify-between gap-4'; const copy=document.createElement('div'); const title=document.createElement('p'); title.className='text-sm text-cream/80'; title.textContent=update.summary||'Archive updated'; const path=document.createElement('p'); path.className='text-xs text-cream/40 mt-1'; path.textContent=update.path||'World of Ge’or'; const time=document.createElement('time'); time.className='text-[10px] text-gold/70 whitespace-nowrap'; time.dateTime=update.created_at||''; time.textContent=update.created_at?new Date(update.created_at).toLocaleDateString():'Recent'; copy.append(title,path); row.append(copy,time); list.append(row); });
     }).catch(()=>{ document.getElementById('recentActivity').textContent='The ledger is temporarily unavailable.'; });
   </script>
+  <script type="module" src="/archive-compass.js"></script>
 </body>
 </html>

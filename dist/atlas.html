@@ -3,16 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Atlas — World of Ge'or</title>
   <meta name="description" content="Choose your map — World of Ge'or (597 AGD) or Grimmel Peninsula. Political maps by the Cartographer Office of the Erisian Empire." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = { theme: { extend: { colors: { ink: '#0f0e0d', cream: '#f2e8d0', gold: '#d9b77a', amberdeep: '#b8924a' }, fontFamily: { display: ['Cinzel','serif'], sans: ['Inter','sans-serif'] } } } }
-  </script>
-  <style>body{background:#0f0e0d;color:#f2e8d0}</style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3LuqMZfMZc3G6v9K4GQZLlQp1Ns0M=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+  <style>
+    body{background:#0f0e0d;color:#f2e8d0}
+    .leaflet-container{background:#0b0b0a}
+    .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1a1a18;color:#f2e8d0;border:1px solid rgba(217,183,122,.2)}
+    .leaflet-popup-content{margin:14px 16px;min-width:190px;font-family:Inter,system-ui,sans-serif}
+    .leaflet-popup-content a{color:#d9b77a;text-decoration:underline;text-underline-offset:3px}
+    .leaflet-popup-close-button{color:rgba(242,232,208,.7)!important}
+    .leaflet-control-zoom a{background:#1a1a18!important;color:#d9b77a!important;border-color:rgba(217,183,122,.22)!important}
+    .leaflet-control-attribution{background:rgba(15,14,13,.84)!important;color:rgba(242,232,208,.5)!important;border:1px solid rgba(217,183,122,.12)!important;border-radius:8px 0 0 0}
+    .leaflet-control-attribution a{color:#d9b77a!important}
+    .atlas-marker-shell{background:transparent;border:0}
+    .atlas-marker{display:block;width:18px;height:18px;border-radius:999px;background:#d9b77a;border:3px solid #0f0e0d;box-shadow:0 0 0 1px rgba(217,183,122,.9),0 4px 14px rgba(15,14,13,.55);transition:transform .18s ease,box-shadow .18s ease}
+    .atlas-marker-shell:hover .atlas-marker,.atlas-marker-shell:focus .atlas-marker{transform:scale(1.22);box-shadow:0 0 0 2px rgba(217,183,122,.8),0 5px 18px rgba(15,14,13,.65)}
+    .atlas-search-results{max-height:220px;overflow:auto}
+    .atlas-search-results:empty{display:none}
+    @media (prefers-reduced-motion:reduce){.atlas-marker{transition:none}}
+  </style>
 </head>
 <body class="bg-ink text-cream font-sans">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -21,10 +37,16 @@
         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
         <span class="font-display tracking-[0.18em] text-[13px] font-semibold">WORLD OF GE'OR</span>
       </a>
-      <a href="/" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← BACK TO WORLD</a>
+      <div class="flex items-center gap-2">
+        <a href="/updates" class="hidden lg:inline text-xs tracking-widest text-cream/60 hover:text-cream transition">UPDATES</a>
+        <a href="/wiki/" class="hidden md:inline text-xs tracking-widest text-gold hover:text-cream transition">WIKI</a>
+        <a href="/map-editor" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">ATLAS STUDIO</a>
+        <a href="/" class="hidden sm:inline text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← WORLD</a>
+      </div>
     </div>
   </header>
 
+  <main>
   <section class="max-w-[1280px] mx-auto px-6 py-12 md:py-16">
     <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">CARTOGRAPHER OFFICE • 597 AGD</p>
     <h1 class="font-display text-[36px] md:text-[48px] font-bold tracking-tight leading-[0.95] mt-2">CHOOSE YOUR MAP</h1>
@@ -32,9 +54,9 @@
 
     <div class="grid md:grid-cols-2 gap-6 mt-10">
       <!-- World map -->
-      <a href="/world-map.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+      <a href="/world-map.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
-          <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" />
+          <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="1200" height="600" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">WORLD MAP • 16000×8000 • 597 AGD</div>
         </div>
         <div class="p-6">
@@ -45,9 +67,9 @@
       </a>
 
       <!-- Grimmel -->
-      <a href="/grimmel-peninsula.jpg" target="_blank" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
+      <a href="/grimmel-peninsula.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[1.49/1] overflow-hidden bg-[#0b0b0a]">
-          <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500" />
+          <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="3840" height="5715" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">GRIMMEL PENINSULA • STATUE LEVEL ZOOM</div>
         </div>
         <div class="p-6">
@@ -59,9 +81,41 @@
     </div>
 
     <div class="mt-10 rounded-xl border border-gold/10 bg-cream/[0.03] p-5 text-sm text-cream/60 leading-6">
-      <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews — the vault holds the 57 MB / 43 MB masters for battlestation tiling at <code class="text-gold/80">C:\Users\pc\Downloads\Map</code>.
+      <b class="text-cream">Tip:</b> On desktop, open the full map in a new tab and zoom with <code class="text-gold">Ctrl + scroll</code>. On mobile, pinch to zoom. These are compressed previews; the private vault preserves the high-resolution masters for future tiling.
     </div>
+    <!-- Interactive viewer — Leaflet CRS.Simple (premium, in-page pan/zoom) -->
+    <section class="mt-10 rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03]">
+      <div class="px-6 py-5 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display tracking-[0.18em] text-xs font-semibold text-gold">INTERACTIVE VIEWER • LEAFLET • CRS.SIMPLE</h2>
+          <p class="text-sm text-cream/70 mt-1">Pan and zoom the world map right here — no new tab needed. Scale: 3.086 km / pixel.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="atlasWorldBtn" type="button" aria-pressed="true" class="text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold">WORLD</button>
+          <button id="atlasGrimmelBtn" type="button" aria-pressed="false" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">GRIMMEL</button>
+          <button id="atlasReset" type="button" aria-label="Reset map view" class="text-xs tracking-widest border border-cream/15 text-cream/70 px-4 py-2 rounded-full hover:bg-cream/5 transition" title="Reset view">⟲</button>
+        </div>
+      </div>
+      <div class="border-b border-gold/10 px-6 py-4">
+        <div class="max-w-[620px]">
+          <label for="atlasSearch" class="block text-[10px] tracking-[0.24em] text-gold/80">FIND A MAPPED PLACE</label>
+          <div class="relative mt-2">
+            <input id="atlasSearch" type="search" role="combobox" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the current map…" aria-controls="atlasSearchResults" aria-expanded="false" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-2.5 pr-10 text-sm text-cream placeholder:text-cream/35 outline-none transition focus:border-gold/45 focus:bg-cream/[0.04]" />
+            <span aria-hidden="true" class="pointer-events-none absolute right-3 top-2.5 text-xs text-cream/30">⌕</span>
+          </div>
+          <div id="atlasSearchResults" role="listbox" aria-label="Mapped places" class="atlas-search-results hidden mt-2 rounded-xl border border-gold/15 bg-ink/95 p-1 shadow-2xl"></div>
+          <p id="atlasSearchStatus" class="mt-2 min-h-[1em] text-xs text-cream/45" role="status">Choose a map to load its named places.</p>
+        </div>
+      </div>
+      <div id="atlasMap" class="w-full" style="height:clamp(360px,62vh,560px)" role="region" aria-label="Interactive map of Ge'or" aria-describedby="atlasMapHelp atlasMapStatus" aria-busy="true" tabindex="0"></div>
+      <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] tracking-widest border-t border-gold/10">
+        <span id="atlasMapHelp" class="text-cream/50">DRAG to pan • SCROLL to zoom • ARROW KEYS to pan • <span class="text-gold">3.086 km/px</span> • Private — gated by geor_token</span>
+        <span class="text-cream/40">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
+      </div>
+      <p id="atlasMapStatus" class="sr-only" aria-live="polite"></p>
+    </section>
   </section>
+  </main>
 
   <footer class="border-t border-gold/10 mt-8">
     <div class="max-w-[1280px] mx-auto px-6 py-6 text-xs tracking-widest text-cream/40 flex justify-between">
@@ -70,5 +124,204 @@
     </div>
   </footer>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+  <script>
+  (function(){
+    const mapEl = document.getElementById('atlasMap');
+    const searchEl = document.getElementById('atlasSearch');
+    const resultsEl = document.getElementById('atlasSearchResults');
+    const searchStatus = document.getElementById('atlasSearchStatus');
+    const mapStatus = document.getElementById('atlasMapStatus');
+    const worldBtn = document.getElementById('atlasWorldBtn');
+    const grimmelBtn = document.getElementById('atlasGrimmelBtn');
+    const resetBtn = document.getElementById('atlasReset');
+    if(typeof L === 'undefined'){
+      mapEl.setAttribute('aria-busy','false');
+      mapEl.innerHTML='<div class="h-full grid place-items-center p-8 text-center"><div><p class="font-display text-sm tracking-widest text-gold">MAP LIBRARY UNAVAILABLE</p><p class="text-sm text-cream/55 mt-2">Reload the atlas to try opening the interactive folio again.</p></div></div>';
+      if(mapStatus) mapStatus.textContent='The interactive map library could not be loaded.';
+      return;
+    }
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const world = { id:'world', label:'World Map', w:3840, h:1920, url:'/world-map.webp', fallback:'/world-map.jpg' };
+    const grimmel = { id:'grimmel', label:'Grimmel Peninsula', w:3840, h:5715, url:'/grimmel-peninsula.webp', fallback:'/grimmel-peninsula.jpg' };
+    const configs = { world, grimmel };
+    const pins = {
+      world: [
+        { name:'Grimmel Peninsula', x:.44, y:.54, detail:'The statue-level zoom: the western frontier where the story breathes.', url:'/wiki/World/Nations/South Erisdar/Grimmel Peninsula/' },
+        { name:'Erisian Empire', x:.53, y:.27, detail:'The imperial center of Erisdar, recorded in the 597 AGD political ledger.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/' },
+        { name:'Dissenbarg', x:.35, y:.34, detail:'A major power on the world map, with its own civic and mercantile memory.', url:'/wiki/World/Nations/Dissenbarg/Dissenbarg/' },
+        { name:'Kobre', x:.47, y:.42, detail:'The gearward world: four nations measuring life in brass, coal and debt.', url:'/wiki/World/Nations/Kobre/Kobre/' },
+        { name:'Lumina', x:.63, y:.51, detail:'Canopy nations where light is currency and the ground is myth.', url:'/wiki/World/Nations/Lumina/Lumina/' },
+        { name:'Tuba', x:.75, y:.44, detail:'A distant continent of its own, linked through the archive’s nations index.', url:'/wiki/World/Nations/Tuba/Tuba/' },
+        { name:'Merratodoni', x:.78, y:.38, detail:'The liberty continent at the edge of the Great Ocean.', url:'/wiki/World/Locations/Continents/Merratodoni/Merratodoni/' },
+        { name:'Romanium Island', x:.17, y:.11, detail:'The island of the old master forges and the Dwarven First Stone.', url:'/wiki/World/Locations/Romanium Island/' },
+        { name:'Formingar Ocean', x:.38, y:.55, detail:'The ocean around which the first migrations began after the Lost Era.', url:'/wiki/World/Locations/Seas/Formingar Ocean/' }
+      ],
+      grimmel: [
+        { name:'Erisian Empire', x:.49, y:.08, detail:'The imperial crownland occupies the northern reaches of the peninsula.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/' },
+        { name:'Aeger', x:.49, y:.18, detail:'An Erisian county in the high country below the imperial heartland.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/Counties/Aeger/' },
+        { name:'Aelefer', x:.27, y:.24, detail:'A southern realm on the Vennerian coast.', url:'/wiki/World/Nations/South Erisdar/Aelefer/' },
+        { name:'Grimmel Republic', x:.47, y:.35, detail:'The central republic and the campaign’s primary ground.', url:'/wiki/World/Nations/South Erisdar/Grimmel Republic/' },
+        { name:'Elkenloft', x:.39, y:.44, detail:'A green southern country beneath Grimmel’s central forests.', url:'/wiki/World/Nations/South Erisdar/Elkenloft/' },
+        { name:'Ferroson', x:.68, y:.53, detail:'The eastern country on the road toward the southern powers.', url:'/wiki/World/Nations/South Erisdar/Ferroson/' },
+        { name:'Arisdian', x:.56, y:.61, detail:'A southern realm at the meeting line of Grimmel and the Scarlet Order.', url:'/wiki/World/Nations/South Erisdar/Arisdian/' },
+        { name:'Tundranya', x:.72, y:.61, detail:'The colder eastern edge of the southern peninsula.', url:'/wiki/World/Nations/South Erisdar/Tundranya/' },
+        { name:'Anos Plutocracy', x:.77, y:.69, detail:'A large eastern power, bright against the sea.', url:'/wiki/World/Nations/South Erisdar/Anos Plutocracy/' },
+        { name:'Scarlet Order', x:.38, y:.70, detail:'The great southern order, marked by red borders and old force.', url:'/wiki/World/Nations/South Erisdar/Scarlet Order/' },
+        { name:'Evern', x:.32, y:.79, detail:'A southern country at the edge of the Scarlet sphere.', url:'/wiki/World/Nations/South Erisdar/Evern/' },
+        { name:'Limese League', x:.70, y:.21, detail:'A trading power whose territory reaches down the eastern coast.', url:'/wiki/World/Nations/South Erisdar/Limese League/' }
+      ]
+    };
+    const escapeHtml = value => String(value ?? '').replace(/[&<>\"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
+    const map = L.map(mapEl, { crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:.25, zoomDelta:.5, attributionControl:true, keyboard:false, maxBoundsViscosity:.7 });
+    let current = world;
+    let overlay = null;
+    let markerEntries = [];
+    let loadNonce = 0;
+    function boundsFor(cfg){ return [[0,0],[cfg.h,cfg.w]]; }
+    function setStatus(message){ if(mapStatus) mapStatus.textContent=message; }
+    function setMapButtons(cfg){
+      const active='text-xs tracking-widest bg-gold text-ink px-4 py-2 rounded-full font-semibold';
+      const idle='text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition';
+      if(worldBtn){ worldBtn.className=cfg===world?active:idle; worldBtn.setAttribute('aria-pressed',String(cfg===world)); }
+      if(grimmelBtn){ grimmelBtn.className=cfg===grimmel?active:idle; grimmelBtn.setAttribute('aria-pressed',String(cfg===grimmel)); }
+    }
+    function popupFor(pin){
+      return '<div class=\"atlas-popup\"><div class=\"text-[10px] tracking-[0.22em] text-gold\">'+escapeHtml(current.label.toUpperCase())+'</div><h3 class=\"font-display text-sm font-semibold mt-1\">'+escapeHtml(pin.name)+'</h3><p class=\"text-xs leading-5 mt-2\">'+escapeHtml(pin.detail)+'</p><a class=\"inline-block mt-3\" href=\"'+escapeHtml(pin.url)+'\">Open lore entry →</a></div>';
+    }
+    function clearMarkers(){
+      markerEntries.forEach(entry=>map.removeLayer(entry.marker));
+      markerEntries=[];
+    }
+    function addPins(cfg, nonce, requestedPlace){
+      if(nonce!==loadNonce) return;
+      clearMarkers();
+      markerEntries=(pins[cfg.id]||[]).map(pin=>{
+        const marker=L.marker([cfg.h*pin.y,cfg.w*pin.x], {
+          title:pin.name,
+          alt:pin.name,
+          keyboard:true,
+          icon:L.divIcon({className:'atlas-marker-shell',html:'<span class=\"atlas-marker\" aria-hidden=\"true\"></span>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-12]})
+        }).addTo(map);
+        marker.bindPopup(popupFor(pin), { maxWidth:280, closeButton:true });
+        marker.on('click',()=>{ searchEl.value=pin.name; renderSearchResults(); searchStatus.textContent=pin.name+' selected; open its lore entry from the map callout.'; });
+        return { pin, marker, latlng:[cfg.h*pin.y,cfg.w*pin.x] };
+      });
+      renderSearchResults();
+      mapEl.setAttribute('aria-busy','false');
+      setStatus(cfg.label+' loaded with '+markerEntries.length+' named lore pins. Use the search field or focus a pin.');
+      if(requestedPlace){
+        const index=(pins[cfg.id]||[]).findIndex(pin=>pin.name.toLowerCase()===requestedPlace.toLowerCase());
+        if(index>=0) setTimeout(()=>focusPin(index),80);
+      }
+    }
+    function renderSearchResults(){
+      if(!resultsEl || !searchEl) return;
+      const query=searchEl.value.trim().toLowerCase();
+      const currentPins=pins[current.id]||[];
+      if(!query){
+        resultsEl.innerHTML='';
+        resultsEl.classList.add('hidden');
+        searchEl.setAttribute('aria-expanded','false');
+        if(searchStatus) searchStatus.textContent=currentPins.length+' named places mapped on the '+current.label.toLowerCase()+'.';
+        return;
+      }
+      const matches=currentPins.map((pin,index)=>({pin,index})).filter(item=>item.pin.name.toLowerCase().includes(query)||item.pin.detail.toLowerCase().includes(query)).slice(0,8);
+      resultsEl.classList.remove('hidden');
+      searchEl.setAttribute('aria-expanded','true');
+      if(!matches.length){
+        resultsEl.innerHTML='<div role=\"option\" aria-disabled=\"true\" class=\"px-3 py-2 text-sm text-cream/45\">No mapped place matches “'+escapeHtml(searchEl.value)+'”.</div>';
+        if(searchStatus) searchStatus.textContent='No mapped places match '+searchEl.value+'.';
+        return;
+      }
+      resultsEl.innerHTML=matches.map(item=>'<button type=\"button\" role=\"option\" data-pin-index=\"'+item.index+'\" class=\"w-full text-left rounded-lg px-3 py-2 hover:bg-gold/10 focus:bg-gold/10 focus:outline-none\"><span class=\"block text-sm text-cream\">'+escapeHtml(item.pin.name)+'</span><span class=\"block text-xs text-cream/45 mt-0.5 truncate\">'+escapeHtml(item.pin.detail)+'</span></button>').join('');
+      resultsEl.querySelectorAll('[data-pin-index]').forEach(button=>button.addEventListener('click',()=>focusPin(Number(button.dataset.pinIndex))));
+      if(searchStatus) searchStatus.textContent=matches.length+' mapped place'+(matches.length===1?'':'s')+' found.';
+    }
+    function focusPin(index){
+      const entry=markerEntries[index];
+      if(!entry) return;
+      const zoom=Math.min(map.getMaxZoom(),current===world ? 0.5 : 0.25);
+      map.setView(entry.latlng,zoom,{animate:!reduceMotion});
+      entry.marker.openPopup();
+      if(searchEl) searchEl.value=entry.pin.name;
+      if(resultsEl){ resultsEl.innerHTML=''; resultsEl.classList.add('hidden'); searchEl?.setAttribute('aria-expanded','false'); }
+      if(searchStatus) searchStatus.textContent=entry.pin.name+' selected. Lore link opened in the map callout.';
+      mapEl.focus({preventScroll:true});
+      const params=new URLSearchParams(location.search); params.set('map',current.id); params.set('place',entry.pin.name);
+      history.replaceState(null,'',location.pathname+'?'+params.toString());
+    }
+    function loadMap(cfg){
+      current=cfg;
+      const nonce=++loadNonce;
+      const bounds=boundsFor(cfg);
+      const requestedPlace=new URLSearchParams(location.search).get('place');
+      setMapButtons(cfg);
+      clearMarkers();
+      mapEl.setAttribute('aria-busy','true');
+      if(overlay) map.removeLayer(overlay);
+      map.setMaxBounds(bounds);
+      map.fitBounds(bounds,{padding:[12,12],animate:false});
+      setStatus('Loading '+cfg.label.toLowerCase()+'…');
+      if(searchStatus) searchStatus.textContent='Loading named places…';
+      const next=L.imageOverlay(cfg.url,bounds,{interactive:false,alt:cfg.label+' political map'});
+      let usedFallback=false;
+      next.on('load',()=>{ if(nonce!==loadNonce) return; addPins(cfg,nonce,requestedPlace); });
+      next.on('error',()=>{
+        if(nonce!==loadNonce) return;
+        if(!usedFallback){ usedFallback=true; next.setUrl(cfg.fallback); }
+        else { mapEl.setAttribute('aria-busy','false'); setStatus('The '+cfg.label.toLowerCase()+' image could not be loaded. Try again or open the full map above.'); if(searchStatus) searchStatus.textContent='Map image unavailable.'; }
+      });
+      overlay=next.addTo(map);
+      const params=new URLSearchParams(location.search); params.set('map',cfg.id); params.delete('place');
+      history.replaceState(null,'',location.pathname+'?'+params.toString());
+    }
+    searchEl?.addEventListener('input',renderSearchResults);
+    searchEl?.addEventListener('keydown',event=>{
+      if(event.key==='ArrowDown'){
+        const first=resultsEl?.querySelector('[data-pin-index]');
+        if(first){ event.preventDefault(); first.focus(); }
+      } else if(event.key==='Enter'){
+        const first=resultsEl?.querySelector('[data-pin-index]');
+        if(first){ event.preventDefault(); focusPin(Number(first.dataset.pinIndex)); }
+      } else if(event.key==='Escape'){
+        searchEl.value=''; renderSearchResults(); mapEl.focus({preventScroll:true});
+      }
+    });
+    resultsEl?.addEventListener('keydown',event=>{
+      const options=[...resultsEl.querySelectorAll('[data-pin-index]')];
+      const currentIndex=options.indexOf(document.activeElement);
+      if(event.key==='ArrowDown' && options.length){ event.preventDefault(); options[(currentIndex+1+options.length)%options.length].focus(); }
+      else if(event.key==='ArrowUp' && options.length){ event.preventDefault(); (currentIndex<=0 ? searchEl : options[currentIndex-1]).focus(); }
+      else if(event.key==='Escape'){ event.preventDefault(); resultsEl.classList.add('hidden'); searchEl.setAttribute('aria-expanded','false'); searchEl.focus(); }
+    });
+    document.addEventListener('click',event=>{
+      if(event.target===searchEl || resultsEl?.contains(event.target)) return;
+      resultsEl?.classList.add('hidden');
+      searchEl?.setAttribute('aria-expanded','false');
+    });
+    worldBtn?.addEventListener('click',()=>loadMap(world));
+    grimmelBtn?.addEventListener('click',()=>loadMap(grimmel));
+    resetBtn?.addEventListener('click',()=>{ map.fitBounds(boundsFor(current),{padding:[12,12],animate:!reduceMotion}); mapEl.focus({preventScroll:true}); setStatus(current.label+' view reset.'); });
+    mapEl.addEventListener('keydown',event=>{
+      const step=Math.max(80,Math.round(Math.min(mapEl.clientWidth,mapEl.clientHeight)*.18));
+      if(event.key==='ArrowLeft'){ event.preventDefault(); map.panBy([-step,0],{animate:!reduceMotion}); }
+      else if(event.key==='ArrowRight'){ event.preventDefault(); map.panBy([step,0],{animate:!reduceMotion}); }
+      else if(event.key==='ArrowUp'){ event.preventDefault(); map.panBy([0,-step],{animate:!reduceMotion}); }
+      else if(event.key==='ArrowDown'){ event.preventDefault(); map.panBy([0,step],{animate:!reduceMotion}); }
+      else if(event.key==='+' || event.key==='='){ event.preventDefault(); map.zoomIn(undefined,{animate:!reduceMotion}); }
+      else if(event.key==='-'){ event.preventDefault(); map.zoomOut(undefined,{animate:!reduceMotion}); }
+      else if(event.key==='Home'){ event.preventDefault(); resetBtn?.click(); }
+      else if(event.key.toLowerCase()==='f'){ event.preventDefault(); searchEl?.focus(); }
+    });
+    window.addEventListener('resize',()=>map.invalidateSize(),{passive:true});
+    const params=new URLSearchParams(location.search);
+    const initial=configs[params.get('map')==='grimmel'?'grimmel':'world'];
+    setStatus('Map viewer ready. Loading '+initial.label.toLowerCase()+'…');
+    const boot=()=>loadMap(initial);
+    if('requestIdleCallback' in window) window.requestIdleCallback(boot,{timeout:700}); else setTimeout(boot,80);
+  })();
+  </script>
+  <script type="module" src="/archive-compass.js"></script>
 </body>
 </html>

@@ -54,6 +54,9 @@
 /search*
   Cache-Control: private, no-store
 
+/archive-compass*
+  Cache-Control: private, no-store
+
 /wiki-index.json
   Cache-Control: private, no-store
 

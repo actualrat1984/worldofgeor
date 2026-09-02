@@ -7,6 +7,9 @@ const JWT_EXP_SEC = 60 * 60 * 24 * 30; // 30 days
 const JWT_ISSUER = 'worldofgeor';
 const COOKIE_NAME = 'geor_token';
 const ADMIN_EMAIL = 'ichieisenheart@gmail.com';
+const PASSWORD_ITERATIONS = 600_000;
+const LEGACY_PASSWORD_ITERATIONS = 100_000;
+const PASSWORD_HASH_SCHEME = 'pbkdf2-sha256';
 const MAX_JSON_BYTES = 4_096;
 const MAX_SAVE_JSON_BYTES = 1_000_000;
 const MAX_MAP_JSON_BYTES = 512_000;
@@ -16,6 +19,8 @@ const MAP_DIMENSIONS = Object.freeze({
   grimmel: { width: 3840, height: 5715 },
 });
 const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-compass', action: 'feature', path: '/search', summary: 'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at: '2026-09-01T13:10:00Z' },
+  { id: 'release-auth-v2', action: 'security', path: '/', summary: 'Password hashing and abuse protection received a transparent security upgrade', created_at: '2026-09-01T13:09:59Z' },
   { id: 'release-species', action: 'feature', path: '/species', summary: 'Species Gallery opened with 34 filterable folios', created_at: '2026-09-01T03:56:24Z' },
   { id: 'release-stats', action: 'feature', path: '/dashboard', summary: 'World Stats joined the private member dashboard', created_at: '2026-09-01T03:56:23Z' },
   { id: 'release-studio', action: 'map', path: '/map-editor', summary: 'Atlas Studio and archive search went live', created_at: '2026-09-01T02:53:10Z' },
@@ -24,6 +29,11 @@ const RELEASE_CHANGELOG = Object.freeze([
   { id: 'release-ledger', action: 'launch', path: '/updates', summary: 'The public, privacy-safe updates ledger launched', created_at: '2026-08-31T03:58:49Z' },
 ]);
 const DUMMY_PASSWORD_SALT = 'AAAAAAAAAAAAAAAAAAAAAA';
+const RATE_LIMITS = Object.freeze({
+  login: { attempts: 8, windowSeconds: 15 * 60 },
+  register: { attempts: 5, windowSeconds: 60 * 60 },
+  requestAccess: { attempts: 3, windowSeconds: 60 * 60 },
+});
 const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
 const PRIVATE_ASSET_PATHS = new Set([
   '/wiki-index.json',
@@ -38,6 +48,8 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/species.css',
   '/species.js',
   '/search.js',
+  '/archive-compass.css',
+  '/archive-compass.js',
 ]);
 const ROUTE_ALIASES = new Map([
   ['/updates', '/updates.html'],
@@ -85,6 +97,33 @@ async function pbkdf2Hash(password, saltB64, iterations = 100000) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations, hash: 'SHA-256' }, key, 256);
   return b64url(new Uint8Array(bits));
+}
+function parsePasswordHash(value) {
+  if (typeof value !== 'string') return null;
+  const modern = value.match(/^pbkdf2-sha256\$(\d{6,7})\$([A-Za-z0-9_-]{40,48})$/);
+  if (modern) {
+    const iterations = Number(modern[1]);
+    if (!Number.isSafeInteger(iterations) || iterations < LEGACY_PASSWORD_ITERATIONS || iterations > 2_000_000) return null;
+    return { digest: modern[2], iterations, modern: true };
+  }
+  return /^[A-Za-z0-9_-]{40,48}$/.test(value)
+    ? { digest: value, iterations: LEGACY_PASSWORD_ITERATIONS, modern: false }
+    : null;
+}
+async function createPasswordHash(password, saltB64, iterations = PASSWORD_ITERATIONS) {
+  const digest = await pbkdf2Hash(password, saltB64, iterations);
+  return `${PASSWORD_HASH_SCHEME}$${iterations}$${digest}`;
+}
+async function verifyPassword(password, saltB64, storedHash) {
+  const parsed = parsePasswordHash(storedHash);
+  if (!parsed) return { ok: false, needsUpgrade: false };
+  const digest = await pbkdf2Hash(password, saltB64, parsed.iterations);
+  // Keep legacy-account checks close to the modern work factor so response
+  // timing does not reveal which addresses still need a transparent upgrade.
+  if (parsed.iterations < PASSWORD_ITERATIONS) {
+    await pbkdf2Hash(password, DUMMY_PASSWORD_SALT, PASSWORD_ITERATIONS - parsed.iterations);
+  }
+  return { ok: constantTimeEqual(digest, parsed.digest), needsUpgrade: !parsed.modern || parsed.iterations < PASSWORD_ITERATIONS };
 }
 function randomSalt() {
   const a = new Uint8Array(16);
@@ -187,6 +226,37 @@ function isTrustedMutation(request, url) {
   const origin = request.headers.get('Origin');
   if (origin && origin !== url.origin) return false;
   return request.headers.get('Sec-Fetch-Site') !== 'cross-site';
+}
+async function rateLimitKey(request, env, scope) {
+  const address = request.headers.get('CF-Connecting-IP');
+  if (!address) return null;
+  const signature = await hmacSha256(getJwtSecret(env), `${scope}\0${address}`);
+  return `${scope}:${b64url(signature).slice(0, 32)}`;
+}
+async function consumeRateLimit(request, env, scope) {
+  const config = RATE_LIMITS[scope];
+  if (!config || !env.DB) return { allowed: true, retryAfter: 0, key: null };
+  const key = await rateLimitKey(request, env, scope);
+  if (!key) return { allowed: true, retryAfter: 0, key: null };
+  const now = Math.floor(Date.now() / 1000);
+  const resetAt = now + config.windowSeconds;
+  await env.DB.prepare(`INSERT INTO rate_limits (key, attempts, reset_at, updated_at)
+    VALUES (?, 1, ?, strftime('%Y-%m-%dT%H:%M:%SZ','now'))
+    ON CONFLICT(key) DO UPDATE SET
+      attempts = CASE WHEN rate_limits.reset_at <= ? THEN 1 ELSE rate_limits.attempts + 1 END,
+      reset_at = CASE WHEN rate_limits.reset_at <= ? THEN excluded.reset_at ELSE rate_limits.reset_at END,
+      updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+    .bind(key, resetAt, now, now).run();
+  const record = await env.DB.prepare('SELECT attempts, reset_at FROM rate_limits WHERE key = ?').bind(key).first();
+  const attempts = Number(record?.attempts || 0);
+  const retryAfter = Math.max(1, Number(record?.reset_at || resetAt) - now);
+  return { allowed: attempts <= config.attempts, retryAfter, key };
+}
+async function clearRateLimit(env, key) {
+  if (env.DB && key) await env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind(key).run();
+}
+function rateLimited(retryAfter) {
+  return json({ error: 'Too many attempts — wait a little before trying again' }, 429, { 'Retry-After': String(retryAfter) });
 }
 function cleanInviteCode(value) {
   const code = typeof value === 'string' ? value.trim().toUpperCase().replace(/\s+/g, '_') : '';
@@ -360,6 +430,15 @@ async function ghApi(path, init, env) {
   });
 }
 
+function withPrivateArchiveShell(response) {
+  const contentType = response.headers.get('Content-Type') || '';
+  if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
+  return new HTMLRewriter()
+    .on('head', { element(element) { element.append('<link rel="stylesheet" href="/archive-compass.css">', { html: true }); } })
+    .on('body', { element(element) { element.append('<script type="module" src="/archive-compass.js"></script>', { html: true }); } })
+    .transform(response);
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -375,8 +454,10 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT NOT NULL, message TEXT, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, path TEXT, summary TEXT NOT NULL, actor_email TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS map_documents (slug TEXT PRIMARY KEY, title TEXT NOT NULL, document_json TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_rate_limits_reset ON rate_limits(reset_at)`),
         ]);
       }
 
@@ -405,6 +486,8 @@ export default {
         try {
           const secret = getJwtSecret(env);
           await ensureTables();
+          const throttle = await consumeRateLimit(request, env, 'register');
+          if (!throttle.allowed) return rateLimited(throttle.retryAfter);
           const body = await readJson(request);
           if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const { email, password, inviteCode } = body;
@@ -417,7 +500,7 @@ export default {
           const salt = randomSalt();
           const [exists, hash] = await Promise.all([
             env.DB.prepare('SELECT id FROM users WHERE email = ?').bind(normEmail).first(),
-            pbkdf2Hash(password, salt),
+            createPasswordHash(password, salt),
           ]);
           if (exists) return json({ error: 'Invalid or unavailable invite code' }, 403);
           const results = await env.DB.batch([
@@ -446,6 +529,8 @@ export default {
       if (url.pathname === '/api/login' && request.method === 'POST') {
         try {
           await ensureTables();
+          const throttle = await consumeRateLimit(request, env, 'login');
+          if (!throttle.allowed) return rateLimited(throttle.retryAfter);
           const body = await readJson(request);
           if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const { email, password } = body;
@@ -454,11 +539,21 @@ export default {
           const normEmail = normalizeEmail(email);
           if (!isValidEmail(normEmail)) return json({ error: 'Invalid email or password' }, 401);
           const user = await env.DB.prepare('SELECT email, password_hash, salt FROM users WHERE email = ?').bind(normEmail).first();
-          const hash = await pbkdf2Hash(password, user?.salt || DUMMY_PASSWORD_SALT);
-          if (!user || !constantTimeEqual(hash, user.password_hash)) return json({ error: 'Invalid email or password' }, 401);
+          const passwordCheck = user
+            ? await verifyPassword(password, user.salt, user.password_hash)
+            : (await pbkdf2Hash(password, DUMMY_PASSWORD_SALT, PASSWORD_ITERATIONS), { ok: false, needsUpgrade: false });
+          if (!user || !passwordCheck.ok) return json({ error: 'Invalid email or password' }, 401);
           const secret = getJwtSecret(env);
           const now = Math.floor(Date.now() / 1000);
           const token = await signJwt({ email: normEmail, iss: JWT_ISSUER, iat: now, exp: now + JWT_EXP_SEC }, secret);
+          await clearRateLimit(env, throttle.key);
+          if (passwordCheck.needsUpgrade) {
+            const upgradedSalt = randomSalt();
+            const upgradedHash = await createPasswordHash(password, upgradedSalt);
+            const upgrade = env.DB.prepare('UPDATE users SET password_hash = ?, salt = ? WHERE email = ? AND password_hash = ?')
+              .bind(upgradedHash, upgradedSalt, normEmail, user.password_hash).run().catch(() => {});
+            if (typeof ctx?.waitUntil === 'function') ctx.waitUntil(upgrade); else await upgrade;
+          }
           return json({ ok: true, email: normEmail }, 200, { 'Set-Cookie': authCookie(token) });
         } catch (e) {
           if (e instanceof RangeError) return json({ error: e.message }, 413);
@@ -530,6 +625,8 @@ export default {
       if (url.pathname === '/api/request-access' && request.method === 'POST') {
         try {
           await ensureTables();
+          const throttle = await consumeRateLimit(request, env, 'requestAccess');
+          if (!throttle.allowed) return rateLimited(throttle.retryAfter);
           const body = await readJson(request);
           if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
           const { email, message } = body;
@@ -601,10 +698,10 @@ export default {
           await ensureTables();
           const user = await env.DB.prepare('SELECT password_hash, salt FROM users WHERE email = ?').bind(session.email).first();
           if (!user) return json({ error: 'Account not found' }, 404);
-          const currentHash = await pbkdf2Hash(currentPassword, user.salt);
-          if (!constantTimeEqual(currentHash, user.password_hash)) return json({ error: 'Current password is incorrect' }, 401);
+          const currentCheck = await verifyPassword(currentPassword, user.salt, user.password_hash);
+          if (!currentCheck.ok) return json({ error: 'Current password is incorrect' }, 401);
           const salt = randomSalt();
-          const passwordHash = await pbkdf2Hash(newPassword, salt);
+          const passwordHash = await createPasswordHash(newPassword, salt);
           await env.DB.prepare('UPDATE users SET password_hash = ?, salt = ? WHERE email = ?').bind(passwordHash, salt, session.email).run();
           return json({ ok: true });
         } catch {
@@ -1025,7 +1122,7 @@ export default {
     const headers = new Headers(response.headers);
     headers.set('Cache-Control', 'private, no-store');
     headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-    return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    return withPrivateArchiveShell(new Response(response.body, { status: response.status, statusText: response.statusText, headers }));
   }
 };
 
@@ -1033,11 +1130,14 @@ export const __test = {
   cleanInviteCode,
   cleanMapSlug,
   constantTimeEqual,
+  createPasswordHash,
   isPrivatePath,
   isTrustedMutation,
+  parsePasswordHash,
   sanitizeAdditionsPath,
   sanitizeFolderPath,
   sanitizeMapDocument,
   signJwt,
+  verifyPassword,
   verifyJwt,
 };

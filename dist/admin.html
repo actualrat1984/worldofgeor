@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>Admin — World of Ge'or</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{ink:'#0f0e0d',cream:'#f2e8d0',gold:'#d9b77a',amberdeep:'#b8924a'},fontFamily:{display:['Cinzel','serif'],sans:['Inter','sans-serif']}}}}</script>
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+  <style>#approveDialog::backdrop{background:rgba(15,14,13,.82);backdrop-filter:blur(6px)}.request-filter[aria-pressed="true"]{background:#d9b77a;color:#0f0e0d;border-color:#d9b77a}</style>
 </head>
 <body class="bg-ink text-cream font-sans min-h-screen">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
@@ -32,6 +34,13 @@
         <h1 class="font-display text-2xl font-bold">Invite Codes</h1>
         <span id="me" class="text-xs text-cream/60"></span>
       </div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" aria-label="Archive administration summary">
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5"><p class="text-[10px] tracking-[.2em] text-gold">MEMBERS</p><p id="statUsers" class="font-display text-3xl mt-2">—</p></div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5"><p class="text-[10px] tracking-[.2em] text-gold">OPEN INVITES</p><p id="statInvites" class="font-display text-3xl mt-2">—</p></div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5"><p class="text-[10px] tracking-[.2em] text-gold">PENDING</p><p id="statPending" class="font-display text-3xl mt-2">—</p></div>
+        <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5"><p class="text-[10px] tracking-[.2em] text-gold">ARCHIVE EVENTS</p><p id="statActivity" class="font-display text-3xl mt-2">—</p></div>
+      </div>
+      <p id="adminNotice" class="hidden rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></p>
 
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
         <form id="createForm" class="flex gap-2">
@@ -50,9 +59,9 @@
       </div>
 
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
-        <div class="px-5 py-3 border-b border-gold/10 flex justify-between items-center">
+        <div class="px-5 py-3 border-b border-gold/10 flex flex-wrap gap-3 justify-between items-center">
           <h3 class="text-sm font-semibold tracking-widest">PENDING REQUESTS</h3>
-          <button id="refreshReq" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button>
+          <div class="flex items-center gap-2"><button type="button" class="request-filter text-[10px] border border-gold/20 px-3 py-1 rounded-full" data-request-filter="pending" aria-pressed="true">PENDING</button><button type="button" class="request-filter text-[10px] border border-gold/20 px-3 py-1 rounded-full" data-request-filter="all" aria-pressed="false">ALL</button><button id="refreshReq" class="text-xs border border-gold/20 px-3 py-1 rounded-full hover:bg-gold/10">Refresh</button></div>
         </div>
         <div id="requests" class="divide-y divide-gold/10 text-sm"></div>
       </div>
@@ -67,13 +76,31 @@
     </div>
   </main>
 
+  <dialog id="approveDialog" class="w-[min(92vw,480px)] rounded-2xl border border-gold/20 bg-[#191a18] p-0 text-cream shadow-2xl">
+    <form id="approveForm" method="dialog" class="p-6">
+      <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] tracking-[.24em] text-gold">ADMIT A KEEPER</p><h2 class="font-display text-xl mt-1">Approve request</h2></div><button id="closeApprove" type="button" class="text-xl text-cream/50 hover:text-cream" aria-label="Close">×</button></div>
+      <p class="text-sm text-cream/60 mt-3">Create an invitation for <strong id="approveEmail" class="text-cream"></strong>. Leave the code blank for a cryptographically random one.</p>
+      <label class="block mt-5 text-[10px] tracking-widest text-cream/60">INVITE CODE <span class="text-cream/35">OPTIONAL</span><input id="approveCode" maxlength="64" autocomplete="off" placeholder="AUTO-GENERATE" class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm uppercase outline-none focus:border-gold/50"></label>
+      <p id="approveMessage" class="min-h-[1.25rem] mt-3 text-xs" role="status" aria-live="polite"></p>
+      <button id="confirmApprove" type="submit" class="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold text-ink">Approve and create invite</button>
+    </form>
+  </dialog>
+
   <script>
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]);
+    }
     async function api(path, opts={}) {
       const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers||{}) } });
       const j = await r.json().catch(()=>({}));
       if (!r.ok) throw new Error(j.error || 'Failed');
       return j;
     }
+    let requestRows=[];
+    let requestFilter='pending';
+    let approvalRequest=null;
+    function notice(message, ok=true){ const el=document.getElementById('adminNotice'); el.textContent=message; el.className='rounded-xl border px-4 py-3 text-sm '+(ok?'border-green-400/20 bg-green-400/5 text-green-200':'border-red-400/20 bg-red-400/5 text-red-200'); }
+    async function loadStats(){ const j=await api('/api/admin/stats'); document.getElementById('statUsers').textContent=Number(j.stats.users).toLocaleString(); document.getElementById('statInvites').textContent=Number(j.stats.openInvites).toLocaleString(); document.getElementById('statPending').textContent=Number(j.stats.pendingRequests).toLocaleString(); document.getElementById('statActivity').textContent=Number(j.stats.additions).toLocaleString(); }
     async function load(){
       try{
         const me = await api('/api/me');
@@ -81,11 +108,9 @@
         document.getElementById('me').textContent = me.user.email;
         document.getElementById('gate').classList.add('hidden');
         document.getElementById('panel').classList.remove('hidden');
-        await refreshRequests();
-        await refreshInvites();
-        await refreshUsers();
+        await Promise.all([refreshRequests(),refreshInvites(),refreshUsers(),loadStats()]);
       } catch(e){
-        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${e.message}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
+        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${escapeHtml(e.message)}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
       }
     }
     async function refreshInvites(){
@@ -94,10 +119,11 @@
       if(!j.invites.length){ el.innerHTML='<div class="p-4 text-cream/50">No invites</div>'; return; }
       el.innerHTML = j.invites.map(i=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b class="text-gold">${i.code}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+i.used_by : 'unused'}</span></div>
-          <button onclick="delInvite('${i.code}')" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
+          <div><b class="text-gold">${escapeHtml(i.code)}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+escapeHtml(i.used_by) : 'unused'}</span></div>
+          <button data-delete-invite="${escapeHtml(i.code)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
         </div>
       `).join('');
+      el.querySelectorAll('[data-delete-invite]').forEach(button => button.addEventListener('click', () => delInvite(button.dataset.deleteInvite)));
     }
     async function refreshUsers(){
       const j = await api('/api/admin/users');
@@ -105,49 +131,64 @@
       if(!j.users.length){ el.innerHTML='<div class="p-4 text-cream/50">No users yet</div>'; return; }
       el.innerHTML = j.users.map(u=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b>${u.email}</b> <span class="text-cream/40 text-xs">via ${u.invite_code} • ${new Date(u.created_at).toLocaleDateString()}</span></div>
+          <div><b>${escapeHtml(u.email)}</b> <span class="text-cream/40 text-xs">via ${escapeHtml(u.invite_code || '—')} • ${escapeHtml(new Date(u.created_at).toLocaleDateString())}</span></div>
         </div>
       `).join('');
     }
 
+    function renderRequests(){
+      const el = document.getElementById('requests');
+      const rows=requestFilter==='pending'?requestRows.filter(row=>row.status==='pending'):requestRows;
+      if(!rows.length){ el.innerHTML='<div class="p-4 text-cream/50">'+(requestFilter==='pending'?'No pending requests':'No requests')+'</div>'; return; }
+      el.innerHTML = rows.map(r=>`
+        <div class="px-5 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
+          <div class="flex-1"><b>${escapeHtml(r.email)}</b> <span class="text-cream/40 text-xs">— ${escapeHtml(r.status)} • ${escapeHtml(new Date(r.created_at).toLocaleString())}</span><div class="text-xs text-cream/60 mt-1">${escapeHtml(r.message || 'No message supplied.')}</div></div>
+          <div class="flex gap-2">
+            ${r.status==='pending' ? `<button data-approve-request="${Number(r.id)}" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button data-reject-request="${Number(r.id)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs rounded-full border border-cream/10 px-3 py-1 text-cream/40">${escapeHtml(r.status)}</span>`}
+          </div>
+        </div>`).join('');
+      el.querySelectorAll('[data-approve-request]').forEach(button => button.addEventListener('click', () => approveReq(Number(button.dataset.approveRequest))));
+      el.querySelectorAll('[data-reject-request]').forEach(button => button.addEventListener('click', () => rejectReq(Number(button.dataset.rejectRequest),button)));
+    }
     async function refreshRequests(){
       try{
         const j = await api('/api/admin/requests');
-        const el = document.getElementById('requests');
-        if(!j.requests.length){ el.innerHTML='<div class="p-4 text-cream/50">No requests</div>'; return; }
-        el.innerHTML = j.requests.map(r=>`
-          <div class="px-5 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
-            <div class="flex-1"><b>${r.email}</b> <span class="text-cream/40 text-xs">— ${r.status} • ${new Date(r.created_at).toLocaleString()}</span><div class="text-xs text-cream/60 mt-1">${(r.message||'').replace(/</g,'&lt;')}</div></div>
-            <div class="flex gap-2">
-              ${r.status==='pending' ? `<button onclick="approveReq(${r.id})" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button onclick="rejectReq(${r.id})" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs text-cream/40">${r.status}</span>`}
-            </div>
-          </div>
-        `).join('');
-      }catch(e){ document.getElementById('requests').innerHTML='<div class="p-4 text-red-400 text-xs">'+e.message+'</div>'; }
+        requestRows=Array.isArray(j.requests)?j.requests:[]; renderRequests();
+      }catch(e){ document.getElementById('requests').innerHTML='<div class="p-4 text-red-400 text-xs">'+escapeHtml(e.message)+'</div>'; }
     }
     async function approveReq(id){
-      const code = prompt('Invite code to create (leave blank for auto):') || '';
-      try{ const j=await api('/api/admin/requests/approve',{method:'POST', body:JSON.stringify({id, code})}); alert('Approved — invite: '+j.code+' for '+j.email+'\nEmail them this code!'); await refreshRequests(); await refreshInvites(); }catch(e){ alert(e.message); }
+      approvalRequest=requestRows.find(row=>Number(row.id)===id); if(!approvalRequest) return;
+      document.getElementById('approveEmail').textContent=approvalRequest.email; document.getElementById('approveCode').value=''; document.getElementById('approveMessage').textContent=''; document.getElementById('approveDialog').showModal(); document.getElementById('approveCode').focus();
     }
-    async function rejectReq(id){
+    async function rejectReq(id,button){
       if(!confirm('Reject request '+id+'?')) return;
-      await api('/api/admin/requests/reject',{method:'POST', body:JSON.stringify({id})}); await refreshRequests();
+      button.disabled=true; try{ await api('/api/admin/requests/reject',{method:'POST', body:JSON.stringify({id})}); notice('Request rejected.'); await Promise.all([refreshRequests(),loadStats()]); }catch(error){ notice(error.message,false); }finally{ button.disabled=false; }
     }
     async function delInvite(code){
       if(!confirm('Delete invite '+code+'?')) return;
       await api('/api/admin/invites/'+encodeURIComponent(code), { method:'DELETE' });
-      await refreshInvites();
+      await Promise.all([refreshInvites(),loadStats()]);
     }
     document.getElementById('createForm').addEventListener('submit', async e=>{
       e.preventDefault();
       const code=document.getElementById('newCode').value.trim();
       if(!code) return;
-      try{ await api('/api/admin/invites',{method:'POST', body:JSON.stringify({code})}); document.getElementById('newCode').value=''; document.getElementById('createMsg').textContent='Created '+code.toUpperCase(); document.getElementById('createMsg').className='text-xs mt-2 text-green-400'; await refreshInvites(); } catch(err){ document.getElementById('createMsg').textContent=err.message; document.getElementById('createMsg').className='text-xs mt-2 text-red-400'; }
+      try{ await api('/api/admin/invites',{method:'POST', body:JSON.stringify({code})}); document.getElementById('newCode').value=''; document.getElementById('createMsg').textContent='Created '+code.toUpperCase(); document.getElementById('createMsg').className='text-xs mt-2 text-green-400'; await Promise.all([refreshInvites(),loadStats()]); } catch(err){ document.getElementById('createMsg').textContent=err.message; document.getElementById('createMsg').className='text-xs mt-2 text-red-400'; }
     });
     document.getElementById('refreshInv').onclick=refreshInvites;
     document.getElementById('refreshUsers').onclick=refreshUsers;
     document.getElementById('refreshReq').onclick=refreshRequests;
+    document.querySelectorAll('[data-request-filter]').forEach(button=>button.addEventListener('click',()=>{ requestFilter=button.dataset.requestFilter; document.querySelectorAll('[data-request-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button))); renderRequests(); }));
+    document.getElementById('closeApprove').onclick=()=>document.getElementById('approveDialog').close();
+    document.getElementById('approveForm').onsubmit=async(event)=>{
+      event.preventDefault(); if(!approvalRequest) return;
+      const code=document.getElementById('approveCode').value.trim(); const message=document.getElementById('approveMessage'); const button=document.getElementById('confirmApprove'); button.disabled=true; message.textContent='Creating invitation…'; message.className='min-h-[1.25rem] mt-3 text-xs text-gold';
+      try{ const j=await api('/api/admin/requests/approve',{method:'POST',body:JSON.stringify({id:Number(approvalRequest.id),code})}); message.textContent='Invite '+j.code+' created. Copying to clipboard…'; message.className='min-h-[1.25rem] mt-3 text-xs text-green-300'; try{ await navigator.clipboard.writeText(j.code); }catch{} notice('Approved '+j.email+' — invite '+j.code+' is ready and was copied when permitted.'); await Promise.all([refreshRequests(),refreshInvites(),loadStats()]); setTimeout(()=>document.getElementById('approveDialog').close(),1100); }
+      catch(error){ message.textContent=error.message; message.className='min-h-[1.25rem] mt-3 text-xs text-red-300'; }
+      finally{ button.disabled=false; }
+    };
     load();
   </script>
+  <script type="module" src="/archive-compass.js"></script>
 </body>
 </html>

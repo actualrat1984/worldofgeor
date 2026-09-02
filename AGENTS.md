@@ -10,10 +10,11 @@ Private, invite-only worldbuilding archive for Mikhail & Ichi. **Never add SEO, 
 
 - **Stack:** Vite 6.4.3 + Tailwind 3.4 + vanilla JS (src/main.js, style.css) → `dist/`
 - **Hosting:** Cloudflare Workers + Assets (worker.js + wrangler.jsonc). `run_worker_first: true`, SPA fallback.
-- **Auth:** Worker handles `/api/register` `/api/login` `/api/me` `/api/additions` — D1 `worldofgeor-db`, PBKDF2 100k + HMAC HS256 JWT (30d), HttpOnly cookie. Invite codes live only in `D1.invites`. ENV secrets: `JWT_SECRET`, `GITHUB_TOKEN`.
+- **Auth:** Worker handles `/api/register` `/api/login` `/api/me` `/api/additions` — D1 `worldofgeor-db`, versioned PBKDF2-SHA256 (600k; legacy hashes upgrade on login) + HMAC HS256 JWT (30d), HttpOnly cookie. Invite codes live only in `D1.invites`; auth and access forms use HMAC-keyed D1 rate limits. ENV secrets: `JWT_SECRET`, `GITHUB_TOKEN`.
 - **Additions:** Authenticated users commit markdown via `worker.js` → `actualrat1984/Website-additions` (branch main) via GitHub API. Sanitize paths strictly — no `..`, no `//`, max 180 chars, segments max 80.
 - **Wiki:** MkDocs build from `C:/Users/pc/Documents/Lore/Lore/site/` into `dist/wiki/` via `npm run build:wiki` (generate_nav.py + mkdocs build + optimize_assets.py + generate-wiki-index.py). Never break wiki generation.
 - **Design:** Premium, not functional. `slate/amber` + `gold/cream/ink` palette, Cinzel + Cormorant + Inter. Polish matters — concierge feel, not stock.
+- **Archive shell:** Authenticated HTML responses receive `/archive-compass.css` + `/archive-compass.js` through `HTMLRewriter`, providing global Cmd/Ctrl+K navigation and a device-local recent trail.
 
 ## Rules
 

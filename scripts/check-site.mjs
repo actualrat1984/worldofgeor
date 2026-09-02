@@ -30,6 +30,10 @@ const failures = []
 let checkedLinks = 0
 let checkedImages = 0
 
+for (const required of ['archive-compass.css', 'archive-compass.js']) {
+  if (!fs.existsSync(path.join(publicRoot, required))) failures.push(`public/${required}: required private archive shell asset is missing`)
+}
+
 function cleanLocalUrl(raw) {
   const value = raw.trim()
   if (!value || value.startsWith('#') || /^(?:https?:|mailto:|tel:|data:|blob:|javascript:)/i.test(value)) return null

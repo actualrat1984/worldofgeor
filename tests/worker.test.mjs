@@ -49,6 +49,8 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/species.js'), true)
   assert.equal(__test.isPrivatePath('/search'), true)
   assert.equal(__test.isPrivatePath('/search.js'), true)
+  assert.equal(__test.isPrivatePath('/archive-compass.js'), true)
+  assert.equal(__test.isPrivatePath('/archive-compass.css'), true)
   assert.equal(__test.isPrivatePath('/updates'), false)
   assert.equal(__test.cleanMapSlug('world'), 'world')
   assert.equal(__test.cleanMapSlug('../world'), null)
@@ -69,6 +71,19 @@ test('constant-time comparison checks decoded password hashes', () => {
   assert.equal(__test.constantTimeEqual('YWJj', 'YWJj'), true)
   assert.equal(__test.constantTimeEqual('YWJj', 'YWJk'), false)
   assert.equal(__test.constantTimeEqual('YWJj', 'YWJjZA'), false)
+})
+
+test('password hashes support legacy verification and modern upgrades', async () => {
+  const salt = 'AAAAAAAAAAAAAAAAAAAAAA'
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode('keeper-password'), 'PBKDF2', false, ['deriveBits'])
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: Uint8Array.from(atob(salt), c => c.charCodeAt(0)), iterations: 100000, hash: 'SHA-256' }, key, 256)
+  const legacyDigest = Buffer.from(bits).toString('base64url')
+  assert.deepEqual(__test.parsePasswordHash(legacyDigest), { digest: legacyDigest, iterations: 100000, modern: false })
+  assert.deepEqual(await __test.verifyPassword('keeper-password', salt, legacyDigest), { ok: true, needsUpgrade: true })
+  const modern = await __test.createPasswordHash('keeper-password', salt)
+  assert.match(modern, /^pbkdf2-sha256\$600000\$/)
+  assert.deepEqual(await __test.verifyPassword('keeper-password', salt, modern), { ok: true, needsUpgrade: false })
+  assert.equal((await __test.verifyPassword('wrong-password', salt, modern)).ok, false)
 })
 
 test('/api/me returns 401 without a session', async () => {
@@ -139,7 +154,7 @@ test('/api/me returns 401 without a session', async () => {
   const updates = await updatesResponse.json()
   assert.equal(updates.source, 'changelog')
   assert.equal(updates.updates.length, 3)
-  assert.match(updates.updates[0].summary, /Species Gallery/)
+  assert.match(updates.updates[0].summary, /Archive Compass/)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -182,6 +197,7 @@ test('private files redirect to the gate and public aliases reach the intended a
   const appHtml = readFileSync(new URL('../public/app/index.html', import.meta.url), 'utf8')
   const updatesHtml = readFileSync(new URL('../public/updates.html', import.meta.url), 'utf8')
   const workerSource = readFileSync(new URL('../worker.js', import.meta.url), 'utf8')
+  const compassScript = readFileSync(new URL('../public/archive-compass.js', import.meta.url), 'utf8')
   assert.match(studioHtml, /unpkg\.com\/leaflet@1\.9\.4\/dist\/leaflet\.js/)
   assert.match(studioHtml, /integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/)
   assert.match(studioScript, /world: \{ slug: 'world', title: 'World Atlas', width: 3840, height: 1920/)
@@ -193,7 +209,10 @@ test('private files redirect to the gate and public aliases reach the intended a
   assert.doesNotMatch(atlasHtml, /C:\\Users\\/)
   assert.match(appHtml, /leaflet\.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2\/Z9VM\+kNiyxNV1lvTlZBo="/)
   assert.match(appHtml, /const allowed = \['md','txt','json','yaml','yml','csv'\]/)
-  for (const releaseId of ['release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
+  assert.match(workerSource, /archive-compass\.js/)
+  assert.match(compassScript, /ctrlKey/)
+  assert.match(compassScript, /wiki-index\.json/)
+  for (const releaseId of ['release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
     assert.match(workerSource, new RegExp(releaseId))
     assert.match(updatesHtml, new RegExp(releaseId))
   }
@@ -204,4 +223,42 @@ test('cross-origin logout is blocked before cookies are changed', async () => {
   const response = await worker.fetch(request, { JWT_SECRET: SECRET }, {})
   assert.equal(response.status, 403)
   assert.equal(response.headers.get('set-cookie'), null)
+})
+
+test('login throttling blocks repeated attempts without storing the raw client address', async () => {
+  const limits = new Map()
+  const db = {
+    prepare(sql) {
+      let args = []
+      return {
+        bind(...values) { args = values; return this },
+        async run() {
+          if (sql.includes('INSERT INTO rate_limits')) {
+            const [key, resetAt] = args
+            const current = limits.get(key)
+            limits.set(key, { attempts: current ? current.attempts + 1 : 1, reset_at: current?.reset_at || resetAt })
+          }
+          if (sql.includes('DELETE FROM rate_limits')) limits.delete(args[0])
+          return { meta: { changes: 1 } }
+        },
+        async first() {
+          if (sql.includes('FROM rate_limits')) return limits.get(args[0]) || null
+          if (sql.includes('FROM users')) return null
+          return null
+        },
+        async all() { return { results: [] } },
+      }
+    },
+    async batch(statements) { return Promise.all(statements.map(statement => statement.run())) },
+  }
+  const makeRequest = () => new Request('https://worldofgeor.com/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Origin: 'https://worldofgeor.com', 'CF-Connecting-IP': '203.0.113.44' },
+    body: JSON.stringify({ email: 'unknown@example.com', password: 'not-the-password' }),
+  })
+  for (let attempt = 0; attempt < 8; attempt++) assert.equal((await worker.fetch(makeRequest(), { JWT_SECRET: SECRET, DB: db }, {})).status, 401)
+  const blocked = await worker.fetch(makeRequest(), { JWT_SECRET: SECRET, DB: db }, {})
+  assert.equal(blocked.status, 429)
+  assert.ok(Number(blocked.headers.get('retry-after')) > 0)
+  assert.equal([...limits.keys()].some(key => key.includes('203.0.113.44')), false)
 })
