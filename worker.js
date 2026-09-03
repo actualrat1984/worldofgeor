@@ -45,6 +45,9 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/world-map-thumb.webp',
   '/grimmel-peninsula.jpg',
   '/grimmel-peninsula.webp',
+  '/central-erisdar.jpg',
+  '/central-erisdar.webp',
+  '/central-erisdar-thumb.jpg',
   '/map-editor.css',
   '/map-editor.js',
   '/species.css',
@@ -469,6 +472,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/favicon.ico') return new Response(null, { status: 204 });
+    // Crawlers must never infer a public sitemap: unknown paths fall through to
+    // the SPA shell, so answer these two explicitly (private archive, no SEO).
+    if (url.pathname === '/sitemap.xml') return new Response('Not found', { status: 404, headers: { 'X-Robots-Tag': 'noindex, nofollow, noarchive' } });
+    if (url.pathname === '/robots.txt') return new Response('User-agent: *\nDisallow: /\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=86400', 'X-Robots-Tag': 'noindex, nofollow, noarchive' } });
     // --- API routes ---
     if (url.pathname.startsWith('/api/')) {
       // auto-migrate tables if missing (so /api/register 500 never happens)
@@ -636,7 +643,9 @@ export default {
             env.DB.prepare("SELECT COUNT(*) AS count FROM member_library WHERE saved = 1 AND kind != 'system'"),
           ]);
           return json({
-            canonical: { nations: 243, species: 34, ages: 13, continents: 17 },
+            // Canonical counts derive from the built archive index (live data, not
+            // hardcoded memory); ages = 12 Ages + Lost Era, continents per map canon.
+            canonical: { nations: countPrefix('/wiki/World/Nations/'), species: countPrefix('/wiki/World/Species/'), ages: 13, continents: 17 },
             archive: {
               pages: index.length,
               nations: countPrefix('/wiki/World/Nations/'),
