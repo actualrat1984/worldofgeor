@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Quest Board — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[920px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE GUILDHALL BOARD • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">QUEST BOARD</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Every open contract pinned by the guild — settle one and it joins the settled rolls below.</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <span id="questsCount" role="status" class="text-xs text-cream/40">Reading the boards…</span>
+        </p>
+      </div>
+      <div class="mt-9 flex items-center gap-3 flex-wrap">
+        <label for="questArcFilter" class="sr-only">Filter contracts by story arc</label>
+        <select id="questArcFilter" class="flex-1 min-w-[220px] rounded-xl border border-gold/15 bg-ink px-4 py-3.5 text-sm text-cream/80 outline-none focus:border-gold/50" aria-label="Filter contracts by story arc">
+          <option value="">Loading the boards…</option>
+        </select>
+      </div>
+      <p id="questsStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Reading the guild boards…</p>
+      <div id="questBoards" class="mt-8 grid gap-6" aria-label="Open contracts by arc" aria-busy="true">
+        <div class="rounded-xl border border-gold/10 p-5 text-sm text-cream/40">Unrolling the postings…</div>
+      </div>
+      <section aria-label="Settled contracts" class="mt-10 rounded-xl border border-gold/10 p-5">
+        <h2 class="font-display text-sm tracking-[.2em] text-gold">SETTLED CONTRACTS</h2>
+        <div id="settledContracts" class="mt-4 grid gap-2 text-sm text-cream/40">The settled rolls gather here.</div>
+      </section>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/arcs" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE PLOT ROOM</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/quests.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
