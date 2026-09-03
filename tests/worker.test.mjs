@@ -287,3 +287,15 @@ test('login throttling blocks repeated attempts without storing the raw client a
   assert.ok(Number(blocked.headers.get('retry-after')) > 0)
   assert.equal([...limits.keys()].some(key => key.includes('203.0.113.44')), false)
 })
+
+test('crawler traps stay private: no sitemap, no crawl', async () => {
+  const sitemap = await worker.fetch(new Request('https://worldofgeor.com/sitemap.xml'), { JWT_SECRET: SECRET }, {})
+  assert.equal(sitemap.status, 404)
+  assert.equal(sitemap.headers.get('x-robots-tag'), 'noindex, nofollow, noarchive')
+  const robots = await worker.fetch(new Request('https://worldofgeor.com/robots.txt'), { JWT_SECRET: SECRET }, {})
+  assert.equal(robots.status, 200)
+  assert.match(await robots.text(), /Disallow: \//)
+  assert.equal(robots.headers.get('x-robots-tag'), 'noindex, nofollow, noarchive')
+  const rootHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+  assert.match(rootHtml, /<meta name="robots" content="noindex, nofollow, noarchive"/)
+})
