@@ -122,6 +122,13 @@ test('primer routes are private and served behind the member gate', () => {
   assert.equal(__test.cleanSecretId('aelis-true-name'), 'aelis-true-name')
 })
 
+// --- Wave F3: author's desk routes stay behind the member gate --------------
+test('desk routes are private and served behind the member gate', () => {
+  for (const path of ['/desk', '/desk/', '/desk.html', '/desk.js']) {
+    assert.equal(__test.isPrivatePath(path), true, path)
+  }
+})
+
 test('cross-origin mutations are rejected', () => {
   const same = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://worldofgeor.com' } })
   const cross = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://example.com' } })

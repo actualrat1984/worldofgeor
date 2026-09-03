@@ -24,6 +24,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Whiteboards', subtitle: 'Plot schemes on an infinite canvas', url: '/boards', sigil: '▦', group: 'ROOM', keywords: 'whiteboard boards canvas cards arrows plot scheme' },
     { title: 'Story Arcs', subtitle: 'Chart master plots, subplots, and open threads', url: '/arcs', sigil: '✧', group: 'ROOM', keywords: 'story arcs plots subplots threads master tree' },
     { title: 'Reader’s Primer', subtitle: 'See what Arcady may know — sealed and opened', url: '/primer', sigil: '◐', group: 'ROOM', keywords: 'primer reader spoilers secrets revealed seals reading' },
+    { title: 'Author’s Desk', subtitle: 'Notes, arcs, ages, and seals in one command view', url: '/desk', sigil: '✍', group: 'ROOM', keywords: 'desk author command notes arcs timeline primer status' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },
     { title: 'Character Gallery', subtitle: 'Browse every named soul of Ge’or', url: '/gallery', sigil: '◍', group: 'ROOM', keywords: 'characters gallery houses species nations people' },
     { title: 'Prompt Oracle', subtitle: 'Roll character, place, and conflict omens', url: '/oracle', sigil: '⚄', group: 'ROOM', keywords: 'oracle prompt roll random character place conflict tags omen' },

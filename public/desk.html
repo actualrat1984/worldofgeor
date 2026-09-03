@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Author's Desk — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[1120px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE AUTHOR'S DESK • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">AUTHOR'S DESK</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Notes, arcs, the ages, and the primer — one tab, no page-hopping.</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <span id="deskStatus" role="status" aria-live="polite" class="text-xs text-cream/40">Opening the desk…</span>
+        </p>
+      </div>
+      <nav class="mt-9 flex items-center justify-center gap-2 flex-wrap" aria-label="Desk quick links">
+        <a href="/manuscripts" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">MANUSCRIPTS</a>
+        <a href="/notebook" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">NOTEBOOK</a>
+        <a href="/boards" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">BOARDS</a>
+        <a href="/arcs" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">ARCS</a>
+        <a href="/oracle" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">ORACLE</a>
+      </nav>
+      <div class="mt-8 grid gap-6 md:grid-cols-2 items-start">
+        <section aria-label="My notes" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">MY NOTES</h2>
+            <a href="/notebook" class="text-[10px] tracking-widest text-cream/40">OPEN NOTEBOOK →</a>
+          </div>
+          <div id="deskNotes" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the notebook…</div>
+        </section>
+        <section aria-label="Arc status" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">ARC STATUS</h2>
+            <a href="/arcs" class="text-[10px] tracking-widest text-cream/40">OPEN PLOT ROOM →</a>
+          </div>
+          <div id="deskArcs" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the arcs…</div>
+        </section>
+        <section aria-label="Timeline reference" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">TIMELINE REF</h2>
+            <a href="/timeline" class="text-[10px] tracking-widest text-cream/40">OPEN TIMELINE →</a>
+          </div>
+          <div id="deskTimeline" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the chronicle…</div>
+        </section>
+        <section aria-label="Primer progress" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">PRIMER PROGRESS</h2>
+            <a href="/primer" class="text-[10px] tracking-widest text-cream/40">OPEN PRIMER →</a>
+          </div>
+          <div id="deskPrimer" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the seals…</div>
+        </section>
+      </div>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/desk.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
