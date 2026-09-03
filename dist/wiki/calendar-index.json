@@ -1,0 +1,212 @@
+{
+  "source_calendar": "World/Dates/Ge'orian Calendar.md",
+  "source_festivals": "World/Culture/Festivals",
+  "structure": {
+    "day_hours": 26,
+    "month_days": 40,
+    "months_per_year": 12,
+    "months_named": false,
+    "year_days": 480,
+    "earth_year_factor": 1.42,
+    "eras": [
+      "BGD",
+      "AGD"
+    ],
+    "present_year": "597 AGD"
+  },
+  "festivals": [
+    {
+      "name": "Alegoria Bloom",
+      "file": "World/Culture/Festivals/Alegoria Bloom.md",
+      "date": "Day 20, Month 4",
+      "tags": [
+        "culture",
+        "festival",
+        "alegoria"
+      ],
+      "aliases": [
+        "Alegoria Bloom",
+        "Bloom Day",
+        "Julian's Bloom"
+      ],
+      "summary": "**Alegoria Bloom** commemorates the day [[Julian the Dragon Tamer]] proved his worth to the dragon [[Fireborn]] and, in Alegorian theology, became one with god. After Julian's death and his incarnation into Fireborn, his companions **Plenio** (elf), **Diana** (human), and **Korvald** (kobold) led th"
+    },
+    {
+      "name": "Bride-Tide",
+      "file": "World/Culture/Festivals/Bride-Tide.md",
+      "date": "Day 10, Month 8",
+      "tags": [
+        "culture",
+        "festival",
+        "silver-bride"
+      ],
+      "aliases": [
+        "Bride-Tide",
+        "Tide of the Bride",
+        "Silver Tide"
+      ],
+      "summary": "**Bride-Tide** honors [[The Silver Bride]] — [[Ge'or]]'s ring, formed from the destroyed sister-moon of [[Maenar]] and [[Amelia (Moon)|Amelia]]. On the 10th of Month 8 the ring's albedo peaks over the northern oceans; tides surge, and at night the sea reflects the Bride so perfectly that sailors say"
+    },
+    {
+      "name": "Eris Ascendance",
+      "file": "World/Culture/Festivals/Eris Ascendance.md",
+      "date": "Day 15, Month 1",
+      "tags": [
+        "culture",
+        "festival",
+        "erisian"
+      ],
+      "aliases": [
+        "Eris Ascendance",
+        "Ascendance Day",
+        "Day of Discord's Rise"
+      ],
+      "summary": "**Eris Ascendance** marks the mythic ascension of [[Eris]], Goddess of Discord, as codified in [[The Eris Saga]] and promulgated by the [[Erisian church]]. According to Church canon, on this winter day Eris shed her mortal veil and took her throne above [[Ge'or]], choosing her seven [[Apostles of Er"
+    },
+    {
+      "name": "Featherfall",
+      "file": "World/Culture/Festivals/Featherfall.md",
+      "date": "Day 15, Month 12",
+      "tags": [
+        "culture",
+        "festival",
+        "mamanolism"
+      ],
+      "aliases": [
+        "Featherfall",
+        "Fall of Feathers",
+        "Light Coin Day"
+      ],
+      "summary": "**Featherfall** is the high holy day of **[[Mamanolism]]** on **[[Tuba Continent|Tuba]]** — the beastmen faith of the [[Mamanolo Tribe]] that holds *all animals are divine*. On Tuba, the sacred storm-birds molt once a year on the northern cliffs; the air fills with flight feathers that drift like sn"
+    },
+    {
+      "name": "Forge-Quench",
+      "file": "World/Culture/Festivals/Forge-Quench.md",
+      "date": "Day 5, Month 2",
+      "tags": [
+        "culture",
+        "festival",
+        "kobre"
+      ],
+      "aliases": [
+        "Forge-Quench",
+        "The Quenching",
+        "Coalsteel Quench"
+      ],
+      "summary": "**Forge-Quench** is the winter forge festival of **[[Kobre Continent|Kobre]]** — the dwarven continent west of [[Tuba Continent|Tuba]] where [[Dwarvism]]'s **[[Coal Doctrine]]** is the spiritual heart. In the [[Coalsteel Kingdom]] (southeast to central Kobre), the doctrine teaches *Life should be tr"
+    },
+    {
+      "name": "Groom Remembrance",
+      "file": "World/Culture/Festivals/Groom Remembrance.md",
+      "date": "Day 1, Month 7",
+      "tags": [
+        "culture",
+        "festival",
+        "groom"
+      ],
+      "aliases": [
+        "Groom Remembrance",
+        "Day of the Groom",
+        "Remembrance of Divergence"
+      ],
+      "summary": "**Groom Remembrance** mourns the **[[Great Divergence]]** — the reactor malfunction of the [[Glorious Alliance]] refugee ship in the [[Formingar Ocean]] at Year 0 that created [[The Groom]] vortex, destroyed [[Elvengar]], and birthed the ring opposite the heavens. The folk pairing of **Bride and Gro"
+    },
+    {
+      "name": "Helism Hexatheon",
+      "file": "World/Culture/Festivals/Helism Hexatheon.md",
+      "date": "Day 30, Month 6",
+      "tags": [
+        "culture",
+        "festival",
+        "helism"
+      ],
+      "aliases": [
+        "Helism Hexatheon",
+        "Hexatheon",
+        "Feast of Six"
+      ],
+      "summary": "**Helism Hexatheon** — the *Feast of Six* — is the only day the entire [[Helism]] pantheon is honored together. On [[Dissenbarg Continent|Dissenbarg]], each nation keeps its own [[Patron Deity|patron]] — [[Corin (Goddess)|Corin]] (sea and commerce) in [[Corin]], [[Cletas]] (reason) in [[Cletas Democ"
+    },
+    {
+      "name": "Hunt Night (Moonfang)",
+      "file": "World/Culture/Festivals/Hunt Night (Moonfang).md",
+      "date": "Day 40, Month 12",
+      "tags": [
+        "culture",
+        "festival",
+        "moonfang"
+      ],
+      "aliases": [
+        "Hunt Night",
+        "Moonfang Hunt Night",
+        "Night of the Warg",
+        "Smell of Winter"
+      ],
+      "summary": "**Hunt Night (Moonfang)** is the annual sacrifice rite of the **[[Moonfang Dominion]]** — the death cult on frozen **[[Moon Wolf Island]]** near the north pole, whose island itself is shaped like a wolf's head and whose god is **Cleton**, the Wolf God. The cult teaches that isolation is salvation, t"
+    },
+    {
+      "name": "Liberty Day",
+      "file": "World/Culture/Festivals/Liberty Day.md",
+      "date": "Day 4, Month 11",
+      "tags": [
+        "culture",
+        "festival",
+        "krowretism"
+      ],
+      "aliases": [
+        "Liberty Day",
+        "Day of Liberty",
+        "Freedom Day"
+      ],
+      "summary": "**Liberty Day** is the national day of the **[[Human Republic of Northeastern Merratodoni]]** and, by extension, the highest holiday of **[[Krowretism]]**. It marks the founding oath sworn after the **exodus ~100 [[BGD]]** — when the first dissidents who rejected [[Eris]] as demon fled [[Erisdar]] a"
+    },
+    {
+      "name": "Maw Feast",
+      "file": "World/Culture/Festivals/Maw Feast.md",
+      "date": "Day 40, Month 9",
+      "tags": [
+        "culture",
+        "festival",
+        "demonism"
+      ],
+      "aliases": [
+        "Maw Feast",
+        "Feast of the Maw",
+        "Night Maw"
+      ],
+      "summary": "**Maw Feast** belongs to the **[[Diablos]]** of the [[Mountain Tribe]] on **Yak Island**, east of the [[Demon Continent]] — the nocturnal, winged humanoids whose faith is [[Demonism]]. The name *Maw* is theirs: the cliff-face council hollow on Yak Island is called the Maw because at night, lit only "
+    },
+    {
+      "name": "Purple Unfurling",
+      "file": "World/Culture/Festivals/Purple Unfurling.md",
+      "date": "Day 1, Month 10",
+      "tags": [
+        "culture",
+        "festival",
+        "merratodoni"
+      ],
+      "aliases": [
+        "Purple Unfurling",
+        "Unfurling Day",
+        "Purple Tide"
+      ],
+      "summary": "**Purple Unfurling** commemorates the **unification of the [[Human Republic of Northeastern Merratodoni]] and the [[Purple Coast]]** — the great political project of 597 [[AGD]]. Around 100 [[BGD]] the first Krowretist refugees fled Erisdar's [[Erisian church]] to build a frontier democracy in north"
+    },
+    {
+      "name": "Temas Harvest",
+      "file": "World/Culture/Festivals/Temas Harvest.md",
+      "date": "Day 25, Month 9",
+      "tags": [
+        "culture",
+        "festival",
+        "dissenbarg"
+      ],
+      "aliases": [
+        "Temas Harvest",
+        "Harvest of Temas",
+        "Lobas Harvest"
+      ],
+      "summary": "**Temas Harvest** is the agrarian thanksgiving of **[[Temas]]**, the inland grain plain of [[Dissenbarg Continent|Dissenbarg]] whose fertile fields feed the continent through the ports of [[Citrea]]. The patron of [[Temas]] in the [[Helism]] pantheon is **[[Lobas]]**, god of nature, and the harvest "
+    }
+  ]
+}

@@ -1,0 +1,450 @@
+{
+  "source": "World/Dates/Complete Timeline.md",
+  "present_year": "597 AGD",
+  "ages": [
+    {
+      "age": "Age 0",
+      "range": "~15,000–14,000 BGD",
+      "trait": "Lost Era (Crash) — post-crash chaos"
+    },
+    {
+      "age": "Age 1",
+      "range": "~14,000–11,000 BGD",
+      "trait": "Nomadism — post-crash survival"
+    },
+    {
+      "age": "Age 2",
+      "range": "10,999–9,000 BGD",
+      "trait": "First Tribes"
+    },
+    {
+      "age": "Age 3",
+      "range": "8,999–7,000 BGD",
+      "trait": "First Empires — Elvengar founded"
+    },
+    {
+      "age": "Age 4",
+      "range": "6,999–5,500 BGD",
+      "trait": "Dragon Tyranny"
+    },
+    {
+      "age": "Age 5",
+      "range": "5,499–4,500 BGD",
+      "trait": "Dwarf Era — Romanium-fueled"
+    },
+    {
+      "age": "Age 6",
+      "range": "4,499–2,989 BGD",
+      "trait": "Iron/Elvish Age — ends at Hybrian crash"
+    },
+    {
+      "age": "Age 7",
+      "range": "2,989–967 BGD",
+      "trait": "Human Age — continent empires, countism"
+    },
+    {
+      "age": "Age 8",
+      "range": "967–421 BGD",
+      "trait": "Age of Baoth — surveillance state, Demonic War"
+    },
+    {
+      "age": "Age 9",
+      "range": "421–300 BGD",
+      "trait": "Lost Era — anarchy, Eris cult fabricated"
+    },
+    {
+      "age": "Age 10",
+      "range": "300 BGD–Year 0",
+      "trait": "Erisian Era — Church ascendant"
+    },
+    {
+      "age": "Age 11",
+      "range": "Year 0–610 AGD",
+      "trait": "Great Divergence — current era"
+    },
+    {
+      "age": "Age 12",
+      "range": "After 610 AGD",
+      "trait": "Age of Strife — to be written"
+    }
+  ],
+  "events": [
+    {
+      "era": "BGD",
+      "date": "~15,000 BGD",
+      "event": "The Crash. Ancient Glorious Alliance carrying war survivors crashes in Formingar Ocean. Survivors: humans, demons, elves, dwarves, dragons. Species spread across Ge'or. Impact triggers body bags in [[The 157th Colony"
+    },
+    {
+      "era": "BGD",
+      "date": "~15,000 BGD",
+      "event": "MELKOR island forms around the wreckage."
+    },
+    {
+      "era": "BGD",
+      "date": "~15,000–14,000 BGD",
+      "event": "Age 0 — The Lost Era. Post-crash chaos. Survivors cling to the crash site; first dispersal begins."
+    },
+    {
+      "era": "BGD",
+      "date": "~14,000–11,000 BGD",
+      "event": "Age 1 — Age of Nomadism. Survivors live as wanderers. No permanent settlements."
+    },
+    {
+      "era": "BGD",
+      "date": "~10,999–9,000 BGD",
+      "event": "Age 2 — Age of First Tribes. Tribal societies form. Species begin differentiating by region."
+    },
+    {
+      "era": "BGD",
+      "date": "~8,999–7,000 BGD",
+      "event": "Age 3 — Age of First Empires. First civilizations rise. Elvengar founded on Kutten — the first great elven kingdom."
+    },
+    {
+      "era": "BGD",
+      "date": "~6,999–5,500 BGD",
+      "event": "Age 4 — Dragon Tyranny. Dragons rule 90% of Ge'or. Intense territorial warfare brings them to near-extinction."
+    },
+    {
+      "era": "BGD",
+      "date": "~5,499–4,500 BGD",
+      "event": "Age 5 — Dwarf Era. Dwarves dominate through underground megacities fueled by Romanium. Economic collapse when Romanium runs out."
+    },
+    {
+      "era": "BGD",
+      "date": "~4,499–2,989 BGD",
+      "event": "Age 6 — Iron/Elvish Age. Post-Romanium collapse. Dwarven economy in ruins. Elvengar rises. Ends with the Hybrian crash at Pontus."
+    },
+    {
+      "era": "BGD",
+      "date": "~2989 BGD",
+      "event": "Hybrian Shadows arrive. Damaged vessel crashes in Pontus (eastern Erisdar). Shadows chose Pontus for its mountain-surrounded isolation. Begin hibernation."
+    },
+    {
+      "era": "BGD",
+      "date": "~2989–1989 BGD",
+      "event": "Phase 1 of the Shadow Plan. First millennium: study Ge'or, create Homunculi, infiltrate institutions, build secret cult."
+    },
+    {
+      "era": "BGD",
+      "date": "~1989–989 BGD",
+      "event": "Phase 2 of the Shadow Plan. Build global influence network. Engineer wars. Manipulate historical figures."
+    },
+    {
+      "era": "BGD",
+      "date": "~1729 BGD",
+      "event": "Old Lumina Empire founded by the beastman Emperor Kaelor I. A great beastmen empire — will eventually control 70% of Lumina Continent, Cattos island, and parts of Tuba."
+    },
+    {
+      "era": "BGD",
+      "date": "~1667 BGD",
+      "event": "Masaaki Sytrenis born — \"Sytrenis the Diplomat,\" the catmen hero who will end the catmen extermination and the Termopolas threat (see Sytrenis)."
+    },
+    {
+      "era": "BGD",
+      "date": "~1645 BGD",
+      "event": "The Metrak Incident. At twenty-two, Masaaki Sytrenis and his party stop the waking [[The Metraks"
+    },
+    {
+      "era": "BGD",
+      "date": "~1134 BGD",
+      "event": "Old Lumina Empire falls. Shadow operation: Luminous XII defeated by Goblin King (engineered). Brother Hoelio killed. Luminous XII commits suicide. Empire collapses. The beastmen — the empire's own people — slowly return to savagery, forgetting their old ways. Maomism rises among the survivors. Lumina enters a tribal dark age."
+    },
+    {
+      "era": "BGD",
+      "date": "~989–421 BGD",
+      "event": "Phase 3 of the Shadow Plan. Target Baoth as pan-continental super-state. Infiltrate Baoth's upper echelons. Possess Goldenborn."
+    },
+    {
+      "era": "BGD",
+      "date": "~526 BGD",
+      "event": "Kirivis receives the bright tablet. Begins 60 years of obsessive study."
+    },
+    {
+      "era": "BGD",
+      "date": "~476 BGD",
+      "event": "Kirivis has an epiphany. Deciphers the tablet. Falls into deep depression. Spends 10 years planning, sending secret teams across Ge'or."
+    },
+    {
+      "era": "BGD",
+      "date": "~466–421 BGD",
+      "event": "The Demonic War. Kirivis attacks Baoth without explanation. 45 years of war."
+    },
+    {
+      "era": "BGD",
+      "date": "421 BGD",
+      "event": "Baoth destroyed. Kirivis storms the dragon hall. Rulfred reveals himself as Shadow agent. Kirivis beheaded. Crowd cheers. Rulfred becomes king."
+    },
+    {
+      "era": "BGD",
+      "date": "421 BGD",
+      "event": "Nethra survives. Kirivis's adopted daughter, age 13, escapes."
+    },
+    {
+      "era": "BGD",
+      "date": "~420 BGD",
+      "event": "Nethra's march. Gathers loyalists. Brother Maoth sacrificed holding the line. Nethra reaches Rulfred's throne room."
+    },
+    {
+      "era": "BGD",
+      "date": "~420 BGD",
+      "event": "The Lyrical Forest prophecy. Lyrical Forest spirits give Nethra a modified Shadow device — \"a gift from 3,000,000 years ago.\""
+    },
+    {
+      "era": "BGD",
+      "date": "~420 BGD",
+      "event": "Nethra transformed. Device detonates in throne room. Nethra becomes a different type of Shadow. Baoth's ruins are final."
+    },
+    {
+      "era": "BGD",
+      "date": "~419 BGD",
+      "event": "Ironcloak founded. Nethra secretly creates the order. Nethrian Revelation transcribed."
+    },
+    {
+      "era": "BGD",
+      "date": "~400–200 BGD",
+      "event": "Erisian Church fabricated. Eris (homunculus) performs staged miracles. Gathers followers. Fakes deaths and resurrections."
+    },
+    {
+      "era": "BGD",
+      "date": "~300–100 BGD",
+      "event": "Church Militant. Holy orders conquer lands. Force conversions. Pontificate of Eris founded as Shadow headquarters."
+    },
+    {
+      "era": "BGD",
+      "date": "~200–0 BGD",
+      "event": "Crusades launched. Waves of holy war expand Church control."
+    },
+    {
+      "era": "BGD",
+      "date": "Pre-Year 0",
+      "event": "Elvengar flourishes. The first great elven kingdom dominates Kutten. Elves are the dominant civilization."
+    },
+    {
+      "era": "Year 0",
+      "date": "**Year 0**",
+      "event": "The Great Divergence. Formingar Ocean reactor malfunctions. The Groom vortex forms. Elvengar destroyed."
+    },
+    {
+      "era": "Year 0",
+      "date": "Year 0",
+      "event": "The Silver Bride ring — formed from destroyed third moon — becomes Ge'or's defining celestial feature."
+    },
+    {
+      "era": "AGD",
+      "date": "1–100 AGD",
+      "event": "The Kutten Catastrophe. Toxic rains and poisoned air desertify Kutten. Elves flee in great diaspora."
+    },
+    {
+      "era": "AGD",
+      "date": "1–100 AGD",
+      "event": "Elven refugees found Luzia and Maemon on Merratodoni."
+    },
+    {
+      "era": "AGD",
+      "date": "27 AGD",
+      "event": "Erisian Empire founded. Kingdom of Shamaradan atoned by Eris. Renamed under Davos the Magnificent."
+    },
+    {
+      "era": "AGD",
+      "date": "~50–100 AGD",
+      "event": "Kutten recolonization begins. Settlers from Erisdar and Demon Continent arrive."
+    },
+    {
+      "era": "AGD",
+      "date": "94 AGD",
+      "event": "Vennerian Trade Republic breaks from Erisian Empire. Independence purchased with wealth."
+    },
+    {
+      "era": "AGD",
+      "date": "122–130 AGD",
+      "event": "Northaxeland Crusades."
+    },
+    {
+      "era": "AGD",
+      "date": "137 AGD",
+      "event": "Great Elvish Persecution. Erisian church campaigns to eliminate elves. Shadow-engineered operation."
+    },
+    {
+      "era": "AGD",
+      "date": "158 AGD",
+      "event": "Anos Plutocracy founded. Kingdom of Tiphar collapses after Lima and Venner invade to rescue Princess Charlotte. Anos city breaks away."
+    },
+    {
+      "era": "AGD",
+      "date": "170–597 AGD",
+      "event": "Great Ascension of Trade. Maritime republics rise. Colonial networks expand."
+    },
+    {
+      "era": "AGD",
+      "date": "214–236 AGD",
+      "event": "Great Erisian Empire War. Kennberg vs Prassen-Albridge. 22 years. Stalemate. Imperial authority permanently weakened."
+    },
+    {
+      "era": "AGD",
+      "date": "~227 AGD",
+      "event": "**[[Founding of the Enkrad Order"
+    },
+    {
+      "era": "AGD",
+      "date": "254 AGD",
+      "event": "Volcano eruption triggers earthquake and tsunami — water floods the 157th Colony bunker, carrying the Black Agent (with [[Ichi Eisenheart"
+    },
+    {
+      "era": "AGD",
+      "date": "~290 AGD",
+      "event": "Gigas Tribe founded. Conquest of neighboring tribes on Lumina. First telepathic dog-god chosen. Gigaoism begins."
+    },
+    {
+      "era": "AGD",
+      "date": "322 AGD",
+      "event": "Marko organized. Erisdarian and Demon Continent settlers formalize the neutral trade hub. High Catmen merchant families rise to power."
+    },
+    {
+      "era": "AGD",
+      "date": "377 AGD",
+      "event": "Amelia family pulse rifle discovered. An ancestor finds a Pulse Rifle from the Glorious Alliance crash in a western Grimmel cave. The weapon is passed down through eleven generations."
+    },
+    {
+      "era": "AGD",
+      "date": "~400–500 AGD",
+      "event": "Dwarven resurgence. New dwarven nations established: Coalsteel Kingdom, Diamonds Kingdom, Dwarvengor."
+    },
+    {
+      "era": "AGD",
+      "date": "~466 AGD",
+      "event": "Homunculi Kingdom stabilized. Formerly warmongering, Kobre homunculi develop agriculture and diplomacy. Omipre (the Unnamed) is legendary founder."
+    },
+    {
+      "era": "AGD",
+      "date": "500s AGD",
+      "event": "Elven population stabilizes. Independent elvish states re-enter geopolitics. Elven goods drive tolerance."
+    },
+    {
+      "era": "AGD",
+      "date": "524 AGD",
+      "event": "**[[The Taberis War"
+    },
+    {
+      "era": "AGD",
+      "date": "~530 AGD",
+      "event": "Asatru Empire stabilizes after civil war. General Doma's successors consolidate the reduced empire."
+    },
+    {
+      "era": "AGD",
+      "date": "~542 AGD",
+      "event": "Anos–Komme Agreement. After intense negotiations, Komme joins [[Anos Plutocracy"
+    },
+    {
+      "era": "AGD",
+      "date": "544 AGD",
+      "event": "**[[The Minir Invasion"
+    },
+    {
+      "era": "AGD",
+      "date": "557 AGD",
+      "event": "Hermes Kennensbach born."
+    },
+    {
+      "era": "AGD",
+      "date": "~570 AGD",
+      "event": "Hermes becomes Emperor. Begins reform attempts. Fails. Empire continues to crack."
+    },
+    {
+      "era": "AGD",
+      "date": "~575 AGD",
+      "event": "Current Gigas dog-god born. Telepathic canine, now 22 years old in 597 AGD."
+    },
+    {
+      "era": "AGD",
+      "date": "~580–590 AGD",
+      "event": "**[[The Kentian Civil War"
+    },
+    {
+      "era": "AGD",
+      "date": "~585 AGD",
+      "event": "Mann Order invaded by Erilian Federation. Tiaboria captured. Refugees flee to Fractured State of Erislod, forming New Mann."
+    },
+    {
+      "era": "AGD",
+      "date": "589 AGD",
+      "event": "Xikxia taken over. Zakarutian queen's sister exiled. Raises army of 8,000. Marches on Xikxia. Declares independence."
+    },
+    {
+      "era": "AGD",
+      "date": "589–597 AGD",
+      "event": "Zakarutia rebuilds fleet. Archaic navy modernizing for reconquest."
+    },
+    {
+      "era": "AGD",
+      "date": "596 AGD",
+      "event": "The Twinning. The black agent enters two women of the Grimmel Republic — Eisenheart and Mortvagn bloodlines. Incubates."
+    },
+    {
+      "era": "AGD",
+      "date": "597 AGD",
+      "event": "Rex Pollo IV elected in Vennerian Trade Republic."
+    },
+    {
+      "era": "AGD",
+      "date": "597 AGD",
+      "event": "Hermes Kennensbach commissions world map. Age 40. Empire still cracking."
+    },
+    {
+      "era": "AGD",
+      "date": "597 AGD",
+      "event": "**The Protagonists born — [[Emrys"
+    },
+    {
+      "era": "AGD",
+      "date": "~597 AGD",
+      "event": "South Sun Empire emperor compromised. Eunuch homunculi installed in court."
+    },
+    {
+      "era": "AGD",
+      "date": "597 AGD",
+      "event": "Present day — Age 11 (Great Divergence). 248 sovereign nations. The Shadows prepare Armageddon."
+    },
+    {
+      "era": "AGD",
+      "date": "598 AGD",
+      "event": "Amelia born. Sole heir of the Amelia family, future keeper of the pulse rifle."
+    },
+    {
+      "era": "AGD",
+      "date": "~600 AGD",
+      "event": "Mana born. Possesses mother's body for 3 years, then incarnates as Lucien's little sister, having given him a childhood first."
+    },
+    {
+      "era": "AGD",
+      "date": "600 AGD",
+      "event": "Aelis born. In the Moonfang Dominion on frozen Moon Wolf Island. Blonde, petite, born into a poor cult family. The prettiest are sacrificed to [[Cleton Island"
+    },
+    {
+      "era": "AGD",
+      "date": "602 AGD",
+      "event": "Amelia's father dies. On his deathbed, gives four-year-old Amelia the pulse rifle — eleventh generation of the lightning bow."
+    }
+  ],
+  "shadow_plan_phases": [
+    {
+      "phase": "Phase 1",
+      "range": "~2989–1989 BGD",
+      "activity": "Infiltration — study, create homunculi, seed institutions"
+    },
+    {
+      "phase": "Phase 2",
+      "range": "~1989–989 BGD",
+      "activity": "Fragmentation — global network, engineered wars, Lumina fall"
+    },
+    {
+      "phase": "Phase 3",
+      "range": "~989–421 BGD",
+      "activity": "Consolidation — Baoth as super-state. Failed. Church launched as backup."
+    },
+    {
+      "phase": "Phase 4",
+      "range": "~421 BGD–present",
+      "activity": "Current — rebuilding after Baoth. Armageddon imminent."
+    }
+  ]
+}
