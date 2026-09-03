@@ -58,6 +58,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/gazetteer.js',
   '/trees.js',
   '/notebook.js',
+  '/manuscripts.js',
   '/boards.js',
   '/webs.js',
   '/gallery.js',
@@ -80,6 +81,8 @@ const ROUTE_ALIASES = new Map([
   ['/trees/', '/trees.html'],
   ['/notebook', '/notebook.html'],
   ['/notebook/', '/notebook.html'],
+  ['/manuscripts', '/manuscripts.html'],
+  ['/manuscripts/', '/manuscripts.html'],
   ['/boards', '/boards.html'],
   ['/boards/', '/boards.html'],
   ['/webs', '/webs.html'],
@@ -335,7 +338,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -761,6 +764,48 @@ function notebookNoteJson(row) {
     if (Array.isArray(parsed)) checklist = parsed;
   } catch { checklist = []; }
   return { id: row.id, title: row.title ?? '', body: row.body ?? '', checklist, created_at: row.created_at, updated_at: row.updated_at };
+}
+// --- Wave E1: manuscripts validation ----------------------------------------
+// Chapters/scenes live under Books/<book>/<chapter>.md in the shared
+// additions repo — segments keep the additions charset (no separators, no
+// dotfiles), bodies cap at 100k chars, and every composed path passes
+// through sanitizeAdditionsPath so the API can never escape Books/.
+const MANUSCRIPT_ROOT = 'Books';
+const MANUSCRIPT_SEGMENT_MAX = 80;
+const MANUSCRIPT_TITLE_MAX = 200;
+const MANUSCRIPT_BODY_MAX = 100_000;
+const MANUSCRIPT_SEGMENT_PATTERN = /^[A-Za-z0-9._\- ]+$/;
+function cleanManuscriptSegment(value) {
+  if (typeof value !== 'string') return null;
+  const segment = value.trim();
+  if (!segment || segment.length > MANUSCRIPT_SEGMENT_MAX) return null;
+  if (!MANUSCRIPT_SEGMENT_PATTERN.test(segment)) return null;
+  if (segment === '.' || segment === '..' || segment.startsWith('.') || segment.endsWith('.')) return null;
+  return segment;
+}
+function manuscriptPath(book, chapter) {
+  const cleanBook = cleanManuscriptSegment(book);
+  const cleanChapter = cleanManuscriptSegment(chapter);
+  if (!cleanBook || !cleanChapter) return null;
+  // Chapters naming their own extension keep it (and face the allow-list);
+  // bare names become markdown.
+  const file = cleanChapter.includes('.') ? cleanChapter : `${cleanChapter}.md`;
+  const path = sanitizeAdditionsPath(`${MANUSCRIPT_ROOT}/${cleanBook}/${file}`);
+  return path && path.startsWith(`${MANUSCRIPT_ROOT}/`) ? path : null;
+}
+function cleanManuscriptTitle(value) {
+  if (value == null) return '';
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title.length <= MANUSCRIPT_TITLE_MAX ? title : null;
+}
+function cleanManuscriptBody(value) {
+  if (typeof value !== 'string') return null;
+  const body = value.trim();
+  return body && body.length <= MANUSCRIPT_BODY_MAX ? body : null;
+}
+function buildManuscriptContent(title, body) {
+  return title ? `# ${title}\n\n${body}` : body;
 }
 // --- Wave E3: whiteboard validation -----------------------------------------
 // Cards + arrows persist inside the 0006 `boards.doc_json` document as
@@ -1922,6 +1967,106 @@ export default {
         }
       }
 
+      // --- Wave E1: manuscripts (chapters/scenes writing studio) --------------
+      // Chapters live under Books/<book>/<chapter>.md in the SAME additions
+      // repo and commit flow as /api/additions — no new store, no new D1
+      // tables. Draft versioning is client localStorage autosave; server
+      // versions surface through /api/additions/history?path=Books/....
+      // GET /api/manuscripts -> {files} (Books/ tree only)
+      // GET /api/manuscripts?book=B -> {files} filtered to Books/B/
+      // GET /api/manuscripts?book=B&chapter=C -> {path, content, sha, ...}
+      if (url.pathname === '/api/manuscripts' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
+        const book = url.searchParams.get('book');
+        const chapter = url.searchParams.get('chapter');
+        if (chapter != null && book == null) return json({ error: 'book required with chapter' }, 400);
+        if (book != null && chapter != null) {
+          const path = manuscriptPath(book, chapter);
+          if (!path) return json({ error: 'Invalid book or chapter' }, 400);
+          try {
+            const r = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(path).replace(/%2F/g,'/') }?ref=${ADDITIONS_BRANCH}`, { method: 'GET' }, env);
+            if (r.status === 404) return json({ error: 'Manuscript not found' }, 404);
+            if (!r.ok) return json({ error: 'Additions repository is unavailable' }, 502);
+            const j = await r.json();
+            if (j.type !== 'file' || !j.content) return json({ error: 'Not a file' }, 400);
+            return json({ path: j.path, sha: j.sha, size: j.size, html_url: j.html_url, content: b64DecodeUtf8(j.content) });
+          } catch {
+            return json({ error: 'Manuscript could not be loaded' }, 500);
+          }
+        }
+        // List: same git-tree listing as additions, scoped to the Books/ tree.
+        let prefix = `${MANUSCRIPT_ROOT}/`;
+        if (book != null) {
+          const cleanBook = cleanManuscriptSegment(book);
+          if (!cleanBook) return json({ error: 'Invalid book' }, 400);
+          prefix = `${MANUSCRIPT_ROOT}/${cleanBook}/`;
+        }
+        try {
+          const treeRes = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/git/trees/${ADDITIONS_BRANCH}?recursive=1`, { method: 'GET' }, env);
+          if (!treeRes.ok) return json({ error: 'Additions repository is unavailable' }, 502);
+          const j = await treeRes.json();
+          const files = (j.tree || [])
+            .filter(n => n.type === 'blob')
+            .map(n => {
+              const path = safeAdditionListPath(n.path);
+              return path && path.startsWith(prefix) ? { path, sha: n.sha, size: n.size || 0 } : null;
+            })
+            .filter(Boolean)
+            .sort((a,b) => a.path.localeCompare(b.path));
+          return json({ files, root: prefix });
+        } catch {
+          return json({ error: 'Manuscripts are temporarily unavailable' }, 500);
+        }
+      }
+
+      // POST /api/manuscripts {book, chapter, title?, body} -> commit to Books/.
+      if (url.pathname === '/api/manuscripts' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        if (!env.GITHUB_TOKEN) return json({ error: 'Archive publishing is unavailable' }, 503);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 512_000); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const path = manuscriptPath(body.book, body.chapter);
+        if (!path) return json({ error: 'Valid book and chapter required (A-Z 0-9 . _ - space)' }, 400);
+        const title = cleanManuscriptTitle(body.title);
+        const chapterBody = cleanManuscriptBody(body.body);
+        if (title === null || chapterBody === null) return json({ error: 'Title within 200 chars and a body within 100k chars required' }, 400);
+        const content = buildManuscriptContent(title, chapterBody);
+        try {
+          let existingSha = null;
+          const check = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(path).replace(/%2F/g,'/') }?ref=${ADDITIONS_BRANCH}`, { method: 'GET' }, env);
+          if (check.ok) {
+            const jc = await check.json();
+            if (jc.sha) existingSha = jc.sha;
+          } else if (check.status !== 404) {
+            return json({ error: 'Additions repository is unavailable' }, 502);
+          }
+          const putBody = {
+            message: `manuscript ${path} via /manuscripts — by ${user.email}`,
+            content: b64EncodeUtf8(content),
+            branch: ADDITIONS_BRANCH,
+          };
+          if (existingSha) putBody.sha = existingSha;
+          const putRes = await ghApi(`/repos/${ADDITIONS_OWNER}/${ADDITIONS_REPO}/contents/${encodeURIComponent(path).replace(/%2F/g,'/')}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(putBody)
+          }, env);
+          if (!putRes.ok) return json({ error: 'Manuscript could not be saved', status: putRes.status }, 502);
+          const pj = await putRes.json();
+          if (env.DB) ctx.waitUntil(env.DB.prepare('INSERT INTO activity (action, path, summary, actor_email) VALUES (?, ?, ?, ?)')
+            .bind(existingSha ? 'edit' : 'create', path, existingSha ? 'Revised a manuscript chapter' : 'Created a manuscript chapter', user.email).run().catch(() => {}));
+          return json({ ok: true, path, sha: pj.content?.sha || pj.commit?.sha, html_url: pj.content?.html_url });
+        } catch {
+          return json({ error: 'Manuscript could not be saved' }, 500);
+        }
+      }
+
       // --- Additions (Website-additions repo) — requires auth ---
       // GET /api/additions/list -> {files:[{path, sha, size, html_url}]}
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
@@ -2288,4 +2433,9 @@ export const __test = {
   signJwt,
   verifyPassword,
   verifyJwt,
+  buildManuscriptContent,
+  cleanManuscriptBody,
+  cleanManuscriptSegment,
+  cleanManuscriptTitle,
+  manuscriptPath,
 };

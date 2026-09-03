@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Manuscripts — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+  <style>
+    @media print {
+      body { background: #fff; }
+      .tl-shell > header, .no-print { display: none !important; }
+      #printSheet { display: block !important; color: #000; max-width: 640px; margin: 0 auto; font-family: Georgia, serif; }
+      #printSheet h1 { font-size: 28px; margin: 0 0 4px; }
+      #printSheet .print-meta { font-size: 12px; color: #555; margin: 0 0 24px; }
+      #printSheet .print-body { white-space: pre-wrap; font-size: 14px; line-height: 1.7; }
+      main .screen-only { display: none !important; }
+    }
+    #printSheet { display: none; }
+  </style>
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[1120px] mx-auto px-5 py-12 md:py-16">
+      <div class="screen-only">
+        <div class="text-center max-w-[700px] mx-auto">
+          <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE SCRIBE'S STUDIO • PRIVATE</p>
+          <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">MANUSCRIPTS</h1>
+          <p class="font-serif italic text-xl text-cream/60 mt-3">Chapters and scenes — drafted here, kept in the archive.</p>
+          <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+            <span id="msCount" role="status" class="text-xs text-cream/40">Opening the studio…</span>
+          </p>
+        </div>
+        <div class="mt-9 flex items-center gap-3 flex-wrap justify-center">
+          <button id="msNew" type="button" class="text-xs bg-gold text-ink rounded-full px-5 py-3 font-semibold">NEW CHAPTER</button>
+          <button id="msDownload" type="button" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-3">DOWNLOAD .MD</button>
+          <button id="msPrint" type="button" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-3">PRINT</button>
+        </div>
+        <p id="msStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Opening the studio…</p>
+        <div class="mt-8 grid gap-6 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-start">
+          <div id="msList" aria-busy="true" class="rounded-xl border border-gold/10 divide-y divide-gold/10 overflow-hidden">
+            <p class="p-5 text-sm text-cream/40">Opening the studio…</p>
+          </div>
+          <form id="msForm" class="rounded-xl border border-gold/10 p-5 flex flex-col gap-4">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="flex flex-col gap-2">
+                <span class="text-[10px] tracking-[.25em] text-cream/40">BOOK</span>
+                <input id="msBook" type="text" maxlength="80" placeholder="Ember…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50" />
+              </label>
+              <label class="flex flex-col gap-2">
+                <span class="text-[10px] tracking-[.25em] text-cream/40">CHAPTER</span>
+                <input id="msChapter" type="text" maxlength="80" placeholder="Arrival…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50" />
+              </label>
+            </div>
+            <label class="flex flex-col gap-2">
+              <span class="text-[10px] tracking-[.25em] text-cream/40">TITLE</span>
+              <input id="msTitle" type="text" maxlength="200" placeholder="The Arrival…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50" />
+            </label>
+            <label class="flex flex-col gap-2">
+              <span class="text-[10px] tracking-[.25em] text-cream/40">CHAPTER TEXT</span>
+              <textarea id="msBody" rows="16" placeholder="It began with…" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50 font-serif"></textarea>
+            </label>
+            <p id="msVersion" role="status" class="text-xs text-cream/40">A new chapter — save it to begin its versions.</p>
+            <div class="flex items-center gap-3 flex-wrap">
+              <button id="msSave" type="submit" class="text-xs bg-gold text-ink rounded-full px-5 py-2.5 font-semibold">SAVE TO ARCHIVE</button>
+            </div>
+          </form>
+        </div>
+        <footer class="mt-12 text-center">
+          <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+          <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>
+        </footer>
+      </div>
+      <div id="printSheet" aria-hidden="true"></div>
+    </main>
+  </div>
+  <script type="module" src="/manuscripts.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
