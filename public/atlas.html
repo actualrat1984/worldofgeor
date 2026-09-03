@@ -125,6 +125,7 @@
         </div>
       </div>
       <div id="atlasMap" class="w-full" style="height:clamp(360px,62vh,560px)" role="region" aria-label="Interactive map of Ge'or" aria-describedby="atlasMapHelp atlasMapStatus" aria-busy="true" tabindex="0"></div>
+      <nav id="atlasCrumbs" class="hidden px-6 py-2.5 border-t border-gold/10 text-[11px] tracking-[.18em]" aria-label="Map folio trail"></nav>
       <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] tracking-widest border-t border-gold/10">
         <span id="atlasMapHelp" class="text-cream/50">DRAG to pan • SCROLL to zoom • ARROW KEYS to pan • <span class="text-gold">3.086 km/px</span> • Private — gated by geor_token</span>
         <span class="text-cream/40">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
@@ -143,7 +144,8 @@
   </footer>
   <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-  <script>
+  <script type="module">
+  import { FOLIO_REGISTRY, chainUiVisible, childFolios, parentFolio, pinArticleUrl, pinFolioTarget } from './atlas-chain.js';
   (function(){
     const initialParams = new URLSearchParams(location.search);
     if(initialParams.get('embedded')==='1') document.body.classList.add('atlas-embedded','geor-no-shell-offset');
@@ -171,8 +173,8 @@
     const configs = { world, grimmel, erisdar };
     const pins = {
       world: [
-        { name:'Grimmel Peninsula', x:.44, y:.54, detail:'The statue-level zoom: the western frontier where the story breathes.', url:'/wiki/World/Nations/South Erisdar/Grimmel Peninsula/' },
-        { name:'Erisian Empire', x:.53, y:.27, detail:'The imperial center of Erisdar, recorded in the 597 AGD political ledger.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/' },
+        { name:'Grimmel Peninsula', x:.44, y:.54, detail:'The statue-level zoom: the western frontier where the story breathes.', url:'/wiki/World/Nations/South Erisdar/Grimmel Peninsula/', folio:'grimmel' },
+        { name:'Erisian Empire', x:.53, y:.27, detail:'The imperial center of Erisdar, recorded in the 597 AGD political ledger.', url:'/wiki/World/Nations/Central Erisdar/Erisian Empire/', folio:'erisdar' },
         { name:'Dissenbarg', x:.35, y:.34, detail:'A major power on the world map, with its own civic and mercantile memory.', url:'/wiki/World/Nations/Dissenbarg/Dissenbarg/' },
         { name:'Kobre', x:.47, y:.42, detail:'The gearward world: four nations measuring life in brass, coal and debt.', url:'/wiki/World/Nations/Kobre/Kobre/' },
         { name:'Lumina', x:.63, y:.51, detail:'Canopy nations where light is currency and the ground is myth.', url:'/wiki/World/Nations/Lumina/Lumina/' },
@@ -226,8 +228,36 @@
       if(erisdarBtn){ erisdarBtn.className=cfg===erisdar?active:idle; erisdarBtn.setAttribute('aria-pressed',String(cfg===erisdar)); }
     }
     function popupFor(pin){
-      return '<div class=\"atlas-popup\"><div class=\"text-[10px] tracking-[0.22em] text-gold\">'+escapeHtml(current.label.toUpperCase())+'</div><h3 class=\"font-display text-sm font-semibold mt-1\">'+escapeHtml(pin.name)+'</h3><p class=\"text-xs leading-5 mt-2\">'+escapeHtml(pin.detail)+'</p><a class=\"inline-block mt-3\" href=\"'+escapeHtml(pin.url)+'\">Open lore entry →</a></div>';
+      // Wave C3a: pin→article gate — hostile wikiUrl never renders (shared
+      // isWikiUrl via pinArticleUrl); article links navigate same-tab.
+      const articleUrl = pinArticleUrl(pin);
+      const loreLink = articleUrl ? '<a class=\"inline-block mt-3\" href=\"'+escapeHtml(articleUrl)+'\">Open lore entry →</a>' : '';
+      const folioSlug = pinFolioTarget(pin, FOLIO_REGISTRY);
+      const folioBtn = folioSlug ? '<button type=\"button\" data-folio=\"'+escapeHtml(folioSlug)+'\" class=\"block mt-2 text-xs tracking-widest text-gold underline underline-offset-4 hover:text-cream transition\">Open '+escapeHtml((FOLIO_REGISTRY[folioSlug]||{}).label||folioSlug)+' folio →</button>' : '';
+      return '<div class=\"atlas-popup\"><div class=\"text-[10px] tracking-[0.22em] text-gold\">'+escapeHtml(current.label.toUpperCase())+'</div><h3 class=\"font-display text-sm font-semibold mt-1\">'+escapeHtml(pin.name)+'</h3><p class=\"text-xs leading-5 mt-2\">'+escapeHtml(pin.detail)+'</p>'+loreLink+folioBtn+'</div>';
     }
+    const crumbsEl = document.getElementById('atlasCrumbs');
+    function renderCrumbs(){
+      // Wave C3a: chaining shell — breadcrumb driven by the folio registry.
+      // Empty registry = chain UI hidden, no dead buttons.
+      if(!crumbsEl) return;
+      if(!chainUiVisible(FOLIO_REGISTRY)){ crumbsEl.classList.add('hidden'); crumbsEl.innerHTML=''; return; }
+      const parent = parentFolio(current.id, FOLIO_REGISTRY);
+      const children = childFolios(current.id, FOLIO_REGISTRY).filter(slug=>slug!==current.id && configs[slug]);
+      if(!parent && !children.length){ crumbsEl.classList.add('hidden'); crumbsEl.innerHTML=''; return; }
+      let html = '<span class=\"text-cream/40\">ATLAS&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+      if(parent && configs[parent]) html += '<button type=\"button\" data-folio=\"'+escapeHtml(parent)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">← '+escapeHtml((FOLIO_REGISTRY[parent]||{}).label||parent).toUpperCase()+'</button><span class=\"text-cream/30\">&nbsp;&nbsp;/&nbsp;&nbsp;</span>';
+      html += '<span class=\"text-cream\">'+escapeHtml(current.label.toUpperCase())+'</span>';
+      for(const slug of children) html += '<span class=\"text-cream/30\">&nbsp;&nbsp;·&nbsp;&nbsp;</span><button type=\"button\" data-folio=\"'+escapeHtml(slug)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">'+escapeHtml((FOLIO_REGISTRY[slug]||{}).label||slug).toUpperCase()+' →</button>';
+      crumbsEl.innerHTML = html;
+      crumbsEl.classList.remove('hidden');
+    }
+    viewerEl?.addEventListener('click', event=>{
+      const btn = event.target && event.target.closest ? event.target.closest('[data-folio]') : null;
+      if(!btn) return;
+      const cfg = configs[btn.dataset.folio];
+      if(cfg && cfg !== current) loadMap(cfg);
+    });
     function clearMarkers(){
       markerEntries.forEach(entry=>map.removeLayer(entry.marker));
       markerEntries=[];
@@ -297,6 +327,7 @@
       const requestedPlace=new URLSearchParams(location.search).get('place');
       const viewParams=new URLSearchParams(location.search); const x=Number(viewParams.get('x')), y=Number(viewParams.get('y')), z=Number(viewParams.get('z')); const requestedView=Number.isFinite(x)&&Number.isFinite(y)&&Number.isFinite(z)?{x,y,z}:null;
       setMapButtons(cfg);
+      renderCrumbs();
       clearMarkers();
       mapEl.setAttribute('aria-busy','true');
       if(overlay) map.removeLayer(overlay);

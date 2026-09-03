@@ -56,6 +56,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/search.js',
   '/timeline.js',
   '/chronicles.js',
+  '/atlas-chain.js',
   '/archive-compass.css',
   '/archive-compass.js',
   '/article-layouts.css',
