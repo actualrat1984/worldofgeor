@@ -681,6 +681,103 @@ test('secrets: reveal attempts are rate limited', async () => {
   assert.ok(Number(blocked.headers.get('retry-after')) > 0)
 })
 
+// --- Wave B4a: auto-migrate proves itself on a pre-0006 database --------------
+// Old-schema mock: only pre-0006 tables exist, users has no role column.
+// Missing tables / columns throw exactly like D1/SQLite would, so a green
+// reveal here proves ensureTables() created them (mirrors 0006_foundation.sql).
+function makeOldSchemaDb({ roles = {} } = {}) {
+  const tables = new Set(['users', 'invites', 'requests', 'activity', 'map_documents', 'rate_limits', 'member_library', 'workflow_items', 'workflow_history'])
+  let roleAdded = false
+  const reveals = new Map()
+  const limits = new Map()
+  const tableOf = sql => {
+    const create = sql.match(/CREATE TABLE IF NOT EXISTS (\w+)/i)
+    if (create) return create[1]
+    const into = sql.match(/INSERT INTO (\w+)/i)
+    if (into) return into[1]
+    const from = sql.match(/FROM (\w+)/i)
+    if (from) return from[1]
+    return null
+  }
+  return {
+    tables,
+    reveals,
+    get roleAdded() { return roleAdded },
+    prepare(sql) {
+      let args = []
+      const api = {
+        bind(...values) { args = values; return api },
+        async run() {
+          if (/CREATE TABLE IF NOT EXISTS/i.test(sql)) { tables.add(tableOf(sql)); return { meta: { changes: 0 } } }
+          if (/CREATE INDEX IF NOT EXISTS/i.test(sql)) return { meta: { changes: 0 } }
+          if (/ALTER TABLE users ADD COLUMN role/i.test(sql)) {
+            if (roleAdded) throw new Error('duplicate column name: role')
+            roleAdded = true
+            return { meta: { changes: 0 } }
+          }
+          if (sql.includes('INSERT INTO rate_limits')) {
+            const [key, resetAt] = args
+            const current = limits.get(key)
+            limits.set(key, { attempts: (current?.attempts || 0) + 1, reset_at: current?.reset_at ?? resetAt })
+            return { meta: { changes: 1 } }
+          }
+          if (sql.includes('DELETE FROM rate_limits')) { limits.delete(args[0]); return { meta: { changes: 1 } } }
+          if (sql.includes('INSERT INTO reveals')) {
+            if (!tables.has('reveals')) throw new Error('no such table: reveals')
+            if (sql.includes("VALUES ('*'")) reveals.set(`*\0${args[0]}`, args[1])
+            else reveals.set(`${args[0]}\0${args[1]}`, 'revealed')
+            return { meta: { changes: 1 } }
+          }
+          return { meta: { changes: 0 } }
+        },
+        async first() {
+          if (sql.includes('FROM rate_limits')) {
+            const record = limits.get(args[0])
+            return record ? { attempts: record.attempts, reset_at: record.reset_at } : null
+          }
+          if (sql.includes('SELECT role FROM users')) {
+            if (!roleAdded) throw new Error('no such column: role')
+            return roles[args[0]] ? { role: roles[args[0]] } : null
+          }
+          return null
+        },
+        async all() {
+          if (sql.includes('FROM reveals')) {
+            if (!tables.has('reveals')) throw new Error('no such table: reveals')
+            const email = args[0]
+            const rows = []
+            for (const [key, state] of reveals) {
+              const [member, id] = key.split('\0')
+              if (state === 'revealed' && (member === email || member === '*')) rows.push({ secret_id: id })
+            }
+            return { results: rows }
+          }
+          return { results: [] }
+        },
+      }
+      return api
+    },
+    async batch(statements) { return Promise.all(statements.map(statement => statement.run())) },
+  }
+}
+
+test('automigrate: reveal succeeds on a pre-0006 database and backfills 0006 tables', async () => {
+  await withSecretsRewriter(async () => {
+    const db = makeOldSchemaDb({ roles: { 'member@example.com': 'viewer' } })
+    const env = secretsEnv(db)
+    const token = await secretsToken('member@example.com')
+    const revealed = await worker.fetch(secretsPost('/api/secrets/reveal', token, { id: 'vault-key' }), env, {})
+    assert.equal(revealed.status, 200, 'auto-migrate must create reveals before the insert')
+    assert.deepEqual(await revealed.json(), { ok: true, id: 'vault-key', state: 'revealed' })
+    for (const table of ['reveals', 'notes', 'arcs', 'plots', 'threads', 'boards']) {
+      assert.equal(db.tables.has(table), true, `ensureTables created ${table}`)
+    }
+    assert.equal(db.roleAdded, true, 'users.role column probed and added')
+    const role = await db.prepare('SELECT role FROM users WHERE email = ?').bind('member@example.com').first()
+    assert.deepEqual(role, { role: 'viewer' }, 'role probe path reads after the ALTER')
+  })
+})
+
 // --- Wave B3: related-articles sidebar ---------------------------------------
 // Tiny fake tags index in the real generator shape
 // ({items:[{tag, count, pages:[{title, path}]}]} — see scripts/generate_tags.py).

@@ -600,6 +600,52 @@ function resetRelatedCache() {
   relatedCache = { at: 0, lookup: null };
 }
 
+// --- Wave B4: sticky table-of-contents ---------------------------------------
+// MkDocs emits id attributes on h2/h3 (verified against dist/wiki output —
+// headerlink ids like <h2 id="connections">), so TOC anchors reuse them.
+// Headings without an id fall back to a slug of their text, assigned back to
+// the element so the anchor resolves. The article h1 is the hero, never TOC.
+function slugifyHeadingText(value) {
+  const ascii = String(value || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  const slug = ascii.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 64);
+  return slug || 'section';
+}
+
+function collectTocEntries(html) {
+  const source = String(html || '');
+  const article = source.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i);
+  const scope = article ? article[1] : source;
+  const entries = [];
+  const seen = new Set();
+  for (const match of scope.matchAll(/<(h[23])\b([^>]*)>([\s\S]*?)<\/\1>/gi)) {
+    const level = match[1].toLowerCase() === 'h3' ? 3 : 2;
+    const idMatch = match[2].match(/\bid\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const text = match[3].replace(/<[^>]+>/g, ' ').replace(/¶/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!text) continue;
+    const raw = idMatch ? (idMatch[1] ?? idMatch[2] ?? idMatch[3]) : '';
+    const base = raw || slugifyHeadingText(text);
+    let id = base;
+    let n = 1;
+    while (seen.has(id)) id = `${base}-${++n}`;
+    seen.add(id);
+    entries.push({ level, id, text, needsId: !raw });
+  }
+  return entries;
+}
+
+function tocNavHtml(entries) {
+  const items = entries
+    .map(entry => `<li class="geor-toc-h${entry.level}"><a href="#${escapeRelatedHtml(entry.id)}">${escapeRelatedHtml(entry.text)}</a></li>`)
+    .join('');
+  return `<nav class="geor-toc" aria-label="On this page"><details class="geor-toc-box" open><summary class="geor-toc-title">On this page</summary><ul class="geor-toc-list">${items}</ul></details></nav>`;
+}
+
+// Per-article section highlighting (aria-current via IntersectionObserver).
+// Reading progress itself is NOT duplicated: archive-compass.js already renders
+// the site-wide .geor-reading-progress bar on /wiki/ pages. This module only
+// highlights the visible TOC section and collapses the TOC on mobile.
+const TOC_HIGHLIGHT_SCRIPT = `<script type="module" data-geor-toc>(function(){var nav=document.querySelector('nav.geor-toc');if(!nav)return;var box=nav.querySelector('details');if(box&&window.matchMedia&&matchMedia('(max-width: 640px)').matches)box.removeAttribute('open');var links=Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));if(!links.length||!('IntersectionObserver' in window))return;var byId={};links.forEach(function(a){byId[a.hash.slice(1)]=a});var current=null;var observer=new IntersectionObserver(function(rows){rows.forEach(function(row){if(!row.isIntersecting)return;var link=byId[row.target.id];if(!link||link===current)return;if(current)current.removeAttribute('aria-current');current=link;link.setAttribute('aria-current','true')})},{rootMargin:'-15% 0px -70% 0px'});Object.keys(byId).forEach(function(id){var h=document.getElementById(id);if(h)observer.observe(h)})})();</script>`;
+
 // --- Wave B2: spoiler-block secrets ------------------------------------------
 // Author syntax (raw HTML passes MkDocs untouched — document here, do NOT
 // touch the vault):
@@ -739,7 +785,11 @@ export default {
     if (url.pathname === '/robots.txt') return new Response('User-agent: *\nDisallow: /\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=86400', 'X-Robots-Tag': 'noindex, nofollow, noarchive' } });
     // --- API routes ---
     if (url.pathname.startsWith('/api/')) {
-      // auto-migrate tables if missing (so /api/register 500 never happens)
+      // auto-migrate tables if missing (so /api/register 500 never happens).
+      // Mirrors migrations/0006_foundation.sql: CREATE TABLE / INDEX statements
+      // are IF NOT EXISTS no-ops on migrated DBs; users.role is ALTER-probed
+      // below because SQLite has no ADD COLUMN IF NOT EXISTS. No data backfill
+      // here — the owner role seed lives in the SQL file.
       async function ensureTables() {
         if (!env.DB) throw new Error('Database unavailable');
         await env.DB.batch([
@@ -750,10 +800,19 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS map_documents (slug TEXT PRIMARY KEY, title TEXT NOT NULL, document_json TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS reveals (member_email TEXT NOT NULL, secret_id TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'locked', updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (member_email, secret_id))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, member_email TEXT NOT NULL, page TEXT NOT NULL, anchor TEXT NOT NULL DEFAULT '', body TEXT NOT NULL, shared INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS arcs (id TEXT PRIMARY KEY, title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'active', created_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS plots (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), parent_id TEXT REFERENCES plots(id), title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', is_master INTEGER NOT NULL DEFAULT 0, sort INTEGER NOT NULL DEFAULT 0)`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS threads (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), title TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'seed', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS boards (id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, title TEXT NOT NULL, doc_json TEXT NOT NULL DEFAULT '{}', updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS member_library (user_email TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, kind TEXT NOT NULL DEFAULT 'folio', progress INTEGER NOT NULL DEFAULT 0, saved INTEGER NOT NULL DEFAULT 0, last_visited_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (user_email, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_items (id TEXT PRIMARY KEY, kind TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', content_json TEXT NOT NULL, created_by TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), UNIQUE(kind, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_history (id INTEGER PRIMARY KEY AUTOINCREMENT, workflow_id TEXT NOT NULL, status TEXT NOT NULL, summary TEXT NOT NULL, actor_email TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_reveals_member ON reveals(member_email)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notes_member_page ON notes(member_email, page)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_plots_arc_parent ON plots(arc_id, parent_id)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_threads_arc_state ON threads(arc_id, state)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_rate_limits_reset ON rate_limits(reset_at)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_member_library_recent ON member_library(user_email, last_visited_at DESC)`),
