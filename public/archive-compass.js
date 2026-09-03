@@ -20,6 +20,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Chronicles', subtitle: 'Scrub the timeline and fly the atlas', url: '/chronicles', sigil: '❖', group: 'ROOM', keywords: 'chronicles scrub map fly events timeline atlas' },
     { title: 'Family Trees', subtitle: 'Trace every named bloodline of Ge’or', url: '/trees', sigil: '❦', group: 'ROOM', keywords: 'family trees houses bloodlines pedigree genealogy' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },
+    { title: 'Character Gallery', subtitle: 'Browse every named soul of Ge’or', url: '/gallery', sigil: '◍', group: 'ROOM', keywords: 'characters gallery houses species nations people' },
     { title: 'Battlestation', subtitle: 'Draft, review, and publish archive additions', url: '/app/', sigil: '⌬', group: 'CREATE', keywords: 'app write additions workspace workflow' },
   ]
   const normalizeTitle = value => String(value || '').replace(/\s+[—|-]\s+World of Ge['’]or.*$/i, '').trim()
