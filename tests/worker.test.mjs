@@ -299,3 +299,125 @@ test('crawler traps stay private: no sitemap, no crawl', async () => {
   const rootHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
   assert.match(rootHtml, /<meta name="robots" content="noindex, nofollow, noarchive"/)
 })
+
+// --- Wave B: path-driven article layouts ------------------------------------
+// Minimal HTMLRewriter test double: implements exactly the API surface the
+// worker uses (on/head/body/article-h1 + append/before/get/setAttribute) so
+// fetch-level hero assertions run in node, where the platform global is absent.
+function parseFakeAttrs(tag) {
+  const attrs = {}
+  const inner = tag.replace(/^<\w+/, '').replace(/\/?>$/, '')
+  for (const match of inner.matchAll(/([\w-]+)(?:="([^"]*)")?/g)) attrs[match[1]] = match[2] ?? ''
+  return attrs
+}
+
+function renderFakeAttrs(attrs) {
+  return Object.entries(attrs).map(([key, value]) => (value === '' ? ` ${key}` : ` ${key}="${value}"`)).join('')
+}
+
+class FakeHTMLRewriter {
+  constructor() { this.rules = [] }
+  on(selector, handlers) { this.rules.push([selector, handlers]); return this }
+  async transform(response) {
+    let html = await response.text()
+    for (const [selector, handlers] of this.rules) {
+      if (!handlers.element) continue
+      if (selector === 'head' || selector === 'body') {
+        const open = html.match(new RegExp(`<${selector}(\\s[^>]*)?>`, 'i'))
+        assert.ok(open, `fake rewriter: <${selector}> missing`)
+        const attrs = parseFakeAttrs(open[0])
+        handlers.element({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          append: fragment => {
+            const close = html.match(new RegExp(`</${selector}>`, 'i'))
+            html = `${html.slice(0, close.index)}${fragment}${html.slice(close.index)}`
+          },
+        })
+        html = `${html.slice(0, open.index)}<${selector}${renderFakeAttrs(attrs)}>${html.slice(open.index + open[0].length)}`
+      } else if (selector === 'article h1') {
+        // First in-article h1 only — mirrors the worker's heroApplied guard.
+        const article = html.match(/<article(\s[^>]*)?>/i)
+        if (!article) continue
+        const rest = html.slice(article.index)
+        const h1 = rest.match(/<h1(\s[^>]*)?>/i)
+        if (!h1) continue
+        const absolute = article.index + h1.index
+        const attrs = parseFakeAttrs(h1[0])
+        let beforeFragment = ''
+        handlers.element({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          before: fragment => { beforeFragment += fragment },
+        })
+        html = `${html.slice(0, absolute)}${beforeFragment}<h1${renderFakeAttrs(attrs)}>${html.slice(absolute + h1[0].length)}`
+      }
+    }
+    return new Response(html, { status: response.status, statusText: response.statusText, headers: response.headers })
+  }
+}
+
+test('article layouts classify real wiki prefixes and nothing else', () => {
+  assert.deepEqual(__test.classifyArticleLayout('/wiki/World/History/Characters/Aelis/'), { bodyClass: 'geor-layout-character', eyebrow: 'Character' })
+  assert.deepEqual(__test.classifyArticleLayout('/wiki/World/Nations/Central%20Erisdar/'), { bodyClass: 'geor-layout-nation', eyebrow: 'Nation' })
+  assert.deepEqual(__test.classifyArticleLayout('/wiki/World/History/Events/Age%200%20%E2%80%94%20The%20Lost%20Era/'), { bodyClass: 'geor-layout-event', eyebrow: 'Event' })
+  for (const pathname of [
+    '/wiki/World/History/Characters/',
+    '/wiki/World/Nations/',
+    '/wiki/World/History/Events/',
+    '/wiki/World/Locations/Cleton%20Island/',
+    '/wiki/World/Species/Elves/',
+    '/wiki/World/History/Figures/Someone/',
+    '/wiki/',
+    '/updates',
+    '/',
+  ]) assert.equal(__test.classifyArticleLayout(pathname), null, pathname)
+})
+
+test('article layout hero injects on matching wiki articles only', async () => {
+  const previous = globalThis.HTMLRewriter
+  globalThis.HTMLRewriter = FakeHTMLRewriter
+  try {
+    const now = Math.floor(Date.now() / 1000)
+    const token = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
+    const articleHtml = '<!DOCTYPE html><html><head><title>Aelis</title></head><body dir="ltr"><article class="md-content__inner md-typeset"><h1 id="aelis">Aelis</h1><p>Keeper.</p></article></body></html>'
+    const pngBytes = new Uint8Array([137, 80, 78, 71])
+    const env = {
+      JWT_SECRET: SECRET,
+      ASSETS: { fetch: async request => {
+        const pathname = new URL(request.url).pathname
+        if (pathname.endsWith('.png')) return new Response(pngBytes, { headers: { 'Content-Type': 'image/png' } })
+        return new Response(articleHtml, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+      } },
+    }
+    const authed = path => new Request(`https://worldofgeor.com${path}`, { headers: { Cookie: `geor_token=${token}` } })
+    for (const [path, bodyClass, eyebrow] of [
+      ['/wiki/World/History/Characters/Aelis/', 'geor-layout-character', 'Character'],
+      ['/wiki/World/Nations/Central%20Erisdar/', 'geor-layout-nation', 'Nation'],
+      ['/wiki/World/History/Events/Age%200%20%E2%80%94%20The%20Lost%20Era/', 'geor-layout-event', 'Event'],
+    ]) {
+      const response = await worker.fetch(authed(path), env, {})
+      assert.equal(response.status, 200, path)
+      const html = await response.text()
+      assert.match(html, new RegExp(bodyClass), path)
+      assert.match(html, new RegExp(`<p class="geor-hero-eyebrow">${eyebrow}</p>`), path)
+      assert.match(html, /article-layouts\.css/, path)
+      assert.match(html, /archive-compass\.js/, path)
+    }
+    const plain = await worker.fetch(authed('/wiki/World/Locations/Cleton%20Island/'), env, {})
+    assert.equal(plain.status, 200)
+    const plainHtml = await plain.text()
+    assert.match(plainHtml, /archive-compass\.js/)
+    assert.doesNotMatch(plainHtml, /geor-layout-/)
+    assert.doesNotMatch(plainHtml, /geor-hero-eyebrow/)
+    assert.doesNotMatch(plainHtml, /article-layouts\.css/)
+    const image = await worker.fetch(authed('/wiki/World/Maps%20and%20Assets/x.png'), env, {})
+    assert.equal(image.status, 200)
+    assert.deepEqual(new Uint8Array(await image.arrayBuffer()), pngBytes)
+    const gated = await worker.fetch(new Request('https://worldofgeor.com/wiki/World/Nations/Central%20Erisdar/'), env, {})
+    assert.equal(gated.status, 302)
+  } finally {
+    if (previous === undefined) delete globalThis.HTMLRewriter
+    else globalThis.HTMLRewriter = previous
+  }
+})

@@ -55,6 +55,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/search.js',
   '/archive-compass.css',
   '/archive-compass.js',
+  '/article-layouts.css',
 ]);
 const ROUTE_ALIASES = new Map([
   ['/updates', '/updates.html'],
@@ -459,13 +460,57 @@ async function ghApi(path, init, env) {
   });
 }
 
-function withPrivateArchiveShell(response) {
+// --- Wave B: path-driven article layouts ------------------------------------
+// Pure string prefix matching on real wiki sections (no D1 on the hot path).
+// Characters live under History/Characters (no top-level People section);
+// section indexes themselves are excluded (articles only, strictly beneath).
+const ARTICLE_LAYOUTS = [
+  { prefix: '/wiki/World/History/Characters/', bodyClass: 'geor-layout-character', eyebrow: 'Character' },
+  { prefix: '/wiki/World/Nations/', bodyClass: 'geor-layout-nation', eyebrow: 'Nation' },
+  { prefix: '/wiki/World/History/Events/', bodyClass: 'geor-layout-event', eyebrow: 'Event' },
+];
+
+function classifyArticleLayout(pathname) {
+  let decoded = pathname;
+  try { decoded = decodeURIComponent(pathname); } catch {}
+  for (const layout of ARTICLE_LAYOUTS) {
+    if (decoded.length > layout.prefix.length && decoded.startsWith(layout.prefix)) {
+      return { bodyClass: layout.bodyClass, eyebrow: layout.eyebrow };
+    }
+  }
+  return null;
+}
+
+function withPrivateArchiveShell(response, pathname = '') {
   const contentType = response.headers.get('Content-Type') || '';
   if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
-  return new HTMLRewriter()
-    .on('head', { element(element) { element.append('<link rel="stylesheet" href="/archive-compass.css"><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0f0e0d">', { html: true }); } })
-    .on('body', { element(element) { element.append('<script type="module" src="/archive-compass.js"></script>', { html: true }); } })
-    .transform(response);
+  const layout = classifyArticleLayout(pathname);
+  let heroApplied = false;
+  let rewriter = new HTMLRewriter()
+    .on('head', { element(element) {
+      element.append('<link rel="stylesheet" href="/archive-compass.css"><link rel="manifest" href="/manifest.webmanifest"><meta name="theme-color" content="#0f0e0d">', { html: true });
+      if (layout) element.append('<link rel="stylesheet" href="/article-layouts.css">', { html: true });
+    } })
+    .on('body', { element(element) {
+      if (layout) {
+        const existing = element.getAttribute('class') || '';
+        element.setAttribute('class', `${existing} ${layout.bodyClass}`.trim());
+      }
+      element.append('<script type="module" src="/archive-compass.js"></script>', { html: true });
+    } });
+  if (layout) {
+    // Slim hero: reuse the article's own <h1> in place (no extra fetch, no
+    // text capture) — eyebrow label before it, hero class on it, CSS does
+    // the rest. Selector matches MkDocs output (<article><h1>…).
+    rewriter = rewriter.on('article h1', { element(element) {
+      if (heroApplied) return;
+      heroApplied = true;
+      const existing = element.getAttribute('class') || '';
+      element.setAttribute('class', `${existing} geor-hero-title`.trim());
+      element.before(`<p class="geor-hero-eyebrow">${layout.eyebrow}</p>`, { html: true });
+    } });
+  }
+  return rewriter.transform(response);
 }
 
 export default {
@@ -1336,11 +1381,12 @@ export default {
     const headers = new Headers(response.headers);
     headers.set('Cache-Control', 'private, no-store');
     headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-    return withPrivateArchiveShell(new Response(response.body, { status: response.status, statusText: response.statusText, headers }));
+    return withPrivateArchiveShell(new Response(response.body, { status: response.status, statusText: response.statusText, headers }), url.pathname);
   }
 };
 
 export const __test = {
+  classifyArticleLayout,
   cleanArchivePath,
   cleanArchiveTitle,
   cleanInviteCode,

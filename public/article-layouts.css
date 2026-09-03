@@ -1,0 +1,51 @@
+/* World of Ge'or — path-driven article layouts (Wave B).
+   Injected only on classified wiki articles via worker HTMLRewriter shell.
+   Slate/amber, translucent so it sits well on any Material scheme. Slim. */
+.geor-hero-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #d9a441;
+}
+h1.geor-hero-title {
+  margin-top: 0;
+  padding-bottom: 0.6rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  border-bottom: 2px solid rgba(217, 164, 65, 0.45);
+}
+body[class*="geor-layout-"] article {
+  background: rgba(15, 14, 13, 0.28);
+  border: 1px solid rgba(217, 164, 65, 0.18);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+body[class*="geor-layout-"] article table {
+  border-color: rgba(217, 183, 122, 0.35);
+}
+body[class*="geor-layout-"] article blockquote {
+  border-left: 3px solid #d9a441;
+  color: inherit;
+  opacity: 0.92;
+}
+/* Per-layout eyebrow accents: character / nation / event. */
+body.geor-layout-character .geor-hero-eyebrow { color: #e8b64c; }
+body.geor-layout-nation .geor-hero-eyebrow { color: #d9b77a; }
+body.geor-layout-nation h1.geor-hero-title {
+  border-bottom-color: rgba(217, 183, 122, 0.6);
+}
+body.geor-layout-event .geor-hero-eyebrow { color: #c98f2e; }
+body.geor-layout-event h1.geor-hero-title { font-style: italic; }
+/* Mobile-safe: slim hero, no overflow, comfortable read measure. */
+@media (max-width: 640px) {
+  h1.geor-hero-title { font-size: 1.5rem; }
+  .geor-hero-eyebrow { letter-spacing: 0.2em; }
+  body[class*="geor-layout-"] article {
+    border-radius: 8px;
+    padding: 1rem;
+  }
+}
