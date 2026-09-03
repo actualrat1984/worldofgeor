@@ -57,6 +57,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/timeline.js',
   '/gazetteer.js',
   '/trees.js',
+  '/notebook.js',
   '/webs.js',
   '/gallery.js',
   '/oracle.js',
@@ -75,6 +76,8 @@ const ROUTE_ALIASES = new Map([
   ['/gazetteer/', '/gazetteer.html'],
   ['/trees', '/trees.html'],
   ['/trees/', '/trees.html'],
+  ['/notebook', '/notebook.html'],
+  ['/notebook/', '/notebook.html'],
   ['/webs', '/webs.html'],
   ['/webs/', '/webs.html'],
   ['/gallery', '/gallery.html'],
@@ -328,7 +331,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -716,6 +719,45 @@ const SECRET_ID_PATTERN = /^[a-z0-9-]{1,64}$/;
 function cleanSecretId(value) {
   return typeof value === 'string' && SECRET_ID_PATTERN.test(value) ? value : null;
 }
+// --- Wave E2: per-member notebook validation --------------------------------
+// Titles are short labels, bodies carry the note (non-empty, 20k cap), and
+// checklists normalize server-side to [{text, done}] so stored JSON is always
+// the same shape no matter what the client sent (strings or {text, done}).
+const NOTEBOOK_TITLE_MAX = 200;
+const NOTEBOOK_BODY_MAX = 20_000;
+const NOTEBOOK_CHECKLIST_MAX = 100;
+const NOTEBOOK_CHECKLIST_ITEM_MAX = 200;
+function cleanNotebookTitle(value) {
+  if (value == null) return '';
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title.length <= NOTEBOOK_TITLE_MAX ? title : null;
+}
+function cleanNotebookBody(value) {
+  if (typeof value !== 'string') return null;
+  const body = value.trim();
+  return body && body.length <= NOTEBOOK_BODY_MAX ? body : null;
+}
+function cleanNotebookChecklist(value) {
+  if (value == null) return [];
+  if (!Array.isArray(value) || value.length > NOTEBOOK_CHECKLIST_MAX) return null;
+  const items = [];
+  for (const entry of value) {
+    const text = typeof entry === 'string' ? entry.trim()
+      : entry && typeof entry.text === 'string' ? entry.text.trim() : null;
+    if (!text || text.length > NOTEBOOK_CHECKLIST_ITEM_MAX) return null;
+    items.push({ text, done: Boolean(entry && typeof entry === 'object' && entry.done) });
+  }
+  return items;
+}
+function notebookNoteJson(row) {
+  let checklist = [];
+  try {
+    const parsed = JSON.parse(row?.checklist_json ?? '[]');
+    if (Array.isArray(parsed)) checklist = parsed;
+  } catch { checklist = []; }
+  return { id: row.id, title: row.title ?? '', body: row.body ?? '', checklist, created_at: row.created_at, updated_at: row.updated_at };
+}
 // Locked cards carry a title + reveal button only — the id charset above is
 // HTML/JS-string safe, so no further escaping is needed when interpolating.
 function lockedSecretInner(id) {
@@ -882,6 +924,7 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS reveals (member_email TEXT NOT NULL, secret_id TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'locked', updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (member_email, secret_id))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, member_email TEXT NOT NULL, page TEXT NOT NULL, anchor TEXT NOT NULL DEFAULT '', body TEXT NOT NULL, shared INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS notebook_notes (id INTEGER PRIMARY KEY AUTOINCREMENT, member_email TEXT NOT NULL, title TEXT NOT NULL DEFAULT '', body TEXT NOT NULL, checklist_json TEXT NOT NULL DEFAULT '[]', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS arcs (id TEXT PRIMARY KEY, title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'active', created_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS plots (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), parent_id TEXT REFERENCES plots(id), title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', is_master INTEGER NOT NULL DEFAULT 0, sort INTEGER NOT NULL DEFAULT 0)`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS threads (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), title TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'seed', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
@@ -892,6 +935,7 @@ export default {
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_requests_status_created ON requests(status, created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_reveals_member ON reveals(member_email)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notes_member_page ON notes(member_email, page)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notebook_notes_member_updated ON notebook_notes(member_email, updated_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_plots_arc_parent ON plots(arc_id, parent_id)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_threads_arc_state ON threads(arc_id, state)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
@@ -1477,6 +1521,107 @@ export default {
         }
       }
 
+      // --- Wave E2: per-member notebook (quick notes + checklists) ------------
+      // Own notes only: every statement binds member_email = session email.
+      // Search is a length-capped LIKE over title/body with wildcards escaped.
+      if (url.pathname === '/api/notes' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const query = (url.searchParams.get('q') || '').slice(0, 100).trim();
+        try {
+          await ensureTables();
+          let statement = env.DB.prepare(`SELECT id, title, body, checklist_json, created_at, updated_at FROM notebook_notes
+            WHERE member_email = ? ORDER BY updated_at DESC LIMIT 100`).bind(user.email);
+          if (query) {
+            const like = `%${query.replace(/[\\%_]/g, char => `\\${char}`)}%`;
+            statement = env.DB.prepare(`SELECT id, title, body, checklist_json, created_at, updated_at FROM notebook_notes
+              WHERE member_email = ? AND (title LIKE ? ESCAPE '\\' OR body LIKE ? ESCAPE '\\')
+              ORDER BY updated_at DESC LIMIT 100`).bind(user.email, like, like);
+          }
+          const { results } = await statement.all();
+          return json({ notes: (results || []).map(notebookNoteJson) });
+        } catch {
+          return json({ error: 'Notebook is temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/notes' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const title = cleanNotebookTitle(body.title ?? '');
+        const noteBody = cleanNotebookBody(body.body);
+        const checklist = cleanNotebookChecklist(body.checklist);
+        if (title === null || noteBody === null || checklist === null) return json({ error: 'Valid notebook note required' }, 400);
+        try {
+          await ensureTables();
+          const inserted = await env.DB.prepare(`INSERT INTO notebook_notes (member_email, title, body, checklist_json)
+            VALUES (?, ?, ?, ?)`).bind(user.email, title, noteBody, JSON.stringify(checklist)).run();
+          const row = await env.DB.prepare(`SELECT id, title, body, checklist_json, created_at, updated_at FROM notebook_notes
+            WHERE id = ? AND member_email = ?`).bind(inserted.meta.last_row_id, user.email).first();
+          if (!row) return json({ error: 'Notebook note could not be saved' }, 500);
+          return json({ note: notebookNoteJson(row) }, 201);
+        } catch {
+          return json({ error: 'Notebook note could not be saved' }, 500);
+        }
+      }
+
+      // PATCH / DELETE /api/notes/:id — own notes only (id + member_email bind,
+      // zero changes means missing or another member's note: generic 404).
+      const notebookIdMatch = url.pathname.match(/^\/api\/notes\/([^/]+)$/);
+      if (notebookIdMatch && (request.method === 'PATCH' || request.method === 'DELETE')) {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        const noteId = validPositiveId(Number(notebookIdMatch[1]));
+        if (!noteId) return json({ error: 'Notebook note not found' }, 404);
+        try {
+          await ensureTables();
+          if (request.method === 'DELETE') {
+            const deleted = await env.DB.prepare('DELETE FROM notebook_notes WHERE id = ? AND member_email = ?')
+              .bind(noteId, user.email).run();
+            if (!deleted.meta.changes) return json({ error: 'Notebook note not found' }, 404);
+            return json({ ok: true, id: noteId });
+          }
+          let body;
+          try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+          const updates = [];
+          const values = [];
+          if (body.title !== undefined) {
+            const title = cleanNotebookTitle(body.title);
+            if (title === null) return json({ error: 'Valid notebook note required' }, 400);
+            updates.push('title = ?'); values.push(title);
+          }
+          if (body.body !== undefined) {
+            const noteBody = cleanNotebookBody(body.body);
+            if (noteBody === null) return json({ error: 'Valid notebook note required' }, 400);
+            updates.push('body = ?'); values.push(noteBody);
+          }
+          if (body.checklist !== undefined) {
+            const checklist = cleanNotebookChecklist(body.checklist);
+            if (checklist === null) return json({ error: 'Valid notebook note required' }, 400);
+            updates.push('checklist_json = ?'); values.push(JSON.stringify(checklist));
+          }
+          if (!updates.length) return json({ error: 'Valid notebook note required' }, 400);
+          updates.push(`updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`);
+          const changed = await env.DB.prepare(`UPDATE notebook_notes SET ${updates.join(', ')} WHERE id = ? AND member_email = ?`)
+            .bind(...values, noteId, user.email).run();
+          if (!changed.meta.changes) return json({ error: 'Notebook note not found' }, 404);
+          const row = await env.DB.prepare(`SELECT id, title, body, checklist_json, created_at, updated_at FROM notebook_notes
+            WHERE id = ? AND member_email = ?`).bind(noteId, user.email).first();
+          if (!row) return json({ error: 'Notebook note not found' }, 404);
+          return json({ note: notebookNoteJson(row) });
+        } catch {
+          return json({ error: 'Notebook note could not be saved' }, 500);
+        }
+      }
+
       // --- Additions (Website-additions repo) — requires auth ---
       // GET /api/additions/list -> {files:[{path, sha, size, html_url}]}
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
@@ -1816,6 +1961,9 @@ export const __test = {
   cleanSecretId,
   cleanArchiveTitle,
   cleanInviteCode,
+  cleanNotebookBody,
+  cleanNotebookChecklist,
+  cleanNotebookTitle,
   cleanMapSlug,
   cleanWorkflowKind,
   cleanWorkflowStatus,

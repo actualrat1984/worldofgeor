@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Notebook — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[1120px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE KEEPER'S DESK • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">NOTEBOOK</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Quick notes and checklists — yours alone, on every device.</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <span id="noteCount" role="status" class="text-xs text-cream/40">Opening the notebook…</span>
+        </p>
+      </div>
+      <div class="mt-9 flex items-center gap-3 flex-wrap">
+        <label for="noteSearch" class="sr-only">Search notes</label>
+        <input id="noteSearch" type="search" placeholder="Search your notes…" autocomplete="off" class="flex-1 min-w-[220px] rounded-xl border border-gold/15 bg-ink px-4 py-3.5 text-sm text-cream/80 outline-none focus:border-gold/50" />
+        <button id="noteNew" type="button" class="text-xs bg-gold text-ink rounded-full px-5 py-3 font-semibold">NEW NOTE</button>
+      </div>
+      <p id="noteStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Opening the notebook…</p>
+      <div class="mt-8 grid gap-6 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-start">
+        <div id="noteList" aria-busy="true" class="rounded-xl border border-gold/10 divide-y divide-gold/10 overflow-hidden">
+          <p class="p-5 text-sm text-cream/40">Opening the notebook…</p>
+        </div>
+        <form id="noteForm" class="rounded-xl border border-gold/10 p-5 flex flex-col gap-4">
+          <label class="flex flex-col gap-2">
+            <span class="text-[10px] tracking-[.25em] text-cream/40">TITLE</span>
+            <input id="noteTitle" type="text" maxlength="200" placeholder="A short label…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50" />
+          </label>
+          <label class="flex flex-col gap-2">
+            <span class="text-[10px] tracking-[.25em] text-cream/40">NOTE</span>
+            <textarea id="noteBody" rows="8" maxlength="20000" placeholder="Write the note…" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50"></textarea>
+          </label>
+          <fieldset class="flex flex-col gap-2">
+            <legend class="text-[10px] tracking-[.25em] text-cream/40">CHECKLIST</legend>
+            <ul id="checkList" class="flex flex-col gap-2"></ul>
+            <div class="flex items-center gap-2">
+              <label for="checkInput" class="sr-only">New checklist item</label>
+              <input id="checkInput" type="text" maxlength="200" placeholder="Add a checklist item…" autocomplete="off" class="flex-1 min-w-0 rounded-xl border border-gold/15 bg-ink px-4 py-2.5 text-sm text-cream/80 outline-none focus:border-gold/50" />
+              <button id="checkAdd" type="button" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2">ADD</button>
+            </div>
+          </fieldset>
+          <div class="flex items-center gap-3 flex-wrap">
+            <button id="noteSave" type="submit" class="text-xs bg-gold text-ink rounded-full px-5 py-2.5 font-semibold">SAVE</button>
+            <button id="noteDelete" type="button" class="text-xs border border-red-400/30 text-red-300 rounded-full px-5 py-2.5">DELETE</button>
+          </div>
+        </form>
+      </div>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/notebook.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
