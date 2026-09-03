@@ -54,6 +54,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/species.css',
   '/species.js',
   '/search.js',
+  '/arcs.js',
   '/timeline.js',
   '/gazetteer.js',
   '/trees.js',
@@ -77,6 +78,8 @@ const ROUTE_ALIASES = new Map([
   ['/timeline/', '/timeline.html'],
   ['/gazetteer', '/gazetteer.html'],
   ['/gazetteer/', '/gazetteer.html'],
+  ['/arcs', '/arcs.html'],
+  ['/arcs/', '/arcs.html'],
   ['/trees', '/trees.html'],
   ['/trees/', '/trees.html'],
   ['/notebook', '/notebook.html'],
@@ -338,7 +341,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/arcs', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -949,6 +952,93 @@ function marginaliaNoteJson(row, viewerEmail) {
     created_at: row.created_at,
     updated_at: row.updated_at,
   };
+}
+// --- Wave F1: story arcs + plot trees validation ----------------------------
+// Reuses the 0006 `arcs` / `plots` / `threads` tables — every column this
+// wave needs already exists, so no migration. Member scoping runs through
+// arcs.created_by (plots + threads scope through their arc, never by a
+// member column they do not have). Thread states are a strict
+// seed/active/resolved enum; plot trees cap at 32 ancestors.
+const ARC_TITLE_MAX = 200;
+const ARC_SUMMARY_MAX = 2000;
+const ARC_STATUSES = new Set(['active', 'complete', 'archived']);
+const ARC_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
+const PLOT_TITLE_MAX = 200;
+const PLOT_SUMMARY_MAX = 2000;
+const PLOT_DEPTH_MAX = 32;
+const PLOT_SORT_MAX = 1_000_000;
+const THREAD_TITLE_MAX = 200;
+const THREAD_STATES = new Set(['seed', 'active', 'resolved']);
+function cleanArcId(value) {
+  return typeof value === 'string' && ARC_ID_PATTERN.test(value) ? value : null;
+}
+function cleanArcTitle(value) {
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title && title.length <= ARC_TITLE_MAX ? title : null;
+}
+function cleanArcSummary(value) {
+  if (value == null || value === '') return '';
+  if (typeof value !== 'string') return null;
+  const summary = value.trim();
+  return summary.length <= ARC_SUMMARY_MAX ? summary : null;
+}
+function cleanArcStatus(value) {
+  if (value == null || value === '') return 'active';
+  return typeof value === 'string' && ARC_STATUSES.has(value) ? value : null;
+}
+function cleanPlotId(value) {
+  return typeof value === 'string' && ARC_ID_PATTERN.test(value) ? value : null;
+}
+function cleanPlotTitle(value) {
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title && title.length <= PLOT_TITLE_MAX ? title : null;
+}
+function cleanPlotSummary(value) {
+  if (value == null || value === '') return '';
+  if (typeof value !== 'string') return null;
+  const summary = value.trim();
+  return summary.length <= PLOT_SUMMARY_MAX ? summary : null;
+}
+function arcJson(row) {
+  return { id: row.id, title: row.title ?? '', summary: row.summary ?? '', status: row.status ?? 'active', created_at: row.created_at, updated_at: row.updated_at };
+}
+function plotJson(row) {
+  return { id: row.id, arc_id: row.arc_id, parent_id: row.parent_id ?? null, title: row.title ?? '', summary: row.summary ?? '', is_master: Number(row.is_master) === 1, sort: Number(row.sort) || 0 };
+}
+function cleanThreadTitle(value) {
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title && title.length <= THREAD_TITLE_MAX ? title : null;
+}
+function cleanThreadState(value) {
+  if (value == null || value === '') return 'seed';
+  return typeof value === 'string' && THREAD_STATES.has(value) ? value : null;
+}
+function threadJson(row) {
+  return { id: row.id, arc_id: row.arc_id, title: row.title ?? '', state: row.state ?? 'seed', created_at: row.created_at, updated_at: row.updated_at };
+}
+// Walk the ancestor chain above startParentId inside one arc. forbiddenId is
+// the plot being moved (null on create — the id is fresh, so only a corrupt
+// pre-existing cycle can trip the walk). Any hit on forbiddenId, any repeat,
+// a parent outside the arc, or a chain deeper than PLOT_DEPTH_MAX rejects
+// the link before store.
+async function plotParentError(env, arcId, startParentId, forbiddenId) {
+  const seen = new Set();
+  let current = startParentId;
+  let depth = 0;
+  while (current) {
+    if (forbiddenId && current === forbiddenId) return 'Plot links must not form a loop';
+    if (seen.has(current)) return 'Plot links must not form a loop';
+    seen.add(current);
+    depth++;
+    if (depth > PLOT_DEPTH_MAX) return 'Plot tree is too deep';
+    const row = await env.DB.prepare('SELECT id, arc_id, parent_id FROM plots WHERE id = ?').bind(current).first();
+    if (!row || row.arc_id !== arcId) return 'Unknown parent plot';
+    current = row.parent_id || null;
+  }
+  return null;
 }
 // Locked cards carry a title + reveal button only — the id charset above is
 // HTML/JS-string safe, so no further escaping is needed when interpolating.
@@ -1967,6 +2057,277 @@ export default {
         }
       }
 
+      // --- Wave F1: story arcs + plot trees ---------------------------------
+      // Own arcs only: every statement scopes arcs.created_by = session
+      // email; plots + threads scope through their arc (a foreign arc id
+      // reads as a generic 404 — never confirm or deny another member's
+      // titles). Parent links validate server-side: same arc, ancestor
+      // walk with a 32-deep cap, loops rejected before store. Thread
+      // states are a strict seed/active/resolved enum. Rate limits reuse
+      // 'reveal', mirroring the notebook/whiteboard pattern.
+      if (url.pathname === '/api/arcs' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const { results } = await env.DB.prepare(`SELECT id, title, summary, status, created_by, created_at, updated_at FROM arcs
+            WHERE created_by = ? ORDER BY updated_at DESC LIMIT 100`).bind(user.email).all();
+          return json({ arcs: (results || []).map(arcJson) });
+        } catch {
+          return json({ error: 'Story arcs are temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/arcs' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const title = cleanArcTitle(body.title);
+        const summary = cleanArcSummary(body.summary);
+        const status = cleanArcStatus(body.status);
+        if (title === null || summary === null || status === null) return json({ error: 'Valid story arc required' }, 400);
+        try {
+          await ensureTables();
+          const id = crypto.randomUUID();
+          await env.DB.prepare(`INSERT INTO arcs (id, title, summary, status, created_by)
+            VALUES (?, ?, ?, ?, ?)`).bind(id, title, summary, status, user.email).run();
+          const row = await env.DB.prepare(`SELECT id, title, summary, status, created_by, created_at, updated_at FROM arcs
+            WHERE id = ? AND created_by = ?`).bind(id, user.email).first();
+          if (!row) return json({ error: 'Story arc could not be saved' }, 500);
+          return json({ arc: arcJson(row) }, 201);
+        } catch {
+          return json({ error: 'Story arc could not be saved' }, 500);
+        }
+      }
+
+      // GET /api/arcs/:id — the arc with its plot tree + threads (the tree
+      // renders from D1 through this endpoint; foreign arcs 404).
+      const arcIdMatch = url.pathname.match(/^\/api\/arcs\/([^/]+)$/);
+      if (arcIdMatch && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const arcId = cleanArcId(arcIdMatch[1]);
+        if (!arcId) return json({ error: 'Story arc not found' }, 404);
+        try {
+          await ensureTables();
+          const arc = await env.DB.prepare(`SELECT id, title, summary, status, created_by, created_at, updated_at FROM arcs
+            WHERE id = ? AND created_by = ?`).bind(arcId, user.email).first();
+          if (!arc) return json({ error: 'Story arc not found' }, 404);
+          const { results: plotRows } = await env.DB.prepare(`SELECT id, arc_id, parent_id, title, summary, is_master, sort FROM plots
+            WHERE arc_id = ? ORDER BY sort ASC LIMIT 200`).bind(arcId).all();
+          const { results: threadRows } = await env.DB.prepare(`SELECT id, arc_id, title, state, created_at, updated_at FROM threads
+            WHERE arc_id = ? ORDER BY created_at ASC LIMIT 200`).bind(arcId).all();
+          return json({ arc: arcJson(arc), plots: (plotRows || []).map(plotJson), threads: (threadRows || []).map(threadJson) });
+        } catch {
+          return json({ error: 'Story arcs are temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/plots' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const arcId = cleanArcId(body.arc_id);
+        const title = cleanPlotTitle(body.title);
+        const summary = cleanPlotSummary(body.summary);
+        if (!arcId || title === null || summary === null) return json({ error: 'Valid plot required' }, 400);
+        let parentId = null;
+        if (body.parent_id != null && body.parent_id !== '') {
+          parentId = cleanPlotId(body.parent_id);
+          if (!parentId) return json({ error: 'Valid plot required' }, 400);
+        }
+        const isMaster = body.is_master === true || body.is_master === 1 ? 1 : 0;
+        let sort = 0;
+        if (body.sort !== undefined) {
+          if (!Number.isSafeInteger(body.sort) || Math.abs(body.sort) > PLOT_SORT_MAX) return json({ error: 'Valid plot required' }, 400);
+          sort = body.sort;
+        }
+        try {
+          await ensureTables();
+          const arc = await env.DB.prepare('SELECT id FROM arcs WHERE id = ? AND created_by = ?').bind(arcId, user.email).first();
+          if (!arc) return json({ error: 'Story arc not found' }, 404);
+          const id = crypto.randomUUID();
+          if (parentId) {
+            const loopError = await plotParentError(env, arcId, parentId, id);
+            if (loopError) return json({ error: loopError }, 400);
+          }
+          await env.DB.prepare(`INSERT INTO plots (id, arc_id, parent_id, title, summary, is_master, sort)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`).bind(id, arcId, parentId, title, summary, isMaster, sort).run();
+          const row = await env.DB.prepare(`SELECT id, arc_id, parent_id, title, summary, is_master, sort FROM plots
+            WHERE id = ?`).bind(id).first();
+          if (!row || row.arc_id !== arcId) return json({ error: 'Plot could not be saved' }, 500);
+          return json({ plot: plotJson(row) }, 201);
+        } catch (e) {
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Plot could not be saved' }, 500);
+        }
+      }
+
+      // PATCH /api/plots/:id — own plots only (ownership resolves through
+      // the plot's arc; foreign plots 404). parent_id: null detaches to a
+      // root; any new link walks ancestors first — self-parents, cycles,
+      // and over-deep trees 400 before store.
+      const plotIdMatch = url.pathname.match(/^\/api\/plots\/([^/]+)$/);
+      if (plotIdMatch && request.method === 'PATCH') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        const plotId = cleanPlotId(plotIdMatch[1]);
+        if (!plotId) return json({ error: 'Plot not found' }, 404);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        try {
+          await ensureTables();
+          const plot = await env.DB.prepare(`SELECT id, arc_id, parent_id, title, summary, is_master, sort FROM plots
+            WHERE id = ?`).bind(plotId).first();
+          if (!plot) return json({ error: 'Plot not found' }, 404);
+          const arc = await env.DB.prepare('SELECT id FROM arcs WHERE id = ? AND created_by = ?').bind(plot.arc_id, user.email).first();
+          if (!arc) return json({ error: 'Plot not found' }, 404);
+          const updates = [];
+          const values = [];
+          if (body.title !== undefined) {
+            const title = cleanPlotTitle(body.title);
+            if (title === null) return json({ error: 'Valid plot required' }, 400);
+            updates.push('title = ?'); values.push(title);
+          }
+          if (body.summary !== undefined) {
+            const summary = cleanPlotSummary(body.summary);
+            if (summary === null) return json({ error: 'Valid plot required' }, 400);
+            updates.push('summary = ?'); values.push(summary);
+          }
+          if (body.is_master !== undefined) {
+            updates.push('is_master = ?'); values.push(body.is_master === true || body.is_master === 1 ? 1 : 0);
+          }
+          if (body.sort !== undefined) {
+            if (!Number.isSafeInteger(body.sort) || Math.abs(body.sort) > PLOT_SORT_MAX) return json({ error: 'Valid plot required' }, 400);
+            updates.push('sort = ?'); values.push(body.sort);
+          }
+          if (body.parent_id !== undefined) {
+            let parentId = null;
+            if (body.parent_id != null && body.parent_id !== '') {
+              parentId = cleanPlotId(body.parent_id);
+              if (!parentId) return json({ error: 'Valid plot required' }, 400);
+              const loopError = await plotParentError(env, plot.arc_id, parentId, plotId);
+              if (loopError) return json({ error: loopError }, 400);
+            }
+            updates.push('parent_id = ?'); values.push(parentId);
+          }
+          if (!updates.length) return json({ error: 'Valid plot required' }, 400);
+          await env.DB.prepare(`UPDATE plots SET ${updates.join(', ')} WHERE id = ?`).bind(...values, plotId).run();
+          const row = await env.DB.prepare(`SELECT id, arc_id, parent_id, title, summary, is_master, sort FROM plots
+            WHERE id = ?`).bind(plotId).first();
+          if (!row) return json({ error: 'Plot not found' }, 404);
+          return json({ plot: plotJson(row) });
+        } catch (e) {
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Plot could not be saved' }, 500);
+        }
+      }
+
+      if (url.pathname === '/api/threads' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const arcId = cleanArcId(url.searchParams.get('arc'));
+        if (!arcId) return json({ error: 'Valid story arc required' }, 400);
+        try {
+          await ensureTables();
+          const arc = await env.DB.prepare('SELECT id FROM arcs WHERE id = ? AND created_by = ?').bind(arcId, user.email).first();
+          if (!arc) return json({ error: 'Story arc not found' }, 404);
+          const { results } = await env.DB.prepare(`SELECT id, arc_id, title, state, created_at, updated_at FROM threads
+            WHERE arc_id = ? ORDER BY created_at ASC LIMIT 200`).bind(arcId).all();
+          return json({ threads: (results || []).map(threadJson) });
+        } catch {
+          return json({ error: 'Threads are temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/threads' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const arcId = cleanArcId(body.arc_id);
+        const title = cleanThreadTitle(body.title);
+        const state = cleanThreadState(body.state);
+        if (!arcId || title === null || state === null) return json({ error: 'Valid thread required' }, 400);
+        try {
+          await ensureTables();
+          const arc = await env.DB.prepare('SELECT id FROM arcs WHERE id = ? AND created_by = ?').bind(arcId, user.email).first();
+          if (!arc) return json({ error: 'Story arc not found' }, 404);
+          const id = crypto.randomUUID();
+          await env.DB.prepare(`INSERT INTO threads (id, arc_id, title, state)
+            VALUES (?, ?, ?, ?)`).bind(id, arcId, title, state).run();
+          const row = await env.DB.prepare(`SELECT id, arc_id, title, state, created_at, updated_at FROM threads
+            WHERE id = ?`).bind(id).first();
+          if (!row || row.arc_id !== arcId) return json({ error: 'Thread could not be saved' }, 500);
+          return json({ thread: threadJson(row) }, 201);
+        } catch (e) {
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Thread could not be saved' }, 500);
+        }
+      }
+
+      // PATCH /api/threads/:id — own threads only (ownership resolves
+      // through the thread's arc); state transitions keep the strict enum.
+      const threadIdMatch = url.pathname.match(/^\/api\/threads\/([^/]+)$/);
+      if (threadIdMatch && request.method === 'PATCH') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        const threadId = cleanPlotId(threadIdMatch[1]);
+        if (!threadId) return json({ error: 'Thread not found' }, 404);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        try {
+          await ensureTables();
+          const thread = await env.DB.prepare(`SELECT id, arc_id, title, state, created_at, updated_at FROM threads
+            WHERE id = ?`).bind(threadId).first();
+          if (!thread) return json({ error: 'Thread not found' }, 404);
+          const arc = await env.DB.prepare('SELECT id FROM arcs WHERE id = ? AND created_by = ?').bind(thread.arc_id, user.email).first();
+          if (!arc) return json({ error: 'Thread not found' }, 404);
+          const updates = [];
+          const values = [];
+          if (body.title !== undefined) {
+            const title = cleanThreadTitle(body.title);
+            if (title === null) return json({ error: 'Valid thread required' }, 400);
+            updates.push('title = ?'); values.push(title);
+          }
+          if (body.state !== undefined) {
+            if (typeof body.state !== 'string' || !THREAD_STATES.has(body.state)) return json({ error: 'Valid thread required' }, 400);
+            updates.push('state = ?'); values.push(body.state);
+          }
+          if (!updates.length) return json({ error: 'Valid thread required' }, 400);
+          updates.push(`updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`);
+          await env.DB.prepare(`UPDATE threads SET ${updates.join(', ')} WHERE id = ?`).bind(...values, threadId).run();
+          const row = await env.DB.prepare(`SELECT id, arc_id, title, state, created_at, updated_at FROM threads
+            WHERE id = ?`).bind(threadId).first();
+          if (!row) return json({ error: 'Thread not found' }, 404);
+          return json({ thread: threadJson(row) });
+        } catch (e) {
+          if (e instanceof RangeError) return json({ error: e.message }, 413);
+          if (e instanceof SyntaxError) return json({ error: e.message }, 400);
+          return json({ error: 'Thread could not be saved' }, 500);
+        }
+      }
+
       // --- Wave E1: manuscripts (chapters/scenes writing studio) --------------
       // Chapters live under Books/<book>/<chapter>.md in the SAME additions
       // repo and commit flow as /api/additions — no new store, no new D1
@@ -2403,6 +2764,15 @@ export const __test = {
   resetRelatedCache,
   relatedUrlForPagePath,
   cleanArchivePath,
+  cleanArcId,
+  cleanArcStatus,
+  cleanArcSummary,
+  cleanArcTitle,
+  cleanPlotId,
+  cleanPlotSummary,
+  cleanPlotTitle,
+  cleanThreadState,
+  cleanThreadTitle,
   cleanSecretId,
   cleanArchiveTitle,
   cleanInviteCode,

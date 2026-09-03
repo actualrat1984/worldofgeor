@@ -21,6 +21,7 @@ const aliases = new Map([
   ['/timeline', '/timeline.html'],
   ['/gazetteer', '/gazetteer.html'],
   ['/trees', '/trees.html'],
+  ['/arcs', '/arcs.html'],
   ['/notebook', '/notebook.html'],
   ['/manuscripts', '/manuscripts.html'],
   ['/boards', '/boards.html'],

@@ -22,6 +22,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Notebook', subtitle: 'Keep quick notes and checklists', url: '/notebook', sigil: '✎', group: 'ROOM', keywords: 'notebook notes checklist memo write' },
     { title: 'Manuscripts', subtitle: 'Draft chapters and scenes for the archive', url: '/manuscripts', sigil: '✒', group: 'ROOM', keywords: 'manuscripts books chapters scenes draft write' },
     { title: 'Whiteboards', subtitle: 'Plot schemes on an infinite canvas', url: '/boards', sigil: '▦', group: 'ROOM', keywords: 'whiteboard boards canvas cards arrows plot scheme' },
+    { title: 'Story Arcs', subtitle: 'Chart master plots, subplots, and open threads', url: '/arcs', sigil: '✧', group: 'ROOM', keywords: 'story arcs plots subplots threads master tree' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },
     { title: 'Character Gallery', subtitle: 'Browse every named soul of Ge’or', url: '/gallery', sigil: '◍', group: 'ROOM', keywords: 'characters gallery houses species nations people' },
     { title: 'Prompt Oracle', subtitle: 'Roll character, place, and conflict omens', url: '/oracle', sigil: '⚄', group: 'ROOM', keywords: 'oracle prompt roll random character place conflict tags omen' },
