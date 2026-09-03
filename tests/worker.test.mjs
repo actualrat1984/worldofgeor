@@ -60,6 +60,11 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/species.js'), true)
   assert.equal(__test.isPrivatePath('/search'), true)
   assert.equal(__test.isPrivatePath('/search.js'), true)
+  assert.equal(__test.isPrivatePath('/timeline'), true)
+  assert.equal(__test.isPrivatePath('/timeline/'), true)
+  assert.equal(__test.isPrivatePath('/timeline.html'), true)
+  assert.equal(__test.isPrivatePath('/timeline.js'), true)
+  assert.equal(__test.isPrivatePath('/wiki/timeline-index.json'), true)
   assert.equal(__test.isPrivatePath('/archive-compass.js'), true)
   assert.equal(__test.isPrivatePath('/archive-compass.css'), true)
   assert.equal(__test.isPrivatePath('/updates'), false)
@@ -241,6 +246,41 @@ test('private files redirect to the gate and public aliases reach the intended a
     assert.match(workerSource, new RegExp(releaseId))
     assert.match(updatesHtml, new RegExp(releaseId))
   }
+})
+
+test('timeline page and timeline index stay behind the gate', async () => {
+  const timelineHtml = readFileSync(new URL('../public/timeline.html', import.meta.url), 'utf8')
+  const env = {
+    JWT_SECRET: SECRET,
+    ASSETS: { fetch: async request => {
+      const pathname = new URL(request.url).pathname
+      const body = pathname === '/timeline.html' ? timelineHtml : pathname
+      return new Response(body, { headers: { 'Content-Type': pathname.endsWith('.html') ? 'text/html; charset=utf-8' : 'application/json' } })
+    } },
+  }
+  for (const path of ['/timeline', '/timeline/']) {
+    const response = await worker.fetch(new Request(`https://worldofgeor.com${path}`, { headers: { Accept: 'text/html' } }), env, {})
+    assert.equal(response.status, 302, path)
+    assert.match(response.headers.get('location'), /next=%2Ftimeline/, path)
+    assert.equal(response.headers.get('cache-control'), 'no-store', path)
+  }
+  const gatedScript = await worker.fetch(new Request('https://worldofgeor.com/timeline.js', { headers: { 'Sec-Fetch-Dest': 'script' } }), env, {})
+  assert.equal(gatedScript.status, 401)
+  const gatedIndex = await worker.fetch(new Request('https://worldofgeor.com/wiki/timeline-index.json', { headers: { Accept: 'text/html' } }), env, {})
+  assert.equal(gatedIndex.status, 302)
+  assert.match(gatedIndex.headers.get('location'), /timeline-index\.json/)
+  const gatedIndexJson = await worker.fetch(new Request('https://worldofgeor.com/wiki/timeline-index.json', { headers: { Accept: 'application/json' } }), env, {})
+  assert.equal(gatedIndexJson.status, 401)
+
+  const now = Math.floor(Date.now() / 1000)
+  const token = await __test.signJwt({ email: 'keeper@example.com', iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
+  const authed = await worker.fetch(new Request('https://worldofgeor.com/timeline', { headers: { Cookie: `geor_token=${token}`, Accept: 'text/html' } }), env, {})
+  assert.equal(authed.status, 200)
+  assert.equal(authed.headers.get('cache-control'), 'private, no-store')
+  const html = await authed.text()
+  assert.match(html, /TIMELINE OF THE AGES/)
+  assert.match(html, /eraRail/)
+  assert.match(html, /timeline\.js/)
 })
 
 test('cross-origin logout is blocked before cookies are changed', async () => {

@@ -15,6 +15,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'World Atlas', subtitle: 'Explore the world and Grimmel maps', url: '/atlas', sigil: '◎', group: 'ROOM', keywords: 'map atlas grimmel world' },
     { title: 'Atlas Studio', subtitle: 'Draw markers, labels, and regions', url: '/map-editor', sigil: '✦', group: 'CREATE', keywords: 'map editor studio draw workflow' },
     { title: 'Species Gallery', subtitle: 'Browse the sentient peoples of Ge’or', url: '/species', sigil: '◈', group: 'ROOM', keywords: 'species peoples races gallery' },
+    { title: 'Timeline of the Ages', subtitle: 'Walk all thirteen ages, event by event', url: '/timeline', sigil: '◷', group: 'ROOM', keywords: 'timeline ages history events dates bgd agd chronicle' },
     { title: 'Battlestation', subtitle: 'Draft, review, and publish archive additions', url: '/app/', sigil: '⌬', group: 'CREATE', keywords: 'app write additions workspace workflow' },
   ]
   const normalizeTitle = value => String(value || '').replace(/\s+[—|-]\s+World of Ge['’]or.*$/i, '').trim()
