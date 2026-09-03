@@ -58,6 +58,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/gazetteer.js',
   '/trees.js',
   '/notebook.js',
+  '/boards.js',
   '/webs.js',
   '/gallery.js',
   '/oracle.js',
@@ -78,6 +79,8 @@ const ROUTE_ALIASES = new Map([
   ['/trees/', '/trees.html'],
   ['/notebook', '/notebook.html'],
   ['/notebook/', '/notebook.html'],
+  ['/boards', '/boards.html'],
+  ['/boards/', '/boards.html'],
   ['/webs', '/webs.html'],
   ['/webs/', '/webs.html'],
   ['/gallery', '/gallery.html'],
@@ -331,7 +334,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/notebook', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -758,6 +761,104 @@ function notebookNoteJson(row) {
   } catch { checklist = []; }
   return { id: row.id, title: row.title ?? '', body: row.body ?? '', checklist, created_at: row.created_at, updated_at: row.updated_at };
 }
+// --- Wave E3: whiteboard validation -----------------------------------------
+// Cards + arrows persist inside the 0006 `boards.doc_json` document as
+// {cards:[{id,x,y,title,body,wiki}], arrows:[{id,from,to}]} — the table
+// already carries every column this wave needs, so no migration. Caps keep
+// docs small (200 cards / 400 arrows); wiki links must stay on-archive
+// (^/wiki/) and are rejected before store.
+const BOARD_TITLE_MAX = 200;
+const BOARD_CARDS_MAX = 200;
+const BOARD_ARROWS_MAX = 400;
+const BOARD_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
+const BOARD_CARD_TITLE_MAX = 200;
+const BOARD_CARD_BODY_MAX = 2000;
+const BOARD_CARD_WIKI_MAX = 500;
+const BOARD_COORD_MAX = 100_000;
+function cleanBoardId(value) {
+  return typeof value === 'string' && BOARD_ID_PATTERN.test(value) ? value : null;
+}
+function cleanBoardTitle(value) {
+  if (typeof value !== 'string') return null;
+  const title = value.trim();
+  return title && title.length <= BOARD_TITLE_MAX ? title : null;
+}
+// Optional wiki link: empty stays empty, otherwise a same-archive /wiki/ path.
+function cleanBoardWiki(value) {
+  if (value == null || value === '') return '';
+  if (typeof value !== 'string') return null;
+  const wiki = value.trim();
+  if (!wiki.startsWith('/wiki/') || wiki.length > BOARD_CARD_WIKI_MAX) return null;
+  if (/[\s\\]/.test(wiki) || wiki.includes('..')) return null;
+  return wiki;
+}
+function cleanBoardCoord(value) {
+  if (typeof value !== 'number' || !Number.isFinite(value) || Math.abs(value) > BOARD_COORD_MAX) return null;
+  return Math.round(value * 100) / 100;
+}
+function cleanBoardCards(value) {
+  if (!Array.isArray(value) || value.length > BOARD_CARDS_MAX) return null;
+  const seen = new Set();
+  const cards = [];
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return null;
+    if (!cleanBoardId(entry.id) || seen.has(entry.id)) return null;
+    seen.add(entry.id);
+    const x = cleanBoardCoord(entry.x);
+    const y = cleanBoardCoord(entry.y);
+    if (x === null || y === null) return null;
+    let title = '';
+    if (entry.title != null && entry.title !== '') {
+      if (typeof entry.title !== 'string') return null;
+      title = entry.title.trim();
+      if (title.length > BOARD_CARD_TITLE_MAX) return null;
+    }
+    let body = '';
+    if (entry.body != null && entry.body !== '') {
+      if (typeof entry.body !== 'string') return null;
+      body = entry.body.trim();
+      if (body.length > BOARD_CARD_BODY_MAX) return null;
+    }
+    const wiki = cleanBoardWiki(entry.wiki);
+    if (wiki === null) return null;
+    cards.push({ id: entry.id, x, y, title, body, wiki });
+  }
+  return cards;
+}
+// Arrows reference cards from the same payload: unknown endpoints 400.
+function cleanBoardArrows(value, cardIds) {
+  if (!Array.isArray(value) || value.length > BOARD_ARROWS_MAX) return null;
+  const ids = cardIds instanceof Set ? cardIds : new Set();
+  const seen = new Set();
+  const arrows = [];
+  for (let index = 0; index < value.length; index++) {
+    const entry = value[index];
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return null;
+    if (typeof entry.from !== 'string' || !ids.has(entry.from)) return null;
+    if (typeof entry.to !== 'string' || !ids.has(entry.to)) return null;
+    const id = entry.id == null || entry.id === '' ? `arrow-${index}` : entry.id;
+    if (!cleanBoardId(id) || seen.has(id)) return null;
+    seen.add(id);
+    arrows.push({ id, from: entry.from, to: entry.to });
+  }
+  return arrows;
+}
+function boardDocJson(row) {
+  let doc = null;
+  try { doc = JSON.parse(row?.doc_json ?? ''); } catch { doc = null; }
+  return {
+    cards: Array.isArray(doc?.cards) ? doc.cards : [],
+    arrows: Array.isArray(doc?.arrows) ? doc.arrows : [],
+  };
+}
+function boardJson(row) {
+  const { cards, arrows } = boardDocJson(row);
+  return { id: row.id, title: row.title ?? '', cards, arrows, updated_at: row.updated_at };
+}
+function boardSummaryJson(row) {
+  const { cards, arrows } = boardDocJson(row);
+  return { id: row.id, title: row.title ?? '', cardCount: cards.length, arrowCount: arrows.length, updated_at: row.updated_at };
+}
 // Locked cards carry a title + reveal button only — the id charset above is
 // HTML/JS-string safe, so no further escaping is needed when interpolating.
 function lockedSecretInner(id) {
@@ -938,6 +1039,7 @@ export default {
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notebook_notes_member_updated ON notebook_notes(member_email, updated_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_plots_arc_parent ON plots(arc_id, parent_id)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_threads_arc_state ON threads(arc_id, state)`),
+           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_boards_owner ON boards(owner_email)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_rate_limits_reset ON rate_limits(reset_at)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_member_library_recent ON member_library(user_email, last_visited_at DESC)`),
@@ -1622,6 +1724,101 @@ export default {
         }
       }
 
+      // --- Wave E3: whiteboards (pan/zoom canvas, wiki-linked cards) --------
+      // Own boards only: every statement binds owner_email = session email.
+      // Cards/arrows persist as doc_json {cards, arrows}; caps + wiki-link
+      // checks run server-side before store, so oversized or off-archive
+      // payloads 400 instead of landing in D1. Rate limits reuse 'reveal'.
+      if (url.pathname === '/api/boards' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const { results } = await env.DB.prepare(`SELECT id, title, doc_json, updated_at FROM boards
+            WHERE owner_email = ? ORDER BY updated_at DESC LIMIT 100`).bind(user.email).all();
+          return json({ boards: (results || []).map(boardSummaryJson) });
+        } catch {
+          return json({ error: 'Whiteboards are temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/boards' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const title = cleanBoardTitle(body.title);
+        if (title === null) return json({ error: 'Valid whiteboard required' }, 400);
+        try {
+          await ensureTables();
+          const id = crypto.randomUUID();
+          await env.DB.prepare(`INSERT INTO boards (id, owner_email, title, doc_json)
+            VALUES (?, ?, ?, ?)`).bind(id, user.email, title, '{"cards":[],"arrows":[]}').run();
+          const row = await env.DB.prepare(`SELECT id, title, doc_json, updated_at FROM boards
+            WHERE id = ? AND owner_email = ?`).bind(id, user.email).first();
+          if (!row) return json({ error: 'Whiteboard could not be saved' }, 500);
+          return json({ board: boardJson(row) }, 201);
+        } catch {
+          return json({ error: 'Whiteboard could not be saved' }, 500);
+        }
+      }
+
+      // GET / PUT / DELETE /api/boards/:id — own boards only (id +
+      // owner_email bind, zero changes means missing or another member's
+      // board: generic 404).
+      const boardIdMatch = url.pathname.match(/^\/api\/boards\/([^/]+)$/);
+      if (boardIdMatch && (request.method === 'GET' || request.method === 'PUT' || request.method === 'DELETE')) {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const boardId = cleanBoardId(boardIdMatch[1]);
+        if (!boardId) return json({ error: 'Whiteboard not found' }, 404);
+        if (request.method !== 'GET') {
+          const throttle = await consumeRateLimit(request, env, 'reveal');
+          if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        }
+        try {
+          await ensureTables();
+          if (request.method === 'DELETE') {
+            const deleted = await env.DB.prepare('DELETE FROM boards WHERE id = ? AND owner_email = ?')
+              .bind(boardId, user.email).run();
+            if (!deleted.meta.changes) return json({ error: 'Whiteboard not found' }, 404);
+            return json({ ok: true, id: boardId });
+          }
+          if (request.method === 'GET') {
+            const row = await env.DB.prepare(`SELECT id, title, doc_json, updated_at FROM boards
+              WHERE id = ? AND owner_email = ?`).bind(boardId, user.email).first();
+            if (!row) return json({ error: 'Whiteboard not found' }, 404);
+            return json({ board: boardJson(row) });
+          }
+          let body;
+          try { body = await readJson(request, MAX_SAVE_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+          if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+          const cards = cleanBoardCards(body.cards);
+          const arrows = cards === null ? null : cleanBoardArrows(body.arrows, new Set(cards.map(card => card.id)));
+          if (cards === null || arrows === null) return json({ error: 'Valid whiteboard required' }, 400);
+          const updates = ['doc_json = ?'];
+          const values = [JSON.stringify({ cards, arrows })];
+          if (body.title !== undefined) {
+            const title = cleanBoardTitle(body.title);
+            if (title === null) return json({ error: 'Valid whiteboard required' }, 400);
+            updates.push('title = ?'); values.push(title);
+          }
+          updates.push(`updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`);
+          const changed = await env.DB.prepare(`UPDATE boards SET ${updates.join(', ')} WHERE id = ? AND owner_email = ?`)
+            .bind(...values, boardId, user.email).run();
+          if (!changed.meta.changes) return json({ error: 'Whiteboard not found' }, 404);
+          const row = await env.DB.prepare(`SELECT id, title, doc_json, updated_at FROM boards
+            WHERE id = ? AND owner_email = ?`).bind(boardId, user.email).first();
+          if (!row) return json({ error: 'Whiteboard not found' }, 404);
+          return json({ board: boardJson(row) });
+        } catch {
+          return json({ error: 'Whiteboard could not be saved' }, 500);
+        }
+      }
+
       // --- Additions (Website-additions repo) — requires auth ---
       // GET /api/additions/list -> {files:[{path, sha, size, html_url}]}
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
@@ -1961,6 +2158,12 @@ export const __test = {
   cleanSecretId,
   cleanArchiveTitle,
   cleanInviteCode,
+  cleanBoardArrows,
+  cleanBoardCards,
+  cleanBoardCoord,
+  cleanBoardId,
+  cleanBoardTitle,
+  cleanBoardWiki,
   cleanNotebookBody,
   cleanNotebookChecklist,
   cleanNotebookTitle,
