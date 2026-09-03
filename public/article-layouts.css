@@ -92,3 +92,34 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
 @media (max-width: 640px) {
   .geor-secret-locked, .geor-secret-gm { padding: 0.8rem; }
 }
+/* Wave B3 — related-articles sidebar. Server-rendered only when ≥1 relation
+   exists (never an empty box); appended inside the article by the worker. */
+.geor-related {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(217, 164, 65, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 14, 13, 0.35);
+}
+.geor-related-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #d9a441;
+}
+.geor-related-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.geor-related-list li { margin: 0.3rem 0; }
+.geor-related-list a {
+  color: #f0d9a8;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(217, 164, 65, 0.5);
+}
+.geor-related-list a:hover { color: #e8b64c; }
+@media (max-width: 640px) {
+  .geor-related { padding: 0.8rem; }
+}

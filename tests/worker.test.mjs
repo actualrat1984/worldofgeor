@@ -680,3 +680,192 @@ test('secrets: reveal attempts are rate limited', async () => {
   assert.equal(blocked.status, 429)
   assert.ok(Number(blocked.headers.get('retry-after')) > 0)
 })
+
+// --- Wave B3: related-articles sidebar ---------------------------------------
+// Tiny fake tags index in the real generator shape
+// ({items:[{tag, count, pages:[{title, path}]}]} — see scripts/generate_tags.py).
+// Tag totals: Aelis 3 (elves, magic, aelis-only), Veil 2, Rune 4, Other 4,
+// Lone 1 (solo, no co-pages). For Aelis the expected order is
+// Veil (2 shared) → Rune (2 shared, more tags) → Other (1 shared).
+const RELATED_TAGS_INDEX = {
+  source: 'test',
+  files_scanned: 6,
+  files_with_tags: 5,
+  items: [
+    { tag: 'elves', count: 4, pages: [
+      { title: 'Aelis', path: 'World/History/Characters/Aelis.md' },
+      { title: 'Veil', path: 'World/Nations/Veil.md' },
+      { title: 'Rune', path: 'World/History/Events/Rune.md' },
+      { title: 'Other', path: 'World/History/Events/Other.md' },
+    ] },
+    { tag: 'magic', count: 3, pages: [
+      { title: 'Aelis', path: 'World/History/Characters/Aelis.md' },
+      { title: 'Veil', path: 'World/Nations/Veil.md' },
+      { title: 'Rune', path: 'World/History/Events/Rune.md' },
+    ] },
+    { tag: 'aelis-only', count: 1, pages: [{ title: 'Aelis', path: 'World/History/Characters/Aelis.md' }] },
+    { tag: 'rune-x', count: 1, pages: [{ title: 'Rune', path: 'World/History/Events/Rune.md' }] },
+    { tag: 'rune-y', count: 1, pages: [{ title: 'Rune', path: 'World/History/Events/Rune.md' }] },
+    { tag: 'other-x', count: 1, pages: [{ title: 'Other', path: 'World/History/Events/Other.md' }] },
+    { tag: 'other-y', count: 1, pages: [{ title: 'Other', path: 'World/History/Events/Other.md' }] },
+    { tag: 'other-z', count: 1, pages: [{ title: 'Other', path: 'World/History/Events/Other.md' }] },
+    { tag: 'solo', count: 1, pages: [{ title: 'Lone', path: 'World/Nations/Lone.md' }] },
+  ],
+}
+
+// Test double covering the selectors the worker registers for related pages
+// (head/body/article-h1 like the earlier fakes, plus article append).
+// Secret selectors are ignored — related fixtures carry no secret blocks.
+class FakeRelatedRewriter {
+  constructor() { this.rules = [] }
+  on(selector, handlers) { this.rules.push([selector, handlers]); return this }
+  async transform(response) {
+    let html = await response.text()
+    for (const [selector, handlers] of this.rules) {
+      const handle = handlers.element
+      if (!handle) continue
+      if (selector === 'head') {
+        let out = ''
+        handle({ append: fragment => { out += fragment } })
+        html = html.replace(/<\/head>/i, `${out}</head>`)
+      } else if (selector === 'body') {
+        const open = html.match(/<body(\s[^>]*)?>/i)
+        assert.ok(open, 'fake rewriter: <body> missing')
+        const attrs = parseFakeAttrs(open[0])
+        let tail = ''
+        handle({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          append: fragment => { tail += fragment },
+        })
+        html = `${html.slice(0, open.index)}<body${renderFakeAttrs(attrs)}>${html.slice(open.index + open[0].length)}`
+        html = html.replace(/<\/body>/i, `${tail}</body>`)
+      } else if (selector === 'article h1') {
+        const article = html.match(/<article(\s[^>]*)?>/i)
+        if (!article) continue
+        const rest = html.slice(article.index)
+        const h1 = rest.match(/<h1(\s[^>]*)?>/i)
+        if (!h1) continue
+        const absolute = article.index + h1.index
+        const attrs = parseFakeAttrs(h1[0])
+        let beforeFragment = ''
+        handle({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          before: fragment => { beforeFragment += fragment },
+        })
+        html = `${html.slice(0, absolute)}${beforeFragment}<h1${renderFakeAttrs(attrs)}>${html.slice(absolute + h1[0].length)}`
+      } else if (selector === 'article') {
+        if (!/<article(\s[^>]*)?>/i.test(html)) continue
+        let tail = ''
+        handle({ append: fragment => { tail += fragment } })
+        html = html.replace(/<\/article>/i, `${tail}</article>`)
+      }
+    }
+    return new Response(html, { status: response.status, statusText: response.statusText, headers: response.headers })
+  }
+}
+
+async function withRelatedRewriter(fn) {
+  const previous = globalThis.HTMLRewriter
+  globalThis.HTMLRewriter = FakeRelatedRewriter
+  try { await fn() } finally {
+    if (previous === undefined) delete globalThis.HTMLRewriter
+    else globalThis.HTMLRewriter = previous
+  }
+}
+
+// Mock ASSETS: serves the fake tags index at /wiki/tags-index.json and a
+// generic MkDocs-shaped article everywhere else. Counts index fetches.
+function relatedTestEnv({ tagIndex = RELATED_TAGS_INDEX, tagStatus = 200, counter = null } = {}) {
+  return {
+    JWT_SECRET: SECRET,
+    ASSETS: { fetch: async request => {
+      const pathname = new URL(request.url).pathname
+      if (pathname === '/wiki/tags-index.json') {
+        if (counter) counter.tags++
+        if (tagStatus !== 200) return new Response('missing', { status: tagStatus })
+        return Response.json(tagIndex)
+      }
+      const title = decodeURIComponent(pathname.split('/').filter(Boolean).pop() || 'Page')
+      return new Response(
+        `<!DOCTYPE html><html><head><title>${title}</title></head><body dir="ltr"><article class="md-content__inner md-typeset"><h1>${title}</h1><p>Body.</p></article></body></html>`,
+        { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+      )
+    } },
+  }
+}
+
+const relatedArticle = (path, token) => new Request(`https://worldofgeor.com${path}`, { headers: { Cookie: `geor_token=${token}` } })
+
+test('related: scoring prefers shared tags, then specificity, capped at five', () => {
+  const lookup = __test.buildRelatedLookup(RELATED_TAGS_INDEX.items)
+  const related = __test.computeRelated('World/History/Characters/Aelis.md', lookup)
+  assert.deepEqual(related.map(entry => entry.title), ['Veil', 'Rune', 'Other'])
+  assert.deepEqual(related.map(entry => entry.shared), [2, 2, 1])
+  assert.equal(related[0].url, '/wiki/World/Nations/Veil/')
+  assert.ok(related.length <= 5)
+  assert.deepEqual(__test.computeRelated('World/Nations/Missing.md', lookup), [])
+  assert.equal(__test.relatedUrlForPagePath('World/Nations/Veil/index.md'), '/wiki/World/Nations/Veil/')
+})
+
+test('related: tagged article shows ordered sidebar, self excluded', async () => {
+  await withRelatedRewriter(async () => {
+    __test.resetRelatedCache()
+    const env = relatedTestEnv()
+    const html = await (await worker.fetch(relatedArticle('/wiki/World/History/Characters/Aelis/', await secretsToken('member@example.com')), env, {})).text()
+    assert.match(html, /<aside class="geor-related">/)
+    assert.match(html, /See also/)
+    const veil = html.indexOf('/wiki/World/Nations/Veil/')
+    const rune = html.indexOf('/wiki/World/History/Events/Rune/')
+    const other = html.indexOf('/wiki/World/History/Events/Other/')
+    assert.ok(veil > -1 && rune > -1 && other > -1, 'all three relations linked')
+    assert.ok(veil < rune && rune < other, 'shared-count desc, then fewer-tags first')
+    assert.equal(html.includes('/wiki/World/History/Characters/Aelis/'), false, 'self excluded')
+    const aside = html.slice(html.indexOf('<aside class="geor-related">'), html.indexOf('</aside>'))
+    assert.ok((aside.match(/<li>/g) || []).length <= 5, 'sidebar capped at five links')
+  })
+})
+
+test('related: untagged and non-layout pages render no sidebar', async () => {
+  await withRelatedRewriter(async () => {
+    __test.resetRelatedCache()
+    const counter = { tags: 0 }
+    const env = relatedTestEnv({ counter })
+    const token = await secretsToken('member@example.com')
+    const lone = await (await worker.fetch(relatedArticle('/wiki/World/Nations/Lone/', token), env, {})).text()
+    assert.doesNotMatch(lone, /geor-related/, 'solo tag with no co-pages renders nothing')
+    const untagged = await (await worker.fetch(relatedArticle('/wiki/World/Nations/Untagged/', token), env, {})).text()
+    assert.doesNotMatch(untagged, /geor-related/, 'page absent from the index renders nothing')
+    const plain = await (await worker.fetch(relatedArticle('/wiki/World/Locations/Cleton%20Island/', token), env, {})).text()
+    assert.doesNotMatch(plain, /geor-related/, 'non-layout pages never get a sidebar')
+    assert.equal(counter.tags, 1, 'only the first layout page fetched the index')
+  })
+})
+
+test('related: tags index is cached across requests', async () => {
+  await withRelatedRewriter(async () => {
+    __test.resetRelatedCache()
+    const counter = { tags: 0 }
+    const env = relatedTestEnv({ counter })
+    const token = await secretsToken('member@example.com')
+    const path = '/wiki/World/History/Characters/Aelis/'
+    const first = await (await worker.fetch(relatedArticle(path, token), env, {})).text()
+    assert.match(first, /geor-related/)
+    const second = await (await worker.fetch(relatedArticle(path, token), env, {})).text()
+    assert.match(second, /geor-related/)
+    assert.equal(counter.tags, 1, 'index fetched once per isolate, then cached')
+  })
+})
+
+test('related: missing index omits sidebar silently, gating untouched', async () => {
+  await withRelatedRewriter(async () => {
+    __test.resetRelatedCache()
+    const env = relatedTestEnv({ tagStatus: 404 })
+    const html = await (await worker.fetch(relatedArticle('/wiki/World/History/Characters/Aelis/', await secretsToken('member@example.com')), env, {})).text()
+    assert.equal(html.includes('geor-related'), false, 'no sidebar without index — and no empty box')
+    assert.match(html, /archive-compass\.js/, 'archive shell still applied')
+    const gated = await worker.fetch(new Request('https://worldofgeor.com/wiki/World/History/Characters/Aelis/'), env, {})
+    assert.equal(gated.status, 302, 'logged-out HTML never reaches the transform')
+  })
+})

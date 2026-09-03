@@ -471,6 +471,26 @@ const ARTICLE_LAYOUTS = [
   { prefix: '/wiki/World/History/Events/', bodyClass: 'geor-layout-event', eyebrow: 'Event' },
 ];
 
+// --- Wave B3: related-articles sidebar ("see also") ---------------------------
+// Actual tags-index.json shape (see scripts/generate_tags.py — NOT
+// {tags:{tag:[urls]}}):
+//   { source, files_scanned, files_with_tags,
+//     items: [{ tag, count, pages: [{ title, path }] }] }
+// where path is a vault-relative markdown path, e.g. "World/Nations/Foo.md"
+// or "World/Nations/Foo/index.md" for folder indexes.
+// Wiki URL mapping (MkDocs renders each page to <path-minus-.md>/index.html):
+//   md path "World/Nations/Foo.md" <-> URL "/wiki/World/Nations/Foo/"
+//   md path "World/Nations/Foo/index.md" <-> URL "/wiki/World/Nations/Foo/"
+// Fetched once per isolate through env.ASSETS (module-level cache, TTL 10 min);
+// oversize index (>2MB) is skipped. No D1. Only layout-classified article
+// pages trigger a lookup, and only the target page's own tags are scanned
+// (no full relatedness matrix). Missing/empty index or zero relations:
+// omit the sidebar silently — never render an empty box.
+const RELATED_TTL_MS = 10 * 60 * 1000;
+const RELATED_MAX_BYTES = 2 * 1024 * 1024;
+const RELATED_MAX_LINKS = 5;
+let relatedCache = { at: 0, lookup: null };
+
 function classifyArticleLayout(pathname) {
   let decoded = pathname;
   try { decoded = decodeURIComponent(pathname); } catch {}
@@ -480,6 +500,104 @@ function classifyArticleLayout(pathname) {
     }
   }
   return null;
+}
+
+function buildRelatedLookup(items) {
+  const pageTags = new Map(); // mdPath -> Set(tag)
+  const tagPages = new Map(); // tag -> [{ path, title }]
+  const pageTitle = new Map(); // mdPath -> title
+  for (const item of items || []) {
+    if (!item || typeof item.tag !== 'string' || !Array.isArray(item.pages)) continue;
+    for (const page of item.pages) {
+      if (!page || typeof page.path !== 'string') continue;
+      if (!pageTags.has(page.path)) {
+        pageTags.set(page.path, new Set());
+        pageTitle.set(page.path, typeof page.title === 'string' && page.title ? page.title : page.path.replace(/\.md$/, '').split('/').pop());
+      }
+      pageTags.get(page.path).add(item.tag);
+      if (!tagPages.has(item.tag)) tagPages.set(item.tag, []);
+      tagPages.get(item.tag).push({ path: page.path, title: pageTitle.get(page.path) });
+    }
+  }
+  return { pageTags, tagPages, pageTitle };
+}
+
+async function loadRelatedLookup(env, origin) {
+  const now = Date.now();
+  if (relatedCache.lookup && now - relatedCache.at < RELATED_TTL_MS) return relatedCache.lookup;
+  if (!env || !env.ASSETS || typeof env.ASSETS.fetch !== 'function') return relatedCache.lookup;
+  try {
+    const response = await env.ASSETS.fetch(new Request(new URL('/wiki/tags-index.json', origin), { headers: { Accept: 'application/json' } }));
+    if (!response.ok) return relatedCache.lookup;
+    const text = await response.text();
+    if (text.length > RELATED_MAX_BYTES) return null;
+    const data = JSON.parse(text);
+    if (!data || !Array.isArray(data.items)) return relatedCache.lookup;
+    const lookup = buildRelatedLookup(data.items);
+    relatedCache = { at: now, lookup };
+    return lookup;
+  } catch {
+    return relatedCache.lookup;
+  }
+}
+
+// Candidate vault md paths for a wiki URL (direct page, then folder index).
+function wikiMdCandidates(pathname) {
+  let decoded = pathname;
+  try { decoded = decodeURIComponent(pathname); } catch { return []; }
+  if (!decoded.startsWith('/wiki/')) return [];
+  let rel = decoded.slice('/wiki/'.length).replace(/\/+$/, '');
+  if (!rel) return [];
+  if (rel.endsWith('/index')) rel = rel.slice(0, -'/index'.length);
+  if (!rel) return [];
+  return [`${rel}.md`, `${rel}/index.md`];
+}
+
+function relatedUrlForPagePath(mdPath) {
+  let rel = mdPath.replace(/\.md$/, '');
+  if (rel.endsWith('/index')) rel = rel.slice(0, -'/index'.length);
+  return `/wiki/${rel.split('/').map(encodeURIComponent).join('/')}/`;
+}
+
+function escapeRelatedHtml(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Top-N related pages by shared-tag count (self excluded). Tie-break: fewer
+// total tags first (more specific), then title A-Z. Only the target page's
+// own tags are scanned — trivial per-request cost.
+function computeRelated(mdPath, lookup, limit = RELATED_MAX_LINKS) {
+  const tags = lookup && lookup.pageTags ? lookup.pageTags.get(mdPath) : null;
+  if (!tags || tags.size === 0) return [];
+  const shared = new Map();
+  for (const tag of tags) {
+    const pages = lookup.tagPages.get(tag) || [];
+    for (const page of pages) {
+      if (page.path === mdPath) continue;
+      shared.set(page.path, (shared.get(page.path) || 0) + 1);
+    }
+  }
+  return [...shared.entries()]
+    .map(([path, count]) => ({
+      path,
+      title: lookup.pageTitle.get(path) || path,
+      shared: count,
+      total: lookup.pageTags.get(path) ? lookup.pageTags.get(path).size : Infinity,
+    }))
+    .sort((a, b) => b.shared - a.shared || a.total - b.total || String(a.title).localeCompare(String(b.title)))
+    .slice(0, limit)
+    .map(({ path, title, shared: count }) => ({ path, title, url: relatedUrlForPagePath(path), shared: count }));
+}
+
+function relatedAsideHtml(related) {
+  const items = related
+    .map(entry => `<li><a href="${escapeRelatedHtml(entry.url)}">${escapeRelatedHtml(entry.title)}</a></li>`)
+    .join('');
+  return `<aside class="geor-related"><h2 class="geor-related-title">See also</h2><ul class="geor-related-list">${items}</ul></aside>`;
+}
+
+function resetRelatedCache() {
+  relatedCache = { at: 0, lookup: null };
 }
 
 // --- Wave B2: spoiler-block secrets ------------------------------------------
@@ -536,7 +654,7 @@ async function isOwnerSession(session, env) {
   } catch { return false; }
 }
 
-function withPrivateArchiveShell(response, pathname = '', secrets = null) {
+async function withPrivateArchiveShell(response, pathname = '', secrets = null, relatedCtx = null) {
   const contentType = response.headers.get('Content-Type') || '';
   if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
   const layout = classifyArticleLayout(pathname);
@@ -563,6 +681,28 @@ function withPrivateArchiveShell(response, pathname = '', secrets = null) {
       const existing = element.getAttribute('class') || '';
       element.setAttribute('class', `${existing} geor-hero-title`.trim());
       element.before(`<p class="geor-hero-eyebrow">${layout.eyebrow}</p>`, { html: true });
+    } });
+  }
+  // Wave B3 related sidebar: layout-classified articles only, resolved from
+  // the cached tags index. Any miss (no index, unknown page, zero relations)
+  // falls through to no sidebar — never an empty box.
+  let related = [];
+  if (layout && relatedCtx && relatedCtx.env && relatedCtx.origin) {
+    try {
+      const lookup = await loadRelatedLookup(relatedCtx.env, relatedCtx.origin);
+      if (lookup) {
+        const candidates = wikiMdCandidates(pathname);
+        const mdPath = candidates.find(candidate => lookup.pageTags.has(candidate));
+        if (mdPath) related = computeRelated(mdPath, lookup);
+      }
+    } catch { related = []; }
+  }
+  if (related.length > 0) {
+    let asideApplied = false;
+    rewriter = rewriter.on('article', { element(element) {
+      if (asideApplied) return;
+      asideApplied = true;
+      element.append(relatedAsideHtml(related), { html: true });
     } });
   }
   // Wave B2 secrets: same guard pattern as layouts. Logged-out/gated requests
@@ -1518,12 +1658,16 @@ export default {
     if (gatedType.toLowerCase().includes('text/html') && response.status >= 200 && response.status < 300 && typeof HTMLRewriter !== 'undefined') {
       try { secretsCtx = await getSecretsContext(request, env); } catch { secretsCtx = null; }
     }
-    return withPrivateArchiveShell(gatedResponse, url.pathname, secretsCtx);
+    return withPrivateArchiveShell(gatedResponse, url.pathname, secretsCtx, { env, origin: url.origin });
   }
 };
 
 export const __test = {
   classifyArticleLayout,
+  computeRelated,
+  buildRelatedLookup,
+  resetRelatedCache,
+  relatedUrlForPagePath,
   cleanArchivePath,
   cleanSecretId,
   cleanArchiveTitle,
