@@ -966,3 +966,98 @@ test('related: missing index omits sidebar silently, gating untouched', async ()
     assert.equal(gated.status, 302, 'logged-out HTML never reaches the transform')
   })
 })
+
+// --- Wave B4b: sticky table-of-contents + single progress mechanism ---------
+// MkDocs-verified shape: h2/h3 carry id attributes (e.g. Erisian Empire's
+// <h2 id="church-state-relations">); id-less headings fall back to slugs.
+const TOC_FIXTURE = '<!DOCTYPE html><html><head><title>Empress</title></head><body dir="ltr"><article class="md-content__inner md-typeset"><h1 id="empress">Empress</h1><h2 id="reign">Reign <a class="headerlink" href="#reign">¶</a></h2><p>Text.</p><h3>Customs</h3><p>More.</p><h2 id="reign">Reign repeated</h2></article></body></html>'
+const TOC_BARE = '<!DOCTYPE html><html><head><title>Empress</title></head><body dir="ltr"><article class="md-content__inner md-typeset"><h1 id="empress">Empress</h1><p>No subheads.</p></article></body></html>'
+
+function tocTestEnv(html = TOC_FIXTURE) {
+  return {
+    JWT_SECRET: SECRET,
+    ASSETS: { fetch: async request => {
+      if (new URL(request.url).pathname === '/wiki/tags-index.json') return new Response('missing', { status: 404 })
+      return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+    } },
+  }
+}
+const tocArticle = (path, token) => new Request(`https://worldofgeor.com${path}`, { headers: { Cookie: `geor_token=${token}` } })
+
+test('toc: helpers collect h2/h3 only, reuse ids, slugify + dedupe the rest', () => {
+  assert.equal(__test.slugifyHeadingText('Church-State Relations ¶'), 'church-state-relations')
+  assert.equal(__test.slugifyHeadingText(''), 'section')
+  assert.deepEqual(
+    __test.collectTocEntries('<article><h1>Hero</h1><h2 id="x">Title <a href="#x">&para;</a></h2></article>').map(entry => entry.text),
+    ['Title'],
+    'entity-encoded headerlinks are stripped from TOC text',
+  )
+  const entries = __test.collectTocEntries(TOC_FIXTURE)
+  assert.deepEqual(entries.map(entry => [entry.level, entry.id, entry.text]), [
+    [2, 'reign', 'Reign'],
+    [3, 'customs', 'Customs'],
+    [2, 'reign-2', 'Reign repeated'],
+  ])
+  assert.equal(entries[1].needsId, true)
+  assert.equal(entries[0].needsId, false)
+  assert.deepEqual(__test.collectTocEntries(TOC_BARE), [])
+  const nav = __test.tocNavHtml(entries)
+  assert.match(nav, /<nav class="geor-toc"/)
+  assert.match(nav, /<details class="geor-toc-box" open>/)
+  assert.match(nav, /href="#reign-2"/)
+  assert.doesNotMatch(nav, /empress/)
+})
+
+test('toc: layout page with subheads renders nav, stamped ids, highlight script once', async () => {
+  await withRelatedRewriter(async () => {
+    const html = await (await worker.fetch(tocArticle('/wiki/World/Nations/Empress/', await secretsToken('member@example.com')), tocTestEnv(), {})).text()
+    assert.match(html, /<nav class="geor-toc" aria-label="On this page">/)
+    assert.match(html, /<a href="#reign">Reign<\/a>/)
+    assert.match(html, /<a href="#customs">Customs<\/a>/)
+    assert.match(html, /<a href="#reign-2">Reign repeated<\/a>/)
+    assert.doesNotMatch(html, /href="#empress"/, 'article h1 is the hero, never TOC')
+    assert.match(html, /<h3 id="customs">Customs<\/h3>/, 'id-less headings get slugified ids')
+    assert.match(html, /<h2 id="reign-2">Reign repeated<\/h2>/, 'duplicate ids are deduped onto the element')
+    assert.equal((html.match(/data-geor-toc/g) || []).length, 1, 'highlight script present exactly once')
+    assert.match(html, /IntersectionObserver/, 'section highlighting observes headings')
+    assert.match(html, /aria-current/, 'visible section is marked current')
+    assert.doesNotMatch(html, /geor-reading-progress/, 'no second progress bar — compass owns it')
+  })
+})
+
+test('toc: omitted on subhead-less layout pages and on non-layout pages', async () => {
+  await withRelatedRewriter(async () => {
+    const token = await secretsToken('member@example.com')
+    const bare = await (await worker.fetch(tocArticle('/wiki/World/Nations/Empress/', token), tocTestEnv(TOC_BARE), {})).text()
+    assert.doesNotMatch(bare, /geor-toc/, 'empty TOC omits silently')
+    assert.match(bare, /article-layouts\.css/, 'layout shell still applied')
+    const plain = await (await worker.fetch(tocArticle('/wiki/World/Locations/Cleton%20Island/', token), tocTestEnv(), {})).text()
+    assert.doesNotMatch(plain, /geor-toc/, 'non-layout pages never get a TOC')
+    assert.doesNotMatch(plain, /data-geor-toc/, 'no highlight script off-layout')
+    assert.doesNotMatch(plain, /article-layouts\.css/)
+  })
+})
+
+test('toc: exactly one progress mechanism — compass bar reused, TOC only highlights', () => {
+  const compass = readFileSync(new URL('../public/archive-compass.js', import.meta.url), 'utf8')
+  assert.match(compass, /geor-reading-progress/, 'compass renders the site-wide reading-progress bar')
+  const workerSource = readFileSync(new URL('../worker.js', import.meta.url), 'utf8')
+  assert.doesNotMatch(workerSource, /geor-reading-progress/, 'worker never renders a second bar')
+  assert.match(workerSource, /TOC_HIGHLIGHT_SCRIPT/, 'worker ships section highlighting instead')
+})
+
+test('toc: rebuilt pages drop stale length/encoding validators', async () => {
+  await withRelatedRewriter(async () => {
+    const staleEnv = {
+      JWT_SECRET: SECRET,
+      ASSETS: { fetch: async request => {
+        if (new URL(request.url).pathname === '/wiki/tags-index.json') return new Response('missing', { status: 404 })
+        return new Response(TOC_FIXTURE, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': '12', ETag: '"stale"' } })
+      } },
+    }
+    const res = await worker.fetch(tocArticle('/wiki/World/Nations/Empress/', await secretsToken('member@example.com')), staleEnv, {})
+    assert.equal(res.headers.get('content-length'), null, 'stale length dropped on rebuild')
+    assert.equal(res.headers.get('etag'), null, 'stale etag dropped on rebuild')
+    assert.match(await res.text(), /geor-toc/, 'TOC still rendered')
+  })
+})

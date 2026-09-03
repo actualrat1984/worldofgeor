@@ -123,3 +123,47 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
 @media (max-width: 640px) {
   .geor-related { padding: 0.8rem; }
 }
+/* Wave B4b — sticky table-of-contents. Server-rendered only on
+   layout-classified articles with ≥1 h2/h3 (never an empty box). The nav
+   sticks to the viewport top while the article scrolls beneath it; on
+   mobile it is a collapsed <details> (worker script removes open ≤640px).
+   Section highlighting rides on aria-current from the TOC script — reading
+   progress itself stays owned by archive-compass.js (.geor-reading-progress),
+   exactly one progress mechanism. */
+.geor-toc {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0 0 1rem;
+  border: 1px solid rgba(217, 164, 65, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 14, 13, 0.92);
+  max-height: 38vh;
+  overflow: auto;
+}
+.geor-toc-box { margin: 0; padding: 0.75rem 1rem; }
+.geor-toc-title {
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #d9a441;
+}
+.geor-toc-list { margin: 0.6rem 0 0; padding-left: 1.1rem; }
+.geor-toc-list li { margin: 0.3rem 0; }
+.geor-toc-h3 { margin-left: 0.9rem; }
+.geor-toc-list a {
+  color: #f0d9a8;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(217, 164, 65, 0.5);
+}
+.geor-toc-list a:hover { color: #e8b64c; }
+.geor-toc-list a[aria-current="true"] {
+  color: #ffe9bd;
+  border-bottom-style: solid;
+}
+@media (max-width: 640px) {
+  .geor-toc { position: static; max-height: none; }
+  .geor-toc-box { padding: 0.6rem 0.8rem; }
+}

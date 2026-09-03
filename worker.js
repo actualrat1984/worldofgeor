@@ -620,7 +620,7 @@ function collectTocEntries(html) {
   for (const match of scope.matchAll(/<(h[23])\b([^>]*)>([\s\S]*?)<\/\1>/gi)) {
     const level = match[1].toLowerCase() === 'h3' ? 3 : 2;
     const idMatch = match[2].match(/\bid\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
-    const text = match[3].replace(/<[^>]+>/g, ' ').replace(/¶/g, ' ').replace(/\s+/g, ' ').trim();
+    const text = match[3].replace(/<[^>]+>/g, ' ').replace(/¶|&para;/g, ' ').replace(/\s+/g, ' ').trim();
     if (!text) continue;
     const raw = idMatch ? (idMatch[1] ?? idMatch[2] ?? idMatch[3]) : '';
     const base = raw || slugifyHeadingText(text);
@@ -640,10 +640,46 @@ function tocNavHtml(entries) {
   return `<nav class="geor-toc" aria-label="On this page"><details class="geor-toc-box" open><summary class="geor-toc-title">On this page</summary><ul class="geor-toc-list">${items}</ul></details></nav>`;
 }
 
+// Stamp the final (deduped) entry ids back onto their h2/h3 elements and
+// prepend the TOC nav. Mirrors collectTocEntries' scope + skip rules exactly
+// (first <article> scope, empty-text headings skipped) so each consumed entry
+// lines up with its heading in document order. Headings already carrying the
+// final id keep their bytes apart from quote normalization.
+function renderTocHtml(html, entries) {
+  const source = String(html || '');
+  const queue = Array.isArray(entries) ? entries.slice() : [];
+  if (!queue.length) return source;
+  const nav = tocNavHtml(queue);
+  const articleOpen = source.match(/<article\b[^>]*>/i);
+  const scopeEnd = articleOpen ? source.indexOf('</article>', articleOpen.index + articleOpen[0].length) : -1;
+  const scoped = Boolean(articleOpen) && scopeEnd > articleOpen.index;
+  const head = scoped ? source.slice(0, articleOpen.index + articleOpen[0].length) : '';
+  const scope = scoped ? source.slice(articleOpen.index + articleOpen[0].length, scopeEnd) : source;
+  const tail = scoped ? source.slice(scopeEnd) : '';
+  let take = 0;
+  const stamped = scope.replace(/<(h[23])\b([^>]*)>([\s\S]*?)<\/\1>/gi, (whole, tag, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, ' ').replace(/¶|&para;/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!text || take >= queue.length) return whole;
+    const id = escapeRelatedHtml(queue[take++].id);
+    const hasId = /\bid\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i.test(attrs);
+    const nextAttrs = hasId
+      ? attrs.replace(/\bid\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i, `id="${id}"`)
+      : `${attrs} id="${id}"`;
+    return `<${tag}${nextAttrs}>${inner}</${tag}>`;
+  });
+  if (scoped) return `${head}${nav}${stamped}${tail}`;
+  // No <article> (never MkDocs output — fallback only): nav after <body>.
+  const bodyOpen = stamped.match(/<body\b[^>]*>/i);
+  if (!bodyOpen) return `${nav}${stamped}`;
+  const at = bodyOpen.index + bodyOpen[0].length;
+  return `${stamped.slice(0, at)}${nav}${stamped.slice(at)}`;
+}
+
 // Per-article section highlighting (aria-current via IntersectionObserver).
 // Reading progress itself is NOT duplicated: archive-compass.js already renders
-// the site-wide .geor-reading-progress bar on /wiki/ pages. This module only
-// highlights the visible TOC section and collapses the TOC on mobile.
+// the site-wide reading progress bar on /wiki/ pages (see that file for the
+// element's class). This module only highlights the visible TOC section and
+// collapses the TOC on mobile.
 const TOC_HIGHLIGHT_SCRIPT = `<script type="module" data-geor-toc>(function(){var nav=document.querySelector('nav.geor-toc');if(!nav)return;var box=nav.querySelector('details');if(box&&window.matchMedia&&matchMedia('(max-width: 640px)').matches)box.removeAttribute('open');var links=Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));if(!links.length||!('IntersectionObserver' in window))return;var byId={};links.forEach(function(a){byId[a.hash.slice(1)]=a});var current=null;var observer=new IntersectionObserver(function(rows){rows.forEach(function(row){if(!row.isIntersecting)return;var link=byId[row.target.id];if(!link||link===current)return;if(current)current.removeAttribute('aria-current');current=link;link.setAttribute('aria-current','true')})},{rootMargin:'-15% 0px -70% 0px'});Object.keys(byId).forEach(function(id){var h=document.getElementById(id);if(h)observer.observe(h)})})();</script>`;
 
 // --- Wave B2: spoiler-block secrets ------------------------------------------
@@ -704,6 +740,29 @@ async function withPrivateArchiveShell(response, pathname = '', secrets = null, 
   const contentType = response.headers.get('Content-Type') || '';
   if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
   const layout = classifyArticleLayout(pathname);
+  // Wave B4b TOC: buffer layout-classified articles once, collect h2/h3
+  // entries, and rewrite the body (final ids + prepended nav) before the
+  // streaming shell runs. Non-layout pages and empty TOCs pass through
+  // untouched — never an empty box.
+  let tocEntries = [];
+  if (layout) {
+    try {
+      tocEntries = collectTocEntries(await response.clone().text());
+    } catch { tocEntries = []; }
+  }
+  if (tocEntries.length > 0) {
+    try {
+      const rendered = renderTocHtml(await response.text(), tocEntries);
+      // Rebuilt body has a new byte length: drop length/encoding validators
+      // from the asset response or pages truncate on stale content-length.
+      const rebuiltHeaders = new Headers(response.headers);
+      rebuiltHeaders.delete('content-length');
+      rebuiltHeaders.delete('content-encoding');
+      rebuiltHeaders.delete('etag');
+      response = new Response(rendered, { status: response.status, statusText: response.statusText, headers: rebuiltHeaders });
+    } catch { tocEntries = []; }
+  }
+  const hasToc = tocEntries.length > 0;
   let heroApplied = false;
   let rewriter = new HTMLRewriter()
     .on('head', { element(element) {
@@ -715,7 +774,7 @@ async function withPrivateArchiveShell(response, pathname = '', secrets = null, 
         const existing = element.getAttribute('class') || '';
         element.setAttribute('class', `${existing} ${layout.bodyClass}`.trim());
       }
-      element.append('<script type="module" src="/archive-compass.js"></script>', { html: true });
+      element.append(`<script type="module" src="/archive-compass.js"></script>${hasToc ? TOC_HIGHLIGHT_SCRIPT : ''}`, { html: true });
     } });
   if (layout) {
     // Slim hero: reuse the article's own <h1> in place (no extra fetch, no
@@ -1723,6 +1782,10 @@ export default {
 
 export const __test = {
   classifyArticleLayout,
+  collectTocEntries,
+  slugifyHeadingText,
+  tocNavHtml,
+  renderTocHtml,
   computeRelated,
   buildRelatedLookup,
   resetRelatedCache,
