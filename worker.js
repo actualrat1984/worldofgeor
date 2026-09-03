@@ -35,6 +35,7 @@ const RATE_LIMITS = Object.freeze({
   login: { attempts: 8, windowSeconds: 15 * 60 },
   register: { attempts: 5, windowSeconds: 60 * 60 },
   requestAccess: { attempts: 3, windowSeconds: 60 * 60 },
+  reveal: { attempts: 30, windowSeconds: 10 * 60 },
 });
 const ALLOWED_ADDITION_EXTENSIONS = new Set(['md', 'txt', 'json', 'yaml', 'yml', 'csv']);
 const PRIVATE_ASSET_PATHS = new Set([
@@ -481,7 +482,61 @@ function classifyArticleLayout(pathname) {
   return null;
 }
 
-function withPrivateArchiveShell(response, pathname = '') {
+// --- Wave B2: spoiler-block secrets ------------------------------------------
+// Author syntax (raw HTML passes MkDocs untouched — document here, do NOT
+// touch the vault):
+//   <div class="geor-secret" data-secret="slug-id">hidden html</div>
+// Optional GM-only part (NEVER sent to non-owners — stripped server-side):
+//   <div class="geor-secret-gm">notes</div>
+// GM blocks must be siblings of secrets, never nested inside them: a revealed
+// secret is unwrapped verbatim, so nested GM notes would ride along.
+const SECRET_ID_PATTERN = /^[a-z0-9-]{1,64}$/;
+function cleanSecretId(value) {
+  return typeof value === 'string' && SECRET_ID_PATTERN.test(value) ? value : null;
+}
+// Locked cards carry a title + reveal button only — the id charset above is
+// HTML/JS-string safe, so no further escaping is needed when interpolating.
+function lockedSecretInner(id) {
+  const title = id
+    ? `<p class="geor-secret-locked-title">🔒 Hidden passage <span class="geor-secret-id">${id}</span></p>`
+    : `<p class="geor-secret-locked-title">🔒 Hidden passage</p>`;
+  if (!id) return title;
+  return `${title}<p class="geor-secret-locked-action"><button type="button" class="geor-secret-reveal" data-geor-reveal="${id}" onclick="fetch('/api/secrets/reveal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'${id}'})}).then(function(r){if(r.ok){location.reload()}})">Reveal</button></p>`;
+}
+// revealed: secret ids the viewer may read (own reveals + global '*' reveals).
+// Fail-closed: any DB trouble returns a locked, non-owner context.
+async function getSecretsContext(request, env) {
+  const locked = { loggedIn: false, email: null, isOwner: false, revealed: new Set() };
+  let session = null;
+  try { session = await requireUser(request, env); } catch { return locked; }
+  if (!session?.email) return locked;
+  const ctx = { loggedIn: true, email: session.email, isOwner: session.email === ADMIN_EMAIL, revealed: new Set() };
+  if (!env.DB) return ctx;
+  try {
+    const row = await env.DB.prepare('SELECT role FROM users WHERE email = ?').bind(session.email).first();
+    if (row?.role === 'owner') ctx.isOwner = true;
+  } catch { /* keep JWT-derived ownership only */ }
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT secret_id FROM reveals WHERE state = 'revealed' AND (member_email = ? OR member_email = '*')`
+    ).bind(session.email).all();
+    for (const row of results || []) {
+      if (cleanSecretId(row?.secret_id)) ctx.revealed.add(row.secret_id);
+    }
+  } catch { ctx.revealed.clear(); }
+  return ctx;
+}
+async function isOwnerSession(session, env) {
+  if (!session?.email) return false;
+  if (session.email === ADMIN_EMAIL) return true;
+  try {
+    if (!env.DB) return false;
+    const row = await env.DB.prepare('SELECT role FROM users WHERE email = ?').bind(session.email).first();
+    return row?.role === 'owner';
+  } catch { return false; }
+}
+
+function withPrivateArchiveShell(response, pathname = '', secrets = null) {
   const contentType = response.headers.get('Content-Type') || '';
   if (!contentType.toLowerCase().includes('text/html') || response.status < 200 || response.status >= 300 || typeof HTMLRewriter === 'undefined') return response;
   const layout = classifyArticleLayout(pathname);
@@ -510,6 +565,27 @@ function withPrivateArchiveShell(response, pathname = '') {
       element.before(`<p class="geor-hero-eyebrow">${layout.eyebrow}</p>`, { html: true });
     } });
   }
+  // Wave B2 secrets: same guard pattern as layouts. Logged-out/gated requests
+  // never reach here (302/401 above); secretsCtx null also locks everything.
+  const secretsCtx = secrets || { loggedIn: false, email: null, isOwner: false, revealed: new Set() };
+  const revealed = secretsCtx.revealed instanceof Set ? secretsCtx.revealed : new Set();
+  rewriter = rewriter
+    .on('div.geor-secret-gm', { element(element) {
+      if (!secretsCtx.isOwner) element.remove();
+    } })
+    .on('div.geor-secret', { element(element) {
+      const id = cleanSecretId(element.getAttribute('data-secret'));
+      if (secretsCtx.isOwner || (id && revealed.has(id))) {
+        element.removeAndKeepContent();
+        return;
+      }
+      // Locked: swap children for a title + reveal button — zero secret bytes
+      // reach the client (asserted by the zero-bytes test in worker.test.mjs).
+      element.setAttribute('class', 'geor-secret-locked');
+      if (id) element.setAttribute('data-secret', id);
+      else if (typeof element.removeAttribute === 'function') element.removeAttribute('data-secret');
+      element.setInnerContent(lockedSecretInner(id), { html: true });
+    } });
   return rewriter.transform(response);
 }
 
@@ -533,6 +609,7 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, path TEXT, summary TEXT NOT NULL, actor_email TEXT, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS map_documents (slug TEXT PRIMARY KEY, title TEXT NOT NULL, document_json TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, reset_at INTEGER NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS reveals (member_email TEXT NOT NULL, secret_id TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'locked', updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (member_email, secret_id))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS member_library (user_email TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, kind TEXT NOT NULL DEFAULT 'folio', progress INTEGER NOT NULL DEFAULT 0, saved INTEGER NOT NULL DEFAULT 0, last_visited_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (user_email, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_items (id TEXT PRIMARY KEY, kind TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', content_json TEXT NOT NULL, created_by TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), UNIQUE(kind, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_history (id INTEGER PRIMARY KEY AUTOINCREMENT, workflow_id TEXT NOT NULL, status TEXT NOT NULL, summary TEXT NOT NULL, actor_email TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
@@ -544,6 +621,9 @@ export default {
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_workflow_status_updated ON workflow_items(status, updated_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_workflow_history_item ON workflow_history(workflow_id, created_at DESC)`),
         ]);
+        // Wave B2: roles column for pre-0006 databases (best effort — migrated
+        // DBs already have it, so a duplicate-column error is the happy path).
+        try { await env.DB.prepare(`ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'viewer'`).run(); } catch {}
       }
 
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !isTrustedMutation(request, url)) {
@@ -1069,6 +1149,54 @@ export default {
         }
       }
 
+      // --- Wave B2: spoiler-block secrets — reveal state per member in D1. ---
+      // POST /api/secrets/reveal {id} — any member reveals a secret for self.
+      if (url.pathname === '/api/secrets/reveal' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const id = cleanSecretId(body.id);
+        if (!id) return json({ error: 'Unknown secret id' }, 400);
+        try {
+          await ensureTables();
+          await env.DB.prepare(`INSERT INTO reveals (member_email, secret_id, state)
+            VALUES (?, ?, 'revealed')
+            ON CONFLICT(member_email, secret_id) DO UPDATE SET state = 'revealed', updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+            .bind(user.email, id).run();
+          return json({ ok: true, id, state: 'revealed' });
+        } catch {
+          return json({ error: 'Secret could not be revealed' }, 500);
+        }
+      }
+
+      // POST /api/secrets/set {id, state} — owner reveals/locks globally ('*'
+      // rows, which every viewer reads as revealed while state = 'revealed').
+      if (url.pathname === '/api/secrets/set' && request.method === 'POST') {
+        const session = await requireUser(request, env);
+        if (!session) return json({ error: 'Authentication required' }, 401);
+        if (!(await isOwnerSession(session, env))) return json({ error: 'Owner access required' }, 403);
+        let body;
+        try { body = await readJson(request); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const id = cleanSecretId(body.id);
+        const state = body.state === 'revealed' || body.state === 'locked' ? body.state : null;
+        if (!id || !state) return json({ error: 'Valid secret id and state required' }, 400);
+        try {
+          await ensureTables();
+          await env.DB.prepare(`INSERT INTO reveals (member_email, secret_id, state)
+            VALUES ('*', ?, ?)
+            ON CONFLICT(member_email, secret_id) DO UPDATE SET state = excluded.state, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now')`)
+            .bind(id, state).run();
+          return json({ ok: true, id, state });
+        } catch {
+          return json({ error: 'Secret state could not be changed' }, 500);
+        }
+      }
+
       // --- Additions (Website-additions repo) — requires auth ---
       // GET /api/additions/list -> {files:[{path, sha, size, html_url}]}
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
@@ -1381,13 +1509,23 @@ export default {
     const headers = new Headers(response.headers);
     headers.set('Cache-Control', 'private, no-store');
     headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
-    return withPrivateArchiveShell(new Response(response.body, { status: response.status, statusText: response.statusText, headers }), url.pathname);
+    const gatedResponse = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    // Wave B2: resolve secret visibility before rewriting (HTMLRewriter element
+    // handlers are synchronous, so reveal state loads up front; any DB failure
+    // falls back to fully locked). Skipped for non-HTML gated assets.
+    const gatedType = response.headers.get('Content-Type') || '';
+    let secretsCtx = null;
+    if (gatedType.toLowerCase().includes('text/html') && response.status >= 200 && response.status < 300 && typeof HTMLRewriter !== 'undefined') {
+      try { secretsCtx = await getSecretsContext(request, env); } catch { secretsCtx = null; }
+    }
+    return withPrivateArchiveShell(gatedResponse, url.pathname, secretsCtx);
   }
 };
 
 export const __test = {
   classifyArticleLayout,
   cleanArchivePath,
+  cleanSecretId,
   cleanArchiveTitle,
   cleanInviteCode,
   cleanMapSlug,

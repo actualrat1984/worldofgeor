@@ -421,3 +421,262 @@ test('article layout hero injects on matching wiki articles only', async () => {
     else globalThis.HTMLRewriter = previous
   }
 })
+
+// --- Wave B2: spoiler-block secrets ------------------------------------------
+// Author syntax (documented in worker.js — the vault is never touched):
+//   <div class="geor-secret" data-secret="slug-id">hidden html</div>
+//   <div class="geor-secret-gm">owner-only notes</div>
+const SECRET_BYTES = 'S3CR3T-VAULT-KEY-BYTES-9f8e7d6c5b4a'
+const GM_BYTES = 'GM-ONLY-NOTES-BYTES-1a2b3c4d5e6f'
+const secretArticleHtml = () => `<!DOCTYPE html><html><head><title>Veil</title></head><body dir="ltr"><article class="md-content__inner md-typeset"><h1 id="veil">Veil</h1><div class="geor-secret" data-secret="vault-key"><p>${SECRET_BYTES}</p></div><div class="geor-secret-gm"><p>${GM_BYTES}</p></div></article></body></html>`
+
+// Test double covering the selectors the worker registers (head/body/
+// article-h1 like the layout fake, plus the two secret selectors).
+class FakeSecretsRewriter {
+  constructor() { this.rules = [] }
+  on(selector, handlers) { this.rules.push([selector, handlers]); return this }
+  async transform(response) {
+    let html = await response.text()
+    for (const [selector, handlers] of this.rules) {
+      const handle = handlers.element
+      if (!handle) continue
+      if (selector === 'head') {
+        let out = ''
+        handle({ append: fragment => { out += fragment } })
+        html = html.replace(/<\/head>/i, `${out}</head>`)
+      } else if (selector === 'body') {
+        const open = html.match(/<body(\s[^>]*)?>/i)
+        assert.ok(open, 'fake rewriter: <body> missing')
+        const attrs = parseFakeAttrs(open[0])
+        let tail = ''
+        handle({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          append: fragment => { tail += fragment },
+        })
+        html = `${html.slice(0, open.index)}<body${renderFakeAttrs(attrs)}>${html.slice(open.index + open[0].length)}`
+        html = html.replace(/<\/body>/i, `${tail}</body>`)
+      } else if (selector === 'article h1') {
+        const article = html.match(/<article(\s[^>]*)?>/i)
+        if (!article) continue
+        const rest = html.slice(article.index)
+        const h1 = rest.match(/<h1(\s[^>]*)?>/i)
+        if (!h1) continue
+        const absolute = article.index + h1.index
+        const attrs = parseFakeAttrs(h1[0])
+        let beforeFragment = ''
+        handle({
+          getAttribute: name => (name in attrs ? attrs[name] : null),
+          setAttribute: (name, value) => { attrs[name] = value },
+          before: fragment => { beforeFragment += fragment },
+        })
+        html = `${html.slice(0, absolute)}${beforeFragment}<h1${renderFakeAttrs(attrs)}>${html.slice(absolute + h1[0].length)}`
+      } else if (selector === 'div.geor-secret' || selector === 'div.geor-secret-gm') {
+        const token = selector === 'div.geor-secret' ? 'geor-secret' : 'geor-secret-gm'
+        const matches = [...html.matchAll(/<div(\s[^>]*)?>([\s\S]*?)<\/div>/gi)]
+          .filter(m => {
+            const classes = (parseFakeAttrs(`<div${m[1] || ''}>`).class || '').split(/\s+/).filter(Boolean)
+            return token === 'geor-secret'
+              ? classes.includes('geor-secret') && !classes.includes('geor-secret-gm')
+              : classes.includes('geor-secret-gm')
+          })
+        for (let i = matches.length - 1; i >= 0; i--) {
+          const m = matches[i]
+          const start = m.index
+          const end = start + m[0].length
+          const attrs = parseFakeAttrs(`<div${m[1] || ''}>`)
+          let inner = m[2]
+          let removed = false
+          let keepContent = false
+          let before = ''
+          let after = ''
+          handle({
+            getAttribute: name => (name in attrs ? attrs[name] : null),
+            setAttribute: (name, value) => { attrs[name] = value },
+            removeAttribute: name => { delete attrs[name] },
+            setInnerContent: content => { inner = content },
+            remove: () => { removed = true },
+            removeAndKeepContent: () => { keepContent = true },
+            before: fragment => { before += fragment },
+            after: fragment => { after = fragment + after },
+          })
+          const replacement = removed ? '' : keepContent ? inner : `<div${renderFakeAttrs(attrs)}>${inner}</div>`
+          html = `${html.slice(0, start)}${before}${replacement}${after}${html.slice(end)}`
+        }
+      }
+    }
+    return new Response(html, { status: response.status, statusText: response.statusText, headers: response.headers })
+  }
+}
+
+// Mock D1 mirroring the existing mock-db pattern, plus reveals + roles.
+function makeSecretsDb({ roles = {}, seedReveals = [] } = {}) {
+  const reveals = new Map(seedReveals.map(([member, id, state]) => [`${member}\0${id}`, state]))
+  const limits = new Map()
+  return {
+    reveals,
+    limits,
+    prepare(sql) {
+      let args = []
+      const api = {
+        bind(...values) { args = values; return api },
+        async run() {
+          if (sql.includes('INSERT INTO rate_limits')) {
+            const [key, resetAt] = args
+            const current = limits.get(key)
+            limits.set(key, { attempts: (current?.attempts || 0) + 1, reset_at: current?.reset_at ?? resetAt })
+          }
+          if (sql.includes('DELETE FROM rate_limits')) limits.delete(args[0])
+          if (sql.includes('INSERT INTO reveals')) {
+            if (sql.includes("VALUES ('*'")) reveals.set(`*\0${args[0]}`, args[1])
+            else reveals.set(`${args[0]}\0${args[1]}`, 'revealed')
+          }
+          return { meta: { changes: 1 } }
+        },
+        async first() {
+          if (sql.includes('FROM rate_limits')) {
+            const record = limits.get(args[0])
+            return record ? { attempts: record.attempts, reset_at: record.reset_at } : null
+          }
+          if (sql.includes('SELECT role FROM users')) return roles[args[0]] ? { role: roles[args[0]] } : null
+          return null
+        },
+        async all() {
+          if (sql.includes('FROM reveals')) {
+            const email = args[0]
+            const rows = []
+            for (const [key, state] of reveals) {
+              const [member, id] = key.split('\0')
+              if (state === 'revealed' && (member === email || member === '*')) rows.push({ secret_id: id })
+            }
+            return { results: rows }
+          }
+          return { results: [] }
+        },
+      }
+      return api
+    },
+    async batch(statements) { return Promise.all(statements.map(statement => statement.run())) },
+  }
+}
+
+async function secretsToken(email) {
+  const now = Math.floor(Date.now() / 1000)
+  return __test.signJwt({ email, iss: 'worldofgeor', iat: now, exp: now + 60 }, SECRET)
+}
+
+function secretsEnv(db) {
+  return {
+    JWT_SECRET: SECRET,
+    DB: db,
+    ASSETS: { fetch: async () => new Response(secretArticleHtml(), { headers: { 'Content-Type': 'text/html; charset=utf-8' } }) },
+  }
+}
+
+const secretsArticle = token => new Request('https://worldofgeor.com/wiki/World/Nations/Veil/', { headers: { Cookie: `geor_token=${token}` } })
+const secretsPost = (path, token, body, extraHeaders = {}) => new Request(`https://worldofgeor.com${path}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', ...(token ? { Cookie: `geor_token=${token}` } : {}), ...extraHeaders },
+  body: JSON.stringify(body),
+})
+
+async function withSecretsRewriter(fn) {
+  const previous = globalThis.HTMLRewriter
+  globalThis.HTMLRewriter = FakeSecretsRewriter
+  try { await fn() } finally {
+    if (previous === undefined) delete globalThis.HTMLRewriter
+    else globalThis.HTMLRewriter = previous
+  }
+}
+
+test('secrets: locked responses carry zero secret bytes', async () => {
+  await withSecretsRewriter(async () => {
+    const db = makeSecretsDb({ roles: { 'member@example.com': 'viewer' } })
+    const html = await (await worker.fetch(secretsArticle(await secretsToken('member@example.com')), secretsEnv(db), {})).text()
+    assert.equal(html.includes(SECRET_BYTES), false, 'locked card must not contain secret bytes')
+    assert.equal(html.includes(GM_BYTES), false, 'GM notes must never reach non-owners')
+    assert.match(html, /geor-secret-locked/)
+    assert.match(html, /data-geor-reveal="vault-key"/)
+    assert.match(html, /\/api\/secrets\/reveal/)
+  })
+})
+
+test('secrets: reveal persists per member; bad ids rejected', async () => {
+  assert.equal(__test.cleanSecretId('vault-key'), 'vault-key')
+  assert.equal(__test.cleanSecretId('Bad_ID!!'), null)
+  assert.equal(__test.cleanSecretId(''), null)
+  await withSecretsRewriter(async () => {
+    const db = makeSecretsDb({ roles: { 'member@example.com': 'viewer', 'other@example.com': 'viewer' } })
+    const env = secretsEnv(db)
+    const token = await secretsToken('member@example.com')
+    const bad = await worker.fetch(secretsPost('/api/secrets/reveal', token, { id: 'Bad_ID!!' }), env, {})
+    assert.equal(bad.status, 400)
+    const revealed = await worker.fetch(secretsPost('/api/secrets/reveal', token, { id: 'vault-key' }), env, {})
+    assert.equal(revealed.status, 200)
+    assert.deepEqual(await revealed.json(), { ok: true, id: 'vault-key', state: 'revealed' })
+    const mine = await (await worker.fetch(secretsArticle(token), env, {})).text()
+    assert.equal(mine.includes(SECRET_BYTES), true, 'revealed member reads the content unwrapped')
+    assert.equal(mine.includes('data-geor-reveal="vault-key"'), false)
+    const other = await (await worker.fetch(secretsArticle(await secretsToken('other@example.com')), env, {})).text()
+    assert.equal(other.includes(SECRET_BYTES), false, 'reveal is per-member, not global')
+  })
+})
+
+test('secrets: GM stripped for editors, visible to owners', async () => {
+  await withSecretsRewriter(async () => {
+    const db = makeSecretsDb({ roles: { 'editor@example.com': 'editor', 'owner@example.com': 'owner' } })
+    const env = secretsEnv(db)
+    const editorHtml = await (await worker.fetch(secretsArticle(await secretsToken('editor@example.com')), env, {})).text()
+    assert.equal(editorHtml.includes(GM_BYTES), false, 'editors never receive GM notes')
+    assert.equal(editorHtml.includes(SECRET_BYTES), false, 'editors still see locked secrets')
+    const ownerHtml = await (await worker.fetch(secretsArticle(await secretsToken('owner@example.com')), env, {})).text()
+    assert.equal(ownerHtml.includes(GM_BYTES), true, 'owners read GM notes')
+    assert.equal(ownerHtml.includes(SECRET_BYTES), true, 'owners bypass secret locks')
+  })
+})
+
+test('secrets: global set is owner-only and applies to all members', async () => {
+  await withSecretsRewriter(async () => {
+    const db = makeSecretsDb({ roles: { 'member@example.com': 'viewer', 'owner@example.com': 'owner' } })
+    const env = secretsEnv(db)
+    const member = await secretsToken('member@example.com')
+    const owner = await secretsToken('owner@example.com')
+    assert.equal((await worker.fetch(secretsPost('/api/secrets/set', null, { id: 'vault-key', state: 'revealed' }), env, {})).status, 401)
+    assert.equal((await worker.fetch(secretsPost('/api/secrets/set', member, { id: 'vault-key', state: 'revealed' }), env, {})).status, 403)
+    assert.equal((await worker.fetch(secretsPost('/api/secrets/set', owner, { id: 'vault-key', state: 'sometimes' }), env, {})).status, 400)
+    const set = await worker.fetch(secretsPost('/api/secrets/set', owner, { id: 'vault-key', state: 'revealed' }), env, {})
+    assert.equal(set.status, 200)
+    assert.deepEqual(await set.json(), { ok: true, id: 'vault-key', state: 'revealed' })
+    const globalHtml = await (await worker.fetch(secretsArticle(member), env, {})).text()
+    assert.equal(globalHtml.includes(SECRET_BYTES), true, 'global reveal opens the secret for every viewer')
+    const relock = await worker.fetch(secretsPost('/api/secrets/set', owner, { id: 'vault-key', state: 'locked' }), env, {})
+    assert.equal(relock.status, 200)
+    const relockedHtml = await (await worker.fetch(secretsArticle(member), env, {})).text()
+    assert.equal(relockedHtml.includes(SECRET_BYTES), false, 'global lock closes it again')
+  })
+})
+
+test('secrets: logged-out reveal attempts are rejected at the gate', async () => {
+  await withSecretsRewriter(async () => {
+    const db = makeSecretsDb()
+    const env = secretsEnv(db)
+    assert.equal((await worker.fetch(secretsPost('/api/secrets/reveal', null, { id: 'vault-key' }), env, {})).status, 401)
+    assert.equal((await worker.fetch(secretsPost('/api/secrets/set', null, { id: 'vault-key', state: 'revealed' }), env, {})).status, 401)
+    const gated = await worker.fetch(new Request('https://worldofgeor.com/wiki/World/Nations/Veil/'), env, {})
+    assert.equal(gated.status, 302, 'logged-out HTML never reaches the transform')
+  })
+})
+
+test('secrets: reveal attempts are rate limited', async () => {
+  const db = makeSecretsDb({ roles: { 'member@example.com': 'viewer' } })
+  const env = secretsEnv(db)
+  const token = await secretsToken('member@example.com')
+  const headers = { 'CF-Connecting-IP': '203.0.113.77' }
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const response = await worker.fetch(secretsPost('/api/secrets/reveal', token, { id: 'vault-key' }, headers), env, {})
+    assert.equal(response.status, 200, `attempt ${attempt + 1}`)
+  }
+  const blocked = await worker.fetch(secretsPost('/api/secrets/reveal', token, { id: 'vault-key' }, headers), env, {})
+  assert.equal(blocked.status, 429)
+  assert.ok(Number(blocked.headers.get('retry-after')) > 0)
+})

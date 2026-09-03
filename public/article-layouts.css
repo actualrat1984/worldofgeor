@@ -49,3 +49,46 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
     padding: 1rem;
   }
 }
+/* Wave B2 — spoiler-block secrets. Locked cards carry zero secret bytes;
+   reveal is a POST to /api/secrets/reveal (member) or /api/secrets/set
+   (owner global). GM notes never leave the server for non-owners. */
+.geor-secret-locked {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px dashed rgba(217, 164, 65, 0.5);
+  border-radius: 10px;
+  background: rgba(15, 14, 13, 0.45);
+}
+.geor-secret-locked-title {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: #e8dcc3;
+}
+.geor-secret-id {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+  color: #d9b77a;
+}
+.geor-secret-locked-action { margin: 0.6rem 0 0; }
+.geor-secret-reveal {
+  cursor: pointer;
+  border: 1px solid rgba(217, 164, 65, 0.6);
+  border-radius: 8px;
+  background: rgba(217, 164, 65, 0.12);
+  color: #f0d9a8;
+  padding: 0.4rem 0.9rem;
+  font: inherit;
+  font-size: 0.9rem;
+}
+.geor-secret-reveal:hover { background: rgba(217, 164, 65, 0.25); }
+.geor-secret-gm {
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(180, 120, 60, 0.4);
+  border-radius: 10px;
+  background: rgba(40, 22, 10, 0.5);
+}
+@media (max-width: 640px) {
+  .geor-secret-locked, .geor-secret-gm { padding: 0.8rem; }
+}
