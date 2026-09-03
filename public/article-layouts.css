@@ -240,3 +240,38 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
 .tl-shadow li p { margin: 0.25rem 0 0; font-size: 0.88rem; line-height: 1.6; color: rgba(242,232,208,.75); }
 @media (min-width: 768px) { .tl-shadow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { .tl-rail { scroll-behavior: auto; } }
+
+/* Wave C2 — Chronicles (public/chronicles.html only; ch- prefix).
+   Event scrubber drives the same Leaflet CRS.Simple world folio the
+   atlas viewer uses. tl- card prose is reused, not duplicated. */
+.ch-scrub-wrap { border: 1px solid rgba(217,183,122,.15); border-radius: 1rem; background: rgba(11,11,10,.6); padding: 1.25rem; }
+.ch-scrub { flex: 1 1 auto; width: 100%; accent-color: #d9b77a; height: 2rem; cursor: pointer; }
+.ch-step {
+  flex: 0 0 auto; width: 2.5rem; height: 2.5rem; border-radius: 999px;
+  border: 1px solid rgba(217,183,122,.3); color: #d9b77a; font-size: 1rem; line-height: 1;
+}
+.ch-step:hover { background: rgba(217,183,122,.12); }
+.ch-card {
+  border: 1px solid rgba(217,183,122,.18); border-radius: 0.9rem;
+  background: rgba(242,232,208,.03); padding: 1.15rem 1.25rem;
+}
+.ch-card-date { margin: 0 0 0.4rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em; color: #d9b77a; }
+.ch-badge { margin-left: 0.6rem; font-weight: 400; letter-spacing: 0.14em; border-radius: 999px; padding: 0.1rem 0.55rem; white-space: nowrap; }
+.ch-badge-mapped { color: #0f0e0d; background: #d9b77a; border: 1px solid #d9b77a; }
+.ch-badge-unmapped { color: rgba(242,232,208,.55); border: 1px solid rgba(242,232,208,.2); }
+.ch-card-place { margin: 0.6rem 0 0; font-size: 0.8rem; color: rgba(242,232,208,.65); }
+.ch-card-link { display: inline-block; margin-top: 0.7rem; color: #f0d9a8; font-size: 0.85rem; text-decoration: none; border-bottom: 1px dotted rgba(217,164,65,.55); }
+.ch-card-link:hover { color: #e8b64c; }
+.ch-error { border: 1px solid rgba(248,113,113,.25); background: rgba(248,113,113,.06); color: #fecaca; border-radius: 0.9rem; padding: 1.25rem; }
+.ch-map-wrap { border: 1px solid rgba(217,183,122,.15); border-radius: 1rem; background: rgba(11,11,10,.6); overflow: hidden; }
+.ch-map-head { padding: 1.1rem 1.25rem 0.9rem; border-bottom: 1px solid rgba(217,183,122,.1); }
+#chronMap { background: #0b0b0a; }
+.ch-unmapped-note { margin: 0 0 0.8rem; font-size: 0.85rem; line-height: 1.6; color: rgba(242,232,208,.6); }
+.ch-unmapped-row {
+  display: flex; gap: 0.9rem; align-items: baseline; width: 100%; text-align: left;
+  border: 1px solid rgba(217,183,122,.1); border-radius: 0.7rem; background: rgba(242,232,208,.02);
+  padding: 0.7rem 0.95rem; margin-bottom: 0.45rem; cursor: pointer;
+}
+.ch-unmapped-row:hover { border-color: rgba(217,183,122,.35); }
+.ch-unmapped-date { flex: 0 0 auto; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; color: #d9b77a; }
+.ch-unmapped-text { font-size: 0.85rem; line-height: 1.55; color: rgba(242,232,208,.7); }

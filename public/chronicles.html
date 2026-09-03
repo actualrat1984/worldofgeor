@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Chronicles — World of Ge'or</title>
+  <meta name="description" content="Scrub the timeline and fly the atlas — every mapped event in one procession. Private archive." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3LuqMZfMZc3G6v9K4GQZLlQp1Ns0M=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+  <style>
+    .leaflet-container{background:#0b0b0a}
+    .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#1a1a18;color:#f2e8d0;border:1px solid rgba(217,183,122,.2)}
+    .leaflet-popup-content{margin:14px 16px;min-width:190px;font-family:Inter,system-ui,sans-serif}
+    .leaflet-popup-content a{color:#d9b77a;text-decoration:underline;text-underline-offset:3px}
+    .leaflet-popup-close-button{color:rgba(242,232,208,.7)!important}
+    .leaflet-control-zoom a{background:#1a1a18!important;color:#d9b77a!important;border-color:rgba(217,183,122,.22)!important}
+    .leaflet-control-attribution{background:rgba(15,14,13,.84)!important;color:rgba(242,232,208,.5)!important;border-radius:8px 0 0 0}
+    .leaflet-control-attribution a{color:#d9b77a!important}
+    .atlas-marker-shell{background:transparent;border:0}
+    .atlas-marker{display:block;width:18px;height:18px;border-radius:999px;background:#d9b77a;border:3px solid #0f0e0d;box-shadow:0 0 0 1px rgba(217,183,122,.9),0 4px 14px rgba(15,14,13,.55)}
+    @media (prefers-reduced-motion:reduce){.atlas-marker{transition:none}}
+  </style>
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/timeline" class="text-xs border border-gold/20 rounded-full px-3 py-2">TIMELINE</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[1120px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE KEEPER'S CHRONICLE • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">CHRONICLES</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Scrub the ages — the map flies where the story happened.</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <span class="text-[10px] tracking-[.25em] text-gold border border-gold/25 rounded-full px-4 py-1.5">SCRUB DRIVES MAP</span>
+          <span id="chronCount" role="status" class="text-xs text-cream/40">Opening the chronicle…</span>
+        </p>
+      </div>
+
+      <section class="ch-scrub-wrap mt-9" aria-label="Event scrubber">
+        <div class="flex items-center gap-3">
+          <button id="chronPrev" type="button" aria-label="Previous event" class="ch-step">←</button>
+          <label for="chronScrub" class="sr-only">Scrub through timeline events</label>
+          <input id="chronScrub" type="range" min="0" max="0" step="1" value="0" class="ch-scrub" aria-describedby="chronStatus" />
+          <button id="chronNext" type="button" aria-label="Next event" class="ch-step">→</button>
+        </div>
+        <p id="chronStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Opening the chronicle…</p>
+        <article id="chronCard" class="ch-card mt-4" aria-live="polite" aria-label="Current event">
+          <div class="rounded-xl border border-gold/5 p-5 text-sm text-cream/40">Opening the chronicle…</div>
+        </article>
+      </section>
+
+      <section class="ch-map-wrap mt-8" aria-label="Chronicle map">
+        <div class="ch-map-head">
+          <h2 class="font-display tracking-[0.18em] text-xs font-semibold text-gold">WORLD FOLIO • LEAFLET • CRS.SIMPLE</h2>
+          <p class="text-sm text-cream/70 mt-1">Mapped events carry gold pins — scrubbing one flies the folio there. Scale: 3.086 km / pixel.</p>
+        </div>
+        <div id="chronMap" class="w-full" style="height:clamp(360px,58vh,520px)" role="region" aria-label="Chronicle map of Ge'or" aria-describedby="chronMapStatus" tabindex="0"></div>
+        <p id="chronMapStatus" class="sr-only" aria-live="polite"></p>
+      </section>
+
+      <section class="mt-10" aria-label="Events without map coordinates">
+        <h2 class="font-display tracking-[0.18em] text-xs font-semibold text-gold">UNMAPPED — NO COORDINATES INVENTED</h2>
+        <div id="chronUnmapped" class="mt-4">
+          <div class="rounded-xl border border-gold/5 p-5 text-sm text-cream/40">Opening the chronicle…</div>
+        </div>
+      </section>
+
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <a href="/timeline" class="inline-flex border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE TIMELINE</a>
+          <a href="/atlas" class="inline-flex border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE ATLAS</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+  <script type="module" src="/chronicles.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>

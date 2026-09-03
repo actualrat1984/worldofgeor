@@ -55,6 +55,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/species.js',
   '/search.js',
   '/timeline.js',
+  '/chronicles.js',
   '/archive-compass.css',
   '/archive-compass.js',
   '/article-layouts.css',
@@ -64,6 +65,8 @@ const ROUTE_ALIASES = new Map([
   ['/updates/', '/updates.html'],
   ['/timeline', '/timeline.html'],
   ['/timeline/', '/timeline.html'],
+  ['/chronicles', '/chronicles.html'],
+  ['/chronicles/', '/chronicles.html'],
   ['/atlas', '/atlas.html'],
   ['/atlas/', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
@@ -309,7 +312,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/chronicles', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
