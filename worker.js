@@ -64,6 +64,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/oracle.js',
   '/chronicles.js',
   '/atlas-chain.js',
+  '/marginalia.js',
   '/archive-compass.css',
   '/archive-compass.js',
   '/article-layouts.css',
@@ -859,6 +860,51 @@ function boardSummaryJson(row) {
   const { cards, arrows } = boardDocJson(row);
   return { id: row.id, title: row.title ?? '', cardCount: cards.length, arrowCount: arrows.length, updated_at: row.updated_at };
 }
+// --- Wave E4: marginalia validation -----------------------------------------
+// Page-anchored notes persist in the 0006 `notes` table
+// (member_email, page, anchor, body, shared) — the table already carries
+// every column this wave needs, so no migration. Pages are same-archive
+// wiki paths only; anchors are optional section labels; bodies are short
+// margin notes (5k cap).
+const MARGINALIA_PAGE_MAX = 500;
+const MARGINALIA_ANCHOR_MAX = 200;
+const MARGINALIA_BODY_MAX = 5000;
+function cleanMarginaliaPage(value) {
+  if (typeof value !== 'string') return null;
+  const page = value.trim();
+  if (!page.startsWith('/wiki/') || page.length > MARGINALIA_PAGE_MAX) return null;
+  if (/[\s\\?#]/.test(page) || page.includes('..')) return null;
+  return page;
+}
+function cleanMarginaliaAnchor(value) {
+  if (value == null || value === '') return '';
+  if (typeof value !== 'string') return null;
+  const anchor = value.trim();
+  if (!anchor) return '';
+  return anchor.length <= MARGINALIA_ANCHOR_MAX ? anchor : null;
+}
+function cleanMarginaliaBody(value) {
+  if (typeof value !== 'string') return null;
+  const body = value.trim();
+  return body && body.length <= MARGINALIA_BODY_MAX ? body : null;
+}
+// mine marks the viewer's own notes; author names the sharer on notes from
+// other members (null on own notes — the client already knows the viewer).
+function marginaliaNoteJson(row, viewerEmail) {
+  const shared = Number(row?.shared) === 1;
+  const mine = row?.member_email === viewerEmail;
+  return {
+    id: row.id,
+    page: row.page ?? '',
+    anchor: row.anchor ?? '',
+    body: row.body ?? '',
+    shared,
+    mine,
+    author: !mine && shared ? (row.member_email ?? null) : null,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
+}
 // Locked cards carry a title + reveal button only — the id charset above is
 // HTML/JS-string safe, so no further escaping is needed when interpolating.
 function lockedSecretInner(id) {
@@ -939,7 +985,7 @@ async function withPrivateArchiveShell(response, pathname = '', secrets = null, 
         const existing = element.getAttribute('class') || '';
         element.setAttribute('class', `${existing} ${layout.bodyClass}`.trim());
       }
-      element.append(`<script type="module" src="/archive-compass.js"></script>${hasToc ? TOC_HIGHLIGHT_SCRIPT : ''}`, { html: true });
+      element.append(`<script type="module" src="/archive-compass.js"></script>${layout ? '<script type="module" src="/marginalia.js"></script>' : ''}${hasToc ? TOC_HIGHLIGHT_SCRIPT : ''}`, { html: true });
     } });
   if (layout) {
     // Slim hero: reuse the article's own <h1> in place (no extra fetch, no
@@ -1819,6 +1865,63 @@ export default {
         }
       }
 
+      // --- Wave E4: marginalia (page-anchored notes in the reader) --------
+      // Own notes for the page plus notes other members marked shared;
+      // private notes stay invisible — enforced in SQL, never filtered
+      // client-side. POST creates own notes only. Rate limits reuse
+      // 'reveal'. Reads cap at 100, oldest first (margin order).
+      if (url.pathname === '/api/marginalia' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const page = cleanMarginaliaPage(url.searchParams.get('page'));
+        if (!page) return json({ error: 'Valid wiki page required' }, 400);
+        const anchorParam = url.searchParams.get('anchor');
+        let anchorFilter = null;
+        if (anchorParam != null && anchorParam !== '') {
+          const cleaned = cleanMarginaliaAnchor(anchorParam);
+          if (cleaned === null) return json({ error: 'Valid wiki page required' }, 400);
+          if (cleaned) anchorFilter = cleaned;
+        }
+        try {
+          await ensureTables();
+          const base = `SELECT id, member_email, page, anchor, body, shared, created_at, updated_at FROM notes
+            WHERE page = ? AND (member_email = ? OR shared = 1)`;
+          const statement = anchorFilter
+            ? env.DB.prepare(`${base} AND anchor = ? ORDER BY created_at ASC LIMIT 100`).bind(page, user.email, anchorFilter)
+            : env.DB.prepare(`${base} ORDER BY created_at ASC LIMIT 100`).bind(page, user.email);
+          const { results } = await statement.all();
+          return json({ notes: (results || []).map(row => marginaliaNoteJson(row, user.email)) });
+        } catch {
+          return json({ error: 'Marginalia is temporarily unavailable' }, 503);
+        }
+      }
+
+      if (url.pathname === '/api/marginalia' && request.method === 'POST') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        let body;
+        try { body = await readJson(request, 32_768); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const page = cleanMarginaliaPage(body.page);
+        const anchor = cleanMarginaliaAnchor(body.anchor);
+        const noteBody = cleanMarginaliaBody(body.body);
+        if (!page || anchor === null || !noteBody) return json({ error: 'Valid marginalia note required' }, 400);
+        const shared = body.shared === true || body.shared === 1 ? 1 : 0;
+        try {
+          await ensureTables();
+          const inserted = await env.DB.prepare(`INSERT INTO notes (member_email, page, anchor, body, shared)
+            VALUES (?, ?, ?, ?, ?)`).bind(user.email, page, anchor, noteBody, shared).run();
+          const row = await env.DB.prepare(`SELECT id, member_email, page, anchor, body, shared, created_at, updated_at FROM notes
+            WHERE id = ? AND member_email = ?`).bind(inserted.meta.last_row_id, user.email).first();
+          if (!row) return json({ error: 'Marginalia note could not be saved' }, 500);
+          return json({ note: marginaliaNoteJson(row, user.email) }, 201);
+        } catch {
+          return json({ error: 'Marginalia note could not be saved' }, 500);
+        }
+      }
+
       // --- Additions (Website-additions repo) — requires auth ---
       // GET /api/additions/list -> {files:[{path, sha, size, html_url}]}
       if (url.pathname === '/api/additions/list' && request.method === 'GET') {
@@ -2168,6 +2271,9 @@ export const __test = {
   cleanNotebookChecklist,
   cleanNotebookTitle,
   cleanMapSlug,
+  cleanMarginaliaAnchor,
+  cleanMarginaliaBody,
+  cleanMarginaliaPage,
   cleanWorkflowKind,
   cleanWorkflowStatus,
   constantTimeEqual,
@@ -2178,6 +2284,7 @@ export const __test = {
   sanitizeAdditionsPath,
   sanitizeFolderPath,
   sanitizeMapDocument,
+  marginaliaNoteJson,
   signJwt,
   verifyPassword,
   verifyJwt,
