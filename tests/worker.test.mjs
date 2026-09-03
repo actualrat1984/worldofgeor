@@ -114,6 +114,14 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.sanitizeMapDocument({ version: 1, slug: 'world', layers: [{ id: 'political', name: 'Political', features: [{ id: 'marker_123456', type: 'marker', point: { lat: 120, lng: 3841 } }] }] }, 'world'), null)
 })
 
+// --- Wave F2: reader's primer routes stay behind the member gate ------------
+test('primer routes are private and served behind the member gate', () => {
+  for (const path of ['/primer', '/primer/', '/primer.html', '/primer.js']) {
+    assert.equal(__test.isPrivatePath(path), true, path)
+  }
+  assert.equal(__test.cleanSecretId('aelis-true-name'), 'aelis-true-name')
+})
+
 test('cross-origin mutations are rejected', () => {
   const same = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://worldofgeor.com' } })
   const cross = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://example.com' } })

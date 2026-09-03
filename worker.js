@@ -65,6 +65,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/gallery.js',
   '/oracle.js',
   '/chronicles.js',
+  '/primer.js',
   '/atlas-chain.js',
   '/marginalia.js',
   '/archive-compass.css',
@@ -96,6 +97,8 @@ const ROUTE_ALIASES = new Map([
   ['/oracle/', '/oracle.html'],
   ['/chronicles', '/chronicles.html'],
   ['/chronicles/', '/chronicles.html'],
+  ['/primer', '/primer.html'],
+  ['/primer/', '/primer.html'],
   ['/atlas', '/atlas.html'],
   ['/atlas/', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
@@ -341,7 +344,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/arcs', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/gazetteer', '/trees', '/arcs', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/primer', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -1801,6 +1804,31 @@ export default {
           return json({ ok: true, id, state });
         } catch {
           return json({ error: 'Secret state could not be changed' }, 500);
+        }
+      }
+
+      // --- Wave F2: reader's primer — spoiler-gated read lens over reveals. ---
+      // GET /api/primer — the caller's own revealed secret ids only (own rows
+      // plus global '*' rows, mirroring getSecretsContext). No secret content
+      // here: article HTML behind the geor-secret transform stays the only
+      // place hidden bytes are ever served.
+      if (url.pathname === '/api/primer' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const { results } = await env.DB.prepare(
+            `SELECT secret_id FROM reveals WHERE state = 'revealed' AND (member_email = ? OR member_email = '*')`
+          ).bind(user.email).all();
+          const seen = new Set();
+          for (const row of results || []) {
+            const id = cleanSecretId(row?.secret_id);
+            if (id) seen.add(id);
+          }
+          const revealed = [...seen].sort();
+          return json({ revealed, count: revealed.length });
+        } catch {
+          return json({ error: 'Primer is temporarily unavailable' }, 503);
         }
       }
 
