@@ -16,6 +16,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Atlas Studio', subtitle: 'Draw markers, labels, and regions', url: '/map-editor', sigil: '✦', group: 'CREATE', keywords: 'map editor studio draw workflow' },
     { title: 'Species Gallery', subtitle: 'Browse the sentient peoples of Ge’or', url: '/species', sigil: '◈', group: 'ROOM', keywords: 'species peoples races gallery' },
     { title: 'Timeline of the Ages', subtitle: 'Walk all thirteen ages, event by event', url: '/timeline', sigil: '◷', group: 'ROOM', keywords: 'timeline ages history events dates bgd agd chronicle' },
+    { title: 'Ge’orian Calendar', subtitle: 'Twelve months, twelve festivals, and the BGD/AGD converter', url: '/calendar', sigil: '☾', group: 'ROOM', keywords: 'calendar months festivals converter bgd agd year earth' },
     { title: 'Gazetteer of Nations', subtitle: 'Sort and filter every nation of Ge’or', url: '/gazetteer', sigil: '❈', group: 'ROOM', keywords: 'gazetteer nations regions geography index' },
     { title: 'Chronicles', subtitle: 'Scrub the timeline and fly the atlas', url: '/chronicles', sigil: '❖', group: 'ROOM', keywords: 'chronicles scrub map fly events timeline atlas' },
     { title: 'Family Trees', subtitle: 'Trace every named bloodline of Ge’or', url: '/trees', sigil: '❦', group: 'ROOM', keywords: 'family trees houses bloodlines pedigree genealogy' },

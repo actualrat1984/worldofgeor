@@ -19,6 +19,7 @@ collectHtml(publicRoot)
 const aliases = new Map([
   ['/updates', '/updates.html'],
   ['/timeline', '/timeline.html'],
+  ['/calendar', '/calendar.html'],
   ['/gazetteer', '/gazetteer.html'],
   ['/trees', '/trees.html'],
   ['/arcs', '/arcs.html'],

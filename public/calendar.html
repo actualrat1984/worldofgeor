@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Ge'orian Calendar — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[920px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">THE KEEPER'S ALMANAC • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">GE'ORIAN CALENDAR</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Twelve months of forty days, twelve festivals, and the turning of BGD into AGD.</p>
+        <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+          <span id="presentYear" class="text-[10px] tracking-[.25em] text-gold border border-gold/25 rounded-full px-4 py-1.5">PRESENT DAY</span>
+          <span id="calendarCount" role="status" class="text-xs text-cream/40">Opening the almanac…</span>
+        </p>
+      </div>
+      <section aria-label="Months of the Ge'orian year" class="mt-10">
+        <h2 class="font-display text-sm tracking-[.25em] text-gold">THE TWELVE MONTHS</h2>
+        <p id="calendarStructure" class="text-xs text-cream/40 mt-2">A Ge'orian year holds twelve unnamed months of forty days — 480 days in all.</p>
+        <div id="monthGrid" aria-busy="true" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm text-cream/40">Raising the months…</div>
+      </section>
+      <section aria-label="Festivals of Ge'or" class="mt-12">
+        <h2 class="font-display text-sm tracking-[.25em] text-gold">THE TWELVE FESTIVALS</h2>
+        <p class="text-xs text-cream/40 mt-2">One high day kept somewhere on Ge'or — each dated by day and month.</p>
+        <div id="festivalList" aria-busy="true" class="mt-4 grid gap-3 text-sm text-cream/40">Kindling the feast-fires…</div>
+      </section>
+      <section aria-label="BGD AGD date converter" class="mt-12 rounded-xl border border-gold/15 bg-ink p-5 md:p-7">
+        <h2 class="font-display text-sm tracking-[.25em] text-gold">BGD / AGD CONVERTER</h2>
+        <p class="text-xs text-cream/40 mt-2">Turn an era date into years from the Great Divergence — or turn Earth years into Ge'orian ones at 1.42 to the year.</p>
+        <form id="eraConverter" class="mt-5 grid gap-3 md:grid-cols-[1fr_160px_auto]" novalidate>
+          <div>
+            <label for="eraYear" class="sr-only">Year number</label>
+            <input id="eraYear" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="Year — e.g. 597" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50 placeholder:text-cream/30" aria-describedby="converterStatus" />
+          </div>
+          <div>
+            <label for="eraSelect" class="sr-only">Era</label>
+            <select id="eraSelect" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50">
+              <option value="AGD">AGD</option>
+              <option value="BGD">BGD</option>
+            </select>
+          </div>
+          <button type="submit" class="rounded-xl bg-gold px-6 py-3 text-sm font-semibold text-ink">CONVERT</button>
+        </form>
+        <form id="earthConverter" class="mt-3 grid gap-3 md:grid-cols-[1fr_auto]" novalidate>
+          <div>
+            <label for="earthYears" class="sr-only">Earth years</label>
+            <input id="earthYears" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="Earth years — e.g. 848" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 outline-none focus:border-gold/50 placeholder:text-cream/30" aria-describedby="converterStatus" />
+          </div>
+          <button type="submit" class="rounded-xl border border-gold/25 px-6 py-3 text-sm text-gold">EARTH → GE'ORIAN</button>
+        </form>
+        <p id="converterStatus" role="status" aria-live="polite" class="text-sm text-cream/60 mt-4 text-center">Name a year above and the almanac will reckon it.</p>
+      </section>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/wiki/World/Dates/" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE DATES FOLIO</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/calendar.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
