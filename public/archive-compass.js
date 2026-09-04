@@ -28,6 +28,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'System Statblocks', subtitle: 'Magic ranks, species traits, and currencies as game blocks', url: '/statblocks', sigil: '⚖', group: 'ROOM', keywords: 'statblocks systems magic ranks species traits currencies homebrew blocks' },
     { title: 'Reader’s Primer', subtitle: 'See what Arcady may know — sealed and opened', url: '/primer', sigil: '◐', group: 'ROOM', keywords: 'primer reader spoilers secrets revealed seals reading' },
     { title: 'Author’s Desk', subtitle: 'Notes, arcs, ages, and seals in one command view', url: '/desk', sigil: '✍', group: 'ROOM', keywords: 'desk author command notes arcs timeline primer status' },
+    { title: 'Audio Library', subtitle: 'Hear the story of Ge’or, chapter by chapter', url: '/audio', sigil: '♪', group: 'ROOM', keywords: 'audio music listen lore chapters voice library player' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },
     { title: 'Character Gallery', subtitle: 'Browse every named soul of Ge’or', url: '/gallery', sigil: '◍', group: 'ROOM', keywords: 'characters gallery houses species nations people' },
     { title: 'Prompt Oracle', subtitle: 'Roll character, place, and conflict omens', url: '/oracle', sigil: '⚄', group: 'ROOM', keywords: 'oracle prompt roll random character place conflict tags omen' },

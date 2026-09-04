@@ -34,6 +34,7 @@ const aliases = new Map([
   ['/oracle', '/oracle.html'],
   ['/primer', '/primer.html'],
   ['/desk', '/desk.html'],
+  ['/audio', '/audio.html'],
   ['/atlas', '/atlas.html'],
   ['/map-editor', '/map-editor.html'],
   ['/species', '/species.html'],

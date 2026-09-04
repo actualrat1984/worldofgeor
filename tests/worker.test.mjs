@@ -143,6 +143,13 @@ test('system statblock routes are private and served behind the member gate', ()
   }
 })
 
+// --- Wave G2: audio library routes stay behind the member gate --------------
+test('audio library routes are private and served behind the member gate', () => {
+  for (const path of ['/audio', '/audio/', '/audio.html', '/audio.js']) {
+    assert.equal(__test.isPrivatePath(path), true, path)
+  }
+})
+
 // --- Wave G1: calendar routes stay behind the member gate -------------------
 test('calendar routes are private and served behind the member gate', () => {
   for (const path of ['/calendar', '/calendar/', '/calendar.html', '/calendar.js']) {
