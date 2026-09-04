@@ -54,6 +54,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/species.css',
   '/species.js',
   '/search.js',
+  '/search-sources.js',
   '/arcs.js',
   '/quests.js',
   '/statblocks.js',

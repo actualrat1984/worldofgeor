@@ -1,3 +1,5 @@
+import { kindBadge, mergeExtra } from './search-sources.js'
+
 const input = document.getElementById('archiveSearch')
 const results = document.getElementById('searchResults')
 const status = document.getElementById('searchStatus')
@@ -6,6 +8,7 @@ const recentSection = document.getElementById('recentSection')
 const recentEl = document.getElementById('recentSearches')
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char])
 let index = []
+let extraIndex = []
 let activeFilter = 'all'
 let selected = -1
 let visibleResults = []
@@ -13,6 +16,7 @@ let timer = null
 let syncedBookmarks = new Set()
 
 function categoryFor(url) {
+  if (url === '/timeline') return 'History'
   const parts = url.split('/').filter(Boolean)
   if (parts.includes('Nations')) return 'Nations'
   if (parts.includes('Species') || parts.includes('Races')) return 'Species'
@@ -56,11 +60,11 @@ function setSelected(next) {
 function renderSearch(query) {
   const normalized = query.trim().toLowerCase(); selected = -1
   const bookmarks = new Set([...syncedBookmarks, ...(()=>{ try { const value=JSON.parse(localStorage.getItem('geor_archive_bookmarks_v1')||'[]'); return Array.isArray(value)?value.map(item=>item?.url).filter(Boolean):[] } catch { return [] } })()])
-  if (normalized.length < 2 && activeFilter !== 'saved') { visibleResults = []; results.innerHTML = ''; empty.classList.add('hidden'); status.textContent = `${index.length.toLocaleString()} entries ready`; renderRecent(); return }
-  visibleResults = index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: normalized.length >= 2 ? scoreEntry(entry, normalized) : 0 })).filter(entry => entry.score >= 0 && (activeFilter === 'all' || activeFilter === 'saved' ? activeFilter !== 'saved' || bookmarks.has(entry.url) : entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
+  if (normalized.length < 2 && activeFilter !== 'saved') { visibleResults = []; results.innerHTML = ''; empty.classList.add('hidden'); status.textContent = `${(index.length + extraIndex.length).toLocaleString()} entries ready`; renderRecent(); return }
+  visibleResults = [...index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: normalized.length >= 2 ? scoreEntry(entry, normalized) : 0 })), ...mergeExtra(index, extraIndex, normalized).map(entry => ({ ...entry, category: categoryFor(entry.url) }))].filter(entry => entry.score >= 0 && (activeFilter === 'all' || activeFilter === 'saved' ? activeFilter !== 'saved' || bookmarks.has(entry.url) : entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
   status.textContent = `${visibleResults.length}${visibleResults.length === 60 ? '+' : ''} result${visibleResults.length === 1 ? '' : 's'}`
   empty.classList.toggle('hidden', visibleResults.length > 0); recentSection.classList.add('hidden')
-  results.innerHTML = visibleResults.map((entry, i) => `<a data-result="${i}" aria-selected="false" href="${escapeHtml(entry.url)}" class="result-row group grid sm:grid-cols-[1fr_auto] gap-2 rounded-xl border border-gold/10 bg-cream/[.025] p-4 hover:border-gold/35 transition"><div class="min-w-0"><div class="flex items-center gap-2"><span class="text-[9px] tracking-[.2em] text-gold">${escapeHtml(entry.category.toUpperCase())}</span></div><h2 class="font-display text-base mt-1">${highlight(entry.title, normalized)}</h2><p class="archive-path text-xs text-cream/35 mt-1"><span>${escapeHtml(decodeURIComponent(entry.url).replace(/^\/wiki\//,'').replace(/\/$/, '').replaceAll('/',' › '))}</span></p></div><span class="self-center text-gold group-hover:translate-x-1 transition" aria-hidden="true">→</span></a>`).join('')
+  results.innerHTML = visibleResults.map((entry, i) => `<a data-result="${i}" aria-selected="false" href="${escapeHtml(entry.url)}" class="result-row group grid sm:grid-cols-[1fr_auto] gap-2 rounded-xl border border-gold/10 bg-cream/[.025] p-4 hover:border-gold/35 transition"><div class="min-w-0"><div class="flex items-center gap-2"><span class="text-[9px] tracking-[.2em] text-gold">${escapeHtml(entry.category.toUpperCase())}</span>${entry.kind ? `<span class=\"text-[9px] tracking-[.2em] text-cream/40 border border-gold/20 rounded-full px-2 py-0.5\">${escapeHtml(kindBadge(entry.kind))}</span>` : ''}</div><h2 class="font-display text-base mt-1">${highlight(entry.title, normalized)}</h2><p class="archive-path text-xs text-cream/35 mt-1"><span>${escapeHtml(decodeURIComponent(entry.url).replace(/^\/wiki\//,'').replace(/\/$/, '').replaceAll('/',' › '))}</span></p></div><span class="self-center text-gold group-hover:translate-x-1 transition" aria-hidden="true">→</span></a>`).join('')
   results.querySelectorAll('[data-result]').forEach(row => row.addEventListener('click', () => saveRecent(query)))
 }
 function runSearch() { clearTimeout(timer); timer = setTimeout(() => { const query = input.value; const url = new URL(location.href); query.trim() ? url.searchParams.set('q', query.trim()) : url.searchParams.delete('q'); history.replaceState(null,'',url); renderSearch(query) }, 70) }
@@ -79,6 +83,7 @@ try {
   if (response.status === 401) { location.href='/?next='+encodeURIComponent('/search'); throw new Error('Authentication required') }
   if (!response.ok) throw new Error('The index could not be opened')
   const data = await response.json(); index = Array.isArray(data) ? data.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : []
+  try { const extraResponse = await fetch('/wiki/search-extra-index.json', { credentials:'same-origin' }); if (extraResponse.ok) { const extraData = await extraResponse.json(); extraIndex = Array.isArray(extraData) ? extraData.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : [] } } catch { extraIndex = [] }
   fetch('/api/archive-state',{credentials:'same-origin'}).then(response=>response.ok?response.json():null).then(data=>{ if(data){ syncedBookmarks=new Set((data.saved||[]).map(item=>item.path)); if(activeFilter==='saved') renderSearch(input.value) } }).catch(()=>{})
   input.value = new URLSearchParams(location.search).get('q') || ''; results.innerHTML = ''; renderRecent(); renderSearch(input.value); input.focus({preventScroll:true})
 } catch (error) { results.innerHTML = `<div class="rounded-xl border border-red-400/20 bg-red-400/5 p-5 text-sm text-red-200">${escapeHtml(error.message)}</div>`; status.textContent='Index unavailable' }
