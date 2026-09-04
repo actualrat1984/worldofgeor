@@ -24,6 +24,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Whiteboards', subtitle: 'Plot schemes on an infinite canvas', url: '/boards', sigil: '▦', group: 'ROOM', keywords: 'whiteboard boards canvas cards arrows plot scheme' },
     { title: 'Story Arcs', subtitle: 'Chart master plots, subplots, and open threads', url: '/arcs', sigil: '✧', group: 'ROOM', keywords: 'story arcs plots subplots threads master tree' },
     { title: 'Quest Board', subtitle: 'Read every open contract, arc by arc', url: '/quests', sigil: '❧', group: 'ROOM', keywords: 'quests board contracts guild threads arcs settled' },
+    { title: 'System Statblocks', subtitle: 'Magic ranks, species traits, and currencies as game blocks', url: '/statblocks', sigil: '⚖', group: 'ROOM', keywords: 'statblocks systems magic ranks species traits currencies homebrew blocks' },
     { title: 'Reader’s Primer', subtitle: 'See what Arcady may know — sealed and opened', url: '/primer', sigil: '◐', group: 'ROOM', keywords: 'primer reader spoilers secrets revealed seals reading' },
     { title: 'Author’s Desk', subtitle: 'Notes, arcs, ages, and seals in one command view', url: '/desk', sigil: '✍', group: 'ROOM', keywords: 'desk author command notes arcs timeline primer status' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },

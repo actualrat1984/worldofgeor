@@ -136,6 +136,13 @@ test('quest board routes are private and served behind the member gate', () => {
   }
 })
 
+// --- Wave F5: system statblock routes stay behind the member gate -----------
+test('system statblock routes are private and served behind the member gate', () => {
+  for (const path of ['/statblocks', '/statblocks/', '/statblocks.html', '/statblocks.js']) {
+    assert.equal(__test.isPrivatePath(path), true, path)
+  }
+})
+
 test('cross-origin mutations are rejected', () => {
   const same = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://worldofgeor.com' } })
   const cross = new Request('https://worldofgeor.com/api/logout', { method: 'POST', headers: { Origin: 'https://example.com' } })
