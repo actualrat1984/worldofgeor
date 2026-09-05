@@ -1,9 +1,10 @@
-import { kindBadge, mergeExtra } from './search-sources.js'
+import { closestTitle, kindBadge, mergeExtra, scoreEntry } from './search-sources.js'
 
 const input = document.getElementById('archiveSearch')
 const results = document.getElementById('searchResults')
 const status = document.getElementById('searchStatus')
 const empty = document.getElementById('searchEmpty')
+const didYouMean = document.getElementById('didYouMean')
 const recentSection = document.getElementById('recentSection')
 const recentEl = document.getElementById('recentSearches')
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char])
@@ -26,13 +27,8 @@ function categoryFor(url) {
   return parts[2] || 'Archive'
 }
 function tokens(value) { return value.toLowerCase().normalize('NFKD').replace(/[’']/g, '').split(/[^a-z0-9]+/).filter(Boolean) }
-function scoreEntry(entry, query) {
-  const title = entry.title.toLowerCase(); const path = decodeURIComponent(entry.url).toLowerCase(); const words = tokens(query)
-  if (!words.length) return 0
-  let score = title === query ? 1000 : title.startsWith(query) ? 600 : title.includes(query) ? 350 : 0
-  for (const word of words) { if (title === word) score += 220; else if (title.startsWith(word)) score += 140; else if (title.includes(word)) score += 80; if (path.includes(word)) score += 25; else return -1 }
-  return score - title.length / 100
-}
+// Typo-tolerant ranking (prefix + trigram fuzzy) lives in the shared
+// scoreEntry imported from search-sources.js — 100% local, no network.
 function highlight(title, query) {
   const words = tokens(query).sort((a,b) => b.length-a.length).slice(0,5)
   if (!words.length) return escapeHtml(title)
@@ -64,13 +60,26 @@ function renderSearch(query) {
   visibleResults = [...index.map(entry => ({ ...entry, category: categoryFor(entry.url), score: normalized.length >= 2 ? scoreEntry(entry, normalized) : 0 })), ...mergeExtra(index, extraIndex, normalized).map(entry => ({ ...entry, category: categoryFor(entry.url) }))].filter(entry => entry.score >= 0 && (activeFilter === 'all' || activeFilter === 'saved' ? activeFilter !== 'saved' || bookmarks.has(entry.url) : entry.category === activeFilter)).sort((a,b) => b.score-a.score || a.title.localeCompare(b.title)).slice(0,60)
   status.textContent = `${visibleResults.length}${visibleResults.length === 60 ? '+' : ''} result${visibleResults.length === 1 ? '' : 's'}`
   empty.classList.toggle('hidden', visibleResults.length > 0); recentSection.classList.add('hidden')
+  renderSuggestion(query, normalized, visibleResults.length)
   results.innerHTML = visibleResults.map((entry, i) => `<a data-result="${i}" aria-selected="false" href="${escapeHtml(entry.url)}" class="result-row group grid sm:grid-cols-[1fr_auto] gap-2 rounded-xl border border-gold/10 bg-cream/[.025] p-4 hover:border-gold/35 transition"><div class="min-w-0"><div class="flex items-center gap-2"><span class="text-[9px] tracking-[.2em] text-gold">${escapeHtml(entry.category.toUpperCase())}</span>${entry.kind ? `<span class=\"text-[9px] tracking-[.2em] text-cream/60 border border-gold/20 rounded-full px-2 py-0.5\">${escapeHtml(kindBadge(entry.kind))}</span>` : ''}</div><h2 class="font-display text-base mt-1">${highlight(entry.title, normalized)}</h2><p class="archive-path text-xs text-cream/60 mt-1"><span>${escapeHtml(decodeURIComponent(entry.url).replace(/^\/wiki\//,'').replace(/\/$/, '').replaceAll('/',' › '))}</span></p></div><span class="self-center text-gold group-hover:translate-x-1 transition" aria-hidden="true">→</span></a>`).join('')
   results.querySelectorAll('[data-result]').forEach(row => row.addEventListener('click', () => saveRecent(query)))
 }
 function runSearch() { clearTimeout(timer); timer = setTimeout(() => { const query = input.value; const url = new URL(location.href); query.trim() ? url.searchParams.set('q', query.trim()) : url.searchParams.delete('q'); history.replaceState(null,'',url); renderSearch(query) }, 70) }
 
+// Zero-result recovery: suggest the closest local title. The button
+// re-runs the search with the suggestion — everything stays on-device.
+function renderSuggestion(query, normalized, resultCount) {
+  if (!didYouMean) return
+  if (resultCount > 0 || normalized.length < 2 || !(index.length || extraIndex.length)) { didYouMean.innerHTML = ''; didYouMean.classList.add('hidden'); return }
+  const suggestion = closestTitle(query.trim(), [...index, ...extraIndex])
+  if (!suggestion) { didYouMean.innerHTML = ''; didYouMean.classList.add('hidden'); return }
+  didYouMean.innerHTML = `<button type="button" data-suggest="${escapeHtml(suggestion.title)}" class="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-5 py-2 text-xs tracking-widest text-gold hover:bg-gold/20 transition">Did you mean &ldquo;${escapeHtml(suggestion.title)}&rdquo;?</button>`
+  didYouMean.classList.remove('hidden')
+  didYouMean.querySelector('[data-suggest]').addEventListener('click', () => { input.value = suggestion.title; runSearch(); input.focus() })
+}
+
 input.addEventListener('input', runSearch)
-input.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); setSelected(selected + 1) } else if (event.key === 'ArrowUp') { event.preventDefault(); setSelected(selected - 1) } else if (event.key === 'Enter' && selected >= 0) { event.preventDefault(); saveRecent(input.value); location.href = visibleResults[selected].url } else if (event.key === 'Escape') { input.value = ''; runSearch() } })
+input.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); setSelected(selected + 1) } else if (event.key === 'ArrowUp') { event.preventDefault(); setSelected(selected - 1) } else if (event.key === 'Home') { event.preventDefault(); setSelected(0) } else if (event.key === 'End') { event.preventDefault(); setSelected(visibleResults.length - 1) } else if (event.key === 'Enter' && selected >= 0) { event.preventDefault(); saveRecent(input.value); location.href = visibleResults[selected].url } else if (event.key === 'Escape') { input.value = ''; runSearch(); input.focus() } })
 document.addEventListener('keydown', event => { if (event.key === '/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)) { event.preventDefault(); input.focus() } })
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { activeFilter = button.dataset.filter; document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button))); renderSearch(input.value) }))
 window.addEventListener('geor:bookmarks-updated', () => { if (activeFilter === 'saved') renderSearch(input.value) })
