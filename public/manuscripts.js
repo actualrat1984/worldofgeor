@@ -2,6 +2,8 @@
 // can verify path shaping, content building, and list rendering
 // without a browser. Browser rendering only runs when `document` exists.
 import { escapeHtml } from './timeline.js'
+import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
+import { initInventoryPanel } from './inventory.js'
 
 export const MANUSCRIPT_ROOT = 'Books'
 export const MANUSCRIPT_BODY_MAX = 100000
@@ -88,6 +90,7 @@ async function initManuscripts() {
   let files = []
   let selectedPath = null
   let saveTimer = null
+  let repaintMentions = () => {}
 
   const setStatus = message => { if (status) status.textContent = message }
   const draftKey = () => selectedPath
@@ -142,6 +145,7 @@ async function initManuscripts() {
         setStatus('')
       }
       paint()
+      repaintMentions()
       await paintVersion(selectedPath)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'The chapter could not be opened')
@@ -183,11 +187,25 @@ async function initManuscripts() {
     bodyInput.value = ''
     paint()
     void paintVersion(null)
+    repaintMentions()
     bookInput.focus()
     setStatus('A fresh chapter — save it to keep it in the archive.')
   })
 
   for (const input of [titleInput, bodyInput]) input.addEventListener('input', queueAutosave)
+
+  // Wave H11a: @mention autocomplete from the gated wiki index, with the
+  // linked-folios line repainted as the chapter text changes; inventories
+  // attach per-member packs to entity folios (device-local, honestly labeled).
+  const mentionsLine = document.getElementById('msMentions')
+  let mentionLookup = new Map()
+  repaintMentions = () => paintLinkedFolios(mentionsLine, bodyInput.value, mentionLookup)
+  initMentionAutocomplete(bodyInput, { onChange: lookup => {
+    if (lookup instanceof Map) mentionLookup = lookup
+    paintLinkedFolios(mentionsLine, bodyInput.value, mentionLookup)
+  } })
+  bodyInput.addEventListener('input', () => paintLinkedFolios(mentionsLine, bodyInput.value, mentionLookup))
+  initInventoryPanel(document.getElementById('invPanel'))
 
   form.addEventListener('submit', async event => {
     event.preventDefault()

@@ -75,6 +75,8 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/trees.js',
   '/notebook.js',
   '/manuscripts.js',
+  '/mentions.js',
+  '/inventory.js',
   '/boards.js',
   '/webs.js',
   '/gallery.js',

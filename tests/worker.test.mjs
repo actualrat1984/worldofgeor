@@ -85,6 +85,8 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/manuscripts/'), true)
   assert.equal(__test.isPrivatePath('/manuscripts.html'), true)
   assert.equal(__test.isPrivatePath('/manuscripts.js'), true)
+  assert.equal(__test.isPrivatePath('/mentions.js'), true)
+  assert.equal(__test.isPrivatePath('/inventory.js'), true)
   assert.equal(__test.isPrivatePath('/boards'), true)
   assert.equal(__test.isPrivatePath('/boards/'), true)
   assert.equal(__test.isPrivatePath('/boards.html'), true)

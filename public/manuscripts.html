@@ -70,12 +70,42 @@
               <span class="text-[10px] tracking-[.25em] text-cream/40">CHAPTER TEXT</span>
               <textarea id="msBody" rows="16" placeholder="It began with…" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50 font-serif"></textarea>
             </label>
+            <p id="msMentions" class="text-xs text-cream/40 leading-relaxed"><span class="text-cream/30">Type @ and a folio name — matches link here.</span></p>
             <p id="msVersion" role="status" class="text-xs text-cream/40">A new chapter — save it to begin its versions.</p>
             <div class="flex items-center gap-3 flex-wrap">
               <button id="msSave" type="submit" class="text-xs bg-gold text-ink rounded-full px-5 py-2.5 font-semibold">SAVE TO ARCHIVE</button>
             </div>
           </form>
         </div>
+        <section id="invPanel" aria-label="Entity inventory" class="mt-6 rounded-xl border border-gold/10 p-5">
+          <p class="text-gold text-[10px] tracking-[.3em] font-semibold">ENTITY INVENTORY · PER MEMBER</p>
+          <h2 class="font-display text-xl font-bold mt-2">PACKS FOR A FOLIO</h2>
+          <p class="text-xs text-cream/40 mt-2">Attach a structured item list to a character or nation folio. Kept on this device only — per member, per folio.</p>
+          <label class="flex flex-col gap-2 mt-4">
+            <span class="text-[10px] tracking-[.25em] text-cream/40">FOLIO URL</span>
+            <input data-inventory-entity type="text" maxlength="500" placeholder="/wiki/World/Characters/…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+          </label>
+          <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_110px] mt-4">
+            <label class="flex flex-col gap-2">
+              <span class="text-[10px] tracking-[.25em] text-cream/40">ITEM</span>
+              <input data-inventory-name type="text" maxlength="120" placeholder="Emberglass lantern…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+            </label>
+            <label class="flex flex-col gap-2">
+              <span class="text-[10px] tracking-[.25em] text-cream/40">QTY</span>
+              <input data-inventory-qty type="number" min="1" max="9999" value="1" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+            </label>
+          </div>
+          <label class="flex flex-col gap-2 mt-4">
+            <span class="text-[10px] tracking-[.25em] text-cream/40">NOTE (OPTIONAL)</span>
+            <input data-inventory-note type="text" maxlength="500" placeholder="Where it was found…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+          </label>
+          <div class="flex items-center gap-3 flex-wrap mt-4">
+            <button data-inventory-add type="button" class="text-xs bg-gold text-ink rounded-full px-5 py-2.5 font-semibold">PACK ITEM</button>
+          </div>
+          <p data-inventory-status role="status" aria-live="polite" class="text-xs text-cream/40 mt-3"></p>
+          <div data-inventory-list class="mt-3 rounded-xl border border-gold/10 divide-y divide-gold/10 overflow-hidden"></div>
+          <p data-inventory-count class="text-[10px] tracking-[.2em] text-cream/30 mt-3"></p>
+        </section>
         <footer class="mt-12 text-center">
           <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
           <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>
