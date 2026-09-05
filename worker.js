@@ -19,6 +19,12 @@ const MAP_DIMENSIONS = Object.freeze({
   grimmel: { width: 3840, height: 5715 },
 });
 const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-wave-g', action: 'feature', path: '/audio', summary: 'Calendar, audio library, offline reading, deeper search, and admin charts rounded out the archive system layer', created_at: '2026-09-05T00:00:00Z' },
+  { id: 'release-wave-f', action: 'feature', path: '/arcs', summary: 'Story arcs, reader primer, author desk, quest board, and game statblocks opened the play folios', created_at: '2026-09-04T12:00:00Z' },
+  { id: 'release-wave-e', action: 'feature', path: '/manuscripts', summary: 'Manuscripts, notebook, whiteboards, marginalia, and the prompt oracle opened the writing studio', created_at: '2026-09-03T18:00:00Z' },
+  { id: 'release-wave-d', action: 'feature', path: '/gallery', summary: 'Family trees, diplomacy webs, and the character gallery mapped the peoples of the archive', created_at: '2026-09-03T04:00:00Z' },
+  { id: 'release-wave-c', action: 'feature', path: '/timeline', summary: 'Timeline of the Ages, chronicles, atlas chaining, and the 486-nation gazetteer charted time and space', created_at: '2026-09-03T02:00:00Z' },
+  { id: 'release-wave-b', action: 'feature', path: '/wiki/', summary: 'Article layouts, sealed secrets, related lore, and reader polish rebuilt every article page', created_at: '2026-09-03T00:30:00Z' },
   { id: 'release-unified-archive', action: 'feature', path: '/dashboard', summary: 'A unified archive shell, cross-device collections, contextual lore tools, deep links, and an editorial workflow connected every room', created_at: '2026-09-02T20:00:00Z' },
   { id: 'release-reader-experience', action: 'feature', path: '/dashboard', summary: 'Personal reading trails, saved folios, richer search, fullscreen maps, and recoverable Atlas drafts joined the archive', created_at: '2026-09-02T12:00:00Z' },
   { id: 'release-compass', action: 'feature', path: '/search', summary: 'Archive Compass added instant Cmd/Ctrl+K navigation across every private room', created_at: '2026-09-01T13:10:00Z' },
