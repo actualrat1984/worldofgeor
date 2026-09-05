@@ -31,4 +31,5 @@ run([path.join(loreSite, 'generate_nav.py'), '--write'], 'Wiki navigation genera
 run(['-m', 'mkdocs', 'build', '-f', wikiConfig, '--site-dir', wikiOutput], 'MkDocs build')
 run([path.join(loreSite, 'optimize_assets.py'), wikiOutput], 'Wiki asset optimization')
 run([path.join(root, 'scripts', 'generate-wiki-index.py')], 'Wiki index generation')
+run([path.join(root, 'scripts', 'generate_secrets_index.py')], 'Secrets index generation')
 

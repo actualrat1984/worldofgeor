@@ -65,3 +65,25 @@ export function chainUiVisible(registry = FOLIO_REGISTRY) {
   if (!registry || typeof registry !== 'object') return false
   return Object.keys(registry).length > 0
 }
+
+// --- Wave H10: hidden-lore pin badges (leak-proof) ------------------------
+// secretsIndex maps article URL -> hidden-passage COUNT (built by
+// scripts/generate_secrets_index.py, fetched gated). Counts only — no
+// secret bytes ever flow through here, and lookups go through the same
+// pinArticleUrl gate, so hostile pin urls and hostile index keys resolve
+// to 0 and never render.
+export function secretCountForUrl(url, secretsIndex) {
+  if (typeof url !== 'string' || !url.startsWith('/wiki/')) return 0
+  if (!secretsIndex || typeof secretsIndex !== 'object' || Array.isArray(secretsIndex)) return 0
+  const count = secretsIndex[url]
+  return Number.isInteger(count) && count > 0 ? count : 0
+}
+
+export function pinSecretCount(pin, secretsIndex) {
+  return secretCountForUrl(pinArticleUrl(pin), secretsIndex)
+}
+
+export function formatSecretBadge(count) {
+  if (!Number.isInteger(count) || count <= 0) return ''
+  return `🔒 ${count} hidden ${count === 1 ? 'passage' : 'passages'}`
+}

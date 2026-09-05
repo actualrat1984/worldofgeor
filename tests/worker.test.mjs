@@ -614,12 +614,19 @@ class FakeSecretsRewriter {
         const absolute = article.index + h1.index
         const attrs = parseFakeAttrs(h1[0])
         let beforeFragment = ''
+        let afterFragment = ''
         handle({
           getAttribute: name => (name in attrs ? attrs[name] : null),
           setAttribute: (name, value) => { attrs[name] = value },
           before: fragment => { beforeFragment += fragment },
+          after: fragment => { afterFragment = fragment + afterFragment },
         })
         html = `${html.slice(0, absolute)}${beforeFragment}<h1${renderFakeAttrs(attrs)}>${html.slice(absolute + h1[0].length)}`
+        const h1close = html.indexOf('</h1>', absolute)
+        if (h1close >= 0 && afterFragment) {
+          const h1end = h1close + '</h1>'.length
+          html = `${html.slice(0, h1end)}${afterFragment}${html.slice(h1end)}`
+        }
       } else if (selector === 'div.geor-secret' || selector === 'div.geor-secret-gm') {
         const token = selector === 'div.geor-secret' ? 'geor-secret' : 'geor-secret-gm'
         const matches = [...html.matchAll(/<div(\s[^>]*)?>([\s\S]*?)<\/div>/gi)]
@@ -995,12 +1002,19 @@ class FakeRelatedRewriter {
         const absolute = article.index + h1.index
         const attrs = parseFakeAttrs(h1[0])
         let beforeFragment = ''
+        let afterFragment = ''
         handle({
           getAttribute: name => (name in attrs ? attrs[name] : null),
           setAttribute: (name, value) => { attrs[name] = value },
           before: fragment => { beforeFragment += fragment },
+          after: fragment => { afterFragment = fragment + afterFragment },
         })
         html = `${html.slice(0, absolute)}${beforeFragment}<h1${renderFakeAttrs(attrs)}>${html.slice(absolute + h1[0].length)}`
+        const h1close = html.indexOf('</h1>', absolute)
+        if (h1close >= 0 && afterFragment) {
+          const h1end = h1close + '</h1>'.length
+          html = `${html.slice(0, h1end)}${afterFragment}${html.slice(h1end)}`
+        }
       } else if (selector === 'article') {
         if (!/<article(\s[^>]*)?>/i.test(html)) continue
         let tail = ''

@@ -1080,6 +1080,32 @@ function lockedSecretInner(id) {
   if (!id) return title;
   return `${title}<p class="geor-secret-locked-action"><button type="button" class="geor-secret-reveal" data-geor-reveal="${id}" onclick="fetch('/api/secrets/reveal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'${id}'})}).then(function(r){if(r.ok){location.reload()}})">Reveal</button></p>`;
 }
+// Reveal-state preview badge (Wave H10): counts only, ZERO secret bytes.
+// Counts <div class="geor-secret"> blocks (never geor-secret-gm notes) in
+// raw article HTML; revealed = owner sees all, else ids present in the
+// viewer's reveal set. Both numbers are plain integers — safe to
+// interpolate into badge HTML without escaping.
+function countArticleSecrets(html, revealedSet, isOwner) {
+  const revealed = revealedSet instanceof Set ? revealedSet : new Set();
+  const ids = [];
+  if (typeof html === 'string') {
+    for (const match of html.matchAll(/<div\b([^>]*)>/gi)) {
+      const attrs = match[1] || '';
+      const classMatch = attrs.match(/\bclass\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const classes = (classMatch ? (classMatch[1] ?? classMatch[2] ?? classMatch[3] ?? '') : '').split(/\s+/).filter(Boolean);
+      if (!classes.includes('geor-secret') || classes.includes('geor-secret-gm')) continue;
+      const idMatch = attrs.match(/\bdata-secret\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+      const raw = idMatch ? (idMatch[1] ?? idMatch[2] ?? idMatch[3] ?? '') : '';
+      ids.push(cleanSecretId(raw));
+    }
+  }
+  const total = ids.length;
+  const shown = isOwner ? total : ids.filter(id => id && revealed.has(id)).length;
+  return { total, revealed: shown };
+}
+function secretBadgeHtml(total, revealedCount) {
+  return `<p class="geor-secret-badge">🔒 ${total} hidden passages (${revealedCount} revealed)</p>`;
+}
 // revealed: secret ids the viewer may read (own reveals + global '*' reveals).
 // Fail-closed: any DB trouble returns a locked, non-owner context.
 async function getSecretsContext(request, env) {
@@ -1208,6 +1234,23 @@ async function withPrivateArchiveShell(response, pathname = '', secrets = null, 
       else if (typeof element.removeAttribute === 'function') element.removeAttribute('data-secret');
       element.setInnerContent(lockedSecretInner(id), { html: true });
     } });
+  // Wave H10 reveal-state preview: badge counts computed server-side from
+  // the buffered body BEFORE the streaming rewrite — counts only, zero
+  // secret bytes by construction (countArticleSecrets returns integers).
+  let secretCounts = { total: 0, revealed: 0 };
+  try {
+    secretCounts = countArticleSecrets(await response.clone().text(), revealed, secretsCtx.isOwner);
+  } catch { secretCounts = { total: 0, revealed: 0 }; }
+  if (secretCounts.total > 0) {
+    // Article-header badge: independent of the layout hero above so pages
+    // with secrets but no layout still preview honestly. One badge only.
+    let badgeApplied = false;
+    rewriter = rewriter.on('article h1', { element(element) {
+      if (badgeApplied) return;
+      badgeApplied = true;
+      element.after(secretBadgeHtml(secretCounts.total, secretCounts.revealed), { html: true });
+    } });
+  }
   return rewriter.transform(response);
 }
 
@@ -2830,6 +2873,8 @@ export const __test = {
   cleanThreadState,
   cleanThreadTitle,
   cleanSecretId,
+  countArticleSecrets,
+  secretBadgeHtml,
   cleanArchiveTitle,
   cleanInviteCode,
   cleanBoardArrows,

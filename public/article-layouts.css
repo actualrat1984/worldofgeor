@@ -49,6 +49,14 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
     padding: 1rem;
   }
 }
+/* Wave H10 — reveal-state preview badge. Counts only (never secret bytes);
+   locked cards carry zero secret bytes like the Wave B2 cards below. */
+.geor-secret-badge {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: #d9b77a;
+}
 /* Wave B2 — spoiler-block secrets. Locked cards carry zero secret bytes;
    reveal is a POST to /api/secrets/reveal (member) or /api/secrets/set
    (owner global). GM notes never leave the server for non-owners. */
