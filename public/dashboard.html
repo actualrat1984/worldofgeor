@@ -81,6 +81,20 @@
           <div class="p-5 md:p-6"><div class="flex items-center justify-between gap-3"><h3 class="text-tiny tracking-[.22em] text-gold">SAVED FOLIOS</h3><span id="savedCount" class="font-mono text-tiny text-cream/60">0 saved</span></div><div id="savedFolios" class="mt-3 space-y-2"><p class="text-sm text-cream/60">Save a wiki folio from its reading toolbar to keep it here.</p><a href="/wiki/" class="inline-block text-xs border border-gold/25 text-gold rounded-full px-4 py-1.5 hover:bg-gold/10">Open the wiki</a></div></div>
         </div>
       </section>
+      <section class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden" aria-labelledby="taskTitle">
+        <div class="px-5 md:px-6 py-4 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
+          <div><p class="text-tiny tracking-[.24em] text-gold">PERSONAL · KEPT ON THIS DEVICE</p><h2 id="taskTitle" class="font-display text-18 mt-1">Reading tasks</h2></div>
+          <span id="taskCount" class="font-mono text-tiny text-cream/60" role="status" aria-live="polite">0 open</span>
+        </div>
+        <div class="p-5 md:p-6">
+          <form id="taskForm" class="flex gap-2">
+            <input id="taskInput" type="text" maxlength="280" placeholder="Add a task — e.g. finish the Silver Bride folio" aria-label="New task" autocomplete="off" class="min-w-0 flex-1 rounded-xl border border-gold/15 bg-ink px-4 py-2.5 text-sm placeholder:text-cream/60 focus:border-gold/50" />
+            <button type="submit" class="shrink-0 text-xs border border-gold/30 text-gold px-4 py-2.5 rounded-full font-semibold hover:bg-gold/10">Add</button>
+          </form>
+          <p class="mt-2 text-tiny text-cream/45">Private to your login, kept on this device only — tasks never leave your browser.</p>
+          <div id="taskList" class="mt-4 space-y-2"></div>
+        </div>
+      </section>
       <section class="grid lg:grid-cols-2 gap-4" aria-label="Personal archive overview">
         <div class="rounded-2xl border border-gold/15 bg-gradient-to-br from-gold/[0.07] to-transparent overflow-hidden">
           <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-tiny tracking-[.22em] text-gold">ARCHIVE PULSE</p><h2 class="font-display text-18 mt-1">New and recent</h2></div><button id="markArchiveSeen" type="button" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Mark seen</button></div>
@@ -264,15 +278,47 @@
     const safeLocalItems=(key,limit=8)=>{ try{ const items=JSON.parse(localStorage.getItem(key)||'[]'); return Array.isArray(items)?items.filter(item=>item&&typeof item.title==='string'&&typeof item.url==='string'&&item.url.startsWith('/')).slice(0,limit):[] }catch{return[]} };
     let syncedArchive=null;
     const renderArchiveTrail=()=>{
-      const localTrail=safeLocalItems('geor_archive_trail_v1',6); const localSaved=safeLocalItems('geor_archive_bookmarks_v1',8);
+      const localTrail=safeLocalItems('geor_archive_trail_v1',5); const localSaved=safeLocalItems('geor_archive_bookmarks_v1',8);
       const merge=(local,remote,limit)=>{ const seen=new Set(); return [...local,...(remote||[]).map(item=>({title:item.title,url:item.path,progress:item.progress}))].filter(item=>item.url&&!seen.has(item.url)&&seen.add(item.url)).slice(0,limit) };
-      const trail=merge(localTrail,syncedArchive?.recent,6); const saved=merge(localSaved,syncedArchive?.saved,8);
+      const trail=merge(localTrail,syncedArchive?.recent,5); const saved=merge(localSaved,syncedArchive?.saved,8);
       const makeRows=(target,items,empty)=>{ target.replaceChildren(); if(!items.length){ const p=document.createElement('p'); p.className='text-sm text-cream/60'; p.textContent=empty; target.append(p); const act=document.createElement('a'); act.className='inline-block mt-3 text-xs border border-gold/25 text-gold rounded-full px-4 py-1.5 hover:bg-gold/10'; if(target.id==='readingTrail'){ act.href='/search'; act.textContent='Find a folio'; } else { act.href='/wiki/'; act.textContent='Open the wiki'; } target.append(act); return } items.forEach((item,index)=>{ const link=document.createElement('a'); link.href=item.url; link.className='group flex items-center justify-between gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-3 hover:border-gold/30'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block truncate text-sm font-medium text-cream/80'; title.textContent=item.title; const path=document.createElement('small'); path.className='block truncate mt-1 text-tiny text-cream/60'; path.textContent=decodeURIComponent(item.url).replace(/^\/wiki\//,'').replace(/\/$/,'').replaceAll('/',' › ')||'Archive'; const arrow=document.createElement('span'); arrow.className='text-gold group-hover:translate-x-1 transition'; arrow.ariaHidden='true'; arrow.textContent=index===0&&target.id==='readingTrail'?'CONTINUE →':'→'; copy.append(title,path); link.append(copy,arrow); target.append(link) }) };
       makeRows(document.getElementById('readingTrail'),trail,'Your recently opened folios will appear here.'); makeRows(document.getElementById('savedFolios'),saved,'Save a wiki folio from its reading toolbar to keep it here.'); document.getElementById('savedCount').textContent=`${saved.length} saved`;
     };
     renderArchiveTrail(); window.addEventListener('geor:trail-updated',renderArchiveTrail); window.addEventListener('geor:bookmarks-updated',renderArchiveTrail);
     window.addEventListener('geor:archive-synced',event=>{ syncedArchive=event.detail; renderArchiveTrail(); renderPulse(); });
     document.getElementById('clearTrail').onclick=()=>{ localStorage.removeItem('geor_archive_trail_v1'); renderArchiveTrail(); };
+    let memberEmail='';
+    const TASKS_LIMIT=50;
+    const taskKeyFor=(email)=>'geor_tasks_v1:'+String(email||'anon').toLowerCase();
+    const parseTasks=(raw)=>{ try{ const items=JSON.parse(raw||'[]'); if(!Array.isArray(items)) return []; return items.filter(task=>task&&typeof task.text==='string'&&task.text.trim()).slice(0,TASKS_LIMIT).map(task=>({id:String(task.id||Math.random().toString(36).slice(2)),text:task.text.trim().slice(0,280),done:task.done===true})) }catch{return[]} };
+    const loadTasks=()=>parseTasks(localStorage.getItem(taskKeyFor(memberEmail)));
+    const saveTasks=(items)=>{ try{ localStorage.setItem(taskKeyFor(memberEmail),JSON.stringify(items.slice(0,TASKS_LIMIT))) }catch{} };
+    const addTaskTo=(items,text)=>{ const clean=String(text||'').trim().slice(0,280); if(!clean) return items; return [{id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),text:clean,done:false},...items].slice(0,TASKS_LIMIT) };
+    const toggleTaskIn=(items,id)=>items.map(task=>task.id===id?{...task,done:!task.done}:task);
+    const removeTaskFrom=(items,id)=>items.filter(task=>task.id!==id);
+    const renderTasks=()=>{
+      const target=document.getElementById('taskList'); if(!target) return;
+      const items=loadTasks();
+      document.getElementById('taskCount').textContent=`${items.filter(task=>!task.done).length} open`;
+      target.replaceChildren();
+      if(!items.length){
+        const empty=document.createElement('p'); empty.className='text-sm text-cream/60'; empty.textContent='No tasks yet. Jot down the next folio to read or draft to review.';
+        const act=document.createElement('a'); act.href='/wiki/'; act.className='inline-block mt-3 text-xs border border-gold/25 text-gold rounded-full px-4 py-1.5 hover:bg-gold/10'; act.textContent='Open the wiki';
+        const hint=document.createElement('p'); hint.className='text-xs text-cream/45 mt-2'; hint.textContent='Or type above and press Add — tasks stay on this device.';
+        target.append(empty,act,hint); return;
+      }
+      items.forEach(task=>{
+        const row=document.createElement('div'); row.className='flex items-center gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-2.5';
+        const toggle=document.createElement('button'); toggle.type='button'; toggle.setAttribute('aria-label',(task.done?'Reopen task: ':'Mark done: ')+task.text); toggle.className='shrink-0 w-5 h-5 rounded-full border text-xs leading-none '+(task.done?'bg-gold border-gold text-ink':'border-gold/40 text-gold hover:border-gold'); toggle.textContent=task.done?'✓':'○';
+        toggle.onclick=()=>{ saveTasks(toggleTaskIn(loadTasks(),task.id)); renderTasks(); };
+        const label=document.createElement('span'); label.className='min-w-0 flex-1 truncate text-sm '+(task.done?'text-cream/60 line-through':'text-cream/80'); label.textContent=task.text;
+        const del=document.createElement('button'); del.type='button'; del.setAttribute('aria-label','Delete task: '+task.text); del.className='shrink-0 text-xs text-cream/45 hover:text-cream px-2 py-1'; del.textContent='✕';
+        del.onclick=()=>{ saveTasks(removeTaskFrom(loadTasks(),task.id)); renderTasks(); };
+        row.append(toggle,label,del); target.append(row);
+      });
+    };
+    document.getElementById('taskForm').addEventListener('submit',(event)=>{ event.preventDefault(); const input=document.getElementById('taskInput'); saveTasks(addTaskTo(loadTasks(),input.value)); input.value=''; renderTasks(); input.focus(); });
+    renderTasks();
     let recentMotion=[]; let pulseError=false;
     const renderPulse=()=>{
       const target=document.getElementById('archivePulse'); if(!target) return; const unseen=Array.isArray(syncedArchive?.unseen)?syncedArchive.unseen:[]; const feed=[...unseen.map(item=>({summary:item.summary,path:item.path,created_at:item.created_at,action:item.action,isNew:true})),...recentMotion.filter(motion=>!unseen.some(item=>item.path&&motion.path&&item.path===motion.path))].slice(0,8); target.replaceChildren();
@@ -317,12 +363,14 @@
       who.classList.remove('hidden');
       document.getElementById('dashName').textContent=j.user.email.split('@')[0];
       document.getElementById('setEmail').textContent=j.user.email;
+      memberEmail=j.user.email||'';
       if(j.user.email==='ichieisenheart@gmail.com'){
         document.getElementById('adminLink').classList.remove('hidden');
       }
       loadWorldStats();
       loadPersonalArchive();
       loadWorkflow();
+      renderTasks();
     }).catch(()=>{ location.href='/?next='+encodeURIComponent('/dashboard.html'); });
     document.getElementById('logout').onclick=async()=>{ await fetch('/api/logout',{method:'POST'}); location.href='/'; };
     const passwordDialog=document.getElementById('passwordDialog');
