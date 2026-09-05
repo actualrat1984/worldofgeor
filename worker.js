@@ -76,6 +76,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/marginalia.js',
   '/archive-compass.css',
   '/archive-compass.js',
+  '/admin-charts.js',
   '/article-layouts.css',
 ]);
 const ROUTE_ALIASES = new Map([

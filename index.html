@@ -119,6 +119,48 @@
     </div>
   </section>
 
+  <!-- Archive counts — static verified totals from the built wiki indexes (no fetch; count up on reveal) -->
+  <section id="archive-counts" class="border-b border-gold/10 bg-cream/[0.02]" aria-label="Archive totals">
+    <div class="max-w-[1280px] mx-auto px-6 py-10 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="13">13</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">AGES</p></div>
+      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="71">71</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">EVENTS</p></div>
+      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="486">486</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">NATIONS</p></div>
+      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="78">78</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">CHARACTERS</p></div>
+    </div>
+  </section>
+  <script>
+  (function () {
+    var strip = document.getElementById('archive-counts');
+    if (!strip) return;
+    var nums = Array.prototype.slice.call(strip.querySelectorAll('[data-count]'));
+    function finalText(el) { return Number(el.getAttribute('data-count')).toLocaleString('en-US'); }
+    function countUp(el) {
+      var target = Number(el.getAttribute('data-count'));
+      if (!Number.isFinite(target)) return;
+      if ((window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame) { el.textContent = finalText(el); return; }
+      el.textContent = '0';
+      var start = null, dur = 900;
+      function frame(t) {
+        if (start === null) start = t;
+        var p = Math.min((t - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased).toLocaleString('en-US');
+        if (p < 1) window.requestAnimationFrame(frame);
+      }
+      window.requestAnimationFrame(frame);
+    }
+    if (!('IntersectionObserver' in window)) { nums.forEach(function (el) { el.textContent = finalText(el); }); return; }
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        nums.forEach(countUp);
+        seen.disconnect();
+      });
+    }, { threshold: 0.3 });
+    seen.observe(strip);
+  })();
+  </script>
+
   <!-- Clear first-visit routes -->
   <section id="start" class="max-w-[1280px] mx-auto px-6 py-16 md:py-20" aria-labelledby="startTitle">
     <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">

@@ -151,6 +151,11 @@ test('audio library routes are private and served behind the member gate', () =>
   }
 })
 
+// --- Wave G5: admin charts asset stays behind the member gate ---------------
+test('admin charts asset is private and served behind the member gate', () => {
+  assert.equal(__test.isPrivatePath('/admin-charts.js'), true)
+})
+
 // --- Wave G1: calendar routes stay behind the member gate -------------------
 test('calendar routes are private and served behind the member gate', () => {
   for (const path of ['/calendar', '/calendar/', '/calendar.html', '/calendar.js']) {
