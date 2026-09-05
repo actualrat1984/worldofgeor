@@ -30,6 +30,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Author’s Desk', subtitle: 'Notes, arcs, ages, and seals in one command view', url: '/desk', sigil: '✍', group: 'ROOM', keywords: 'desk author command notes arcs timeline primer status' },
     { title: 'Audio Library', subtitle: 'Hear the story of Ge’or, chapter by chapter', url: '/audio', sigil: '♪', group: 'ROOM', keywords: 'audio music listen lore chapters voice library player' },
     { title: 'Diplomacy Webs', subtitle: 'Trace every pact and rivalry of Ge’or', url: '/webs', sigil: '🕸', group: 'ROOM', keywords: 'diplomacy webs factions relations allies rivals war pacts' },
+    { title: 'Relation Graph', subtitle: 'See every faction bond of Ge’or in one web', url: '/graph', sigil: '◈', group: 'ROOM', keywords: 'graph relations factions edges bonds network explorer' },
     { title: 'Character Gallery', subtitle: 'Browse every named soul of Ge’or', url: '/gallery', sigil: '◍', group: 'ROOM', keywords: 'characters gallery houses species nations people' },
     { title: 'Prompt Oracle', subtitle: 'Roll character, place, and conflict omens', url: '/oracle', sigil: '⚄', group: 'ROOM', keywords: 'oracle prompt roll random character place conflict tags omen' },
     { title: 'Battlestation', subtitle: 'Draft, review, and publish archive additions', url: '/app/', sigil: '⌬', group: 'CREATE', keywords: 'app write additions workspace workflow' },

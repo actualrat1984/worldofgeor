@@ -19,6 +19,7 @@ const expectedRooms = [
   { href: '/gazetteer', title: 'Gazetteer of Nations' },
   { href: '/trees', title: 'Family Trees' },
   { href: '/webs', title: 'Diplomacy Webs' },
+  { href: '/graph', title: 'Relation Graph' },
   { href: '/gallery', title: 'Character Gallery' },
   { href: '/oracle', title: 'Prompt Oracle' },
   { href: '/notebook', title: 'Notebook' },

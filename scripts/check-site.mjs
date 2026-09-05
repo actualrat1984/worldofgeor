@@ -30,6 +30,7 @@ const aliases = new Map([
   ['/boards', '/boards.html'],
   ['/chronicles', '/chronicles.html'],
   ['/webs', '/webs.html'],
+  ['/graph', '/graph.html'],
   ['/gallery', '/gallery.html'],
   ['/oracle', '/oracle.html'],
   ['/primer', '/primer.html'],
