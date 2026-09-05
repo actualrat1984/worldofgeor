@@ -137,17 +137,20 @@
     function countUp(el) {
       var target = Number(el.getAttribute('data-count'));
       if (!Number.isFinite(target)) return;
-      if ((window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame) { el.textContent = finalText(el); return; }
-      el.textContent = '0';
-      var start = null, dur = 900;
+      // Static verified numbers stay put unless animation can actually run:
+      // never blank them first, so a stalled frame loop cannot strand a 0.
+      if ((window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame || document.hidden) return;
+      var start = null, dur = 900, done = false;
       function frame(t) {
         if (start === null) start = t;
         var p = Math.min((t - start) / dur, 1);
         var eased = 1 - Math.pow(1 - p, 3);
         el.textContent = Math.round(target * eased).toLocaleString('en-US');
-        if (p < 1) window.requestAnimationFrame(frame);
+        if (p < 1) { window.requestAnimationFrame(frame); }
+        else { done = true; }
       }
       window.requestAnimationFrame(frame);
+      setTimeout(function () { if (!done) el.textContent = finalText(el); }, 2500);
     }
     if (!('IntersectionObserver' in window)) { nums.forEach(function (el) { el.textContent = finalText(el); }); return; }
     var seen = new IntersectionObserver(function (entries) {
