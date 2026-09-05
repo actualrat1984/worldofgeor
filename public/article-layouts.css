@@ -249,6 +249,35 @@ body.geor-layout-event h1.geor-hero-title { font-style: italic; }
 @media (min-width: 768px) { .tl-shadow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) { .tl-rail { scroll-behavior: auto; } }
 
+/* Wave H24 — print for worker-shelled wiki articles. Mirrors the
+   manuscripts.html @media print pattern: white page, black serif body,
+   compass/nav/chrome/popups hidden, article title + meta + body shown,
+   page-break rules for headings. Applies to every layout-classified
+   article the worker shell wraps. */
+@media print {
+  body { background: #fff !important; color: #000; }
+  body[class*="geor-layout-"] { background: #fff; color: #000; }
+  body[class*="geor-layout-"] article {
+    background: #fff;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    color: #000;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  header, nav, footer, .no-print,
+  .geor-toc, .geor-related,
+  .geor-secret-locked-action, .geor-secret-badge,
+  .geor-reading-progress,
+  [class*="compass"], [id*="compass"] { display: none !important; }
+  .geor-hero-eyebrow { color: #000; }
+  h1.geor-hero-title { color: #000; border-bottom-color: #000; font-size: 24px; }
+  body[class*="geor-layout-"] article a { color: #000; text-decoration: none; border: 0; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; color: #000; }
+  p, li { orphans: 3; widows: 3; }
+  table, figure, blockquote, pre { break-inside: avoid; page-break-inside: avoid; }
+}
+
 /* Wave C2 — Chronicles (public/chronicles.html only; ch- prefix).
    Event scrubber drives the same Leaflet CRS.Simple world folio the
    atlas viewer uses. tl- card prose is reused, not duplicated. */

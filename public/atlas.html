@@ -31,6 +31,21 @@
     .atlas-viewer:fullscreen{background:#0f0e0d;display:flex;flex-direction:column}.atlas-viewer:fullscreen #atlasMap{height:auto!important;flex:1}.atlas-viewer:fullscreen .atlas-fullscreen-hide{display:none}
     body.atlas-embedded>header,body.atlas-embedded>section:not(:has(#atlasViewer)),body.atlas-embedded>footer{display:none!important}body.atlas-embedded #atlasViewer{margin-top:0!important;border-radius:0!important;border:0!important;min-height:100vh}body.atlas-embedded #atlasMap{height:calc(100vh - 150px)!important}body.atlas-embedded>section:has(#atlasViewer){padding:0!important;max-width:none!important}
     @media (prefers-reduced-motion:reduce){.atlas-marker{transition:none}}
+    /* Wave H24 — touch-native atlas. 44px minimum tap targets: the visual
+       pin stays 18px but carries a 44px ::after hit pad so the CRS.Simple
+       anchor never shifts. Tap highlight kept as a gold wash (never
+       transparent) so touch feedback survives; keyboard focus rides
+       :focus-visible rings. Desktop-only remainder: hover scale on
+       .atlas-marker (harmless on touch — :hover never fires) and the
+       custom arrow-key pan handler below (keyboard users only). */
+    .atlas-marker-shell{position:relative;-webkit-tap-highlight-color:rgba(217,183,122,.35)}
+    .atlas-marker-shell::after{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+    .atlas-marker-shell:focus{outline:none}
+    .atlas-marker-shell:focus-visible .atlas-marker{box-shadow:0 0 0 3px #0f0e0d,0 0 0 5px #d9b77a}
+    .leaflet-control-zoom a{width:44px!important;height:44px!important;line-height:44px!important}
+    .leaflet-popup-close-button{width:44px!important;height:44px!important;min-width:44px;min-height:44px;font-size:18px!important;line-height:44px!important}
+    .atlas-popup a,.atlas-popup button{display:inline-block;min-height:44px;padding-top:10px;padding-bottom:10px;box-sizing:border-box}
+    .atlas-popup a:focus-visible,.atlas-popup button:focus-visible{outline:2px solid #d9b77a;outline-offset:2px}
   </style>
 </head>
 <body class="bg-ink text-cream font-sans">
@@ -218,7 +233,12 @@
     // fetches fail closed to {} and no badge renders).
     let secretsIndex = {};
     fetch('/wiki/secrets-index.json', { credentials:'same-origin' }).then(response=>response.ok?response.json():{}).then(data=>{ if(data && typeof data==='object' && !Array.isArray(data)) secretsIndex=data; }).catch(()=>{ secretsIndex={}; });
-    const map = L.map(mapEl, { crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:.25, zoomDelta:.5, attributionControl:true, keyboard:false, maxBoundsViscosity:.7 });
+    // Wave H24 — explicit touch affordances (Leaflet defaults tap/touchZoom
+    // on but nothing asserted it): tap + touchZoom for one-finger drag and
+    // pinch, bounceAtZoomLimits for zoom-edge feedback. worldCopyJump
+    // intentionally omitted — CRS.Simple is a flat unprojected plane with
+    // no wrapped dateline, so there is nothing to jump.
+    const map = L.map(mapEl, { crs:L.CRS.Simple, minZoom:-2, maxZoom:4, zoomSnap:.25, zoomDelta:.5, attributionControl:true, keyboard:false, maxBoundsViscosity:.7, tap:true, touchZoom:true, bounceAtZoomLimits:true });
     let current = world;
     let overlay = null;
     let markerEntries = [];
