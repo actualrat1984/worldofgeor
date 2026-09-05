@@ -12,9 +12,9 @@ Reads (read-only on the vault):
                                          name-only entries (never invented)
   World/Economy, Demographics, Stats/Currencies/index.md .. 25-row table
                                          (template currencies: Symbol/Region/Status)
-Joins:  C:/Users/pc/Documents/worldofgeor/public/wiki-index.json by title match
+Joins:  <repository>/public/wiki-index.json by title match
         (species join scoped to /Species/ urls, currencies to currency urls)
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/statblocks-index.json
+Writes: argv[1] or <repository>/dist/wiki/statblocks-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 an entry exists ONLY for a real vault row/file; every trait value is a
 real vault string (markup-stripped, length-capped). Files or rows with no
@@ -22,18 +22,19 @@ resolvable wiki article keep path "" (cards render as plain text).
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 MAGIC_RANKS = pathlib.Path("World/Systems/Magic Ranks.md")
 MAGIC = pathlib.Path("World/Systems/Magic.md")
 MAGE_CELLS = pathlib.Path("World/Systems/Mage-Cells.md")
 SPECIES_INDEX = pathlib.Path("World/Species/index.md")
 SPECIES_DIR = pathlib.Path("World/Species")
 CURRENCIES_INDEX = pathlib.Path("World/Economy, Demographics, Stats/Currencies/index.md")
-WIKI_INDEX = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/statblocks-index.json")
+WIKI_INDEX = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/statblocks-index.json"
 
 TEMPLATES = [
     {"id": "magic-ranks", "title": "Magic Ranks"},

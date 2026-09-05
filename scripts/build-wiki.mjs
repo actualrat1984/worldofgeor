@@ -31,4 +31,9 @@ run([path.join(loreSite, 'generate_nav.py'), '--write'], 'Wiki navigation genera
 run(['-m', 'mkdocs', 'build', '-f', wikiConfig, '--site-dir', wikiOutput], 'MkDocs build')
 run([path.join(loreSite, 'optimize_assets.py'), wikiOutput], 'Wiki asset optimization')
 run([path.join(root, 'scripts', 'generate-wiki-index.py')], 'Wiki index generation')
+const indices = spawnSync(process.execPath, [path.join(root, 'scripts', 'build-indices.mjs')], { cwd: root, stdio: 'inherit', env: process.env })
+if (indices.error || indices.status !== 0) {
+  console.error('Archive index generation failed.')
+  process.exit(indices.status || 1)
+}
 

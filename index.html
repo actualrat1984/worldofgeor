@@ -13,6 +13,7 @@
   <style>html{scroll-padding-top:72px}section[id],a[id]{scroll-margin-top:80px}</style>
 </head>
 <body class="bg-ink text-cream">
+  <a href="#main" class="skip-link">Skip to content</a>
   <!-- Nav -->
   <header class="fixed top-0 inset-x-0 z-50 bg-ink/80 backdrop-blur-md border-b border-gold/10">
     <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
@@ -68,7 +69,7 @@
     </div>
 </header>
 
-<main>
+<main id="main" tabindex="-1">
 
   <!-- Hero -->
   <section id="top" class="relative min-h-[92vh] flex items-center overflow-hidden pt-[64px]">
@@ -438,14 +439,14 @@
       let postAuthDestination = null;
       let authReturnFocus = null;
       let requestReturnFocus = null;
-      const allowedNextRoots = ['/wiki', '/app', '/atlas', '/atlas.html', '/map-editor', '/map-editor.html', '/search', '/search.html', '/species', '/species.html', '/dashboard', '/dashboard.html', '/admin', '/admin.html'];
+      const allowedNextRoots = ['/wiki', '/app', '/atlas', '/map-editor', '/search', '/species', '/dashboard', '/admin', '/timeline', '/calendar', '/gazetteer', '/trees', '/arcs', '/quests', '/statblocks', '/notebook', '/manuscripts', '/boards', '/webs', '/gallery', '/oracle', '/chronicles', '/primer', '/desk', '/audio'];
       function safeNext(){
         const requested = new URLSearchParams(location.search).get('next');
         if(!requested || !requested.startsWith('/') || requested.startsWith('//')) return null;
         try{
           const parsed=new URL(requested, location.origin);
           if(parsed.origin!==location.origin) return null;
-          return allowedNextRoots.some(root => parsed.pathname===root || parsed.pathname.startsWith(root+'/')) ? parsed.pathname+parsed.search+parsed.hash : null;
+          return allowedNextRoots.some(root => parsed.pathname===root || parsed.pathname===root+'.html' || parsed.pathname.startsWith(root+'/')) ? parsed.pathname+parsed.search+parsed.hash : null;
         }catch{ return null; }
       }
       // a11y helpers — body lock + focus trap

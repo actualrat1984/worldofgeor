@@ -1,21 +1,22 @@
 """gazetteer index generator (Wave C3b): nations from World/Nations/**/*.md.
 
 Reads:  <vault>/World/Nations/**/*.md (default vault C:/Users/pc/Documents/Lore/Lore)
-Joins:  C:/Users/pc/Documents/worldofgeor/public/wiki-index.json by title match
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/gazetteer-index.json
+Joins:  <repository>/public/wiki-index.json by title match
+Writes: argv[1] or <repository>/dist/wiki/gazetteer-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 only frontmatter region/status/tags present in the source file are emitted
 (region falls back to the wiki URL's <Region> segment, else omitted).
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 NATIONS = pathlib.Path("World/Nations")
-WIKI_INDEX = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/gazetteer-index.json")
+WIKI_INDEX = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/gazetteer-index.json"
 
 
 def parse_frontmatter(text):

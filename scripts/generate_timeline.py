@@ -1,18 +1,19 @@
 """timeline index generator (Wave A2): events from World/Dates/Complete Timeline.md.
 
 Reads:  <vault>/World/Dates/Complete Timeline.md (default vault C:/Users/pc/Documents/Lore/Lore)
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/timeline-index.json
+Writes: argv[1] or <repository>/dist/wiki/timeline-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 only table rows present in the source file are emitted.
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 SOURCE = pathlib.Path("World/Dates/Complete Timeline.md")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/timeline-index.json")
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/timeline-index.json"
 PRESENT_YEAR = "597 AGD"
 
 

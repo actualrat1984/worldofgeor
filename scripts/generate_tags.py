@@ -1,16 +1,17 @@
 """tags index generator (Wave A2): page -> tags from vault frontmatter.
 
 Reads:  <vault>/World/**/*.md  (default C:/Users/pc/Documents/Lore/Lore)
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/tags-index.json
+Writes: argv[1] or <repository>/dist/wiki/tags-index.json
 Stdlib only. Read-only on the vault. Prints counts.
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/tags-index.json")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/tags-index.json"
 
 
 def parse_frontmatter_tags(text):
