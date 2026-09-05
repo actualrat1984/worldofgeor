@@ -24,6 +24,7 @@ if (!document.getElementById(COMPASS_ID)) {
     { title: 'Manuscripts', subtitle: 'Draft chapters and scenes for the archive', url: '/manuscripts', sigil: '✒', group: 'ROOM', keywords: 'manuscripts books chapters scenes draft write' },
     { title: 'Guided Entry', subtitle: 'File a character, deity, or race as vault-shaped markdown', url: '/entry', sigil: '❏', group: 'ROOM', keywords: 'entry guided form character deity race markdown draft download' },
     { title: 'Session Recaps', subtitle: 'Log play sessions, link the cast, pin the date', url: '/recaps', sigil: '❐', group: 'ROOM', keywords: 'recaps sessions log entries timeline calendar entities play' },
+    { title: 'Review Queue', subtitle: 'Submit drafts, approve canon, publish additions', url: '/review', sigil: '☰', group: 'ROOM', keywords: 'review queue workflow draft approved publish canon additions' },
     { title: 'Whiteboards', subtitle: 'Plot schemes on an infinite canvas', url: '/boards', sigil: '▦', group: 'ROOM', keywords: 'whiteboard boards canvas cards arrows plot scheme' },
     { title: 'Story Arcs', subtitle: 'Chart master plots, subplots, and open threads', url: '/arcs', sigil: '✧', group: 'ROOM', keywords: 'story arcs plots subplots threads master tree' },
     { title: 'Quest Board', subtitle: 'Read every open contract, arc by arc', url: '/quests', sigil: '❧', group: 'ROOM', keywords: 'quests board contracts guild threads arcs settled' },

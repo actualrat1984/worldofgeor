@@ -85,6 +85,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/graph.js',
   '/entry.js',
   '/recaps.js',
+  '/review.js',
   '/webs-manager.js',
   '/gallery.js',
   '/gallery-curation.js',
@@ -129,6 +130,8 @@ const ROUTE_ALIASES = new Map([
   ['/entry/', '/entry.html'],
   ['/recaps', '/recaps.html'],
   ['/recaps/', '/recaps.html'],
+  ['/review', '/review.html'],
+  ['/review/', '/review.html'],
   ['/gallery', '/gallery.html'],
   ['/gallery/', '/gallery.html'],
   ['/oracle', '/oracle.html'],
@@ -315,6 +318,25 @@ function cleanWorkflowKind(value) {
 function cleanWorkflowStatus(value) {
   return ['draft', 'review', 'approved', 'published'].includes(value) ? value : null;
 }
+function cleanRole(value) {
+  return value === 'viewer' || value === 'editor' || value === 'owner' ? value : null;
+}
+// Pure editorial gate (no I/O, no user lookup): draft→review by
+// author/editor/owner, review→approved and approved→published by owner
+// only, any→draft (rework) by author/owner only. All else denied —
+// including skips (draft→approved) and no-ops (same→same).
+function canTransitionItem(from, to, access) {
+  const states = ['draft', 'review', 'approved', 'published'];
+  if (!states.includes(from) || !states.includes(to) || from === to) return false;
+  const isOwner = access?.isOwner === true;
+  const isEditor = access?.isEditor === true;
+  const isAuthor = access?.isAuthor === true;
+  if (to === 'draft') return isAuthor || isOwner;
+  if (from === 'draft' && to === 'review') return isAuthor || isEditor || isOwner;
+  if (from === 'review' && to === 'approved') return isOwner;
+  if (from === 'approved' && to === 'published') return isOwner;
+  return false;
+}
 function normalizeEmail(value) {
   return typeof value === 'string' ? value.trim().toLowerCase() : '';
 }
@@ -388,7 +410,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/calendar', '/gazetteer', '/trees', '/arcs', '/quests', '/statblocks', '/notebook', '/manuscripts', '/boards', '/webs', '/graph', '/entry', '/recaps', '/gallery', '/oracle', '/chronicles', '/primer', '/desk', '/audio', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/calendar', '/gazetteer', '/trees', '/arcs', '/quests', '/statblocks', '/notebook', '/manuscripts', '/boards', '/webs', '/graph', '/entry', '/recaps', '/review', '/gallery', '/oracle', '/chronicles', '/primer', '/desk', '/audio', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
@@ -1634,6 +1656,30 @@ export default {
       }
 
       // Shared Draft → Review → Approved → Published queue for additions and maps.
+      // POST /api/roles {email, role} — owner only. Denials are generic
+      // on purpose: never confirm whether an address is registered, and
+      // never hint at which role (if any) the caller holds.
+      if (url.pathname === '/api/roles' && request.method === 'POST') {
+        const session = await requireUser(request, env);
+        if (!session) return json({ error: 'Authentication required' }, 401);
+        if (!(await isOwnerSession(session, env))) return json({ error: 'Access denied' }, 403);
+        let body;
+        try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+        if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+        const email = normalizeEmail(body.email);
+        if (!isValidEmail(email)) return json({ error: 'Valid email required' }, 400);
+        const role = cleanRole(typeof body.role === 'string' ? body.role.trim().toLowerCase() : '');
+        if (!role) return json({ error: 'Valid role required' }, 400);
+        try {
+          await ensureTables();
+          const result = await env.DB.prepare('UPDATE users SET role = ? WHERE email = ?').bind(role, email).run();
+          if (result.meta?.changes !== 1) return json({ error: 'Access denied' }, 403);
+          return json({ ok: true });
+        } catch {
+          return json({ error: 'Role could not be changed' }, 500);
+        }
+      }
+
       if (url.pathname === '/api/workflow' && request.method === 'GET') {
         const user = await requireUser(request, env);
         if (!user) return json({ error: 'Authentication required' }, 401);
@@ -1670,8 +1716,19 @@ export default {
           try {
             await ensureTables();
             const id = body.id.slice(0, 80);
-            const existing = await env.DB.prepare('SELECT id, title, status FROM workflow_items WHERE id = ?').bind(id).first();
+            const existing = await env.DB.prepare('SELECT id, title, status, created_by FROM workflow_items WHERE id = ?').bind(id).first();
             if (!existing) return json({ error: 'Workflow item not found' }, 404);
+            // Guarded transitions: deny with a generic 403 that never hints
+            // at which role (if any) the caller holds.
+            let callerIsEditor = false;
+            try {
+              const self = await env.DB.prepare('SELECT role FROM users WHERE email = ?').bind(user.email).first();
+              callerIsEditor = self?.role === 'editor';
+            } catch {}
+            const callerIsOwner = await isOwnerSession(user, env);
+            if (!canTransitionItem(existing.status, transitionStatus, { isOwner: callerIsOwner, isEditor: callerIsEditor, isAuthor: existing.created_by === user.email })) {
+              return json({ error: 'Access denied' }, 403);
+            }
             await env.DB.batch([
               env.DB.prepare(`UPDATE workflow_items SET status = ?, updated_by = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ','now') WHERE id = ?`).bind(transitionStatus, user.email, id),
               env.DB.prepare('INSERT INTO workflow_history (workflow_id, status, summary, actor_email) VALUES (?, ?, ?, ?)').bind(id, transitionStatus, cleanArchiveTitle(body.summary) || `Moved ${existing.title} to ${transitionStatus}`, user.email),
@@ -1684,8 +1741,13 @@ export default {
         const kind = cleanWorkflowKind(body.kind);
         const path = kind === 'map' ? cleanMapSlug(body.path) : sanitizeAdditionsPath(body.path);
         const title = cleanArchiveTitle(body.title);
-        const status = cleanWorkflowStatus(body.status);
+        let status = cleanWorkflowStatus(body.status);
         if (!kind || !path || !title || !status || !isJsonObject(body.content)) return json({ error: 'Valid workflow item required' }, 400);
+        // Editors file drafts only: non-owners always start at draft, so a
+        // crafted {status:'published'} body can never self-approve.
+        try {
+          if (!(await isOwnerSession(user, env))) status = 'draft';
+        } catch { status = 'draft'; }
         const contentJson = JSON.stringify(body.content);
         if (contentJson.length > 900_000) return json({ error: 'Workflow item is too large' }, 413);
         try {
@@ -2908,6 +2970,8 @@ export const __test = {
   cleanMarginaliaPage,
   cleanWorkflowKind,
   cleanWorkflowStatus,
+  cleanRole,
+  canTransitionItem,
   constantTimeEqual,
   createPasswordHash,
   isPrivatePath,
