@@ -2,6 +2,7 @@
 // can verify path shaping, content building, and list rendering
 // without a browser. Browser rendering only runs when `document` exists.
 import { escapeHtml } from './timeline.js'
+import { buildDocx, buildEpub, downloadBytes } from './compiler.js'
 import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
 import { initInventoryPanel } from './inventory.js'
 import { initManuscriptPresence } from './manuscript-presence.js'
@@ -319,6 +320,32 @@ async function initManuscripts() {
     anchor.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
     setStatus(`Downloaded ${name}.`)
+  })
+
+  document.getElementById('msDownloadDocx')?.addEventListener('click', () => {
+    const base = (selectedPath
+      ? manuscriptDownloadName(selectedPath)
+      : manuscriptDownloadName(`${chapterInput.value.trim() || 'chapter'}.md`)).replace(/\.md$/, '')
+    const file = `${base}.docx`
+    const ok = downloadBytes(
+      buildDocx(titleInput.value, bodyInput.value),
+      file,
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    )
+    setStatus(ok ? `Exported ${file} on this device — no server involved.` : 'Export needs this device browser — downloads are unavailable here.')
+  })
+
+  document.getElementById('msDownloadEpub')?.addEventListener('click', () => {
+    const base = (selectedPath
+      ? manuscriptDownloadName(selectedPath)
+      : manuscriptDownloadName(`${chapterInput.value.trim() || 'chapter'}.md`)).replace(/\.md$/, '')
+    const file = `${base}.epub`
+    const ok = downloadBytes(
+      buildEpub(titleInput.value, bodyInput.value, bookInput.value),
+      file,
+      'application/epub+zip',
+    )
+    setStatus(ok ? `Exported ${file} on this device — no server involved.` : 'Export needs this device browser — downloads are unavailable here.')
   })
 
   document.getElementById('msPrint')?.addEventListener('click', () => {
