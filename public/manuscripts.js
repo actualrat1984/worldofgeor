@@ -4,6 +4,7 @@
 import { escapeHtml } from './timeline.js'
 import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
 import { initInventoryPanel } from './inventory.js'
+import { initManuscriptPresence } from './manuscript-presence.js'
 import {
   CHAPTER_META_STORAGE_LABEL,
   cleanChapterEra,
@@ -203,6 +204,7 @@ async function initManuscripts() {
       paint()
       repaintMentions()
       paintMeta()
+      presence?.open(selectedPath)
       await paintVersion(selectedPath)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'The chapter could not be opened')
@@ -238,6 +240,7 @@ async function initManuscripts() {
 
   document.getElementById('msNew')?.addEventListener('click', () => {
     selectedPath = null
+    presence?.close()
     bookInput.value = ''
     chapterInput.value = ''
     titleInput.value = ''
@@ -268,6 +271,7 @@ async function initManuscripts() {
   } })
   bodyInput.addEventListener('input', () => paintLinkedFolios(mentionsLine, bodyInput.value, mentionLookup))
   initInventoryPanel(document.getElementById('invPanel'))
+  const presence = initManuscriptPresence(list, document.getElementById('msPresenceNote'))
 
   form.addEventListener('submit', async event => {
     event.preventDefault()

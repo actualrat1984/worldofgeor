@@ -2,6 +2,7 @@
 // can verify filtering, card rendering, and the ^/wiki/ link gate
 // without a browser. Browser rendering only runs when `document` exists.
 import { escapeHtml, isWikiUrl } from './timeline.js'
+import { applyCurationFilter, initGalleryCuration } from './gallery-curation.js'
 
 // A missing or blank status means the character walks the world still.
 export function entryStatus(entry) {
@@ -94,6 +95,9 @@ async function initGallery() {
   const nationFilter = document.getElementById('nationFilter')
   const statusFilter = document.getElementById('statusFilter')
   const search = document.getElementById('gallerySearch')
+  const tagFilter = document.getElementById('galleryTagFilter')
+  const showHidden = document.getElementById('galleryShowHidden')
+  let curationApi = null
   try {
     const response = await fetch('/wiki/gallery-index.json', { credentials: 'same-origin' })
     if (response.status === 401) {
@@ -125,25 +129,35 @@ async function initGallery() {
     fill(speciesFilter, distinctValues(entries, 'species'), 'All species')
     fill(nationFilter, distinctValues(entries, 'nation'), 'All nations')
     const render = () => {
-      const kept = filterGallery(entries, {
+      const curation = curationApi?.getCuration?.() ?? { tags: {}, hidden: [] }
+      const base = filterGallery(entries, {
         house: houseFilter?.value ?? '',
         species: speciesFilter?.value ?? '',
         nation: nationFilter?.value ?? '',
         status: statusFilter?.value ?? '',
         query: search?.value ?? '',
       })
+      const kept = applyCurationFilter(base, curation, {
+        tag: tagFilter?.value ?? '',
+        includeHidden: showHidden?.checked ?? false,
+      })
+      curationApi?.setVisible?.(kept.map(entry => entry.name))
       grid.innerHTML = renderGallery(kept)
+      curationApi?.decorate?.()
       grid.setAttribute('aria-busy', 'false')
       if (count) count.textContent = gallerySummary(entries)
       if (status) {
+        const curated = (curation?.hidden?.length ?? 0) > 0 || Boolean(tagFilter?.value)
+        const suffix = curated ? ' — your curation shapes this view' : ''
         status.textContent = kept.length === entries.length
-          ? `${gallerySummary(entries)} — every soul of the archive`
-          : `${kept.length} of ${entries.length} souls match these filters`
+          ? `${gallerySummary(entries)} — every soul of the archive${suffix}`
+          : `${kept.length} of ${entries.length} souls match these filters${suffix}`
       }
     }
     for (const control of [houseFilter, speciesFilter, nationFilter, statusFilter, search]) {
       control?.addEventListener(control === search ? 'input' : 'change', render)
     }
+    curationApi = initGalleryCuration(grid, { entries, onFilterChange: render })
     render()
   } catch (error) {
     if (status) status.textContent = error instanceof Error ? error.message : 'The character gallery could not be opened'
