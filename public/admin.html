@@ -26,7 +26,7 @@
 
   <main class="max-w-[1000px] mx-auto px-6 py-8 page-enter">
     <div id="gate" class="rounded-2xl border border-gold/20 bg-cream/[0.03] p-6 text-center">
-      <p class="text-sm">Checking admin… you must be logged in as <b class="text-gold">ichieisenheart@gmail.com</b>.</p>
+      <p class="text-sm">Checking admin… restricted to the archive owner — log in to continue.</p>
       <p class="text-xs text-cream/60 mt-2">Log in on the main site first (ENTER → login), then reopen /admin.html</p>
       <a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>
     </div>
@@ -115,10 +115,10 @@
           const charts = await import('/admin-charts.js');
           charts.renderAdminCharts(chartsEl, j.stats);
         }catch(chartErr){
-          if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-cream/60">Charts unavailable.</p>';
+          if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-cream/60">Charts unavailable — reload the page to try again, or review the totals above.</p>';
         }
       }catch(e){
-        if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-red-300">Charts unavailable — '+escapeHtml(e.message)+'</p>';
+        if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-red-300">Charts unavailable — '+escapeHtml(e.message)+' Reload the page to try again.</p>';
       }
     }
     async function load(){
@@ -130,7 +130,7 @@
         document.getElementById('panel').classList.remove('hidden');
         await Promise.all([refreshRequests(),refreshInvites(),refreshUsers(),loadStats()]);
       } catch(e){
-        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — log in as <b>ichieisenheart@gmail.com</b> on the main site first.</p><p class="text-xs text-cream/60 mt-2">${escapeHtml(e.message)}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
+        document.getElementById('gate').innerHTML = `<p class="text-sm text-red-400">Admin only — this area is restricted to the archive owner. Log in on the main site first, then reopen this page.</p><p class="text-xs text-cream/60 mt-2">${escapeHtml(e.message)}</p><a href="/" class="inline-block mt-4 text-xs bg-gold text-ink px-5 py-2 rounded-full font-semibold">GO LOGIN</a>`;
       }
     }
     async function refreshInvites(){
