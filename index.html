@@ -244,7 +244,7 @@
     <p class="text-sm text-cream/60 max-w-[620px] -mt-4 mb-6">From the Lost Era after the ancient crash to the unwritten Age of Strife. Select an age to open its place in the archive.</p>
     <div id="ageGrid" class="age-scroller flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory" role="group" aria-label="Chronology of Ge'or">
     </div>
-    <p id="ageStatus" class="mt-2 text-xs text-cream/35" role="status">13 eras in the chronology • select one to open its archive entry.</p>
+    <p id="ageStatus" class="mt-2 text-xs text-cream/60" role="status">13 eras in the chronology • select one to open its archive entry.</p>
   </section>
 
   <!-- Age drawer (private archive teaser) -->
@@ -368,7 +368,7 @@
   <footer class="border-t border-gold/10">
     <div class="max-w-[1280px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs tracking-widest">
       <span class="text-cream/50">© <span id="year"></span> WORLD OF GE'OR — BY MIKHAIL & ICHI</span>
-      <span class="text-cream/35">BUILT TO ENDURE • SLATE / AMBER • PRIVATE ARCHIVE</span>
+      <span class="text-cream/60">BUILT TO ENDURE • SLATE / AMBER • PRIVATE ARCHIVE</span>
       <span class="text-gold/60">WORLDOFGEOR.COM</span>
     </div>
   </footer>
@@ -385,13 +385,13 @@
       <p id="requestDescription" class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
       <form id="requestForm" class="mt-5 space-y-3">
         <label for="reqEmail" class="sr-only">Email address</label>
-        <input id="reqEmail" type="email" placeholder="your email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="reqEmail" type="email" placeholder="your email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40" />
         <label for="reqMsg" class="sr-only">Why you want access (optional)</label>
-        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" maxlength="500" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none resize-none"></textarea>
+        <textarea id="reqMsg" placeholder="why Ge&apos;or? (optional)" rows="3" maxlength="500" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40 resize-none"></textarea>
         <button type="submit" id="reqSubmit" class="w-full bg-cream text-ink py-3 rounded-full text-sm font-semibold hover:bg-white transition">Send Request</button>
         <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]" aria-live="polite"></p>
       </form>
-      <p class="text-kicker text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
+      <p class="text-kicker text-cream/60 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
     </div>
   </div>
 
@@ -408,11 +408,11 @@
       </div>
       <form id="authForm" class="mt-5 space-y-3">
         <label for="authEmail" class="sr-only">Email address</label>
-        <input id="authEmail" type="email" placeholder="email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authEmail" type="email" placeholder="email" autocomplete="email" maxlength="254" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40" />
         <label for="authPassword" class="sr-only">Password</label>
-        <input id="authPassword" type="password" placeholder="password" autocomplete="current-password" minlength="1" maxlength="256" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authPassword" type="password" placeholder="password" autocomplete="current-password" minlength="1" maxlength="256" required class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40" />
         <label for="authInvite" class="sr-only">Invite code</label>
-        <input id="authInvite" type="text" placeholder="invite code (for register)" autocomplete="off" maxlength="64" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none" />
+        <input id="authInvite" type="text" placeholder="invite code (for register)" autocomplete="off" maxlength="64" class="w-full px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40" />
         <button type="submit" id="authSubmit" class="w-full bg-gradient-to-b from-gold to-amberdeep text-ink py-3 rounded-full text-sm font-semibold hover:brightness-110 transition">Continue</button>
         <p id="authMsg" class="text-xs text-center min-h-[1.2em]" aria-live="polite"></p>
         </form>

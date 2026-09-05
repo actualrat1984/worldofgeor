@@ -116,8 +116,8 @@
         <div class="max-w-[620px]">
           <label for="atlasSearch" class="block text-[10px] tracking-[0.24em] text-gold/80">FIND A MAPPED PLACE</label>
           <div class="relative mt-2">
-            <input id="atlasSearch" type="search" role="combobox" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the current map…" aria-controls="atlasSearchResults" aria-expanded="false" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-2.5 pr-10 text-sm text-cream placeholder:text-cream/35 outline-none transition focus:border-gold/45 focus:bg-cream/[0.04]" />
-            <span aria-hidden="true" class="pointer-events-none absolute right-3 top-2.5 text-xs text-cream/30">⌕</span>
+            <input id="atlasSearch" type="search" role="combobox" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search the current map…" aria-controls="atlasSearchResults" aria-expanded="false" class="w-full rounded-xl border border-gold/15 bg-ink px-4 py-2.5 pr-10 text-sm text-cream placeholder:text-cream/60 transition focus:border-gold/45 focus:bg-cream/[0.04]" />
+            <span aria-hidden="true" class="pointer-events-none absolute right-3 top-2.5 text-xs text-cream/60">⌕</span>
           </div>
           <div id="atlasSearchResults" role="listbox" aria-label="Mapped places" class="atlas-search-results hidden mt-2 rounded-xl border border-gold/15 bg-ink/95 p-1 shadow-2xl"></div>
           <p id="atlasSearchStatus" class="mt-2 min-h-[1em] text-xs text-cream/45" role="status">Choose a map to load its named places.</p>
@@ -127,7 +127,7 @@
       <nav id="atlasCrumbs" class="hidden px-6 py-2.5 border-t border-gold/10 text-[11px] tracking-[.18em]" aria-label="Map folio trail"></nav>
       <div class="px-6 py-3 flex flex-wrap items-center justify-between gap-2 text-[11px] tracking-widest border-t border-gold/10">
         <span id="atlasMapHelp" class="text-cream/50">DRAG to pan • SCROLL to zoom • ARROW KEYS to pan • <span class="text-gold">3.086 km/px</span> • Private — gated by geor_token</span>
-        <span class="text-cream/40">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
+        <span class="text-cream/60">Built on Leaflet • <a href="/world-map.jpg" target="_blank" rel="noopener" class="text-gold underline">open full 16000×8000</a></span>
       </div>
       <details class="atlas-fullscreen-hide border-t border-gold/10 px-6 py-3 text-xs text-cream/55"><summary class="cursor-pointer text-gold tracking-widest">MAP LEGEND &amp; SHORTCUTS</summary><div class="grid sm:grid-cols-3 gap-3 mt-3"><p><span class="inline-block w-3 h-3 rounded-full bg-gold mr-2"></span>Gold markers open named lore locations.</p><p><b class="text-gold">F</b> focuses place search; <b class="text-gold">Home</b> resets the view.</p><p><b class="text-gold">+/−</b> zoom; arrow keys pan while the map is focused.</p></div></details>
       <p id="atlasMapStatus" class="sr-only" aria-live="polite"></p>
@@ -136,7 +136,7 @@
   </main>
 
   <footer class="border-t border-gold/10 mt-8">
-    <div class="max-w-[1280px] mx-auto px-6 py-6 text-xs tracking-widest text-cream/40 flex justify-between">
+    <div class="max-w-[1280px] mx-auto px-6 py-6 text-xs tracking-widest text-cream/60 flex justify-between">
       <span>© <span id="y"></span> WORLD OF GE'OR</span>
       <span class="text-gold/60">ATLAS • 597 AGD</span>
     </div>
@@ -244,10 +244,10 @@
       const parent = parentFolio(current.id, FOLIO_REGISTRY);
       const children = childFolios(current.id, FOLIO_REGISTRY).filter(slug=>slug!==current.id && configs[slug]);
       if(!parent && !children.length){ crumbsEl.classList.add('hidden'); crumbsEl.innerHTML=''; return; }
-      let html = '<span class=\"text-cream/40\">ATLAS&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
-      if(parent && configs[parent]) html += '<button type=\"button\" data-folio=\"'+escapeHtml(parent)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">← '+escapeHtml((FOLIO_REGISTRY[parent]||{}).label||parent).toUpperCase()+'</button><span class=\"text-cream/30\">&nbsp;&nbsp;/&nbsp;&nbsp;</span>';
+      let html = '<span class=\"text-cream/60\">ATLAS&nbsp;&nbsp;·&nbsp;&nbsp;</span>';
+      if(parent && configs[parent]) html += '<button type=\"button\" data-folio=\"'+escapeHtml(parent)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">← '+escapeHtml((FOLIO_REGISTRY[parent]||{}).label||parent).toUpperCase()+'</button><span class=\"text-cream/60\">&nbsp;&nbsp;/&nbsp;&nbsp;</span>';
       html += '<span class=\"text-cream\">'+escapeHtml(current.label.toUpperCase())+'</span>';
-      for(const slug of children) html += '<span class=\"text-cream/30\">&nbsp;&nbsp;·&nbsp;&nbsp;</span><button type=\"button\" data-folio=\"'+escapeHtml(slug)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">'+escapeHtml((FOLIO_REGISTRY[slug]||{}).label||slug).toUpperCase()+' →</button>';
+      for(const slug of children) html += '<span class=\"text-cream/60\">&nbsp;&nbsp;·&nbsp;&nbsp;</span><button type=\"button\" data-folio=\"'+escapeHtml(slug)+'\" class=\"text-gold underline underline-offset-4 hover:text-cream transition\">'+escapeHtml((FOLIO_REGISTRY[slug]||{}).label||slug).toUpperCase()+' →</button>';
       crumbsEl.innerHTML = html;
       crumbsEl.classList.remove('hidden');
     }
@@ -302,7 +302,7 @@
         if(searchStatus) searchStatus.textContent='No mapped places match '+searchEl.value+'.';
         return;
       }
-      resultsEl.innerHTML=matches.map(item=>'<button type=\"button\" role=\"option\" data-pin-index=\"'+item.index+'\" class=\"w-full text-left rounded-lg px-3 py-2 hover:bg-gold/10 focus:bg-gold/10 focus:outline-none\"><span class=\"block text-sm text-cream\">'+escapeHtml(item.pin.name)+'</span><span class=\"block text-xs text-cream/45 mt-0.5 truncate\">'+escapeHtml(item.pin.detail)+'</span></button>').join('');
+      resultsEl.innerHTML=matches.map(item=>'<button type=\"button\" role=\"option\" data-pin-index=\"'+item.index+'\" class=\"w-full text-left rounded-lg px-3 py-2 hover:bg-gold/10 focus:bg-gold/10\"><span class=\"block text-sm text-cream\">'+escapeHtml(item.pin.name)+'</span><span class=\"block text-xs text-cream/45 mt-0.5 truncate\">'+escapeHtml(item.pin.detail)+'</span></button>').join('');
       resultsEl.querySelectorAll('[data-pin-index]').forEach(button=>button.addEventListener('click',()=>focusPin(Number(button.dataset.pinIndex))));
       if(searchStatus) searchStatus.textContent=matches.length+' mapped place'+(matches.length===1?'':'s')+' found.';
     }

@@ -44,13 +44,13 @@
       </div>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5" aria-label="Archive administration chart">
         <h3 class="text-sm font-semibold tracking-widest">OVERVIEW</h3>
-        <div id="statCharts" class="mt-3 text-gold" role="img" aria-label="Admin stats chart"><p class="text-xs text-cream/40">Loading charts…</p></div>
+        <div id="statCharts" class="mt-3 text-gold" role="img" aria-label="Admin stats chart"><p class="text-xs text-cream/60">Loading charts…</p></div>
       </div>
       <p id="adminNotice" class="hidden rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></p>
 
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
         <form id="createForm" class="flex gap-2">
-          <input id="newCode" placeholder="NEW_CODE (e.g. ARCADY_2026)" class="flex-1 px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/40 focus:border-gold/40 outline-none text-sm" />
+          <input id="newCode" placeholder="NEW_CODE (e.g. ARCADY_2026)" class="flex-1 px-4 py-2.5 rounded-xl bg-ink border border-gold/15 text-cream placeholder:text-cream/60 focus:border-gold/40 text-sm" />
           <button class="bg-gold text-ink px-5 py-2.5 rounded-full text-sm font-semibold hover:brightness-110">Create</button>
         </form>
         <p id="createMsg" class="text-xs mt-2 min-h-[1em]"></p>
@@ -86,7 +86,7 @@
     <form id="approveForm" method="dialog" class="p-6">
       <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] tracking-[.24em] text-gold">ADMIT A KEEPER</p><h2 class="font-display text-xl mt-1">Approve request</h2></div><button id="closeApprove" type="button" class="text-xl text-cream/50 hover:text-cream" aria-label="Close">×</button></div>
       <p class="text-sm text-cream/60 mt-3">Create an invitation for <strong id="approveEmail" class="text-cream"></strong>. Leave the code blank for a cryptographically random one.</p>
-      <label class="block mt-5 text-[10px] tracking-widest text-cream/60">INVITE CODE <span class="text-cream/35">OPTIONAL</span><input id="approveCode" maxlength="64" autocomplete="off" placeholder="AUTO-GENERATE" class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm uppercase outline-none focus:border-gold/50"></label>
+      <label class="block mt-5 text-[10px] tracking-widest text-cream/60">INVITE CODE <span class="text-cream/60">OPTIONAL</span><input id="approveCode" maxlength="64" autocomplete="off" placeholder="AUTO-GENERATE" class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm uppercase focus:border-gold/50"></label>
       <p id="approveMessage" class="min-h-[1.25rem] mt-3 text-xs" role="status" aria-live="polite"></p>
       <button id="confirmApprove" type="submit" class="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold text-ink">Approve and create invite</button>
     </form>
@@ -115,7 +115,7 @@
           const charts = await import('/admin-charts.js');
           charts.renderAdminCharts(chartsEl, j.stats);
         }catch(chartErr){
-          if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-cream/40">Charts unavailable.</p>';
+          if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-cream/60">Charts unavailable.</p>';
         }
       }catch(e){
         if(chartsEl) chartsEl.innerHTML='<p class="text-xs text-red-300">Charts unavailable — '+escapeHtml(e.message)+'</p>';
@@ -139,7 +139,7 @@
       if(!j.invites.length){ el.innerHTML='<div class="p-4 text-cream/50">No invites</div>'; return; }
       el.innerHTML = j.invites.map(i=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b class="text-gold">${escapeHtml(i.code)}</b> <span class="text-cream/40 text-xs">— ${i.used_by ? 'used by '+escapeHtml(i.used_by) : 'unused'}</span></div>
+          <div><b class="text-gold">${escapeHtml(i.code)}</b> <span class="text-cream/60 text-xs">— ${i.used_by ? 'used by '+escapeHtml(i.used_by) : 'unused'}</span></div>
           <button data-delete-invite="${escapeHtml(i.code)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full hover:bg-red-400/10">Delete</button>
         </div>
       `).join('');
@@ -151,7 +151,7 @@
       if(!j.users.length){ el.innerHTML='<div class="p-4 text-cream/50">No users yet</div>'; return; }
       el.innerHTML = j.users.map(u=>`
         <div class="flex items-center justify-between px-5 py-3">
-          <div><b>${escapeHtml(u.email)}</b> <span class="text-cream/40 text-xs">via ${escapeHtml(u.invite_code || '—')} • ${escapeHtml(new Date(u.created_at).toLocaleDateString())}</span></div>
+          <div><b>${escapeHtml(u.email)}</b> <span class="text-cream/60 text-xs">via ${escapeHtml(u.invite_code || '—')} • ${escapeHtml(new Date(u.created_at).toLocaleDateString())}</span></div>
         </div>
       `).join('');
     }
@@ -162,9 +162,9 @@
       if(!rows.length){ el.innerHTML='<div class="p-4 text-cream/50">'+(requestFilter==='pending'?'No pending requests':'No requests')+'</div>'; return; }
       el.innerHTML = rows.map(r=>`
         <div class="px-5 py-3 flex flex-col md:flex-row md:items-center justify-between gap-2">
-          <div class="flex-1"><b>${escapeHtml(r.email)}</b> <span class="text-cream/40 text-xs">— ${escapeHtml(r.status)} • ${escapeHtml(new Date(r.created_at).toLocaleString())}</span><div class="text-xs text-cream/60 mt-1">${escapeHtml(r.message || 'No message supplied.')}</div></div>
+          <div class="flex-1"><b>${escapeHtml(r.email)}</b> <span class="text-cream/60 text-xs">— ${escapeHtml(r.status)} • ${escapeHtml(new Date(r.created_at).toLocaleString())}</span><div class="text-xs text-cream/60 mt-1">${escapeHtml(r.message || 'No message supplied.')}</div></div>
           <div class="flex gap-2">
-            ${r.status==='pending' ? `<button data-approve-request="${Number(r.id)}" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button data-reject-request="${Number(r.id)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs rounded-full border border-cream/10 px-3 py-1 text-cream/40">${escapeHtml(r.status)}</span>`}
+            ${r.status==='pending' ? `<button data-approve-request="${Number(r.id)}" class="text-xs bg-gold text-ink px-3 py-1 rounded-full">Approve → invite</button><button data-reject-request="${Number(r.id)}" class="text-xs border border-red-400/30 text-red-300 px-3 py-1 rounded-full">Reject</button>` : `<span class="text-xs rounded-full border border-cream/10 px-3 py-1 text-cream/60">${escapeHtml(r.status)}</span>`}
           </div>
         </div>`).join('');
       el.querySelectorAll('[data-approve-request]').forEach(button => button.addEventListener('click', () => approveReq(Number(button.dataset.approveRequest))));

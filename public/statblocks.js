@@ -94,7 +94,7 @@ async function initStatblocks() {
       for (const tab of tabs) {
         const on = tab.dataset.template === template
         tab.setAttribute('aria-pressed', on ? 'true' : 'false')
-        tab.className = 'flex-1 min-w-[160px] rounded-xl border px-4 py-3 text-sm outline-none '
+        tab.className = 'flex-1 min-w-[160px] rounded-xl border px-4 py-3 text-sm '
           + (on ? 'border-gold/60 bg-gold/10 text-gold font-semibold' : 'border-gold/15 bg-ink text-cream/60')
       }
     }
