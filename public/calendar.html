@@ -39,6 +39,22 @@
         <p class="text-xs text-cream/40 mt-2">One high day kept somewhere on Ge'or — each dated by day and month.</p>
         <div id="festivalList" aria-busy="true" class="mt-4 grid gap-3 text-sm text-cream/40">Kindling the feast-fires…</div>
       </section>
+      <section aria-label="Living month" class="mt-12">
+        <h2 class="font-display text-sm tracking-[.25em] text-gold">THE LIVING MONTH</h2>
+        <p class="text-xs text-cream/40 mt-2">One focused month — its happenings, birthdays, and moons. The calendar shows only Month-dated records; the timeline reckons in years, so most of it never lands here.</p>
+        <nav id="monthNav" aria-label="Focus a month" class="mt-4 flex items-center justify-center gap-2 flex-wrap">
+          <button id="monthPrev" type="button" class="text-xs border border-gold/20 rounded-full px-4 py-2 text-gold">← PREV</button>
+          <label for="monthSelect" class="sr-only">Focused month</label>
+          <select id="monthSelect" class="rounded-full border border-gold/25 bg-ink px-4 py-2 text-xs text-cream/80"></select>
+          <button id="monthNext" type="button" class="text-xs border border-gold/20 rounded-full px-4 py-2 text-gold">NEXT →</button>
+        </nav>
+        <p id="monthMemoryNote" class="mt-2 text-center text-[11px] text-cream/30"></p>
+        <div id="moonMarker" role="status" class="mt-4 text-center text-xs text-cream/50">Watching the moons…</div>
+        <div class="mt-4 grid gap-3 md:grid-cols-2">
+          <div id="timelineLayer" aria-busy="true" class="rounded-xl border border-gold/10 bg-ink/60 p-4 text-sm text-cream/40">Raising this month's happenings…</div>
+          <div id="birthdayLayer" aria-busy="true" class="rounded-xl border border-gold/10 bg-ink/60 p-4 text-sm text-cream/40">Reckoning this month's birthdays…</div>
+        </div>
+      </section>
       <section aria-label="BGD AGD date converter" class="mt-12 rounded-xl border border-gold/15 bg-ink p-5 md:p-7">
         <h2 class="font-display text-sm tracking-[.25em] text-gold">BGD / AGD CONVERTER</h2>
         <p class="text-xs text-cream/40 mt-2">Turn an era date into years from the Great Divergence — or turn Earth years into Ge'orian ones at 1.42 to the year.</p>
