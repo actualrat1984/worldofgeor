@@ -34,6 +34,13 @@
           <option value="">Loading the boards…</option>
         </select>
       </div>
+      <div id="questStatusFilters" class="mt-4 flex items-center gap-2 flex-wrap" role="group" aria-label="Filter contracts by status">
+        <button type="button" data-quest-filter="all" aria-pressed="true" class="rounded-full border border-gold/60 bg-gold px-3.5 py-1.5 text-[11px] tracking-widest font-semibold text-ink">ALL</button>
+        <button type="button" data-quest-filter="open" aria-pressed="false" class="rounded-full border border-gold/15 px-3.5 py-1.5 text-[11px] tracking-widest text-cream/40">OPEN</button>
+        <button type="button" data-quest-filter="settled" aria-pressed="false" class="rounded-full border border-gold/15 px-3.5 py-1.5 text-[11px] tracking-widest text-cream/40">SETTLED</button>
+        <button type="button" data-quest-filter="claimed" aria-pressed="false" class="rounded-full border border-gold/15 px-3.5 py-1.5 text-[11px] tracking-widest text-cream/40">CLAIMED BY ME</button>
+      </div>
+      <p class="mt-2 text-center text-[11px] text-cream/30">Claims stay on this device only — per member, per contract.</p>
       <p id="questsStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Reading the guild boards…</p>
       <div id="questBoards" class="mt-8 grid gap-6" aria-label="Open contracts by arc" aria-busy="true">
         <div class="rounded-xl border border-gold/10 p-5 text-sm text-cream/40">Unrolling the postings…</div>
