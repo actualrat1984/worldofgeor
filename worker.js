@@ -19,6 +19,11 @@ const MAP_DIMENSIONS = Object.freeze({
   grimmel: { width: 3840, height: 5715 },
 });
 const RELEASE_CHANGELOG = Object.freeze([
+  { id: 'release-wave-h5', action: 'feature', path: '/', summary: 'One call-to-action hierarchy, a rooms-first hero, and locked teasers sharpened the landing', created_at: '2026-09-05T20:00:00Z' },
+  { id: 'release-wave-h4', action: 'feature', path: '/', summary: 'Skeleton loaders, actioned empty states, and a single easing smoothed every wait', created_at: '2026-09-05T16:00:00Z' },
+  { id: 'release-wave-h3', action: 'feature', path: '/', summary: 'A gold focus ring, a cream contrast floor, and reduced-motion guards calmed every room', created_at: '2026-09-05T12:00:00Z' },
+  { id: 'release-wave-h2', action: 'feature', path: '/', summary: 'Two canonical headers, card tiers, and one button rule unified every room', created_at: '2026-09-05T08:00:00Z' },
+  { id: 'release-wave-h1', action: 'feature', path: '/', summary: 'Type scale tokens landed with a zero-drift migration and a ratchet against regressions', created_at: '2026-09-05T04:00:00Z' },
   { id: 'release-wave-g', action: 'feature', path: '/audio', summary: 'Calendar, audio library, offline reading, deeper search, and admin charts rounded out the archive system layer', created_at: '2026-09-05T00:00:00Z' },
   { id: 'release-wave-f', action: 'feature', path: '/arcs', summary: 'Story arcs, reader primer, author desk, quest board, and game statblocks opened the play folios', created_at: '2026-09-04T12:00:00Z' },
   { id: 'release-wave-e', action: 'feature', path: '/manuscripts', summary: 'Manuscripts, notebook, whiteboards, marginalia, and the prompt oracle opened the writing studio', created_at: '2026-09-03T18:00:00Z' },
@@ -2859,4 +2864,5 @@ export const __test = {
   cleanManuscriptSegment,
   cleanManuscriptTitle,
   manuscriptPath,
+  releaseChangelog: RELEASE_CHANGELOG,
 };

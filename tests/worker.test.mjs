@@ -262,7 +262,28 @@ test('/api/me returns 401 without a session', async () => {
   const updates = await updatesResponse.json()
   assert.equal(updates.source, 'changelog')
   assert.equal(updates.updates.length, 3)
-  assert.match(updates.updates[0].summary, /rounded out the archive system layer/)
+  assert.match(updates.updates[0].summary, /sharpened the landing/)
+})
+
+// --- Wave H6: changelog discipline -------------------------------------------
+// Structural only: shape, uniqueness, newest-first order. No clock, no dates.
+test('release changelog stays non-empty, newest-first, and well-shaped', () => {
+  const log = __test.releaseChangelog
+  assert.ok(Array.isArray(log) && log.length > 0, 'changelog is non-empty')
+  const seen = new Set()
+  for (const entry of log) {
+    for (const key of ['id', 'action', 'path', 'summary', 'created_at']) {
+      assert.equal(typeof entry[key], 'string', `changelog entry carries a string ${key}`)
+      assert.ok(entry[key].length > 0, `changelog entry ${key} is non-empty`)
+    }
+    assert.ok(!seen.has(entry.id), `duplicate changelog id ${entry.id}`)
+    seen.add(entry.id)
+  }
+  const stamps = log.map(entry => entry.created_at)
+  assert.deepEqual([...stamps].sort().reverse(), stamps, 'changelog stays newest-first')
+  for (const id of ['release-wave-h1', 'release-wave-h2', 'release-wave-h3', 'release-wave-h4', 'release-wave-h5']) {
+    assert.ok(seen.has(id), `${id} is logged`)
+  }
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
@@ -330,7 +351,7 @@ test('private files redirect to the gate and public aliases reach the intended a
   assert.match(studioScript, /geor_atlas_draft_v1_/)
   assert.match(atlasHtml, /atlasFullscreen/)
   assert.match(updatesHtml, /data-update-filter="security"/)
-  for (const releaseId of ['release-unified-archive', 'release-reader-experience', 'release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
+  for (const releaseId of ['release-wave-h1', 'release-wave-h2', 'release-wave-h3', 'release-wave-h4', 'release-wave-h5', 'release-unified-archive', 'release-reader-experience', 'release-compass', 'release-auth-v2', 'release-species', 'release-stats', 'release-studio', 'release-reserve', 'release-atlas', 'release-ledger']) {
     assert.match(workerSource, new RegExp(releaseId))
     assert.match(updatesHtml, new RegExp(releaseId))
   }
