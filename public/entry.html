@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Guided Entry — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[920px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[700px] mx-auto">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">GUIDED ENTRY • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">GUIDED ENTRY</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Answer the form, download the markdown, hand it to Mikhail.</p>
+        <p class="text-sm text-cream/60 mt-4">Nothing here touches the vault — download the file and give it to Mikhail; nothing is filed until he approves.</p>
+        <p class="mt-2 flex items-center justify-center gap-3 flex-wrap">
+          <span id="enStorageNote" role="note" class="text-xs text-cream/40">Drafts autosave on this device only.</span>
+        </p>
+      </div>
+      <div id="enTabs" role="group" aria-label="Entry kind" class="mt-9 flex items-center gap-3 flex-wrap justify-center">
+        <button data-entry-kind="character" type="button" aria-pressed="true" class="text-xs bg-gold text-ink rounded-full px-5 py-3 font-semibold">CHARACTER</button>
+        <button data-entry-kind="deity" type="button" aria-pressed="false" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-3">DEITY</button>
+        <button data-entry-kind="race" type="button" aria-pressed="false" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-3">RACE</button>
+      </div>
+      <form id="enForm" class="mt-8 rounded-2xl border border-gold/15 bg-cream/[0.03] p-5 md:p-8" onsubmit="return false">
+        <div id="enFields" class="flex flex-col gap-5" aria-live="off"></div>
+        <ul id="enErrors" aria-live="polite" class="mt-6 flex flex-col gap-2 list-none"></ul>
+        <div class="mt-6 flex items-center gap-3 flex-wrap">
+          <button id="enDownload" type="button" class="text-xs bg-gold text-ink rounded-full px-5 py-3 font-semibold">DOWNLOAD .MD</button>
+          <button id="enCopy" type="button" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-3">COPY MARKDOWN</button>
+        </div>
+        <p id="enStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3">Fill the required fields — the preview updates as you write.</p>
+      </form>
+      <section aria-label="Markdown preview" class="mt-8 rounded-2xl border border-gold/10 p-5 md:p-8">
+        <h2 class="text-[10px] tracking-[.25em] text-cream/40">VAULT-SHAPED PREVIEW — NOT FILED</h2>
+        <div id="enPreview" aria-live="polite" class="mt-4"></div>
+      </section>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/entry.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>
