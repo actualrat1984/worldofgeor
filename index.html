@@ -8,7 +8,7 @@
   <meta name="description" content="World of Ge'or — 1.37× Earth, ringed by the Silver Bride. Three million years of war, shadow and stubborn freedom. A living worldbuilding archive by Mikhail & Ichi." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="/Geor_from_orbit-1280.webp" imagesrcset="/Geor_from_orbit-640.webp 640w, /Geor_from_orbit-1280.webp 1280w, /Geor_from_orbit.webp 1920w" imagesizes="100vw" type="image/webp" fetchpriority="high">
   <style>html{scroll-padding-top:72px}section[id],a[id]{scroll-margin-top:80px}</style>
 </head>
@@ -18,10 +18,10 @@
     <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
       <a href="/" class="flex items-center gap-3" aria-label="World of Ge'or home">
         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
-        <span class="font-display tracking-[0.18em] text-[13px] font-semibold text-cream">WORLD OF GE'OR</span>
-        <span class="hidden sm:inline text-gold/60 text-xs tracking-widest ml-2">EST. 597 AGD</span>
+        <span class="font-display tracking-[0.18em] text-13 font-semibold text-cream">WORLD OF GE'OR</span>
+        <span class="hidden sm:inline text-gold/60 font-mono text-xs tracking-widest ml-2">EST. 597 AGD</span>
       </a>
-      <nav class="hidden xl:flex items-center gap-5 text-[11px] tracking-widest font-medium" aria-label="Primary navigation">
+      <nav class="hidden xl:flex items-center gap-5 text-kicker tracking-widest font-medium" aria-label="Primary navigation">
         <a href="/#world" class="text-cream/70 hover:text-cream transition">WORLD</a>
         <a href="/#atlas" class="text-cream/70 hover:text-cream transition">ATLAS</a>
         <a href="/#history" class="text-cream/70 hover:text-cream transition">HISTORY</a>
@@ -35,7 +35,7 @@
         <button id="deskRequestBtn" type="button" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">REQUEST ACCESS</button>
         <a id="deskEnterLink" href="/#atlas" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold hover:brightness-110 transition">ENTER</a>
         <div id="deskUserWrap" class="hidden relative">
-          <button id="deskUserBtn" type="button" aria-haspopup="menu" aria-controls="deskUserMenu" aria-expanded="false" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span aria-hidden="true" class="text-[10px]">▼</span></button>
+          <button id="deskUserBtn" type="button" aria-haspopup="menu" aria-controls="deskUserMenu" aria-expanded="false" class="text-xs tracking-widest bg-gradient-to-b from-gold to-amberdeep text-ink px-5 py-2.5 rounded-full font-semibold flex items-center gap-2"><span id="deskUserName">USER</span> <span aria-hidden="true" class="text-tiny">▼</span></button>
           <div id="deskUserMenu" role="menu" class="hidden absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#1a1a18] border border-gold/20 shadow-xl py-2 z-50">
             <a href="/dashboard.html" class="block px-4 py-2 text-sm hover:bg-gold/10">Enter Dashboard</a>
             <a href="/admin.html" id="deskAdminLink" class="hidden block px-4 py-2 text-sm hover:bg-gold/10 text-gold">Admin</a>
@@ -82,14 +82,14 @@
     </div>
     <div class="relative max-w-[1280px] mx-auto px-6 w-full py-16 md:py-24">
       <div class="max-w-[620px]">
-        <p class="text-gold tracking-[0.32em] text-[11px] font-semibold mb-4">A WORLD 1.37× OLD EARTH • RINGED BY THE SILVER BRIDE</p>
-        <h1 class="font-display text-[42px] md:text-[64px] leading-[0.95] font-bold tracking-tight">
+        <p class="text-gold tracking-[0.32em] text-kicker font-semibold mb-4">A WORLD 1.37× OLD EARTH • RINGED BY THE SILVER BRIDE</p>
+        <h1 class="font-display text-display md:text-display-xl leading-[0.95] font-bold tracking-tight">
           A WORLD<br/>
           <span class="font-serif font-normal italic text-gold">forged</span> THROUGH<br/>
           THREE MILLION<br/>
           YEARS OF WAR.
         </h1>
-        <p class="mt-5 text-[16px] leading-7 text-cream/80 max-w-[520px] font-light">
+        <p class="mt-5 text-base leading-7 text-cream/80 max-w-[520px] font-light">
           Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
@@ -97,7 +97,7 @@
           <button id="openExplore" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">Member Sign In</button>
           <a href="/#atlas" class="border border-gold/30 text-gold px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-gold/10 transition">Explore the Atlas</a>
         </div>
-        <div class="mt-10 flex flex-wrap gap-2 text-[11px] tracking-widest">
+        <div class="mt-10 flex flex-wrap gap-2 text-kicker tracking-widest">
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">60+</b> PEOPLES</span>
@@ -110,7 +110,7 @@
 
   <!-- Trust / Manifesto bar -->
   <section class="border-y border-gold/10 bg-cream/[0.02]">
-    <div class="max-w-[1280px] mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.22em] text-cream/60">
+    <div class="max-w-[1280px] mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-4 text-kicker tracking-[0.22em] text-cream/60">
       <span>BUILT BY MIKHAIL & ICHI — SINCE MAY 2026</span>
       <span class="hidden md:inline h-3 w-px bg-gold/20"></span>
       <span>PRIVATE ARCHIVE • INVITE ONLY • BUILT TO ENDURE</span>
@@ -122,10 +122,10 @@
   <!-- Archive counts — static verified totals from the built wiki indexes (no fetch; count up on reveal) -->
   <section id="archive-counts" class="border-b border-gold/10 bg-cream/[0.02]" aria-label="Archive totals">
     <div class="max-w-[1280px] mx-auto px-6 py-10 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="13">13</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">AGES</p></div>
-      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="71">71</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">EVENTS</p></div>
-      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="486">486</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">NATIONS</p></div>
-      <div><p class="font-display text-4xl font-bold text-gold"><span data-count="78">78</span></p><p class="mt-1 text-[11px] tracking-[0.24em] text-cream/60">CHARACTERS</p></div>
+      <div><p class="font-mono text-4xl font-bold text-gold"><span data-count="13">13</span></p><p class="mt-1 text-kicker tracking-[0.24em] text-cream/60">AGES</p></div>
+      <div><p class="font-mono text-4xl font-bold text-gold"><span data-count="71">71</span></p><p class="mt-1 text-kicker tracking-[0.24em] text-cream/60">EVENTS</p></div>
+      <div><p class="font-mono text-4xl font-bold text-gold"><span data-count="486">486</span></p><p class="mt-1 text-kicker tracking-[0.24em] text-cream/60">NATIONS</p></div>
+      <div><p class="font-mono text-4xl font-bold text-gold"><span data-count="78">78</span></p><p class="mt-1 text-kicker tracking-[0.24em] text-cream/60">CHARACTERS</p></div>
     </div>
   </section>
   <script>
@@ -167,13 +167,13 @@
   <!-- Clear first-visit routes -->
   <section id="start" class="max-w-[1280px] mx-auto px-6 py-16 md:py-20" aria-labelledby="startTitle">
     <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
-      <div class="max-w-[680px]"><p class="text-gold text-[11px] tracking-[0.28em] font-semibold">START HERE</p><h2 id="startTitle" class="font-display text-[28px] md:text-[38px] font-bold mt-2">CHOOSE YOUR DOORWAY.</h2><p class="mt-3 text-sm leading-6 text-cream/65">See the world without an account, enter the archive if you are already a member, or continue from your last private folio on this device.</p></div>
+      <div class="max-w-[680px]"><p class="text-gold text-kicker tracking-[0.28em] font-semibold">START HERE</p><h2 id="startTitle" class="font-display text-xl md:text-2xl font-bold mt-2">CHOOSE YOUR DOORWAY.</h2><p class="mt-3 text-sm leading-6 text-cream/65">See the world without an account, enter the archive if you are already a member, or continue from your last private folio on this device.</p></div>
       <a id="continueArchive" href="/dashboard" class="hidden rounded-full border border-gold/25 px-5 py-2.5 text-xs text-gold hover:bg-gold/10"><span>CONTINUE READING</span> →</a>
     </div>
     <div class="grid md:grid-cols-3 gap-4 mt-8">
-      <a href="/#world" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-[9px] tracking-[.24em] text-gold">PUBLIC · NO ACCOUNT</span><h3 class="font-display text-base mt-3">Discover the World</h3><p class="text-sm leading-6 text-cream/55 mt-2">Begin with its scale, chronology, peoples, and visual identity.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">START THE TOUR →</span></a>
-      <a href="/atlas" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-[9px] tracking-[.24em] text-gold">MEMBERS · INTERACTIVE</span><h3 class="font-display text-base mt-3">Open the Atlas</h3><p class="text-sm leading-6 text-cream/55 mt-2">Pan, zoom, search named places, and move directly into their archive entries.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">VIEW THE MAP →</span></a>
-      <a href="/dashboard" class="group rounded-2xl border border-gold/35 bg-gradient-to-br from-gold/[.13] to-transparent p-6 hover:border-gold/60 transition"><span class="text-[9px] tracking-[.24em] text-gold">MEMBERS · PRIVATE</span><h3 class="font-display text-base mt-3">Enter the Archive</h3><p class="text-sm leading-6 text-cream/60 mt-2">Return to recent folios, saved pages, search, maps, and the Battlestation.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">ENTER YOUR DASHBOARD →</span></a>
+      <a href="/#world" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-micro tracking-[.24em] text-gold">PUBLIC · NO ACCOUNT</span><h3 class="font-display text-base mt-3">Discover the World</h3><p class="text-sm leading-6 text-cream/55 mt-2">Begin with its scale, chronology, peoples, and visual identity.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">START THE TOUR →</span></a>
+      <a href="/atlas" class="group rounded-2xl border border-gold/15 bg-cream/[0.03] p-6 hover:border-gold/35 transition"><span class="text-micro tracking-[.24em] text-gold">MEMBERS · INTERACTIVE</span><h3 class="font-display text-base mt-3">Open the Atlas</h3><p class="text-sm leading-6 text-cream/55 mt-2">Pan, zoom, search named places, and move directly into their archive entries.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">VIEW THE MAP →</span></a>
+      <a href="/dashboard" class="group rounded-2xl border border-gold/35 bg-gradient-to-br from-gold/[.13] to-transparent p-6 hover:border-gold/60 transition"><span class="text-micro tracking-[.24em] text-gold">MEMBERS · PRIVATE</span><h3 class="font-display text-base mt-3">Enter the Archive</h3><p class="text-sm leading-6 text-cream/60 mt-2">Return to recent folios, saved pages, search, maps, and the Battlestation.</p><span class="inline-block mt-5 text-xs text-gold group-hover:translate-x-1 transition">ENTER YOUR DASHBOARD →</span></a>
     </div>
   </section>
 
@@ -182,17 +182,17 @@
     <div class="grid md:grid-cols-3 gap-6">
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
         <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◈</div>
-        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">SCALE THAT MATTERS</h3>
+        <h3 class="font-display text-15 tracking-widest font-semibold mb-2">SCALE THAT MATTERS</h3>
         <p class="text-sm leading-6 text-cream/70">1.37× Earth, 1.26 AU from Golias, a ring torn from its moon. Every continent has a climate, a trade, a lie it tells itself. Nothing is filler.</p>
       </div>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
         <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">◎</div>
-        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">MEMORY THAT LASTS</h3>
+        <h3 class="font-display text-15 tracking-widest font-semibold mb-2">MEMORY THAT LASTS</h3>
         <p class="text-sm leading-6 text-cream/70">Twelve ages from the Lost Era to the Age of Strife. 3M years of Shadow conspiracy, filed, cross-linked and guarded. No retcons, no orphans.</p>
       </div>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-7">
         <div class="w-9 h-9 rounded-xl bg-gold/15 border border-gold/20 flex items-center justify-center text-gold mb-4">⬢</div>
-        <h3 class="font-display text-[15px] tracking-widest font-semibold mb-2">FREEDOM AS PHYSICS</h3>
+        <h3 class="font-display text-15 tracking-widest font-semibold mb-2">FREEDOM AS PHYSICS</h3>
         <p class="text-sm leading-6 text-cream/70">Magic is not divine — it is mage-cells. Souls recycle. The Shadows weaponized it. Free people weaponized refusal. That is the thesis.</p>
       </div>
     </div>
@@ -207,17 +207,17 @@
             <source type="image/webp" srcset="/Geor_World.webp">
             <img src="/Geor_World.png" alt="Ge'or valley — river, castle and cliffs under the Silver Bride" class="w-full h-full object-cover opacity-90" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\'p-12 text-center text-cream/50 text-sm\'>Valley view — Geor_World.png</div>'" width="1376" height="768" />
           </picture>
-          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full text-[11px] tracking-widest border border-gold/20">VALLEY VIEW • GRIMMEL PENINSULA • 597 AGD</div>
+          <div class="absolute bottom-4 left-4 bg-ink/80 backdrop-blur px-3 py-2 rounded-full font-mono text-kicker tracking-widest border border-gold/20">VALLEY VIEW • GRIMMEL PENINSULA • 597 AGD</div>
         </div>
         <div class="p-8 md:p-10 flex flex-col justify-center">
-          <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">THE ATLAS</p>
-          <h2 class="font-display text-[30px] leading-[1.05] font-bold">17 CONTINENTS.<br/>ONE COHERENT WORLD.</h2>
+          <p class="text-gold text-kicker tracking-[0.28em] font-semibold mb-3">THE ATLAS</p>
+          <h2 class="font-display text-30 leading-[1.05] font-bold">17 CONTINENTS.<br/>ONE COHERENT WORLD.</h2>
           <p class="mt-4 text-sm leading-6 text-cream/70">
-            Under the Silver Bride — a thin, shattered ring torn from the third moon, not a solid Saturn band — 17 continents await. Commissioned by Archduke Hermes Kennensbach, Cartographer Office of the Erisian Empire — 0–8000 km scale, 16-point compass. Every border is canon.
+            Under the Silver Bride — a thin, shattered ring torn from the third moon, not a solid Saturn band — 17 continents await. Commissioned by Archduke Hermes Kennensbach, Cartographer Office of the Erisian Empire — <span class="font-mono">0–8000 km scale, 16-point compass</span>. Every border is canon.
           </p>
           <ul class="mt-6 space-y-2.5 text-sm text-cream/80">
             <li class="flex gap-3"><span class="text-gold">—</span> 17 continents / landmasses, 8 seas, 3 moons + the Bride</li>
-            <li class="flex gap-3"><span class="text-gold">—</span> Political map at 3.086 km / pixel • ~49,400 km world</li>
+            <li class="flex gap-3"><span class="text-gold">—</span> Political map at <span class="font-mono">3.086 km / pixel • ~49,400 km</span> world</li>
             <li class="flex gap-3"><span class="text-gold">—</span> World map & Grimmel zoom — choose your view in the Atlas</li>
           </ul>
           <div class="mt-7 flex flex-wrap gap-2">
@@ -233,8 +233,8 @@
   <section id="history" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24" aria-labelledby="historyTitle">
     <div class="flex items-end justify-between gap-4 mb-8">
       <div>
-        <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">CHRONOLOGY</p>
-        <h2 id="historyTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight">THE AGES OF GE'OR</h2>
+        <p class="text-gold text-kicker tracking-[0.28em] font-semibold">CHRONOLOGY</p>
+        <h2 id="historyTitle" class="font-display text-xl md:text-4xl font-bold tracking-tight">THE AGES OF GE'OR</h2>
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <button id="agePrev" type="button" aria-controls="ageGrid" aria-label="Scroll to earlier ages" class="h-9 w-9 rounded-full border border-gold/20 text-gold hover:bg-gold/10 transition">←</button>
@@ -251,20 +251,20 @@
   <div id="ageDrawer" class="hidden max-w-[1280px] mx-auto px-6 -mt-8 pb-16 md:pb-24" role="region" aria-labelledby="ageDrawerTitle" aria-hidden="true">
     <div class="rounded-2xl border border-gold/20 bg-[#1a1a18] p-6 md:p-7 flex flex-col sm:flex-row justify-between gap-6">
       <div>
-        <p id="ageDrawerKicker" class="text-gold text-[11px] tracking-[0.28em] font-semibold"></p>
-        <h3 id="ageDrawerTitle" class="font-display text-[22px] font-bold mt-1"></h3>
+        <p id="ageDrawerKicker" class="text-gold text-kicker tracking-[0.28em] font-semibold"></p>
+        <h3 id="ageDrawerTitle" class="font-display text-22 font-bold mt-1"></h3>
         <p id="ageDrawerText" class="text-sm leading-6 text-cream/70 mt-2 max-w-[640px]"></p>
         <div id="ageDrawerMeta" class="text-xs text-cream/50 mt-3"></div>
         <button id="ageDrawerEnter" type="button" class="mt-4 inline-flex border border-gold/30 text-gold px-5 py-2 rounded-full text-xs tracking-widest hover:bg-gold/10 transition">ENTER ARCHIVE →</button>
       </div>
-      <button id="ageDrawerClose" type="button" class="self-start text-cream/60 hover:text-cream text-xl leading-none" aria-label="Close selected age">✕</button>
+      <button id="ageDrawerClose" type="button" class="self-start text-cream/60 hover:text-cream text-lg leading-none" aria-label="Close selected age">✕</button>
     </div>
   </div>
 
   <!-- Gallery / Peoples -->
   <section id="gallery" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24">
-    <p class="text-gold text-[11px] tracking-[0.28em] font-semibold mb-3">PEOPLES & POWERS</p>
-    <h2 class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mb-8">A WORLD THAT BREATHES.</h2>
+    <p class="text-gold text-kicker tracking-[0.28em] font-semibold mb-3">PEOPLES & POWERS</p>
+    <h2 class="font-display text-xl md:text-4xl font-bold tracking-tight mb-8">A WORLD THAT BREATHES.</h2>
     <div class="grid md:grid-cols-3 gap-5">
       <div class="rounded-2xl overflow-hidden border border-gold/15 bg-cream/[0.03]">
         <picture><source type="image/webp" srcset="/panel-erisia.webp"><img src="/panel-erisia.jpg" alt="Erisian Empire — gothic imperial capital on the hill, flags of the dragon" class="w-full h-44 object-cover" loading="lazy" decoding="async" width="1408" height="768" /></picture>
@@ -289,7 +289,7 @@
       </div>
     </div>
     <div class="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-gold/15 bg-gradient-to-r from-gold/[0.08] to-transparent p-5">
-      <div><p class="text-[10px] tracking-[0.24em] text-gold">THE KEEPER'S BESTIARY</p><p class="mt-1 text-sm text-cream/65">Browse 34 sentient peoples by lineage, origin, and form.</p></div>
+      <div><p class="text-tiny tracking-[0.24em] text-gold">THE KEEPER'S BESTIARY</p><p class="mt-1 text-sm text-cream/65">Browse 34 sentient peoples by lineage, origin, and form.</p></div>
       <a href="/species" class="shrink-0 rounded-full bg-gold px-5 py-2.5 text-xs font-semibold text-ink hover:brightness-110 transition">OPEN SPECIES GALLERY →</a>
     </div>
   </section>
@@ -298,38 +298,38 @@
   <section id="archive" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24" aria-labelledby="archiveTitle">
     <div class="rounded-[20px] border border-gold/15 bg-gradient-to-br from-gold/[0.07] via-cream/[0.025] to-transparent p-7 md:p-10">
       <div class="max-w-[700px]">
-        <p class="text-gold text-[11px] tracking-[0.28em] font-semibold">INSIDE THE GATE</p>
-        <h2 id="archiveTitle" class="font-display text-[28px] md:text-[36px] font-bold tracking-tight mt-2">THE WORLD HAS A BACK ROOM.</h2>
+        <p class="text-gold text-kicker tracking-[0.28em] font-semibold">INSIDE THE GATE</p>
+        <h2 id="archiveTitle" class="font-display text-xl md:text-4xl font-bold tracking-tight mt-2">THE WORLD HAS A BACK ROOM.</h2>
         <p class="mt-3 text-sm leading-6 text-cream/65">The public page is the map room. Members get the shelves behind it: the complete wiki, the Battlestation workspace, and one quiet dashboard to keep the archive in order.</p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mt-7">
         <a id="wiki" href="/wiki/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Enter the private Ge'or wiki">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">01 / WIKI</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">01 / WIKI</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">THE FULL ARCHIVE</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">1,436 pages of nations, species, history, systems and the things between them.</p>
         </a>
         <a id="app" href="/app/" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Battlestation workspace">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">02 / APP</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">02 / APP</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">BATTLESTATION WEB</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Search, preview, write and commit additions to the living vault from the browser.</p>
         </a>
         <a id="editor" href="/map-editor" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private Atlas Studio map editor">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">03 / STUDIO</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">03 / STUDIO</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">ATLAS STUDIO</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Draw shared markers, regions and labels on the world and Grimmel folios.</p>
         </a>
         <a href="/search" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Search the private archive">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">04 / SEARCH</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">04 / SEARCH</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">KEEPER'S INDEX</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">Search all 1,436 titles by nation, species, history, system or archive path.</p>
         </a>
         <a id="updates" href="/updates" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Read public archive updates">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">05 / UPDATES</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">05 / UPDATES</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">WHAT CHANGED</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">A privacy-safe public ledger of new pages, revisions and archive milestones.</p>
         </a>
         <a href="/dashboard.html" class="group rounded-xl border border-gold/15 bg-ink/60 p-5 hover:border-gold/35 hover:bg-ink transition" aria-label="Open the private member dashboard">
-          <div class="flex items-center justify-between"><span class="text-[11px] tracking-[0.22em] text-gold">06 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
+          <div class="flex items-center justify-between"><span class="text-kicker tracking-[0.22em] text-gold">06 / DASHBOARD</span><span aria-hidden="true" class="text-gold group-hover:translate-x-1 transition">→</span></div>
           <h3 class="font-display text-sm tracking-widest font-semibold mt-3">YOUR WAY IN</h3>
           <p class="text-sm leading-6 text-cream/55 mt-2">A single home for your account, the wiki, the atlas, the workspace and the next thing to read.</p>
         </a>
@@ -339,8 +339,8 @@
 
   <!-- Quote -->
   <section class="max-w-[860px] mx-auto px-6 pb-16 md:pb-24 text-center">
-    <div class="text-gold/40 text-3xl mb-4">“</div>
-    <blockquote class="font-serif text-[24px] md:text-[32px] leading-[1.25] text-cream">
+    <div class="text-gold/40 text-30 mb-4">“</div>
+    <blockquote class="font-serif text-24 md:text-32 leading-[1.25] text-cream">
       The Shadows are losing to the fact that <span class="text-gold italic">free people keep refusing to stay dead.</span>
     </blockquote>
     <p class="mt-4 text-xs tracking-[0.24em] text-cream/50">— ARCHIVE OF THE TRAVELER, RUINS OF BAOTH</p>
@@ -351,7 +351,7 @@
     <div class="rounded-[20px] bg-gradient-to-br from-gold to-amberdeep p-[1px]">
       <div class="rounded-[19px] bg-ink px-8 md:px-12 py-10 md:py-12 flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
-          <h3 class="font-display text-[26px] md:text-[32px] font-bold tracking-tight text-cream">This world is private.</h3>
+          <h3 class="font-display text-26 md:text-32 font-bold tracking-tight text-cream">This world is private.</h3>
           <p class="mt-2 text-sm leading-6 text-cream/70 max-w-[560px]">World of Ge'or is an invite-only archive. If you were given a link, you’re already on the list. If not — request access and we’ll get back to you.</p>
         </div>
         <div class="flex gap-3 shrink-0">
@@ -381,7 +381,7 @@
     <div id="requestBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
       <button id="closeRequest" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close request access dialog">✕</button>
-      <h3 id="requestTitle" class="font-display text-[20px] font-bold tracking-tight">REQUEST ACCESS</h3>
+      <h3 id="requestTitle" class="font-display text-lg font-bold tracking-tight">REQUEST ACCESS</h3>
       <p id="requestDescription" class="text-sm text-cream/60 mt-1">Tell us why you want to enter. We will email you an invite code.</p>
       <form id="requestForm" class="mt-5 space-y-3">
         <label for="reqEmail" class="sr-only">Email address</label>
@@ -391,7 +391,7 @@
         <button type="submit" id="reqSubmit" class="w-full bg-cream text-ink py-3 rounded-full text-sm font-semibold hover:bg-white transition">Send Request</button>
         <p id="reqMsgOut" class="text-xs text-center min-h-[1.2em]" aria-live="polite"></p>
       </form>
-      <p class="text-[11px] text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
+      <p class="text-kicker text-cream/40 text-center mt-3">Or email directly: <a href="mailto:ichieisenheart@gmail.com?subject=Request%20access%20to%20World%20of%20Ge&apos;or" class="text-gold underline">ichieisenheart@gmail.com</a></p>
     </div>
   </div>
 
@@ -400,7 +400,7 @@
     <div id="authBackdrop" class="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
     <div class="relative w-full max-w-[420px] rounded-[16px] bg-[#1a1a18] border border-gold/20 p-6 md:p-7 shadow-2xl">
       <button id="closeAuth" type="button" class="absolute top-4 right-4 text-cream/60 hover:text-cream" aria-label="Close sign in dialog">✕</button>
-      <h3 id="authTitle" class="font-display text-[20px] font-bold tracking-tight">ENTER GE'OR</h3>
+      <h3 id="authTitle" class="font-display text-lg font-bold tracking-tight">ENTER GE'OR</h3>
       <p id="authDescription" class="text-sm text-cream/60 mt-1">Invite-only. You need an invite code.</p>
       <div class="flex gap-2 mt-4 text-xs">
         <button id="tabLogin" type="button" role="tab" aria-selected="true" class="flex-1 py-2 rounded-full bg-gold text-ink font-semibold">LOGIN</button>
@@ -535,8 +535,8 @@
       const scrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
       ageGrid.innerHTML = Object.entries(AGE_DATA).map(([age, data])=>`
         <button type="button" data-age="${age}" aria-pressed="false" class="age-card min-w-[220px] md:min-w-[250px] snap-start text-left rounded-2xl border border-gold/15 bg-cream/[0.035] p-5 hover:border-gold/35 hover:bg-cream/[0.06] transition">
-          <span class="text-[10px] tracking-[0.28em] text-gold">AGE ${age}</span>
-          <span class="block font-display text-[14px] leading-5 font-semibold mt-2">${data.title}</span>
+          <span class="text-tiny tracking-[0.28em] text-gold">AGE ${age}</span>
+          <span class="block font-display text-sm leading-5 font-semibold mt-2">${data.title}</span>
           <span class="block text-xs leading-5 text-cream/50 mt-2">${data.meta}</span>
         </button>
       `).join('');

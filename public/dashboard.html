@@ -7,7 +7,7 @@
   <title>Dashboard — World of Ge'or</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css" />
   <link rel="stylesheet" href="/archive-compass.css" />
   <style>#passwordDialog::backdrop{background:rgba(15,14,13,.82);backdrop-filter:blur(6px)}</style>
@@ -34,7 +34,7 @@
     </div>
     <div id="dash" class="hidden space-y-6">
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-6">
-        <h1 class="font-display text-2xl font-bold">Welcome, <span id="dashName" class="text-gold">—</span></h1>
+        <h1 class="font-display text-24 font-bold">Welcome, <span id="dashName" class="text-gold">—</span></h1>
         <p class="text-sm text-cream/60 mt-1">You are inside. Invite-only archive — 17 continents, 12 ages, Silver Bride overhead.</p>
         <div class="flex gap-2 mt-4 flex-wrap">
           <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 1,436 pages</a>
@@ -46,14 +46,14 @@
       </div>
       <section id="worldStats" class="rounded-2xl border border-gold/15 bg-gradient-to-br from-gold/[0.07] via-cream/[0.025] to-transparent overflow-hidden" aria-labelledby="worldStatsTitle" aria-busy="true">
         <div class="px-5 md:px-6 py-4 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
-          <div><p class="text-[10px] tracking-[.24em] text-gold">WORLD LEDGER · VAULT + D1</p><h2 id="worldStatsTitle" class="font-display text-lg mt-1">Ge'or at a glance</h2></div>
-          <p id="statsRefresh" class="text-[10px] tracking-widest text-cream/40" role="status" aria-live="polite">Reading the archive…</p>
+          <div><p class="text-tiny tracking-[.24em] text-gold">WORLD LEDGER · VAULT + D1</p><h2 id="worldStatsTitle" class="font-display text-18 mt-1">Ge'or at a glance</h2></div>
+          <p id="statsRefresh" class="font-mono text-tiny tracking-widest text-cream/40" role="status" aria-live="polite">Reading the archive…</p>
         </div>
         <div class="grid grid-cols-2 lg:grid-cols-4 border-b border-gold/10">
-          <div class="p-5 md:p-6 border-r border-b lg:border-b-0 border-gold/10"><p id="statPages" class="font-display text-3xl text-gold">—</p><p class="text-[10px] tracking-widest text-cream/45 mt-1">INDEXED PAGES</p></div>
-          <div class="p-5 md:p-6 lg:border-r border-b lg:border-b-0 border-gold/10"><p id="statNations" class="font-display text-3xl">243</p><p class="text-[10px] tracking-widest text-cream/45 mt-1">KNOWN NATIONS</p></div>
-          <div class="p-5 md:p-6 border-r border-gold/10"><p id="statSpecies" class="font-display text-3xl">34</p><p class="text-[10px] tracking-widest text-cream/45 mt-1">SENTIENT SPECIES</p></div>
-          <div class="p-5 md:p-6"><p id="statAges" class="font-display text-3xl">13</p><p class="text-[10px] tracking-widest text-cream/45 mt-1">RECORDED AGES</p></div>
+          <div class="p-5 md:p-6 border-r border-b lg:border-b-0 border-gold/10"><p id="statPages" class="font-mono text-30 text-gold">—</p><p class="text-tiny tracking-widest text-cream/45 mt-1">INDEXED PAGES</p></div>
+          <div class="p-5 md:p-6 lg:border-r border-b lg:border-b-0 border-gold/10"><p id="statNations" class="font-mono text-30">243</p><p class="text-tiny tracking-widest text-cream/45 mt-1">KNOWN NATIONS</p></div>
+          <div class="p-5 md:p-6 border-r border-gold/10"><p id="statSpecies" class="font-mono text-30">34</p><p class="text-tiny tracking-widest text-cream/45 mt-1">SENTIENT SPECIES</p></div>
+          <div class="p-5 md:p-6"><p id="statAges" class="font-mono text-30">13</p><p class="text-tiny tracking-widest text-cream/45 mt-1">RECORDED AGES</p></div>
         </div>
         <div class="grid lg:grid-cols-[1.5fr_.8fr]">
           <figure class="p-5 md:p-6 lg:border-r border-gold/10" aria-labelledby="coverageTitle">
@@ -63,37 +63,37 @@
           <div class="p-5 md:p-6">
             <p class="text-xs tracking-widest font-semibold">Archive pulse</p>
             <dl class="mt-5 space-y-4">
-              <div class="flex items-baseline justify-between border-b border-gold/10 pb-3"><dt class="text-xs text-cream/50">Ledger events</dt><dd id="statActivity" class="font-display text-xl text-gold">—</dd></div>
-              <div class="flex items-baseline justify-between border-b border-gold/10 pb-3"><dt class="text-xs text-cream/50">Saved map folios</dt><dd id="statMaps" class="font-display text-xl text-gold">—</dd></div>
-              <div class="flex items-baseline justify-between"><dt class="text-xs text-cream/50">Continents</dt><dd id="statContinents" class="font-display text-xl">17</dd></div>
+              <div class="flex items-baseline justify-between border-b border-gold/10 pb-3"><dt class="text-xs text-cream/50">Ledger events</dt><dd id="statActivity" class="font-mono text-lg text-gold">—</dd></div>
+              <div class="flex items-baseline justify-between border-b border-gold/10 pb-3"><dt class="text-xs text-cream/50">Saved map folios</dt><dd id="statMaps" class="font-mono text-lg text-gold">—</dd></div>
+              <div class="flex items-baseline justify-between"><dt class="text-xs text-cream/50">Continents</dt><dd id="statContinents" class="font-mono text-lg">17</dd></div>
             </dl>
           </div>
         </div>
       </section>
       <section class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden" aria-labelledby="yourArchiveTitle">
         <div class="px-5 md:px-6 py-4 border-b border-gold/10 flex flex-wrap items-center justify-between gap-3">
-          <div><p class="text-[10px] tracking-[.24em] text-gold">SYNCED · PRIVATE TO YOU</p><h2 id="yourArchiveTitle" class="font-display text-lg mt-1">Your archive trail</h2></div>
+          <div><p class="text-tiny tracking-[.24em] text-gold">SYNCED · PRIVATE TO YOU</p><h2 id="yourArchiveTitle" class="font-display text-18 mt-1">Your archive trail</h2></div>
           <a href="/search" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Find another folio</a>
         </div>
         <div class="grid lg:grid-cols-2">
-          <div class="p-5 md:p-6 lg:border-r border-gold/10"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">CONTINUE READING</h3><button id="clearTrail" type="button" class="text-xs text-cream/35 hover:text-cream">Clear trail</button></div><div id="readingTrail" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Your recently opened folios will appear here.</p></div></div>
-          <div class="p-5 md:p-6"><div class="flex items-center justify-between gap-3"><h3 class="text-[10px] tracking-[.22em] text-gold">SAVED FOLIOS</h3><span id="savedCount" class="text-[10px] text-cream/35">0 saved</span></div><div id="savedFolios" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Save a wiki folio from its reading toolbar to keep it here.</p></div></div>
+          <div class="p-5 md:p-6 lg:border-r border-gold/10"><div class="flex items-center justify-between gap-3"><h3 class="text-tiny tracking-[.22em] text-gold">CONTINUE READING</h3><button id="clearTrail" type="button" class="text-xs text-cream/35 hover:text-cream">Clear trail</button></div><div id="readingTrail" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Your recently opened folios will appear here.</p></div></div>
+          <div class="p-5 md:p-6"><div class="flex items-center justify-between gap-3"><h3 class="text-tiny tracking-[.22em] text-gold">SAVED FOLIOS</h3><span id="savedCount" class="font-mono text-tiny text-cream/35">0 saved</span></div><div id="savedFolios" class="mt-3 space-y-2"><p class="text-sm text-cream/40">Save a wiki folio from its reading toolbar to keep it here.</p></div></div>
         </div>
       </section>
       <section class="grid lg:grid-cols-2 gap-4" aria-label="Personal archive overview">
         <div class="rounded-2xl border border-gold/15 bg-gradient-to-br from-gold/[0.07] to-transparent overflow-hidden">
-          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-[10px] tracking-[.22em] text-gold">SINCE YOUR LAST VISIT</p><h2 class="font-display text-lg mt-1">New in the archive</h2></div><button id="markArchiveSeen" type="button" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Mark seen</button></div>
+          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-tiny tracking-[.22em] text-gold">SINCE YOUR LAST VISIT</p><h2 class="font-display text-18 mt-1">New in the archive</h2></div><button id="markArchiveSeen" type="button" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Mark seen</button></div>
           <div id="newSinceVisit" class="divide-y divide-gold/10"><p class="p-5 text-sm text-cream/40">Checking the newest folios…</p></div>
         </div>
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
-          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-[10px] tracking-[.22em] text-gold">SHARED EDITORIAL DESK</p><h2 class="font-display text-lg mt-1">Drafts and reviews</h2></div><a href="/app/" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Create</a></div>
+          <div class="px-5 py-4 border-b border-gold/10 flex items-center justify-between gap-3"><div><p class="text-tiny tracking-[.22em] text-gold">SHARED EDITORIAL DESK</p><h2 class="font-display text-18 mt-1">Drafts and reviews</h2></div><a href="/app/" class="text-xs border border-gold/20 rounded-full px-3 py-1.5 hover:bg-gold/10">Create</a></div>
           <div id="workflowQueue" class="divide-y divide-gold/10"><p class="p-5 text-sm text-cream/40">Opening the review queue…</p></div>
         </div>
       </section>
       <div class="grid md:grid-cols-3 gap-4">
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
           <h3 class="text-xs tracking-widest font-semibold text-gold">ATLAS</h3>
-          <p class="text-sm text-cream/70 mt-2">World map + Grimmel zoom. 597 AGD, 0–8000 km, 16-point compass.</p>
+          <p class="text-sm text-cream/70 mt-2">World map + Grimmel zoom. <span class="font-mono">597 AGD, 0–8000 km, 16-point compass</span>.</p>
           <a href="/atlas.html" class="inline-block mt-3 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">Open →</a>
         </div>
         <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
@@ -131,8 +131,8 @@
       </div>
       <section class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden" aria-labelledby="roomsTitle">
         <div class="px-5 md:px-6 py-4 border-b border-gold/10">
-          <p class="text-[10px] tracking-[.24em] text-gold">EVERY ROOM · MEMBER HOME</p>
-          <h2 id="roomsTitle" class="font-display text-lg mt-1">Explore every room</h2>
+          <p class="text-tiny tracking-[.24em] text-gold">EVERY ROOM · MEMBER HOME</p>
+          <h2 id="roomsTitle" class="font-display text-18 mt-1">Explore every room</h2>
         </div>
         <div id="roomsGrid" class="grid md:grid-cols-3 gap-4 p-5">
           <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
@@ -228,7 +228,7 @@
         </div>
       </section>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] overflow-hidden">
-      <div class="px-5 py-3 border-b border-gold/10 flex items-center justify-between"><div><p class="text-[10px] tracking-[.22em] text-gold">RECENT ARCHIVE MOTION</p><h3 class="text-sm font-semibold mt-1">What changed lately</h3></div><a href="/updates" class="text-xs border border-gold/20 rounded-full px-3 py-1.5">Full ledger</a></div>
+      <div class="px-5 py-3 border-b border-gold/10 flex items-center justify-between"><div><p class="text-tiny tracking-[.22em] text-gold">RECENT ARCHIVE MOTION</p><h3 class="text-sm font-semibold mt-1">What changed lately</h3></div><a href="/updates" class="text-xs border border-gold/20 rounded-full px-3 py-1.5">Full ledger</a></div>
         <div id="recentActivity" class="divide-y divide-gold/10"><div class="p-5 text-sm text-cream/45">Opening the ledger…</div></div>
       </div>
       <div class="rounded-2xl border border-gold/15 bg-cream/[0.03] p-5">
@@ -243,11 +243,11 @@
   </main>
   <dialog id="passwordDialog" class="w-[min(92vw,460px)] rounded-2xl border border-gold/20 bg-[#191a18] p-0 text-cream shadow-2xl">
     <form id="passwordForm" method="dialog" class="p-6">
-      <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] tracking-[.24em] text-gold">ACCOUNT SECURITY</p><h2 class="font-display text-xl mt-1">Change password</h2></div><button id="closePassword" type="button" class="text-xl text-cream/50 hover:text-cream" aria-label="Close">×</button></div>
+      <div class="flex items-start justify-between gap-4"><div><p class="text-tiny tracking-[.24em] text-gold">ACCOUNT SECURITY</p><h2 class="font-display text-lg mt-1">Change password</h2></div><button id="closePassword" type="button" class="text-lg text-cream/50 hover:text-cream" aria-label="Close">×</button></div>
       <p class="text-sm text-cream/55 mt-3">Use at least 12 characters. Your current archive session will remain open.</p>
-      <label class="block mt-5 text-[10px] tracking-widest text-cream/60">CURRENT PASSWORD<input id="currentPassword" type="password" autocomplete="current-password" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
-      <label class="block mt-4 text-[10px] tracking-widest text-cream/60">NEW PASSWORD<input id="newPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
-      <label class="block mt-4 text-[10px] tracking-widest text-cream/60">CONFIRM NEW PASSWORD<input id="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <label class="block mt-5 text-tiny tracking-widest text-cream/60">CURRENT PASSWORD<input id="currentPassword" type="password" autocomplete="current-password" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <label class="block mt-4 text-tiny tracking-widest text-cream/60">NEW PASSWORD<input id="newPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
+      <label class="block mt-4 text-tiny tracking-widest text-cream/60">CONFIRM NEW PASSWORD<input id="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="256" required class="mt-2 w-full rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm outline-none focus:border-gold/50"></label>
       <p id="passwordMessage" class="min-h-[1.25rem] mt-3 text-xs" role="status" aria-live="polite"></p>
       <button id="savePassword" type="submit" class="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold text-ink">Update password</button>
     </form>
@@ -269,7 +269,7 @@
       const localTrail=safeLocalItems('geor_archive_trail_v1',6); const localSaved=safeLocalItems('geor_archive_bookmarks_v1',8);
       const merge=(local,remote,limit)=>{ const seen=new Set(); return [...local,...(remote||[]).map(item=>({title:item.title,url:item.path,progress:item.progress}))].filter(item=>item.url&&!seen.has(item.url)&&seen.add(item.url)).slice(0,limit) };
       const trail=merge(localTrail,syncedArchive?.recent,6); const saved=merge(localSaved,syncedArchive?.saved,8);
-      const makeRows=(target,items,empty)=>{ target.replaceChildren(); if(!items.length){ const p=document.createElement('p'); p.className='text-sm text-cream/40'; p.textContent=empty; target.append(p); return } items.forEach((item,index)=>{ const link=document.createElement('a'); link.href=item.url; link.className='group flex items-center justify-between gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-3 hover:border-gold/30'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block truncate text-sm font-medium text-cream/80'; title.textContent=item.title; const path=document.createElement('small'); path.className='block truncate mt-1 text-[10px] text-cream/35'; path.textContent=decodeURIComponent(item.url).replace(/^\/wiki\//,'').replace(/\/$/,'').replaceAll('/',' › ')||'Archive'; const arrow=document.createElement('span'); arrow.className='text-gold group-hover:translate-x-1 transition'; arrow.ariaHidden='true'; arrow.textContent=index===0&&target.id==='readingTrail'?'CONTINUE →':'→'; copy.append(title,path); link.append(copy,arrow); target.append(link) }) };
+      const makeRows=(target,items,empty)=>{ target.replaceChildren(); if(!items.length){ const p=document.createElement('p'); p.className='text-sm text-cream/40'; p.textContent=empty; target.append(p); return } items.forEach((item,index)=>{ const link=document.createElement('a'); link.href=item.url; link.className='group flex items-center justify-between gap-3 rounded-xl border border-gold/10 bg-ink/35 px-4 py-3 hover:border-gold/30'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block truncate text-sm font-medium text-cream/80'; title.textContent=item.title; const path=document.createElement('small'); path.className='block truncate mt-1 text-tiny text-cream/35'; path.textContent=decodeURIComponent(item.url).replace(/^\/wiki\//,'').replace(/\/$/,'').replaceAll('/',' › ')||'Archive'; const arrow=document.createElement('span'); arrow.className='text-gold group-hover:translate-x-1 transition'; arrow.ariaHidden='true'; arrow.textContent=index===0&&target.id==='readingTrail'?'CONTINUE →':'→'; copy.append(title,path); link.append(copy,arrow); target.append(link) }) };
       makeRows(document.getElementById('readingTrail'),trail,'Your recently opened folios will appear here.'); makeRows(document.getElementById('savedFolios'),saved,'Save a wiki folio from its reading toolbar to keep it here.'); document.getElementById('savedCount').textContent=`${saved.length} saved`;
     };
     renderArchiveTrail(); window.addEventListener('geor:trail-updated',renderArchiveTrail); window.addEventListener('geor:bookmarks-updated',renderArchiveTrail);
@@ -278,11 +278,11 @@
     const renderNewSinceVisit=()=>{
       const target=document.getElementById('newSinceVisit'); const unseen=Array.isArray(syncedArchive?.unseen)?syncedArchive.unseen:[]; target.replaceChildren();
       if(!unseen.length){ const empty=document.createElement('p'); empty.className='p-5 text-sm text-cream/45'; empty.textContent='You are caught up. The archive is quiet for now.'; target.append(empty); return; }
-      unseen.slice(0,8).forEach(item=>{ const row=item.path&&item.path.startsWith('/')?document.createElement('a'):document.createElement('div'); if(row.tagName==='A') row.href=item.path; row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block text-sm text-cream/80'; title.textContent=item.summary||'Archive updated'; const path=document.createElement('small'); path.className='block truncate text-[10px] text-cream/35 mt-1'; path.textContent=item.path||item.action||'Archive'; const time=document.createElement('time'); time.className='text-[10px] text-gold/70 whitespace-nowrap'; time.dateTime=item.created_at||''; time.textContent=item.created_at?new Date(item.created_at).toLocaleDateString():'New'; copy.append(title,path); row.append(copy,time); target.append(row); });
+      unseen.slice(0,8).forEach(item=>{ const row=item.path&&item.path.startsWith('/')?document.createElement('a'):document.createElement('div'); if(row.tagName==='A') row.href=item.path; row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const copy=document.createElement('span'); copy.className='min-w-0'; const title=document.createElement('b'); title.className='block text-sm text-cream/80'; title.textContent=item.summary||'Archive updated'; const path=document.createElement('small'); path.className='block truncate text-tiny text-cream/35 mt-1'; path.textContent=item.path||item.action||'Archive'; const time=document.createElement('time'); time.className='font-mono text-tiny text-gold/70 whitespace-nowrap'; time.dateTime=item.created_at||''; time.textContent=item.created_at?new Date(item.created_at).toLocaleDateString():'New'; copy.append(title,path); row.append(copy,time); target.append(row); });
     };
     document.getElementById('markArchiveSeen').onclick=async()=>{ try{ await api('/api/archive-state',{method:'POST',body:JSON.stringify({action:'seen'})}); if(syncedArchive) syncedArchive.unseen=[]; renderNewSinceVisit(); }catch{} };
     const loadPersonalArchive=async()=>{ try{ syncedArchive=await api('/api/archive-state'); renderArchiveTrail(); renderNewSinceVisit(); }catch{ renderNewSinceVisit(); } };
-    const loadWorkflow=async()=>{ const target=document.getElementById('workflowQueue'); try{ const data=await api('/api/workflow'); const items=(data.items||[]).filter(item=>item.status!=='published').slice(0,8); target.replaceChildren(); if(!items.length){ const empty=document.createElement('p'); empty.className='p-5 text-sm text-cream/45'; empty.textContent='No drafts are waiting. The editorial desk is clear.'; target.append(empty); return; } items.forEach(item=>{ const row=document.createElement('div'); row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const link=document.createElement('a'); link.href=item.kind==='map'?`/map-editor?map=${encodeURIComponent(item.path)}`:'/app/'; link.className='min-w-0 flex-1'; const title=document.createElement('b'); title.className='block truncate text-sm text-cream/80'; title.textContent=item.title; const meta=document.createElement('small'); meta.className='block truncate text-[10px] text-cream/35 mt-1'; meta.textContent=`${item.kind.toUpperCase()} · ${item.path}`; link.append(title,meta); const actions=document.createElement('span'); actions.className='flex items-center gap-2'; const badge=document.createElement('span'); badge.className='text-[9px] tracking-widest text-gold border border-gold/20 rounded-full px-2 py-1'; badge.textContent=item.status.toUpperCase(); actions.append(badge); if(item.status==='review'){ const approve=document.createElement('button'); approve.type='button'; approve.className='text-[9px] tracking-widest bg-gold text-ink rounded-full px-2 py-1 font-semibold'; approve.textContent='APPROVE'; approve.onclick=async()=>{ approve.disabled=true; try{ await api('/api/workflow',{method:'POST',body:JSON.stringify({id:item.id,status:'approved',summary:`${item.title} approved for publication`})}); loadWorkflow(); }catch{ approve.disabled=false; } }; actions.append(approve); } row.append(link,actions); target.append(row); }); }catch{ target.innerHTML='<p class="p-5 text-sm text-cream/45">The editorial desk is temporarily unavailable.</p>'; } };
+    const loadWorkflow=async()=>{ const target=document.getElementById('workflowQueue'); try{ const data=await api('/api/workflow'); const items=(data.items||[]).filter(item=>item.status!=='published').slice(0,8); target.replaceChildren(); if(!items.length){ const empty=document.createElement('p'); empty.className='p-5 text-sm text-cream/45'; empty.textContent='No drafts are waiting. The editorial desk is clear.'; target.append(empty); return; } items.forEach(item=>{ const row=document.createElement('div'); row.className='flex items-center justify-between gap-4 px-5 py-3 hover:bg-gold/[0.04]'; const link=document.createElement('a'); link.href=item.kind==='map'?`/map-editor?map=${encodeURIComponent(item.path)}`:'/app/'; link.className='min-w-0 flex-1'; const title=document.createElement('b'); title.className='block truncate text-sm text-cream/80'; title.textContent=item.title; const meta=document.createElement('small'); meta.className='block truncate text-tiny text-cream/35 mt-1'; meta.textContent=`${item.kind.toUpperCase()} · ${item.path}`; link.append(title,meta); const actions=document.createElement('span'); actions.className='flex items-center gap-2'; const badge=document.createElement('span'); badge.className='text-micro tracking-widest text-gold border border-gold/20 rounded-full px-2 py-1'; badge.textContent=item.status.toUpperCase(); actions.append(badge); if(item.status==='review'){ const approve=document.createElement('button'); approve.type='button'; approve.className='text-micro tracking-widest bg-gold text-ink rounded-full px-2 py-1 font-semibold'; approve.textContent='APPROVE'; approve.onclick=async()=>{ approve.disabled=true; try{ await api('/api/workflow',{method:'POST',body:JSON.stringify({id:item.id,status:'approved',summary:`${item.title} approved for publication`})}); loadWorkflow(); }catch{ approve.disabled=false; } }; actions.append(approve); } row.append(link,actions); target.append(row); }); }catch{ target.innerHTML='<p class="p-5 text-sm text-cream/45">The editorial desk is temporarily unavailable.</p>'; } };
     async function loadWorldStats(){
       const section=document.getElementById('worldStats');
       const refresh=document.getElementById('statsRefresh');
@@ -300,10 +300,10 @@
         const chart=document.getElementById('coverageChart'); chart.replaceChildren();
         coverage.forEach(([label,value])=>{
           const row=document.createElement('div'); row.className='grid grid-cols-[74px_1fr_42px] gap-3 items-center';
-          const name=document.createElement('span'); name.className='text-[10px] text-cream/55'; name.textContent=label;
+          const name=document.createElement('span'); name.className='text-tiny text-cream/55'; name.textContent=label;
           const track=document.createElement('div'); track.className='h-2 rounded-full bg-cream/[0.06] overflow-hidden'; track.setAttribute('role','progressbar'); track.setAttribute('aria-label',`${label}: ${value} indexed folios`); track.setAttribute('aria-valuenow',String(value)); track.setAttribute('aria-valuemin','0'); track.setAttribute('aria-valuemax',String(max));
           const bar=document.createElement('span'); bar.className='block h-full rounded-full bg-gradient-to-r from-amberdeep to-gold'; bar.style.width=`${Math.max(2,value/max*100)}%`; track.append(bar);
-          const amount=document.createElement('b'); amount.className='text-right text-[10px] text-gold font-medium'; amount.textContent=numberFormat.format(value);
+          const amount=document.createElement('b'); amount.className='font-mono text-right text-tiny text-gold font-medium'; amount.textContent=numberFormat.format(value);
           row.append(name,track,amount); chart.append(row);
         });
         refresh.textContent=`LIVE · ${new Date(data.refreshedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
@@ -345,7 +345,7 @@
       const list=document.getElementById('recentActivity'); list.replaceChildren();
       const updates=Array.isArray(data.updates)?data.updates:[];
       if(!updates.length){ const row=document.createElement('div'); row.className='p-5 text-sm text-cream/45'; row.textContent='The ledger is quiet.'; list.append(row); return; }
-      updates.forEach(update=>{ const row=document.createElement('div'); row.className='px-5 py-4 flex items-center justify-between gap-4'; const copy=document.createElement('div'); const title=document.createElement('p'); title.className='text-sm text-cream/80'; title.textContent=update.summary||'Archive updated'; const path=document.createElement('p'); path.className='text-xs text-cream/40 mt-1'; path.textContent=update.path||'World of Ge’or'; const time=document.createElement('time'); time.className='text-[10px] text-gold/70 whitespace-nowrap'; time.dateTime=update.created_at||''; time.textContent=update.created_at?new Date(update.created_at).toLocaleDateString():'Recent'; copy.append(title,path); row.append(copy,time); list.append(row); });
+      updates.forEach(update=>{ const row=document.createElement('div'); row.className='px-5 py-4 flex items-center justify-between gap-4'; const copy=document.createElement('div'); const title=document.createElement('p'); title.className='text-sm text-cream/80'; title.textContent=update.summary||'Archive updated'; const path=document.createElement('p'); path.className='text-xs text-cream/40 mt-1'; path.textContent=update.path||'World of Ge’or'; const time=document.createElement('time'); time.className='font-mono text-tiny text-gold/70 whitespace-nowrap'; time.dateTime=update.created_at||''; time.textContent=update.created_at?new Date(update.created_at).toLocaleDateString():'Recent'; copy.append(title,path); row.append(copy,time); list.append(row); });
     }).catch(()=>{ document.getElementById('recentActivity').textContent='The ledger is temporarily unavailable.'; });
   </script>
   <script type="module" src="/archive-compass.js"></script>
