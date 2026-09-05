@@ -90,13 +90,20 @@
           YEARS OF WAR.
         </h1>
         <p class="mt-5 text-base leading-7 text-cream/80 max-w-[520px] font-light">
-          Ge'or is not a backdrop. It is a planet with a ring, three moons, 17 continents and 300 nations — each with a reason to exist. Built over three million years of conspiracy, collapse and stubborn freedom. Documented to endure.
+          Step inside the private archive — the complete wiki, the Atlas, and quiet reading rooms kept in order. Behind them, a planet with a ring, three moons and 300 nations, built over three million years of conspiracy, collapse and stubborn freedom. Invite-only: request access to enter.
         </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="/#start" class="bg-gradient-to-b from-gold to-amberdeep text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Begin with Ge'or</a>
-          <button id="openExplore" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">Member Sign In</button>
-          <a href="/#atlas" class="border border-gold/30 text-gold px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-gold/10 transition">Explore the Atlas</a>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <button id="heroRequestBtn" type="button" class="bg-gold text-ink px-7 py-3 rounded-full text-sm font-semibold tracking-wide hover:brightness-110 transition shadow-[0_8px_24px_rgba(184,146,74,0.35)]">Request Access</button>
+          <button id="openExplore" type="button" class="text-sm text-cream/70 underline decoration-gold/40 underline-offset-4 hover:text-cream transition">Member Sign In</button>
+          <a href="/#start" class="border border-cream/20 text-cream px-7 py-3 rounded-full text-sm font-medium tracking-wide hover:bg-cream/5 transition">Begin with Ge'or — take the tour</a>
         </div>
+        <nav class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-kicker tracking-[0.22em]" aria-label="Archive rooms">
+          <span class="text-cream/60">ENTER THE ROOMS:</span>
+          <a href="/#atlas" class="text-gold/80 hover:text-gold transition">EXPLORE THE ATLAS →</a>
+          <a href="/#history" class="text-gold/80 hover:text-gold transition">TIMELINE →</a>
+          <a href="/#gallery" class="text-gold/80 hover:text-gold transition">GALLERY →</a>
+          <a href="/audio" class="text-gold/80 hover:text-gold transition">AUDIO →</a>
+        </nav>
         <div class="mt-10 flex flex-wrap gap-2 text-kicker tracking-widest">
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">17</b> CONTINENTS</span>
           <span class="px-3 py-1.5 rounded-full bg-cream/10 border border-cream/10 text-cream/90"><b class="text-gold">300+</b> NATIONS</span>
@@ -291,6 +298,56 @@
     <div class="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-gold/15 bg-gradient-to-r from-gold/[0.08] to-transparent p-5">
       <div><p class="text-tiny tracking-[0.24em] text-gold">THE KEEPER'S BESTIARY</p><p class="mt-1 text-sm text-cream/65">Browse 34 sentient peoples by lineage, origin, and form.</p></div>
       <a href="/species" class="shrink-0 rounded-full border border-gold/30 px-5 py-2.5 text-xs font-semibold text-gold hover:bg-gold/10 transition">OPEN SPECIES GALLERY →</a>
+    </div>
+  </section>
+
+  <!-- Locked teasers — members-only panels (static images only, no fetch) -->
+  <section id="teasers" class="max-w-[1280px] mx-auto px-6 pb-16 md:pb-24" aria-labelledby="teasersTitle">
+    <p class="text-gold text-kicker tracking-[0.28em] font-semibold mb-3">BEHIND THE GATE</p>
+    <h2 id="teasersTitle" class="font-display text-xl md:text-4xl font-bold tracking-tight mb-8">LOCKED PANELS. MEMBERS ONLY.</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card-quiet overflow-hidden p-0" data-locked-teaser="erisia">
+        <div class="relative">
+          <img src="/panel-erisia.jpg" alt="Locked archive panel — the Erisian Empire" class="w-full h-44 object-cover blur-sm" loading="lazy" decoding="async" width="1408" height="768" />
+          <div class="teaser-lock absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/60">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gold"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span class="text-kicker tracking-[0.24em] text-gold">MEMBERS ONLY</span>
+            <button type="button" data-open-auth="login" class="text-xs text-cream underline decoration-gold/40 underline-offset-4 hover:text-gold transition">Sign in to unlock →</button>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">THE ERISIAN FOLIO</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Draconic law and elven memory — the full entry stays locked until you sign in.</p>
+        </div>
+      </div>
+      <div class="card-quiet overflow-hidden p-0" data-locked-teaser="kobre">
+        <div class="relative">
+          <img src="/panel-kobre.jpg" alt="Locked archive panel — Kobre and the gear-towers" class="w-full h-44 object-cover blur-sm" loading="lazy" decoding="async" width="1408" height="768" />
+          <div class="teaser-lock absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/60">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gold"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span class="text-kicker tracking-[0.24em] text-gold">MEMBERS ONLY</span>
+            <button type="button" data-open-auth="login" class="text-xs text-cream underline decoration-gold/40 underline-offset-4 hover:text-gold transition">Sign in to unlock →</button>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">THE KOBRE FOLIO</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Brass, coal and debt — the full entry stays locked until you sign in.</p>
+        </div>
+      </div>
+      <div class="card-quiet overflow-hidden p-0" data-locked-teaser="lumina">
+        <div class="relative">
+          <img src="/panel-lumina.jpg" alt="Locked archive panel — Lumina of the luminous forest" class="w-full h-44 object-cover blur-sm" loading="lazy" decoding="async" width="1408" height="768" />
+          <div class="teaser-lock absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/60">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="text-gold"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span class="text-kicker tracking-[0.24em] text-gold">MEMBERS ONLY</span>
+            <button type="button" data-open-auth="login" class="text-xs text-cream underline decoration-gold/40 underline-offset-4 hover:text-gold transition">Sign in to unlock →</button>
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display tracking-widest text-sm font-semibold">THE LUMINA FOLIO</h3>
+          <p class="text-sm text-cream/65 mt-2 leading-6">Ten nations in the trees — the full entry stays locked until you sign in.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -504,8 +561,11 @@
       closeRequest?.addEventListener('click', closeRequestModal);
       requestBackdrop?.addEventListener('click', closeRequestModal);
       document.getElementById('deskRequestBtn')?.addEventListener('click', openRequest);
+      document.getElementById('heroRequestBtn')?.addEventListener('click', openRequest);
       document.getElementById('mobRequestBtn')?.addEventListener('click', openRequest);
       document.getElementById('ctaRequestBtn')?.addEventListener('click', openRequest);
+      // locked-teaser sign-in links reuse the existing auth modal (no new modals, no fetch)
+      document.querySelectorAll('[data-open-auth]')?.forEach((el)=>el.addEventListener('click',()=>openAuth('login')));
       // mobile menu handled in src/main.js (hide-on-scroll, outside-ESC, link-close)
       // age drawer — private archive teaser (no vault data exposed)
       const AGE_DATA = {
