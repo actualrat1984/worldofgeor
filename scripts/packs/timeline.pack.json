@@ -1,0 +1,1 @@
+{"counts": {"ages": 13, "events": 71}, "description": "Ages + dated events from the Complete Timeline source file.", "generator": "scripts/generate_timeline.py", "name": "timeline", "output": "dist/wiki/timeline-index.json", "reads": ["World/Dates/Complete Timeline.md"]}

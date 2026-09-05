@@ -1,0 +1,1 @@
+{"counts": {"festivals": 12}, "description": "Festivals + calendar structure from the Ge'orian Calendar file and the Festivals directory.", "generator": "scripts/generate_calendar.py", "name": "calendar", "output": "dist/wiki/calendar-index.json", "reads": ["World/Dates/Ge'orian Calendar.md", "World/Culture/Festivals/**/*.md"]}

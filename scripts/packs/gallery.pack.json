@@ -1,0 +1,1 @@
+{"counts": {"entries": 78}, "description": "Character gallery from World/History/Characters frontmatter (family/house, species) joined to wiki URLs by title match.", "generator": "scripts/generate_gallery.py", "name": "gallery", "output": "dist/wiki/gallery-index.json", "reads": ["World/History/Characters/*.md"]}

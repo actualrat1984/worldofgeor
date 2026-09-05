@@ -1,0 +1,1 @@
+{"counts": {"items": 1069}, "description": "Tag index from World frontmatter tags across all vault markdown files.", "generator": "scripts/generate_tags.py", "name": "tags", "output": "dist/wiki/tags-index.json", "reads": ["World/**/*.md"]}

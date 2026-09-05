@@ -1,0 +1,1 @@
+{"counts": {"houses": 4}, "description": "Family trees from Characters/Families/Dynasties frontmatter membership joined to wiki URLs by title match.", "generator": "scripts/generate_trees.py", "name": "trees", "output": "dist/wiki/trees-index.json", "reads": ["World/History/Characters/**/*.md", "World/History/Families/**/*.md", "World/History/Dynasties/**/*.md"]}

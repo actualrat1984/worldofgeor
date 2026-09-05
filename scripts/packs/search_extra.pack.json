@@ -1,0 +1,1 @@
+{"after": ["timeline"], "counts": {"items": 102}, "description": "Search extras: atlas pins + timeline events for search. Reads repo files only, never the vault; runs after the timeline pack.", "generator": "scripts/generate_search_extra.py", "name": "search_extra", "output": "dist/wiki/search-extra-index.json", "reads": ["public/atlas.html", "dist/wiki/timeline-index.json"]}

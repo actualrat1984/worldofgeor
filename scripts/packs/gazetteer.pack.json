@@ -1,0 +1,1 @@
+{"counts": {"entries": 486}, "description": "Nations gazetteer from World/Nations files (frontmatter region/status/tags only) joined to wiki URLs by title match.", "generator": "scripts/generate_gazetteer.py", "name": "gazetteer", "output": "dist/wiki/gazetteer-index.json", "reads": ["World/Nations/**/*.md"]}
