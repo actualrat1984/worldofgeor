@@ -28,7 +28,9 @@
           <span id="gazetteerCount" role="status" class="text-xs text-cream/40">Loading the nations…</span>
         </p>
       </div>
-      <div class="mt-9 flex items-center gap-3 flex-wrap">
+      <div id="gazetteerCrumbs" class="mt-9 text-xs text-cream/50"></div>
+      <div id="regionIndex" class="mt-4 overflow-x-auto rounded-xl border border-gold/10"></div>
+      <div class="mt-4 flex items-center gap-3 flex-wrap">
         <div class="flex flex-1 min-w-[220px] items-center gap-3 rounded-xl border border-gold/15 bg-ink px-4 focus-within:border-gold/50">
           <span class="text-gold text-xl" aria-hidden="true">⌕</span>
           <label for="gazetteerFilter" class="sr-only">Filter nations</label>
@@ -54,6 +56,7 @@
           </tbody>
         </table>
       </div>
+      <section id="entryDetail" class="mt-6" hidden></section>
       <footer class="mt-12 text-center">
         <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
         <a href="/wiki/World/Nations/" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE NATIONS FOLIO</a>
