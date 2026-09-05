@@ -3,8 +3,8 @@
 Reads:  <vault>/World/History/Characters/**/*.md (family: frontmatter = membership)
         <vault>/World/History/Families/*.md + Dynasties/*.md (house names,
         household father/mother links, children lists)
-Joins:  C:/Users/pc/Documents/worldofgeor/public/wiki-index.json by title match
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/trees-index.json
+Joins:  <repository>/public/wiki-index.json by title match
+Writes: argv[1] or <repository>/dist/wiki/trees-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 houses come from real Families/Dynasties files and real family: values
 ("(next life)" reincarnation notes are membership-excluded, never members);
@@ -14,15 +14,16 @@ and father/mother-of phrasing). Unresolvable or absent links are omitted.
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 CHARACTERS = pathlib.Path("World/History/Characters")
 FAMILIES = pathlib.Path("World/History/Families")
 DYNASTIES = pathlib.Path("World/History/Dynasties")
-WIKI_INDEX = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/trees-index.json")
+WIKI_INDEX = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/trees-index.json"
 
 LINK_RE = re.compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
 FM_RE = re.compile(r"\A---\s*\n(.*?)\n---", re.S)

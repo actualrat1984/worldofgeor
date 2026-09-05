@@ -12,6 +12,7 @@ Private, invite-only worldbuilding archive for Mikhail & Ichi. The public landin
 - Private additions published to `actualrat1984/Website-additions` through the GitHub API
 - A unified private archive shell with an omnibox, contextual wiki reading tools, Atlas split view, PWA shell, and mobile dock
 - No public indexing: pages and responses carry `noindex`, and private files are gated in the Worker
+- Offline mode caches only public shell assets. Private pages require a live membership check; an offline retry screen replaces saved private HTML, and old private page caches are removed when the service worker updates.
 
 ## Local development
 
@@ -24,7 +25,7 @@ Vite opens on port 5173 by default. The static frontend can be built without the
 
 ```sh
 npm run build:vite
-npm run verify
+npm run check:site
 ```
 
 ## Full build
@@ -32,10 +33,14 @@ npm run verify
 The wiki build expects a MkDocs source directory containing `mkdocs.yml`, `generate_nav.py`, and `optimize_assets.py`. It defaults to the maintainer's existing lore location. Set `GEOR_LORE_SITE` to use a different checkout:
 
 ```sh
-GEOR_LORE_SITE=/path/to/Lore/site npm run build
+GEOR_LORE_SITE=/path/to/Lore/site npm run build:wiki
+npm run build
+npm run verify
 ```
 
-The build now writes the wiki to this repository's own `dist/wiki` directory regardless of where the repository is cloned.
+The wiki build writes the wiki and all supporting indexes to this repository's own `dist/wiki` directory regardless of where it is cloned. `npm run build` builds the frontend only and preserves the wiki output.
+
+To regenerate the archive indexes from the lore vault without rebuilding MkDocs, run `npm run build:indices`. Set `GEOR_LORE_VAULT` to the directory containing `World/`; otherwise it defaults to the parent of `GEOR_LORE_SITE` or the maintainer's existing vault. Index generation only reads the vault. The full test suite (`npm run verify`) requires these generated indexes; a fresh checkout may not contain them.
 
 ## Cloudflare deployment
 

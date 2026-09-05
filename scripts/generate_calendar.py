@@ -3,19 +3,20 @@
 Reads (vault C:/Users/pc/Documents/Lore/Lore, read-only):
   World/Dates/Ge'orian Calendar.md  (day/month/year structure, conversion, eras)
   World/Culture/Festivals/*.md      (one file per festival, except index.md)
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/calendar-index.json
+Writes: argv[1] or <repository>/dist/wiki/calendar-index.json
 Stdlib only. Prints counts. Never invents lore: months in canon are NUMBERED
 (12 x 40 days) with no names, so no month names are emitted.
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 CAL = pathlib.Path("World/Dates/Ge'orian Calendar.md")
 FEST_DIR = pathlib.Path("World/Culture/Festivals")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/calendar-index.json")
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/calendar-index.json"
 
 
 def title_of(path, text):

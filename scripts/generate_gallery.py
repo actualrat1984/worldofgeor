@@ -2,8 +2,8 @@
 
 Reads:  <vault>/World/History/Characters/*.md (family:/house:, species:,
         home:, status:, type:, tags:)
-Joins:  C:/Users/pc/Documents/worldofgeor/public/wiki-index.json by title match
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/gallery-index.json
+Joins:  <repository>/public/wiki-index.json by title match
+Writes: argv[1] or <repository>/dist/wiki/gallery-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 an entry exists ONLY for a real character file; every field comes from a
 real frontmatter value (house/species/nation/status) or a real tag through
@@ -17,13 +17,14 @@ avatars and links lore instead of images.
 
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 CHARACTERS = pathlib.Path("World/History/Characters")
-WIKI_INDEX = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/gallery-index.json")
+WIKI_INDEX = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/gallery-index.json"
 
 FM_RE = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
 NEXT_LIFE_RE = re.compile(r"\(next life\)", re.I)

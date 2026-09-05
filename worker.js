@@ -2743,7 +2743,7 @@ export default {
         });
       }
 
-      if (url.pathname === '/admin.html' || url.pathname === '/admin') {
+      if (decodeURIComponent(url.pathname).replace(/\/$/, '').replace(/\.html$/, '') === '/admin') {
         if (payload.email !== ADMIN_EMAIL) return new Response(null, {
           status: 302,
           headers: {

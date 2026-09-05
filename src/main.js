@@ -80,7 +80,7 @@ const sections = ['world','atlas','history','gallery','archive'].map(id => docum
 if (navLinks.length && sections.length && 'IntersectionObserver' in window) {
   const setActive = (id) => {
     navLinks.forEach(a => {
-      const isActive = a.getAttribute('href') === `#${id}`
+      const isActive = new URL(a.href, window.location.href).hash === `#${id}`
       const inactiveClass = a.dataset.inactiveTextClass
       a.classList.toggle('text-cream', isActive)
       a.classList.toggle(inactiveClass, !isActive)
@@ -110,7 +110,7 @@ if (!reduceMotion) {
   }
 
   if ('IntersectionObserver' in window) {
-    const revealTargets = document.querySelectorAll('body > section:not(:first-of-type), body > footer')
+    const revealTargets = document.querySelectorAll('main > section:not(:first-of-type), body > footer')
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return

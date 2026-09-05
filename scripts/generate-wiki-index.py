@@ -1,5 +1,5 @@
 import pathlib, json, re
-wiki = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki")
+wiki = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki"
 if not wiki.exists():
     print("wiki not built yet, skip index")
     exit(0)
@@ -18,8 +18,8 @@ for html in wiki.rglob("index.html"):
     except: pass
     entries.append({"url": url, "title": title})
 entries = sorted(entries, key=lambda x: x["title"].lower())
-out = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki-index.json")
+out = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki-index.json"
 out.write_text(json.dumps(entries, ensure_ascii=False, indent=2), encoding="utf-8")
-pub = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
+pub = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
 pub.write_text(json.dumps(entries, ensure_ascii=False, indent=2), encoding="utf-8")
 print(f"wiki-index {len(entries)} entries -> {out} {out.stat().st_size} bytes")

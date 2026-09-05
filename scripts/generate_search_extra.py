@@ -15,7 +15,7 @@ import pathlib
 import re
 import sys
 
-REPO = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor")
+REPO = pathlib.Path(__file__).resolve().parents[1]
 ATLAS = REPO / "public" / "atlas.html"
 TIMELINE = REPO / "dist" / "wiki" / "timeline-index.json"
 DEFAULT_OUT = REPO / "dist" / "wiki" / "search-extra-index.json"

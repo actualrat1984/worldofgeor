@@ -4,8 +4,8 @@ Reads:  <vault>/World/Nations/**/*.md (infobox relation lines, Rival/Enemy/
         Hostile sections, civil-war / invaded / conquered phrasing)
         <vault>/World/History/Events/**/*.md (Combatants/Parties/Against/
         Invader/Conquered/Hostile Connections lines)
-Joins:  C:/Users/pc/Documents/worldofgeor/public/wiki-index.json by title match
-Writes: argv[1] or C:/Users/pc/Documents/worldofgeor/dist/wiki/webs-index.json
+Joins:  <repository>/public/wiki-index.json by title match
+Writes: argv[1] or <repository>/dist/wiki/webs-index.json
 Stdlib only. Read-only on the vault. Prints counts. Never invents lore:
 an edge exists ONLY when a real line names real nation files on both
 sides (link targets must casefold-match a nation stem; unlinked or
@@ -16,14 +16,15 @@ invaded/Conquered-By). Severity wins on conflict: war > tense > allied.
 """
 import json
 import pathlib
+import os
 import re
 import sys
 
-VAULT = pathlib.Path(r"C:/Users/pc/Documents/Lore/Lore")
+VAULT = pathlib.Path(os.environ.get("GEOR_LORE_VAULT", str(pathlib.Path(os.environ.get("GEOR_LORE_SITE", "C:/Users/pc/Documents/Lore/Lore/site")).parent)))
 NATIONS = pathlib.Path("World/Nations")
 EVENTS = pathlib.Path("World/History/Events")
-WIKI_INDEX = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/public/wiki-index.json")
-DEFAULT_OUT = pathlib.Path(r"C:/Users/pc/Documents/worldofgeor/dist/wiki/webs-index.json")
+WIKI_INDEX = pathlib.Path(__file__).resolve().parents[1] / "public/wiki-index.json"
+DEFAULT_OUT = pathlib.Path(__file__).resolve().parents[1] / "dist/wiki/webs-index.json"
 
 LINK_RE = re.compile(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]")
 FM_RE = re.compile(r"\A---\s*\n(.*?)\n---", re.S)
