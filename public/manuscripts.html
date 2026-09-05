@@ -66,6 +66,40 @@
               <span class="text-[10px] tracking-[.25em] text-cream/40">TITLE</span>
               <input id="msTitle" type="text" maxlength="200" placeholder="The Arrival…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
             </label>
+            <fieldset class="rounded-xl border border-gold/10 p-4 flex flex-col gap-4">
+              <legend class="px-2 text-[10px] tracking-[.25em] text-cream/40">CHAPTER META · VOICE &amp; DATE</legend>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <label class="flex flex-col gap-2">
+                  <span class="text-[10px] tracking-[.25em] text-cream/40">POINT OF VIEW</span>
+                  <select id="msPov" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50">
+                    <option value="">No voice kept</option>
+                    <option value="first">First person</option>
+                    <option value="second">Second person</option>
+                    <option value="third">Third person</option>
+                  </select>
+                </label>
+                <label class="flex flex-col gap-2">
+                  <span class="text-[10px] tracking-[.25em] text-cream/40">VOICE TAG (OPTIONAL)</span>
+                  <input id="msVoice" type="text" maxlength="80" placeholder="Old scout, wry…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+                </label>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <label class="flex flex-col gap-2">
+                  <span class="text-[10px] tracking-[.25em] text-cream/40">GE'OR YEAR (OPTIONAL)</span>
+                  <input id="msYear" type="text" inputmode="numeric" maxlength="20" placeholder="597…" autocomplete="off" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50" />
+                </label>
+                <label class="flex flex-col gap-2">
+                  <span class="text-[10px] tracking-[.25em] text-cream/40">ERA KEPT</span>
+                  <select id="msEra" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50">
+                    <option value="">Neither yet</option>
+                    <option value="BGD">BGD — before the Divergence</option>
+                    <option value="AGD">AGD — after the Divergence</option>
+                  </select>
+                </label>
+              </div>
+              <div id="msDualDate" aria-live="polite"></div>
+              <p id="msMetaNote" class="text-[10px] tracking-[.15em] text-cream/30">VOICE &amp; DATE STAY ON SAVED CHAPTERS · KEPT ON THIS DEVICE ONLY — PER MEMBER, PER CHAPTER.</p>
+            </fieldset>
             <label class="flex flex-col gap-2">
               <span class="text-[10px] tracking-[.25em] text-cream/40">CHAPTER TEXT</span>
               <textarea id="msBody" rows="16" placeholder="It began with…" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50 font-serif"></textarea>

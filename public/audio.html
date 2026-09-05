@@ -44,6 +44,26 @@
       <div id="trackList" aria-busy="true" class="mt-8 grid gap-2">
         <p class="p-5 text-sm text-cream/40">Tuning the room…</p>
       </div>
+      <section aria-label="Member transcripts" class="mt-6 rounded-xl border border-gold/10 p-5">
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold">MEMBER TRANSCRIPTS · PER CHAPTER</p>
+        <h2 class="font-display text-xl font-bold mt-2">WORDS BESIDE THE VOICE</h2>
+        <p class="text-xs text-cream/40 mt-2">Transcripts are written by members, chapter by chapter. They are shown as text only — playback does not follow the text and the text does not follow playback, because no timing data exists.</p>
+        <label class="flex flex-col gap-2 mt-4">
+          <span class="text-[10px] tracking-[.25em] text-cream/40">CHAPTER</span>
+          <select id="tsTrack" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50"></select>
+        </label>
+        <div id="tsDisplay" aria-live="polite" class="mt-4 rounded-xl border border-gold/10 p-4"></div>
+        <label class="flex flex-col gap-2 mt-4">
+          <span class="text-[10px] tracking-[.25em] text-cream/40">YOUR TRANSCRIPT FOR THIS CHAPTER</span>
+          <textarea id="tsBody" rows="8" maxlength="20000" placeholder="Write what the voice says, in your own hand…" class="rounded-xl border border-gold/15 bg-ink px-4 py-3 text-sm text-cream/80 focus:border-gold/50 font-serif"></textarea>
+        </label>
+        <div class="flex items-center gap-3 flex-wrap mt-4">
+          <button id="tsSave" type="button" class="text-xs bg-gold text-ink rounded-full px-5 py-2.5 font-semibold">KEEP TRANSCRIPT ON THIS DEVICE</button>
+          <button id="tsClear" type="button" class="text-xs border border-gold/25 text-gold rounded-full px-5 py-2.5">DISCARD</button>
+        </div>
+        <p id="tsStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3"></p>
+        <p id="tsNote" class="text-[10px] tracking-[.2em] text-cream/30 mt-3"></p>
+      </section>
       <footer class="mt-12 text-center">
         <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
         <a href="/dashboard" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">BACK TO MEMBER HOME</a>

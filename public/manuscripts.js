@@ -4,6 +4,18 @@
 import { escapeHtml } from './timeline.js'
 import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
 import { initInventoryPanel } from './inventory.js'
+import {
+  CHAPTER_META_STORAGE_LABEL,
+  cleanChapterEra,
+  cleanPov,
+  cleanVoiceTag,
+  chapterMetaKey,
+  currentMemberEmail,
+  parseChapterMeta,
+  parseYearNumber,
+  renderDualDate,
+  serializeChapterMeta,
+} from './chapter-meta.js'
 
 export const MANUSCRIPT_ROOT = 'Books'
 export const MANUSCRIPT_BODY_MAX = 100000
@@ -86,6 +98,50 @@ async function initManuscripts() {
   const titleInput = document.getElementById('msTitle')
   const bodyInput = document.getElementById('msBody')
   if (!list || !form || !bookInput || !chapterInput || !titleInput || !bodyInput) return
+  // Wave H11b: chapter meta (POV voice + dual BGD/AGD date) lives in
+  // member+chapter-keyed localStorage — the server keeps no such fields.
+  const povInput = document.getElementById('msPov')
+  const voiceInput = document.getElementById('msVoice')
+  const yearInput = document.getElementById('msYear')
+  const eraInput = document.getElementById('msEra')
+  const dualDate = document.getElementById('msDualDate')
+  const metaNote = document.getElementById('msMetaNote')
+  if (metaNote) metaNote.textContent = `Voice & date stay on saved chapters · ${CHAPTER_META_STORAGE_LABEL}`
+  let member = 'local'
+  const metaKey = () => (selectedPath ? chapterMetaKey(member, selectedPath) : null)
+  const readMeta = () => {
+    const key = metaKey()
+    if (!key) return { pov: '', voice: '', year: '', era: '' }
+    try { return parseChapterMeta(localStorage.getItem(key)) }
+    catch { return { pov: '', voice: '', year: '', era: '' } }
+  }
+  const paintMeta = () => {
+    if (!povInput || !voiceInput || !yearInput || !eraInput) return
+    const meta = readMeta()
+    povInput.value = cleanPov(meta.pov)
+    voiceInput.value = meta.voice
+    yearInput.value = meta.year
+    eraInput.value = cleanChapterEra(meta.era)
+    if (dualDate) dualDate.innerHTML = renderDualDate(meta.year, meta.era)
+  }
+  const writeMeta = () => {
+    if (!povInput || !voiceInput || !yearInput || !eraInput) return
+    if (dualDate) dualDate.innerHTML = renderDualDate(yearInput.value, eraInput.value)
+    const key = metaKey()
+    if (!key) return
+    const voice = cleanVoiceTag(voiceInput.value)
+    if (voice === null) {
+      setStatus('Voice tags stay under 80 characters — trim it to keep it.')
+      return
+    }
+    if (yearInput.value.trim() && parseYearNumber(yearInput.value) === null) return
+    try {
+      localStorage.setItem(key, serializeChapterMeta({
+        pov: povInput.value, voice: voiceInput.value, year: yearInput.value, era: eraInput.value,
+      }))
+    } catch {}
+  }
+  currentMemberEmail().then(email => { member = email; paintMeta() }).catch(() => {})
 
   let files = []
   let selectedPath = null
@@ -146,6 +202,7 @@ async function initManuscripts() {
       }
       paint()
       repaintMentions()
+      paintMeta()
       await paintVersion(selectedPath)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'The chapter could not be opened')
@@ -187,12 +244,17 @@ async function initManuscripts() {
     bodyInput.value = ''
     paint()
     void paintVersion(null)
+    paintMeta()
     repaintMentions()
     bookInput.focus()
     setStatus('A fresh chapter — save it to keep it in the archive.')
   })
 
   for (const input of [titleInput, bodyInput]) input.addEventListener('input', queueAutosave)
+  for (const input of [povInput, voiceInput, yearInput, eraInput]) {
+    input?.addEventListener('input', writeMeta)
+    input?.addEventListener('change', writeMeta)
+  }
 
   // Wave H11a: @mention autocomplete from the gated wiki index, with the
   // linked-folios line repainted as the chapter text changes; inventories

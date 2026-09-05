@@ -5,6 +5,14 @@
 // without a browser. Browser playback only runs when `document` exists. Progress
 // (last track + position) persists per member in localStorage — no new D1 table.
 import { escapeHtml } from './timeline.js'
+import {
+  TRANSCRIPT_BODY_MAX,
+  TRANSCRIPT_STORAGE_LABEL,
+  cleanTranscriptText,
+  currentMemberEmail,
+  renderTranscript,
+  transcriptKey,
+} from './chapter-meta.js'
 
 export const AUDIO_NEXT = '/audio'
 export const AUDIO_PROGRESS_KEY = 'geor_audio_progress_v1'
@@ -208,4 +216,70 @@ if (typeof document !== 'undefined') {
   player?.addEventListener('error', () => {
     say('That chapter could not be played — try the next one.')
   })
+}
+
+// --- Member-authored transcripts (Wave H11b, display only) -----------------
+// One textarea + display panel per chapter, member-keyed localStorage. The
+// player never reads these and they never follow playback — no timing data
+// exists, so any sync would be faked. Nothing is auto-generated: chapters
+// ship no transcript source, so empty stays honestly empty.
+if (typeof document !== 'undefined') {
+  const tsTrack = document.getElementById('tsTrack')
+  const tsBody = document.getElementById('tsBody')
+  const tsDisplay = document.getElementById('tsDisplay')
+  const tsStatus = document.getElementById('tsStatus')
+  const tsNote = document.getElementById('tsNote')
+  const tsSay = message => { if (tsStatus) tsStatus.textContent = message }
+  if (tsNote) tsNote.textContent = TRANSCRIPT_STORAGE_LABEL
+
+  let tsMember = 'local'
+  const tsKey = () => (tsTrack?.value ? transcriptKey(tsMember, tsTrack.value) : null)
+  const tsRead = () => {
+    const key = tsKey()
+    if (!key) return ''
+    try {
+      const text = cleanTranscriptText(localStorage.getItem(key))
+      return text === null ? '' : text
+    } catch { return '' }
+  }
+  const tsPaint = () => {
+    if (!tsTrack || !tsBody || !tsDisplay) return
+    const text = tsRead()
+    if (document.activeElement !== tsBody) tsBody.value = text
+    tsDisplay.innerHTML = renderTranscript(text)
+  }
+
+  if (tsTrack && tsBody && tsDisplay) {
+    for (const track of TRACKS) {
+      const option = document.createElement('option')
+      option.value = track.file
+      option.textContent = trackLabel(track)
+      tsTrack.appendChild(option)
+    }
+    tsPaint()
+    currentMemberEmail()
+      .then(email => { tsMember = email; tsPaint() })
+      .catch(() => {})
+    tsTrack.addEventListener('change', () => { tsPaint(); tsSay('') })
+    document.getElementById('tsSave')?.addEventListener('click', () => {
+      const key = tsKey()
+      if (!key) { tsSay('Choose a chapter first.'); return }
+      const clean = cleanTranscriptText(tsBody.value)
+      if (clean === null) {
+        tsSay(`That transcript is over the ${TRANSCRIPT_BODY_MAX.toLocaleString('en-US')} character keep — trim it before keeping.`)
+        return
+      }
+      try {
+        if (clean) localStorage.setItem(key, clean)
+        else localStorage.removeItem(key)
+      } catch {}
+      tsDisplay.innerHTML = renderTranscript(clean)
+      tsSay(clean ? 'Kept on this device — per member, per chapter.' : 'No transcript kept for this chapter.')
+    })
+    document.getElementById('tsClear')?.addEventListener('click', () => {
+      tsBody.value = ''
+      tsBody.focus()
+      tsSay('Cleared — keep to store the empty page, or choose another chapter.')
+    })
+  }
 }
