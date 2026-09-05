@@ -34,16 +34,15 @@
 </head>
 <body class="bg-ink text-cream font-sans">
   <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
-    <div class="max-w-[1280px] mx-auto px-6 h-[64px] flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amberdeep flex items-center justify-center text-ink font-display font-bold text-sm">G</div>
-        <span class="font-display tracking-[0.18em] text-[13px] font-semibold">WORLD OF GE'OR</span>
-      </a>
-      <div class="flex items-center gap-2">
+    <div class="max-w-[1100px] mx-auto px-4 md:px-6 h-[56px] flex items-center justify-between gap-4">
+      <a href="/" data-member-logo class="shrink-0 font-display tracking-[0.18em] text-xs font-semibold">WORLD OF GE'OR — <span class="hidden sm:inline">ATLAS</span></a>
+      <div class="flex items-center gap-2 overflow-x-auto py-2" aria-label="Member navigation">
+        <button type="button" data-compass-trigger aria-label="Open archive search" title="Search the archive (Ctrl+K)" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))" class="shrink-0 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">⌕</button>
         <a href="/updates" class="hidden lg:inline text-xs tracking-widest text-cream/60 hover:text-cream transition">UPDATES</a>
         <a href="/wiki/" class="hidden md:inline text-xs tracking-widest text-gold hover:text-cream transition">WIKI</a>
         <a href="/map-editor" class="text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">ATLAS STUDIO</a>
         <a href="/" class="hidden sm:inline text-xs tracking-widest border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">← WORLD</a>
+        <a href="/dashboard" data-member-pill class="shrink-0 text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold">DASHBOARD</a>
       </div>
     </div>
   </header>

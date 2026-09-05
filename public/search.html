@@ -15,10 +15,15 @@
 </head>
 <body class="font-sans">
   <div class="search-shell">
-    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
-      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
-        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
-        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+    <header class="sticky top-0 z-50 bg-ink/90 backdrop-blur border-b border-gold/10">
+      <div class="max-w-[1100px] mx-auto px-4 md:px-6 h-[56px] flex items-center justify-between gap-4">
+        <a href="/" data-member-logo class="shrink-0 font-display tracking-[0.18em] text-xs font-semibold">WORLD OF GE'OR — <span class="hidden sm:inline">SEARCH</span></a>
+        <div class="flex items-center gap-2 overflow-x-auto py-2" aria-label="Member navigation">
+          <button type="button" data-compass-trigger aria-label="Open archive search" title="Search the archive (Ctrl+K)" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}))" class="shrink-0 text-xs border border-gold/20 px-3 py-1.5 rounded-full hover:bg-gold/10">⌕</button>
+          <a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-1.5">WIKI</a>
+          <a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-1.5">ATLAS STUDIO</a>
+          <a href="/dashboard" data-member-pill class="shrink-0 text-xs bg-gold text-ink px-4 py-1.5 rounded-full font-semibold">DASHBOARD</a>
+        </div>
       </div>
     </header>
     <main class="max-w-[920px] mx-auto px-5 py-12 md:py-16">

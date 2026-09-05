@@ -30,6 +30,10 @@
   .age-scroller::-webkit-scrollbar { height: 6px; }
   .age-scroller::-webkit-scrollbar-thumb { background: rgb(217 183 122 / 0.34); border-radius: 999px; }
   .age-card { min-height: 132px; }
+  /* Wave H H2 — canonical card tiers: 20px radius, gold/10-15 borders, cream 3% fill. */
+  .card-quiet { @apply rounded-[20px] border border-gold/10 bg-cream/[0.03] p-6; }
+  .card { @apply rounded-[20px] border border-gold/15 bg-cream/[0.03] p-6; }
+  .card-hero { @apply rounded-[20px] border border-gold/15 bg-cream/[0.03] p-7; }
   .reveal-item {
     opacity: 0;
     transform: translateY(18px);
