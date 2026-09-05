@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="/site.css" />
   <link rel="stylesheet" href="/article-layouts.css" />
   <link rel="stylesheet" href="/archive-compass.css" />
+  <style>
+    body.desk-runmode main { max-width: 1440px; }
+    body.desk-runmode .tl-shell { background: rgba(0, 0, 0, .94); }
+  </style>
 </head>
 <body class="font-sans">
   <div class="tl-shell">
@@ -26,6 +30,8 @@
         <p class="font-serif italic text-xl text-cream/60 mt-3">Notes, arcs, the ages, and the primer — one tab, no page-hopping.</p>
         <p class="mt-4 flex items-center justify-center gap-3 flex-wrap">
           <span id="deskStatus" role="status" aria-live="polite" class="text-xs text-cream/40">Opening the desk…</span>
+          <button id="deskRunMode" type="button" aria-pressed="false" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">Enter run mode (F)</button>
+          <button id="deskHelpBtn" type="button" aria-expanded="false" aria-controls="deskHelp" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">? KEYS</button>
         </p>
       </div>
       <nav class="mt-9 flex items-center justify-center gap-2 flex-wrap" aria-label="Desk quick links">
@@ -35,34 +41,64 @@
         <a href="/arcs" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">ARCS</a>
         <a href="/oracle" class="text-xs border border-gold/25 text-gold rounded-full px-4 py-2 tracking-widest">ORACLE</a>
       </nav>
+      <div id="deskHelp" hidden role="dialog" aria-label="Desk keyboard map" class="mt-6 max-w-[640px] mx-auto rounded-xl border border-gold/25 p-5 text-left">
+        <p class="font-display text-xs tracking-[.2em] text-gold">KEYBOARD MAP</p>
+        <ul class="mt-3 grid gap-1 text-xs text-cream/60">
+          <li><span class="text-gold">1 – 7</span> · jump to notes, arcs, timeline, primer, sealed lore, pinned passages, oracle</li>
+          <li><span class="text-gold">F</span> · enter run mode (fullscreen)</li>
+          <li><span class="text-gold">?</span> · open or close this panel</li>
+          <li><span class="text-gold">Esc</span> · close this panel, then leave run mode</li>
+        </ul>
+      </div>
       <div class="mt-8 grid gap-6 md:grid-cols-2 items-start">
         <section aria-label="My notes" class="rounded-xl border border-gold/10 p-5">
           <div class="flex items-baseline justify-between gap-3 flex-wrap">
             <h2 class="font-display text-sm tracking-[.2em] text-gold">MY NOTES</h2>
             <a href="/notebook" class="text-[10px] tracking-widest text-cream/40">OPEN NOTEBOOK →</a>
           </div>
-          <div id="deskNotes" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the notebook…</div>
+          <div id="deskNotes" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the notebook…</div>
         </section>
         <section aria-label="Arc status" class="rounded-xl border border-gold/10 p-5">
           <div class="flex items-baseline justify-between gap-3 flex-wrap">
             <h2 class="font-display text-sm tracking-[.2em] text-gold">ARC STATUS</h2>
             <a href="/arcs" class="text-[10px] tracking-widest text-cream/40">OPEN PLOT ROOM →</a>
           </div>
-          <div id="deskArcs" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the arcs…</div>
+          <div id="deskArcs" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the arcs…</div>
         </section>
         <section aria-label="Timeline reference" class="rounded-xl border border-gold/10 p-5">
           <div class="flex items-baseline justify-between gap-3 flex-wrap">
             <h2 class="font-display text-sm tracking-[.2em] text-gold">TIMELINE REF</h2>
             <a href="/timeline" class="text-[10px] tracking-widest text-cream/40">OPEN TIMELINE →</a>
           </div>
-          <div id="deskTimeline" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the chronicle…</div>
+          <div id="deskTimeline" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Opening the chronicle…</div>
         </section>
         <section aria-label="Primer progress" class="rounded-xl border border-gold/10 p-5">
           <div class="flex items-baseline justify-between gap-3 flex-wrap">
             <h2 class="font-display text-sm tracking-[.2em] text-gold">PRIMER PROGRESS</h2>
             <a href="/primer" class="text-[10px] tracking-widest text-cream/40">OPEN PRIMER →</a>
           </div>
-          <div id="deskPrimer" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the seals…</div>
+          <div id="deskPrimer" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Reading the seals…</div>
+        </section>
+        <section aria-label="Sealed lore" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">SEALED LORE</h2>
+            <a href="/primer" class="text-[10px] tracking-widest text-cream/40">OPEN PRIMER →</a>
+          </div>
+          <div id="deskSecrets" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Counting your seals…</div>
+        </section>
+        <section aria-label="Pinned passages" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">PINNED PASSAGES</h2>
+            <a href="/map-editor" class="text-[10px] tracking-widest text-cream/40">OPEN ATLAS STUDIO →</a>
+          </div>
+          <div id="deskPins" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40">Counting the pins…</div>
+        </section>
+        <section aria-label="Oracle" class="rounded-xl border border-gold/10 p-5">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <h2 class="font-display text-sm tracking-[.2em] text-gold">ORACLE</h2>
+            <a href="/oracle" class="text-[10px] tracking-widest text-cream/40">CONSULT THE ORACLE →</a>
+          </div>
+          <div id="deskOracle" tabindex="-1" aria-busy="true" class="mt-4 grid gap-2 text-sm text-cream/40"><p class="text-xs"><a class="text-gold" href="/oracle">Consult the oracle →</a></p></div>
         </section>
       </div>
       <footer class="mt-12 text-center">
