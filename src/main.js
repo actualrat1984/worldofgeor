@@ -37,7 +37,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 let lastY = window.scrollY
 let ticking = false
 if (header) {
-  header.style.transition = reduceMotion ? 'none' : 'transform 0.28s ease'
+  header.style.transition = reduceMotion ? 'none' : 'transform 150ms var(--ease-archive)'
   window.addEventListener('scroll', () => {
     if (ticking) return
     ticking = true

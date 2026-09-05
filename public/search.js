@@ -78,7 +78,7 @@ window.addEventListener('geor:archive-synced', event => { syncedBookmarks = new 
 document.getElementById('clearRecent').addEventListener('click', () => { localStorage.removeItem('geor_recent_searches'); renderRecent() })
 
 try {
-  results.innerHTML = Array.from({length:4},()=>'<div class="loading-shimmer h-20 rounded-xl border border-gold/5"></div>').join('')
+  results.innerHTML = Array.from({length:4},()=>'<div class="skel h-20 rounded-xl"></div>').join('')
   const response = await fetch('/wiki-index.json', { credentials:'same-origin' })
   if (response.status === 401) { location.href='/?next='+encodeURIComponent('/search'); throw new Error('Authentication required') }
   if (!response.ok) throw new Error('The index could not be opened')

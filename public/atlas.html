@@ -47,7 +47,7 @@
     </div>
   </header>
 
-  <main>
+  <main class="page-enter">
   <section class="max-w-[1280px] mx-auto px-6 py-12 md:py-16">
     <p class="text-gold tracking-[0.32em] text-[11px] font-semibold">CARTOGRAPHER OFFICE • 597 AGD</p>
     <h1 class="font-display text-[36px] md:text-[48px] font-bold tracking-tight leading-[0.95] mt-2">CHOOSE YOUR MAP</h1>
@@ -57,7 +57,7 @@
       <!-- World map -->
       <a href="/world-map.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
-          <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="1200" height="600" />
+          <img src="/world-map-thumb.jpg" alt="World map of Ge'or — political, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-400 ease-archive" loading="lazy" decoding="async" width="1200" height="600" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">WORLD MAP • 16000×8000 • 597 AGD</div>
         </div>
         <div class="p-6">
@@ -70,7 +70,7 @@
       <!-- Grimmel -->
       <a href="/grimmel-peninsula.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[1.49/1] overflow-hidden bg-[#0b0b0a]">
-          <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="3840" height="5715" />
+          <img src="/grimmel-peninsula.jpg" alt="Grimmel Peninsula map" class="w-full h-full object-cover object-top group-hover:scale-[1.02] transition duration-400 ease-archive" loading="lazy" decoding="async" width="3840" height="5715" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">GRIMMEL PENINSULA • STATUE LEVEL ZOOM</div>
         </div>
         <div class="p-6">
@@ -83,7 +83,7 @@
       <!-- Central Erisdar -->
       <a href="/central-erisdar.jpg" target="_blank" rel="noopener" class="group rounded-[20px] overflow-hidden border border-gold/15 bg-cream/[0.03] hover:border-gold/30 transition block">
         <div class="relative aspect-[2/1] overflow-hidden bg-[#0b0b0a]">
-          <img src="/central-erisdar-thumb.jpg" alt="Central Erisdar map — imperial heartland, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" loading="lazy" decoding="async" width="1200" height="600" />
+          <img src="/central-erisdar-thumb.jpg" alt="Central Erisdar map — imperial heartland, 597 AGD" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-400 ease-archive" loading="lazy" decoding="async" width="1200" height="600" />
           <div class="absolute bottom-3 left-3 bg-ink/80 backdrop-blur px-3 py-1.5 rounded-full text-[11px] tracking-widest border border-gold/20">CENTRAL ERISDAR • 15988×7994 • 597 AGD</div>
         </div>
         <div class="p-6">
@@ -298,7 +298,8 @@
       resultsEl.classList.remove('hidden');
       searchEl.setAttribute('aria-expanded','true');
       if(!matches.length){
-        resultsEl.innerHTML='<div role=\"option\" aria-disabled=\"true\" class=\"px-3 py-2 text-sm text-cream/45\">No mapped place matches “'+escapeHtml(searchEl.value)+'”.</div>';
+        resultsEl.innerHTML='<div role=\"option\" aria-disabled=\"true\" class=\"px-3 py-2 text-sm text-cream/45\">No mapped place matches “'+escapeHtml(searchEl.value)+'”. <button type=\"button\" data-clear-atlas-search class=\"mt-1 text-xs tracking-widest text-gold underline underline-offset-4 hover:text-cream transition\">Clear search</button></div>';
+        resultsEl.querySelector('[data-clear-atlas-search]')?.addEventListener('click',()=>{ searchEl.value=''; renderSearchResults(); searchEl.focus(); });
         if(searchStatus) searchStatus.textContent='No mapped places match '+searchEl.value+'.';
         return;
       }

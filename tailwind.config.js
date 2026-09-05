@@ -43,6 +43,10 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
+      // Wave H H4 — motion discipline: one easing + 150/400ms timings.
+      // Mirrors --ease-archive in src/style.css; keep the values in sync.
+      transitionTimingFunction: { archive: 'cubic-bezier(.22,1,.36,1)' },
+      transitionDuration: { 400: '400ms' },
     },
   },
   plugins: [],

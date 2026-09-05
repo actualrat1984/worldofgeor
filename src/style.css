@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+:root { --ease-archive: cubic-bezier(.22,1,.36,1); }
+
 @layer base {
   html { scroll-behavior: smooth; }
   body {
@@ -18,6 +20,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .skel, .page-enter { animation: none !important; }
   }
 }
 
@@ -37,7 +40,19 @@
   .reveal-item {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 700ms cubic-bezier(.22,1,.36,1), transform 700ms cubic-bezier(.22,1,.36,1);
+    transition: opacity 400ms var(--ease-archive), transform 400ms var(--ease-archive);
   }
   .reveal-item.is-visible { opacity: 1; transform: translateY(0); }
+  /* Wave H H4 — single shared page transition: 150ms fade/slide on the archive easing. */
+  .page-enter { animation: page-enter 150ms var(--ease-archive) both; }
+  @keyframes page-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  /* Wave H H4 — skeleton utility: shimmer mirror-layout blocks for async lists. */
+  .skel {
+    overflow: hidden;
+    background-color: rgb(242 232 208 / 0.06);
+    background-image: linear-gradient(90deg, transparent, rgb(217 183 122 / 0.14), transparent);
+    background-size: 200% 100%;
+    animation: skel-shimmer 1.4s var(--ease-archive) infinite;
+  }
+  @keyframes skel-shimmer { to { background-position: -200% 0; } }
 }
