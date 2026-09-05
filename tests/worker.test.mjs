@@ -262,7 +262,7 @@ test('/api/me returns 401 without a session', async () => {
   const updates = await updatesResponse.json()
   assert.equal(updates.source, 'changelog')
   assert.equal(updates.updates.length, 3)
-  assert.match(updates.updates[0].summary, /unified archive shell/)
+  assert.match(updates.updates[0].summary, /rounded out the archive system layer/)
 })
 
 test('private files redirect to the gate and public aliases reach the intended asset', async () => {
