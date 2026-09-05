@@ -93,6 +93,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/chronicles.js',
   '/primer.js',
   '/desk.js',
+  '/onboarding.js',
   '/audio.js',
   '/atlas-chain.js',
   '/marginalia.js',

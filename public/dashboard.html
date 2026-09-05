@@ -384,6 +384,9 @@
       document.getElementById('dashName').textContent=j.user.email.split('@')[0];
       document.getElementById('setEmail').textContent=j.user.email;
       memberEmail=j.user.email||'';
+      const startTourFor=email=>{ try{ if(window.GeorOnboarding) window.GeorOnboarding.startForMember(email); }catch{} };
+      startTourFor(j.user.email);
+      window.addEventListener('load',()=>startTourFor(j.user.email));
       if(j.user.email==='ichieisenheart@gmail.com'){
         document.getElementById('adminLink').classList.remove('hidden');
       }
@@ -413,5 +416,6 @@
 
   </script>
   <script type="module" src="/archive-compass.js"></script>
+  <script type="module" src="/onboarding.js"></script>
 </body>
 </html>
