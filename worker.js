@@ -80,6 +80,7 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/chapter-meta.js',
   '/boards.js',
   '/webs.js',
+  '/webs-manager.js',
   '/gallery.js',
   '/oracle.js',
   '/chronicles.js',

@@ -33,7 +33,13 @@
         <button type="button" data-state="allied" class="web-filter rounded-full border border-gold/20 px-4 py-2 text-xs tracking-widest text-cream/60">ALLIED</button>
         <button type="button" data-state="tense" class="web-filter rounded-full border border-gold/20 px-4 py-2 text-xs tracking-widest text-cream/60">TENSE</button>
         <button type="button" data-state="war" class="web-filter rounded-full border border-gold/20 px-4 py-2 text-xs tracking-widest text-cream/60">WAR</button>
+        <label class="flex items-center gap-2 text-xs text-cream/40">FACTION
+          <select id="websFaction" class="bg-ink border border-gold/20 rounded-full px-3 py-2 text-xs text-cream/80">
+            <option value="">All factions</option>
+          </select>
+        </label>
       </div>
+      <p class="text-[10px] tracking-[.2em] text-cream/30 mt-2 text-center">FILTERS ARE KEPT ON THIS DEVICE ONLY</p>
       <p id="websStatus" role="status" aria-live="polite" class="text-xs text-cream/40 mt-3 text-center">Loading the webs…</p>
       <div class="mt-8 overflow-x-auto rounded-xl border border-gold/10">
         <div id="websCanvas" aria-busy="true" class="p-5 text-sm text-cream/40">Weaving the diplomacy webs…</div>
