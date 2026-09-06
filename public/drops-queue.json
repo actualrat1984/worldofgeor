@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-06T06:29:23.714Z",
+ "generated": "2026-09-06T07:06:52.709Z",
  "vault": "C:/Users/pc/Documents/Lore/Lore",
  "count": 282,
  "kinds": [
@@ -18,6 +18,7 @@
    "question": "“Ad Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Ad Dwarnov.md — 12 non-empty lines.",
    "placeholder": "The people of Ad Dwarnov are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Ad Dwarnov\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Dwarf — **Inside Empire:** No\r\n**Borders:** [[Albjerg]], [[Pakvezy]], [[Venner]], [[Phaebam]], [[Jogena]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-ad-dwarnov"
   },
   {
@@ -27,6 +28,7 @@
    "question": "“Aelefen (Venner)” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Aelefen (Venner).md — 12 non-empty lines.",
    "placeholder": "The people of Aelefen (Venner) are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Aelefen (Venner)\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Draco Order]], [[Grimmel Republic|Grimmel]], [[Obsidian Dwarnov]], [[Ceruleagl]], [[Alfrichstadt]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-aelefen-venner"
   },
   {
@@ -36,6 +38,7 @@
    "question": "“AfBeg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/AfBeg.md — 12 non-empty lines.",
    "placeholder": "The people of AfBeg are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# AfBeg\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Kent]], [[Dobnya]], [[Cupga]], [[Magna]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-afbeg"
   },
   {
@@ -45,6 +48,7 @@
    "question": "“Astrofod” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Astrofod.md — 12 non-empty lines.",
    "placeholder": "The people of Astrofod are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Astrofod\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Pilferhorn]], Videnya, Winneber, [[New Baoth]], [[Erisian Theocracy]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-astrofod"
   },
   {
@@ -54,6 +58,7 @@
    "question": "“Beaut” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Beaut.md — 13 non-empty lines.",
    "placeholder": "The people of Beaut are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Beaut\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Erisian Theocracy]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Erisian Theocracy. Ends with Nya? No\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-beaut"
   },
   {
@@ -63,6 +68,7 @@
    "question": "“Ceruleagl” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Ceruleagl.md — 12 non-empty lines.",
    "placeholder": "The people of Ceruleagl are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Ceruleagl\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Alfrichstadt]], [[Aelefen (Venner)]], [[Obsidian Dwarnov]], [[Ad Dwarnov]], \r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-ceruleagl"
   },
   {
@@ -72,6 +78,7 @@
    "question": "“Cragsad” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Cragsad.md — 12 non-empty lines.",
    "placeholder": "The people of Cragsad are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Cragsad\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Fezzanite Republic]], [[Galtide]], Brandenburg, Prassen-Albridge, [[Mercuir]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-cragsad"
   },
   {
@@ -81,6 +88,7 @@
    "question": "“Darkne” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Darkne.md — 12 non-empty lines.",
    "placeholder": "The people of Darkne are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Darkne\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Magna]], [[Cristulat]], [[Dubadar]], Sanie, Mirenburg, [[Venkradian Republic]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-darkne"
   },
   {
@@ -90,6 +98,7 @@
    "question": "“Deboria” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Deboria.md — 12 non-empty lines.",
    "placeholder": "The people of Deboria are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Deboria\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Erisian Theocracy]], [[Luitwin]], [[Huric]], [[Yabel]], [[Lemer]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-deboria"
   },
   {
@@ -99,6 +108,7 @@
    "question": "“Dromeda” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Dromeda.md — 12 non-empty lines.",
    "placeholder": "The people of Dromeda are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Dromeda\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Cossiland]], [[Kosled]], [[Elvenkrad]], [[Bichai]], [[Starsh]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-dromeda"
   },
   {
@@ -108,6 +118,7 @@
    "question": "“Aeger” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Aeger.md — 12 non-empty lines.",
    "placeholder": "The people of Aeger are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Aeger\n> Erisian Empire subdivision\nCounty of Aeger — county within the Empire.",
    "id": "d-nation-aeger"
   },
   {
@@ -117,6 +128,7 @@
    "question": "“Alfrichstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Alfrichstadt.md — 12 non-empty lines.",
    "placeholder": "The people of Alfrichstadt are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Alfrichstadt\n> Erisian Empire subdivision\nCounty of Alfrichstadt — county within the Empire.",
    "id": "d-nation-alfrichstadt"
   },
   {
@@ -126,6 +138,7 @@
    "question": "“Aspenwat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Aspenwat.md — 12 non-empty lines.",
    "placeholder": "The people of Aspenwat are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Aspenwat\n> Erisian Empire subdivision\nCounty of Aspenwat — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-aspenwat"
   },
   {
@@ -135,6 +148,7 @@
    "question": "“Auvbach” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Auvbach.md — 12 non-empty lines.",
    "placeholder": "The people of Auvbach are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Auvbach\n> Erisian Empire subdivision\nCounty of Auvbach — county within the Empire.",
    "id": "d-nation-auvbach"
   },
   {
@@ -144,6 +158,7 @@
    "question": "“Balern” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Balern.md — 12 non-empty lines.",
    "placeholder": "The people of Balern are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Balern\n> Erisian Empire subdivision\nCounty of Balern — county within the Empire.",
    "id": "d-nation-balern"
   },
   {
@@ -153,6 +168,7 @@
    "question": "“Dryle” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Dryle.md — 12 non-empty lines.",
    "placeholder": "The people of Dryle are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Dryle\n> Erisian Empire subdivision\nCounty of Dryle — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-dryle"
   },
   {
@@ -162,6 +178,7 @@
    "question": "“Duvlon” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Duvlon.md — 12 non-empty lines.",
    "placeholder": "The people of Duvlon are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Duvlon\n> Erisian Empire subdivision\nCounty of Duvlon — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-duvlon"
   },
   {
@@ -171,6 +188,7 @@
    "question": "“Einstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Einstadt.md — 12 non-empty lines.",
    "placeholder": "The people of Einstadt are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Einstadt\n> Erisian Empire subdivision\nCounty of Einstadt — county incorporating the city of Einstadt.",
    "id": "d-nation-einstadt"
   },
   {
@@ -180,6 +198,7 @@
    "question": "“Genever” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Genever.md — 12 non-empty lines.",
    "placeholder": "The people of Genever are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Genever\n> Erisian Empire subdivision\nCounty of Genever — county within the Empire.",
    "id": "d-nation-genever"
   },
   {
@@ -189,6 +208,7 @@
    "question": "“Granssat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Granssat.md — 12 non-empty lines.",
    "placeholder": "The people of Granssat are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Granssat\n> Erisian Empire subdivision\nCounty of **Granssat** — county within the Empire, in the southern imperial band ([[Grimmel Peninsula]] zoom). Located **below [[Matelofn]], above [[Nortpos]], northeast of [[Opamer]]** — the middle link of the Matelofn → Granssat → Nortpos chain.",
    "id": "d-nation-granssat"
   },
   {
@@ -198,6 +218,7 @@
    "question": "“Jennesfort” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Jennesfort.md — 12 non-empty lines.",
    "placeholder": "The people of Jennesfort are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Jennesfort\n> Erisian Empire subdivision\nCounty of Jennesfort — county within the Empire.",
    "id": "d-nation-jennesfort"
   },
   {
@@ -207,6 +228,7 @@
    "question": "“Kalel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Kalel.md — 12 non-empty lines.",
    "placeholder": "The people of Kalel are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Kalel\n> Erisian Empire subdivision\nCounty of Kalel — county of the Empire, near [[Kimel]].",
    "id": "d-nation-kalel"
   },
   {
@@ -216,6 +238,7 @@
    "question": "“Keth” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Keth.md — 12 non-empty lines.",
    "placeholder": "The people of Keth are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Keth\n> Erisian Empire subdivision\nCounty of Keth — county within the Empire.",
    "id": "d-nation-keth"
   },
   {
@@ -225,6 +248,7 @@
    "question": "“Kimel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Kimel.md — 12 non-empty lines.",
    "placeholder": "The people of Kimel are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Kimel\n> Erisian Empire subdivision\nCounty of Kimel — northeastern county of the Empire.",
    "id": "d-nation-kimel"
   },
   {
@@ -234,6 +258,7 @@
    "question": "“Laber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Laber.md — 12 non-empty lines.",
    "placeholder": "The people of Laber are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Laber\n> Erisian Empire subdivision\nCounty of Laber — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-laber"
   },
   {
@@ -243,6 +268,7 @@
    "question": "“Lebel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Lebel.md — 12 non-empty lines.",
    "placeholder": "The people of Lebel are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Lebel\n> Erisian Empire subdivision\nCounty of Lebel — county of the Empire, near [[Kimel]] and [[Kalel]].",
    "id": "d-nation-lebel"
   },
   {
@@ -252,6 +278,7 @@
    "question": "“Lenninstenberg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Lenninstenberg.md — 12 non-empty lines.",
    "placeholder": "The people of Lenninstenberg are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Lenninstenberg\n> Erisian Empire subdivision\nCounty of Lenninstenberg — county within the Empire.",
    "id": "d-nation-lenninstenberg"
   },
   {
@@ -261,6 +288,7 @@
    "question": "“Mane” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Mane.md — 12 non-empty lines.",
    "placeholder": "The people of Mane are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Mane\n> Erisian Empire subdivision\nCounty of Mane — county within the Empire.",
    "id": "d-nation-mane"
   },
   {
@@ -270,6 +298,7 @@
    "question": "“Marshgress” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Marshgress.md — 12 non-empty lines.",
    "placeholder": "The people of Marshgress are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Marshgress\n> Erisian Empire subdivision\nCounty of Marshgress — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-marshgress"
   },
   {
@@ -279,6 +308,7 @@
    "question": "“Marshloi” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Marshloi.md — 12 non-empty lines.",
    "placeholder": "The people of Marshloi are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Marshloi\n> Erisian Empire subdivision\nCounty of Marshloi — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-marshloi"
   },
   {
@@ -288,6 +318,7 @@
    "question": "“Matelofn” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Matelofn.md — 12 non-empty lines.",
    "placeholder": "The people of Matelofn are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Matelofn\n> Erisian Empire subdivision\nCounty of Matelofn — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-matelofn"
   },
   {
@@ -297,6 +328,7 @@
    "question": "“Miriad” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Miriad.md — 12 non-empty lines.",
    "placeholder": "The people of Miriad are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Miriad\n> Erisian Empire subdivision\nCounty of Miriad — county within the Empire.",
    "id": "d-nation-miriad"
   },
   {
@@ -306,6 +338,7 @@
    "question": "“Miwat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Miwat.md — 12 non-empty lines.",
    "placeholder": "The people of Miwat are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Miwat\n> Erisian Empire subdivision\nCounty of Miwat — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-miwat"
   },
   {
@@ -315,6 +348,7 @@
    "question": "“Mulr” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Mulr.md — 12 non-empty lines.",
    "placeholder": "The people of Mulr are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Mulr\n> Erisian Empire subdivision\nCounty of **Mulr** — county within the Empire, in the southern imperial band ([[Grimmel Peninsula]] zoom). Located **west of [[Pross]]**.",
    "id": "d-nation-mulr"
   },
   {
@@ -324,6 +358,7 @@
    "question": "“Munchon County” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Munchon County.md — 13 non-empty lines.",
    "placeholder": "The people of Munchon County are…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\naliases: [Munchon County, Munchon (County)]\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Munchon County\r\n> Erisian Empire subdivision — march county\r\nCounty of Munchon — a march county on the Empire's frontier. See also the wider **[[Munchon]]** region (ancient Metrak site, former [[Termopolas]] territory) from which the county takes its name.\r",
    "id": "d-nation-munchon-county"
   },
   {
@@ -333,6 +368,7 @@
    "question": "“Neopater” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Neopater.md — 12 non-empty lines.",
    "placeholder": "The people of Neopater are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Neopater\n> Erisian Empire subdivision\nCounty of Neopater — county within the Empire.",
    "id": "d-nation-neopater"
   },
   {
@@ -342,6 +378,7 @@
    "question": "“Nitread” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Nitread.md — 12 non-empty lines.",
    "placeholder": "The people of Nitread are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Nitread\n> Erisian Empire subdivision\nCounty of **Nitread** — county within the Empire, in the northeastern band of the southern imperial edge ([[Grimmel Peninsula]] zoom). Located **east of [[Aspenwat]], west of [[Duvlon]]**.",
    "id": "d-nation-nitread"
   },
   {
@@ -351,6 +388,7 @@
    "question": "“Nortpos” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Nortpos.md — 12 non-empty lines.",
    "placeholder": "The people of Nortpos are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Nortpos\n> Erisian Empire subdivision\nCounty of Nortpos — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-nortpos"
   },
   {
@@ -360,6 +398,7 @@
    "question": "“Olfensban” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Olfensban.md — 12 non-empty lines.",
    "placeholder": "The people of Olfensban are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Olfensban\n> Erisian Empire subdivision\nCounty of Olfensban — county within the Empire.",
    "id": "d-nation-olfensban"
   },
   {
@@ -369,6 +408,7 @@
    "question": "“Opamer” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Opamer.md — 12 non-empty lines.",
    "placeholder": "The people of Opamer are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Opamer\n> Erisian Empire subdivision\nCounty of Opamer — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-opamer"
   },
   {
@@ -378,6 +418,7 @@
    "question": "“Ouvlon” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Ouvlon.md — 12 non-empty lines.",
    "placeholder": "The people of Ouvlon are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Ouvlon\n> Erisian Empire subdivision\nCounty of Ouvlon — county within the Empire.",
    "id": "d-nation-ouvlon"
   },
   {
@@ -387,6 +428,7 @@
    "question": "“Pross” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Pross.md — 12 non-empty lines.",
    "placeholder": "The people of Pross are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Pross\n> Erisian Empire subdivision\nCounty of Pross — county within the Empire.",
    "id": "d-nation-pross"
   },
   {
@@ -396,6 +438,7 @@
    "question": "“Rivel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Rivel.md — 12 non-empty lines.",
    "placeholder": "The people of Rivel are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Rivel\n> Erisian Empire subdivision\nCounty of Rivel — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-rivel"
   },
   {
@@ -405,6 +448,7 @@
    "question": "“Roflenstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Roflenstadt.md — 12 non-empty lines.",
    "placeholder": "The people of Roflenstadt are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Roflenstadt\n> Erisian Empire subdivision\nCounty of Roflenstadt — county within the Empire.",
    "id": "d-nation-roflenstadt"
   },
   {
@@ -414,6 +458,7 @@
    "question": "“Rustred” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Rustred.md — 12 non-empty lines.",
    "placeholder": "The people of Rustred are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Rustred\n> Erisian Empire subdivision\nCounty of Rustred — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-rustred"
   },
   {
@@ -423,6 +468,7 @@
    "question": "“Suslann” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Suslann.md — 12 non-empty lines.",
    "placeholder": "The people of Suslann are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Suslann\n> Erisian Empire subdivision\nCounty of Suslann — county within the Empire.",
    "id": "d-nation-suslann"
   },
   {
@@ -432,6 +478,7 @@
    "question": "“Swineber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Swineber.md — 12 non-empty lines.",
    "placeholder": "The people of Swineber are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - counties\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Swineber\n> Erisian Empire subdivision\nCounty of Swineber — county within the Empire, visible on the southern edge of imperial territory ([[Grimmel Peninsula]] zoom).",
    "id": "d-nation-swineber"
   },
   {
@@ -441,6 +488,7 @@
    "question": "“Kennberg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Kennberg.md — 12 non-empty lines.",
    "placeholder": "The people of Kennberg are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - duchies\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Kennberg\n> Erisian Empire subdivision\nArchduchy of the Kennberg — the Empire's most prestigious archduchy. See [[Archduchy of the Kennberg]].",
    "id": "d-nation-kennberg"
   },
   {
@@ -450,6 +498,7 @@
    "question": "“Mirenburg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Mirenburg.md — 12 non-empty lines.",
    "placeholder": "The people of Mirenburg are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - duchies\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Mirenburg\n> Erisian Empire subdivision\nElectorate of Mirenburg — a powerful electorate city-state within the Empire. In practice, its merchant council governs with near-total autonomy (see [[Mirenburg]]).",
    "id": "d-nation-mirenburg"
   },
   {
@@ -459,6 +508,7 @@
    "question": "“Prassen-Albridge” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Prassen-Albridge.md — 13 non-empty lines.",
    "placeholder": "The people of Prassen-Albridge are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - duchies\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Prassen-Albridge\n> Erisian Empire subdivision\nDuchy of Prassen and Albridge — a major ducal territory within the [[Erisian Empire]]. Includes [[Memei]].\n**Religion:** [[Erisian church]] (state faith); some [[Yll-me]] followers of the star patterns",
    "id": "d-nation-prassen-albridge"
   },
   {
@@ -468,6 +518,7 @@
    "question": "“Cherryglade” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Cherryglade.md — 12 non-empty lines.",
    "placeholder": "The people of Cherryglade are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - free-cities\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Cherryglade\n> Erisian Empire subdivision\nFree City of Cherryglade — an imperial free city within the Empire.",
    "id": "d-nation-cherryglade"
   },
   {
@@ -477,6 +528,7 @@
    "question": "“Kelensborgh” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Kelensborgh.md — 12 non-empty lines.",
    "placeholder": "The people of Kelensborgh are…",
+   "existing": "---\ntags: [nation, erisdar, central, erisian-empire, free-city]\nregion: Central Erisdar\nstatus: active\n---\n# Kelensborgh\nA free city of the [[Erisian Empire]] in [[Central Erisdar]].\n## Connections\n- Part of: [[Erisian Empire]]\n- Region: [[Central Erisdar]]\n- Neighbors: [[Tuvir]]\n> **Stub** — distinguish from Tuvir (currently identical).",
    "id": "d-nation-kelensborgh"
   },
   {
@@ -486,6 +538,7 @@
    "question": "“Memei” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Memei.md — 12 non-empty lines.",
    "placeholder": "The people of Memei are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - free-cities\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Memei\n> Erisian Empire subdivision\nFree City of Memei — an imperial free city under direct [[Erisian Empire|Imperial]] protection.",
    "id": "d-nation-memei"
   },
   {
@@ -495,6 +548,7 @@
    "question": "“Tuvir” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Tuvir.md — 10 non-empty lines.",
    "placeholder": "The people of Tuvir are…",
+   "existing": "---\ntags: [nation, erisdar, central, erisian-empire, free-city]\nregion: Central Erisdar\nstatus: active\n---\n# Tuvir\nA free city of the [[Erisian Empire]] in [[Central Erisdar]].\n## Connections\n- Part of: [[Erisian Empire]]\n- Region: [[Central Erisdar]]",
    "id": "d-nation-tuvir"
   },
   {
@@ -504,6 +558,7 @@
    "question": "“Draco Order” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Draco Order.md — 14 non-empty lines.",
    "placeholder": "The people of Draco Order are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - order-state\n  - erisian\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Draco Order\n> Erisian Empire subdivision — order state\n**Draco Order** is an order state within the [[Erisian Empire]]: part of the Empire, but also an independent military-religious order.\nThe order is named after **Draco**, one of the [[Apostles of Eris]].",
    "id": "d-nation-draco-order"
   },
   {
@@ -513,6 +568,7 @@
    "question": "“Ever Order” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Ever Order.md — 14 non-empty lines.",
    "placeholder": "The people of Ever Order are…",
+   "existing": "---\ntags:\n  - erisian-empire\n  - subdivision\n  - order-state\n  - erisian\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Ever Order\n> Erisian Empire subdivision — order state\n**Ever Order** is an order state within the [[Erisian Empire]]: part of the Empire, but also an independent military-religious order.\nThe order is named after **Ever**, one of the [[Apostles of Eris]].",
    "id": "d-nation-ever-order"
   },
   {
@@ -522,6 +578,7 @@
    "question": "“Kosled” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Kosled.md — 12 non-empty lines.",
    "placeholder": "The people of Kosled are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Kosled\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Tenac]], [[Sperdia]], [[Talis]], [[Elemet]], [[Elvenkrad]], [[Dromeda]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-kosled"
   },
   {
@@ -531,6 +588,7 @@
    "question": "“Lemer” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Lemer.md — 12 non-empty lines.",
    "placeholder": "The people of Lemer are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Lemer\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Erisian Theocracy]], [[Pontificate of Eris]], [[Aspiph]], [[Deboria]], [[Yabel]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-lemer"
   },
   {
@@ -540,6 +598,7 @@
    "question": "“Marisco Church State” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Marisco Church State.md — 12 non-empty lines.",
    "placeholder": "The people of Marisco Church State are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Marisco Church State\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Ei Dwarnov]], [[Voxi]], [[Phaebam]], [[Memei]], [[Sleoris]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-marisco-church-state"
   },
   {
@@ -549,6 +608,7 @@
    "question": "“Mercuir” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Mercuir.md — 12 non-empty lines.",
    "placeholder": "The people of Mercuir are…",
+   "existing": "---\ntags:\n  - central-erisdar\n  - sovereign\nregion: Central Erisdar\nstatus: active\n---\n# Mercuir\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\n**Race:** Human — **Inside Empire:** No\n**Borders:** North: [[Fezzanite Republic]]; North-east: [[Cragsad]]; East: [[Brandenburg]], [[Prassen-Albridge]]\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*",
    "id": "d-nation-mercuir"
   },
   {
@@ -558,6 +618,7 @@
    "question": "“Starsh” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Starsh.md — 12 non-empty lines.",
    "placeholder": "The people of Starsh are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Starsh\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Cossiland]], [[Dromeda]], [[Bichai]], [[Korhely]], [[Kent]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-starsh"
   },
   {
@@ -567,6 +628,7 @@
    "question": "“Tenac” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Tenac.md — 13 non-empty lines.",
    "placeholder": "The people of Tenac are…",
+   "existing": "---\ntags:\n  - central-erisdar\n  - sovereign\nregion: Central Erisdar\nstatus: active\n---\n# Tenac\n> Sovereign enclave nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\n**Race:** Human — **Inside Empire:** No\n**Borders:** Surrounded on all sides by [[Kosled]].\n**Enclave status:** Yes — inside Kosled.\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*",
    "id": "d-nation-tenac"
   },
   {
@@ -576,6 +638,7 @@
    "question": "“Videnya” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Videnya.md — 13 non-empty lines.",
    "placeholder": "The people of Videnya are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Videnya\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Catmen — **Inside Empire:** No\r\n**Borders:** [[Pilferhorn]], [[Winneber]], [[New Baoth]], [[Pontificate of Eris]], [[Astrofod]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? Yes\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-videnya"
   },
   {
@@ -585,6 +648,7 @@
    "question": "“Winneber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Winneber.md — 12 non-empty lines.",
    "placeholder": "The people of Winneber are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Winneber\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Pilferhorn]], [[Matterbleak]], [[Elvennrin]], [[New Baoth]], [[Videnya]]\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-winneber"
   },
   {
@@ -594,6 +658,7 @@
    "question": "“Ximpa” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Ximpa.md — 13 non-empty lines.",
    "placeholder": "The people of Ximpa are…",
+   "existing": "---\r\ntags:\r\n  - central-erisdar\r\n  - sovereign\r\nregion: Central Erisdar\r\nstatus: active\r\n---\r\n# Ximpa\r\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** No\r\n**Borders:** [[Venner]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Venner. Ends with Nya? No\r\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*\r",
    "id": "d-nation-ximpa"
   },
   {
@@ -603,6 +668,7 @@
    "question": "“Yabel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Central Erisdar/Yabel.md — 12 non-empty lines.",
    "placeholder": "The people of Yabel are…",
+   "existing": "---\ntags:\n  - central-erisdar\n  - sovereign\nregion: Central Erisdar\nstatus: active\n---\n# Yabel\n> Sovereign nation outside the Erisian imperial border (Central Erisdar Gazetteer, Sep 2026 map-read)\n**Race:** Human — **Inside Empire:** No\n**Borders:** North: [[Lemer]]; North-east: [[Deboria]]; East: [[Luitwin]]; South-east: [[Neopater]]; South: [[Fezzanite Republic]]\n*Thin stub — map neighbor of the Empire. Region placement pending Mikhail's ruling; filed Central Erisdar as map neighbor. Expand in consolidation wave.*",
    "id": "d-nation-yabel"
   },
   {
@@ -612,6 +678,7 @@
    "question": "“Cubri Archipelago” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Cubri Archipelago/Cubri Archipelago.md — 13 non-empty lines.",
    "placeholder": "The people of Cubri Archipelago are…",
+   "existing": "---\nstatus: hub\ntags: [region, cubri-archipelago, archipelago]\n---\n# Cubri Archipelago\nAn archipelago north of [[Kumir|Kumir Island]] ([[Xeti]]) and southwest of [[Dissenbarg]].\n## Nations\n- [[Aocubri]]\n- Outposts: [[Sousu Manga]], [[Sousu Cherlote]]\n## Connections\n- Part of: [[Ge'or]]\n- North: [[Dissenbarg]]\n- South: [[Kumir]], [[Xeti]]",
    "id": "d-nation-cubri-archipelago"
   },
   {
@@ -621,6 +688,7 @@
    "question": "“Sousu Cherlote” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Cubri Archipelago/Sousu Cherlote.md — 11 non-empty lines.",
    "placeholder": "The people of Sousu Cherlote are…",
+   "existing": "---\ntags: [nation, cubri-archipelago, outpost, sousu]\nregion: Cubri Archipelago\nstatus: holding\n---\n# Sousu Cherlote\nA [[Sousu]] outpost on an island in the [[Cubri Archipelago]], located northeast of [[Sousu Manga]] and southwest of [[Dissenbarg Continent]].\n## Connections\n- Archipelago: [[Cubri Archipelago]]\n- Southwest: [[Sousu Manga]]\n- Controller: [[Sousu]]",
    "id": "d-nation-sousu-cherlote"
   },
   {
@@ -630,6 +698,7 @@
    "question": "“Sousu Manga” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Cubri Archipelago/Sousu Manga.md — 10 non-empty lines.",
    "placeholder": "The people of Sousu Manga are…",
+   "existing": "---\ntags: [nation, cubri-archipelago, outpost, sousu]\nregion: Cubri Archipelago\nstatus: holding\n---\n# Sousu Manga\nA [[Sousu]] outpost on Manga Island in the [[Cubri Archipelago]], located north of [[Kumir|Kumir Island]] and southwest of [[Dissenbarg Continent]].\n## Connections\n- Archipelago: [[Cubri Archipelago]]\n- Controller: [[Sousu]]",
    "id": "d-nation-sousu-manga"
   },
   {
@@ -639,6 +708,7 @@
    "question": "“Blazeyard” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Demon Continent/Blazeyard.md — 14 non-empty lines.",
    "placeholder": "The people of Blazeyard are…",
+   "existing": "---\r\ntags: [nation, demon-continent, flames]\r\nreligion: Ignism\r\nregion: Demon Continent\r\nstatus: active\r\n---\r\n# Blazeyard\r\nA nation on the [[Demon Continent]] located west of the [[Asatru Empire]]. Blazeyard is built into a mountain range where the [[Flames]] — beings made of burning gas rather than flesh — consume minerals as sustenance.\r\n## Faith\r\nThe [[Flames]] of Blazeyard follow [[Ignism]], which venerates the atmosphere as a higher state of being than soil and ground-bound beings.\r\n## Connections\r\n- Region: [[Demon Continent]]\r\n- East: [[Asatru Empire]]\r\n- Species: [[Flames]]\r",
    "id": "d-nation-blazeyard"
   },
   {
@@ -648,6 +718,7 @@
    "question": "“Aeon” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Aeon.md — 7 non-empty lines.",
    "placeholder": "The people of Aeon are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏘️ Aeon\nA nation in [[Dissenbarg Continent|Dissenbarg]]. A [[Theocracy|theocratic]] state governed by a council of star-reading mystics, isolated from Dissenbarg's secular trade networks. Aeon follows [[Helism]] — its patron is Gaelen, the goddess of construction.",
    "id": "d-nation-aeon"
   },
   {
@@ -657,6 +728,7 @@
    "question": "“Anos Maloca” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Anos Maloca.md — 12 non-empty lines.",
    "placeholder": "The people of Anos Maloca are…",
+   "existing": "---\ntags: [nation, dissenbarg, outpost, anos]\nregion: Dissenbarg\nstatus: city\n---\n# Anos Maloca\nA peninsula in eastern [[Dissenbarg]] controlled by the [[Anos Plutocracy]], located east of the [[Harpies]] territory and north of the [[Enkrad Order]].\n## Connections\n- Region: [[Dissenbarg]]\n- West: [[Harpies]]\n- South: [[Enkrad Order]], eastern goblin territory\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-anos-maloca"
   },
   {
@@ -666,6 +738,7 @@
    "question": "“Citrea” is a stub (9 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Citrea.md — 9 non-empty lines.",
    "placeholder": "The people of Citrea are…",
+   "existing": "---\ntags: [nation, dissenbarg]\naliases: [Kizita]\nregion: Dissenbarg\nstatus: active\n---\n# 🏘️ Citrea\nA nation in [[Dissenbarg Continent|Dissenbarg]]. A coastal merchant enclave whose harbors serve as the primary Dissenbarg port for trade with [[Meble]] and the southern routes. Citrea follows [[Helism]] — its patron is Lobas, the god of nature.\nCitrea is a member of the [[Corinite League]], recorded as **\"Kizita\"** on the 597 AGD world map.",
    "id": "d-nation-citrea"
   },
   {
@@ -675,6 +748,7 @@
    "question": "“Cletas Democracy” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Cletas Democracy.md — 13 non-empty lines.",
    "placeholder": "The people of Cletas Democracy are…",
+   "existing": "---\ntags: [nation, dissenbarg, democracy]\nregion: Dissenbarg\nstatus: active\n---\n# 🗳️ Cletas Democracy\nA [[Democracy|democratic]] state in [[Dissenbarg Continent|Dissenbarg]] and one of the few territories where common citizens vote for their leaders. The Cletas Democracy's system is imperfect — property requirements limit the franchise — but it represents a genuine alternative to autocracy.\nThe Democracy is named for **[[Cletas|Cletas, the god of reason]]** — its patron in the [[Helism]] pantheon. Its history carries a wound from the [[The Taberis War]]: when the rival power [[Taberis]] pressed it, the Democracy called on [[Vennerian Trade Republic|Venner]] for aid — and Venner's \"rescue\" ended with Venner taking Taberis for itself (524 [[AGD]]), renaming it [[Johannstadt]]. The Democracy has never forgotten the cost.\n## 🕸️ Connections\n- Region: [[Dissenbarg Continent|Dissenbarg]]\n- North of: [[Monik]]\n- Character: Democratic experiment\n- Religion: [[Helism]] — patron Cletas, god of reason",
    "id": "d-nation-cletas-democracy"
   },
   {
@@ -684,6 +758,7 @@
    "question": "“Eribel” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Eribel.md — 11 non-empty lines.",
    "placeholder": "The people of Eribel are…",
+   "existing": "---\ntags: [nation, dissenbarg, island, outpost, venner]\nregion: Dissenbarg\nstatus: active\n---\n# Eribel\nA [[Vennerian Trade Republic|Vennerian]] outpost on an island southeast of the eastern goblin territories of [[Dissenbarg]].\n## Connections\n- Region: [[Dissenbarg]]\n- Northwest: Eastern goblin territory\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-eribel"
   },
   {
@@ -693,6 +768,7 @@
    "question": "“Klatia” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Klatia.md — 7 non-empty lines.",
    "placeholder": "The people of Klatia are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏙️ Klatia\nA nation in [[Dissenbarg Continent|Dissenbarg]], member of the [[Corinite League]]. Klatia follows [[Helism]] — its patron is Corin, the goddess of sea and commerce.",
    "id": "d-nation-klatia"
   },
   {
@@ -702,6 +778,7 @@
    "question": "“Maedon” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Maedon.md — 7 non-empty lines.",
    "placeholder": "The people of Maedon are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏔️ Maedon\nA nation in [[Dissenbarg Continent|Dissenbarg]], lying north of [[Monik]]. Maedon follows [[Helism]] — its patron is Maokas.",
    "id": "d-nation-maedon"
   },
   {
@@ -711,6 +788,7 @@
    "question": "“Mienna” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Mienna.md — 12 non-empty lines.",
    "placeholder": "The people of Mienna are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏡 Mienna\nA small settlement-state in [[Dissenbarg Continent|Dissenbarg]], named in the feminine linguistic tradition common to the region. Mienna's population is predominantly female-led — a cultural pattern independent of outside influence. Mienna follows [[Helism]] — its patron is Maokas.\n## 🕸️ Connections\n- Region: [[Dissenbarg Continent|Dissenbarg]]\n- West of: [[Monik]]\n- Character: Female-led, pre-Erisian traditions\n- Religion: [[Helism]] — patron Maokas",
    "id": "d-nation-mienna"
   },
   {
@@ -720,6 +798,7 @@
    "question": "“Monik” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Monik.md — 13 non-empty lines.",
    "placeholder": "The people of Monik are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏠 Monik\nA landlocked nation in [[Dissenbarg Continent|Dissenbarg]], wedged between [[Maedon]] to the north and [[Cletas Democracy]] to the south, with [[Mienna]] lying to its east. Monik follows [[Helism]] — its patron is Maokas.\n## 🕸️ Connections\n- Region: [[Dissenbarg Continent|Dissenbarg]]\n- North of: [[Cletas Democracy]]\n- South of: [[Maedon]]\n- East of: [[Mienna]]\n- Religion: [[Helism]] — patron Maokas",
    "id": "d-nation-monik"
   },
   {
@@ -729,6 +808,7 @@
    "question": "“New Venner” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/New Venner.md — 13 non-empty lines.",
    "placeholder": "The people of New Venner are…",
+   "existing": "---\ntags: [nation, dissenbarg, outpost, venner]\nregion: Dissenbarg\nstatus: colony\n---\n# New Venner\nA peninsula in [[Dissenbarg]] controlled by the [[Vennerian Trade Republic]], located east of [[Aeon]] across the sea and below the goblin territories.\n## Connections\n- Region: [[Dissenbarg]]\n- West (across sea): [[Aeon]]\n- North: Goblin territory\n- East: [[Enkrad Order]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-new-venner"
   },
   {
@@ -738,6 +818,7 @@
    "question": "“Sua” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Sua.md — 11 non-empty lines.",
    "placeholder": "The people of Sua are…",
+   "existing": "---\ntags: [nation, dissenbarg, island, outpost, venner]\nregion: Dissenbarg\nstatus: active\n---\n# Sua\nA [[Vennerian Trade Republic|Vennerian]] island south of the [[Cletas Democracy]] in [[Dissenbarg]], across a stretch of sea. Sua is Venner's outpost — the foothold Venner held before it invaded and took over [[Taberis]] (now [[Johannstadt]]).\n## Connections\n- Region: [[Dissenbarg]]\n- North (across sea): [[Cletas Democracy]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-sua"
   },
   {
@@ -747,6 +828,7 @@
    "question": "“Taberis” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Taberis.md — 14 non-empty lines.",
    "placeholder": "The people of Taberis are…",
+   "existing": "---\ntags: [nation, dissenbarg, historical]\nregion: Dissenbarg\nstatus: historical\n---\n# 🏛️ Taberis\n**Taberis** was a big country in [[Dissenbarg Continent|Dissenbarg]], rivaling the [[Cletas Democracy]] — until 524 [[AGD]], when the [[The Taberis War|war]] between them ended in disaster. The Democracy called [[Vennerian Trade Republic|Venner]] for help; Venner took Taberis over illegally — nobody could oppose them at the time — and renamed the country [[Johannstadt]].\n## Connections\n- Region: [[Dissenbarg Continent|Dissenbarg]]\n- Rival: [[Cletas Democracy]]\n- Fall: [[The Taberis War]] (524 [[AGD]])\n- Conquered By: [[Vennerian Trade Republic]] (524 [[AGD]])\n- Now: [[Johannstadt]]\n- Liberation Pact: [[Komme]] and [[Anos Plutocracy|Anos]] agreed (~542 [[AGD]]) to work together to liberate it",
    "id": "d-nation-taberis"
   },
   {
@@ -756,6 +838,7 @@
    "question": "“Taebea” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Taebea.md — 7 non-empty lines.",
    "placeholder": "The people of Taebea are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏛️ Taebea\nA nation in [[Dissenbarg Continent|Dissenbarg]], member of the [[Corinite League]]. Taebea follows [[Helism]] — its patron is Corin, the goddess of sea and commerce.",
    "id": "d-nation-taebea"
   },
   {
@@ -765,6 +848,7 @@
    "question": "“Temas” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Temas.md — 7 non-empty lines.",
    "placeholder": "The people of Temas are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏘️ Temas\nA nation in [[Dissenbarg Continent|Dissenbarg]]. An inland agrarian state whose fertile plains produce grain exported across the continent through [[Citrea]]'s ports. Temas follows [[Helism]] — its patron is Lobas, the god of nature.",
    "id": "d-nation-temas"
   },
   {
@@ -774,6 +858,7 @@
    "question": "“Tessa” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Tessa.md — 7 non-empty lines.",
    "placeholder": "The people of Tessa are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🌊 Tessa\nA coastal nation in [[Dissenbarg Continent|Dissenbarg]], member of the [[Corinite League]]. Controls the island colony of [[Tibia]]. Tessa follows [[Helism]] — its patron is Corin, the goddess of sea and commerce.",
    "id": "d-nation-tessa"
   },
   {
@@ -783,6 +868,7 @@
    "question": "“Tessalian Tibia” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Tessalian Tibia.md — 11 non-empty lines.",
    "placeholder": "The people of Tessalian Tibia are…",
+   "existing": "---\ntags: [nation, dissenbarg, island]\nregion: Dissenbarg\nstatus: active\n---\n# Tessalian Tibia\nAn island nation south of the [[Enkrad Order]] and southeast of the [[Corinite League]] members and [[Aeon]], reached by a long sail across the sea. Positioned between [[Dissenbarg Continent]] and the [[Merratodoni]] continent.\n## Connections\n- Region: [[Dissenbarg Continent]] (southern waters)\n- North: [[Enkrad Order]], [[Aeon]], [[Corinite League]]\n- Southeast (across sea): [[Luzia]] ([[Merratodoni]])",
    "id": "d-nation-tessalian-tibia"
   },
   {
@@ -792,6 +878,7 @@
    "question": "“Tissas” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Dissenbarg/Tissas.md — 7 non-empty lines.",
    "placeholder": "The people of Tissas are…",
+   "existing": "---\ntags: [nation, dissenbarg]\nregion: Dissenbarg\nstatus: active\n---\n# 🏘️ Tissas\nA nation in [[Dissenbarg Continent|Dissenbarg]]. A highland realm controlling the mountain passes between Dissenbarg's eastern and western regions — strategically vital, economically lean. Tissas follows [[Helism]] — its patron is [[Tissas (God)|Tissas]], the god of war, whose name the nation bears.",
    "id": "d-nation-tissas"
   },
   {
@@ -801,6 +888,7 @@
    "question": "“Anos-Arebed” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/East Erisdar/Anos-Arebed.md — 11 non-empty lines.",
    "placeholder": "The people of Anos-Arebed are…",
+   "existing": "---\ntags: [nation, east-erisdar, outpost, anos]\nregion: East Erisdar\nstatus: colony\n---\n# Anos-Arebed\nA territory in [[East Erisdar]] controlled by the [[Anos Plutocracy]], located south of the [[Spasian Teocracy]], southeast of [[Sperdia]], and south of the [[Erilian Federation]].\n## Connections\n- Region: [[East Erisdar]]\n- North: [[Spasian Teocracy]], [[Erilian Federation]]\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-anos-arebed"
   },
   {
@@ -810,6 +898,7 @@
    "question": "“Away” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/East Erisdar/Away.md — 12 non-empty lines.",
    "placeholder": "The people of Away are…",
+   "existing": "---\ntags: [nation, east-erisdar, outpost, limese-league]\nregion: East Erisdar\nstatus: active\n---\n# Away\nA territory in [[East Erisdar]] controlled by the [[Limese League]], located south of [[Sperdia]].\n## Connections\n- Region: [[East Erisdar]]\n- North: [[Sperdia]]\n- East: [[Erilian Federation]]\n- Controller: [[Limese League]]",
    "id": "d-nation-away"
   },
   {
@@ -819,6 +908,7 @@
    "question": "“Dwarvengor” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/East Erisdar/Dwarvengor.md — 13 non-empty lines.",
    "placeholder": "The people of Dwarvengor are…",
+   "existing": "---\ntags: [nation, erisdar, north]\nregion: East Erisdar\nstatus: active\n---\n# ⛰️ Dwarvengor\nThe primary dwarven territory in [[East Erisdar]] and the modern successor to the ancient [[Dwarf Era|dwarven kingdoms]]. Dwarvengor is known for its deep mines, fortifications carved into mountain faces, and stubborn independence. One of the few nations that openly resisted the [[The Geological-Cartographic Rewrite|Geological-Cartographic Rewrite]], and one of the few the [[Erisian church]] chose not to press — dwarven mountain-holds are famously difficult to siege.\n## 🕸️ Connections\n- Species: [[Dwarves]]\n- Religion: [[Dwarvism]] — Eastern (Diamond) Doctrine\n- Era: Survived the [[Dwarf Era]]\n- Resistance: Refused the [[The Geological-Cartographic Rewrite|Geological-Cartographic Rewrite]]\n- See Also: [[Dwarf Era]], [[East Erisdar]]",
    "id": "d-nation-dwarvengor"
   },
   {
@@ -828,6 +918,7 @@
    "question": "“Fendigar Dictatorship” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/East Erisdar/Fendigar Dictatorship.md — 13 non-empty lines.",
    "placeholder": "The people of Fendigar Dictatorship are…",
+   "existing": "---\ntags: [nation, erisdar, north, dictatorship]\nregion: East Erisdar\nstatus: active\n---\n# 👁️ Fendigar Dictatorship\nA rigidly controlled state in [[East Erisdar]] ruled by a single autocrat in the Fendilger lineage. Unlike the republican experiments elsewhere, Fendilger maintained its dictatorial structure through the [[The Era of Cracking Walls|Era of Cracking Walls]] — largely by avoiding imperial entanglements and suppressing internal dissent with brutal efficiency.\n**An atheist, xenophobic kingdom.** Traumatized by what happened with [[Fractured State of Erislod|Erislod]] due to [[Pontus]], Fendigar completely closed itself off from society and **abandoned its gods**. It is autarkian — self-sufficient, sealed, and unwilling to let anyone enter its lands.\n**Species:** [[Humans]]\n## 🕸️ Connections\n- Region: [[East Erisdar]]\n- Character: Dictatorship, isolated, repressive\n- Survived: [[The Era of Cracking Walls|Era of Cracking Walls]]",
    "id": "d-nation-fendigar-dictatorship"
   },
   {
@@ -837,6 +928,7 @@
    "question": "“New Mann” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/East Erisdar/New Mann.md — 13 non-empty lines.",
    "placeholder": "The people of New Mann are…",
+   "existing": "---\ntags: [nation, east-erisdar, refugee, settlement]\nregion: East Erisdar\nstatus: active\n---\n# New Mann\nA settlement of refugees from the war between the [[Mann Order]] and the [[Erilian Federation]], located inside the [[Fractured State of Erislod]]. These refugees fled the conflict — crossing past the [[Mongrel Forest]] in the east — and settled in the anarchic territory, naming their new home after the Mann Order they left behind.\n## Connections\n- Region: [[East Erisdar]]\n- Within: [[Fractured State of Erislod]]\n- Origin: [[Mann Order]]\n- Route: Past the [[Mongrel Forest]]\n- Cause: War with [[Erilian Federation]]",
    "id": "d-nation-new-mann"
   },
   {
@@ -846,6 +938,7 @@
    "question": "“index” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/index.md/index.md — 7 non-empty lines.",
    "placeholder": "The people of index are…",
+   "existing": "---\ntitle: Nations\ntags: [index, hub]\n---\n# 🏰 Nations\nThe sovereign states of Ge'or — from the decaying Erisian Empire to the crab kingdoms of the deep seas.\nBrowse the entries in the sidebar, or return to the [[World Dashboard]].",
    "id": "d-nation-index"
   },
   {
@@ -855,6 +948,7 @@
    "question": "“Coalsteel Kingdom” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kobre/Coalsteel Kingdom.md — 12 non-empty lines.",
    "placeholder": "The people of Coalsteel Kingdom are…",
+   "existing": "---\ntags: [nation, kobre, dwarf]\nregion: Kobre\nstatus: active\n---\n# Coalsteel Kingdom\nA [[Dwarves|dwarf]] nation on the southeastern corner of [[Kobre Continent]], extending into the central region. The Coalsteel dwarves have been locked in a millennia-old rivalry with the [[Elf Kingdom]] to their west — a feud born from the continent's extreme isolation. With no external threats or allies for thousands of years, the two species turned on each other.\n## Connections\n- Region: [[Kobre Continent]]\n- West: [[Elf Kingdom]]\n- North: [[Homunculi Kingdom]]\n- Species: [[Dwarves]]",
    "id": "d-nation-coalsteel-kingdom"
   },
   {
@@ -864,6 +958,7 @@
    "question": "“Diamonds Kingdom” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kobre/Diamonds Kingdom.md — 11 non-empty lines.",
    "placeholder": "The people of Diamonds Kingdom are…",
+   "existing": "---\ntags: [nation, kobre, dwarf]\nregion: Kobre\nstatus: active\n---\n# Diamonds Kingdom\nA [[Dwarves|dwarf]] kingdom on the western tip of a peninsula on [[Kobre Continent]], located west of the [[Homunculi Kingdom]]. The Diamonds dwarves have constructed a massive wall across the peninsula's neck — their only defense against relentless homunculi attacks. Unlike Coalsteel to the east, Diamonds Kingdom's primary enemy is the homunculi, not the elves.\n## Connections\n- Region: [[Kobre Continent]]\n- East: [[Homunculi Kingdom]]\n- Species: [[Dwarves]]",
    "id": "d-nation-diamonds-kingdom"
   },
   {
@@ -873,6 +968,7 @@
    "question": "“Elf Kingdom” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kobre/Elf Kingdom.md — 12 non-empty lines.",
    "placeholder": "The people of Elf Kingdom are…",
+   "existing": "---\ntags: [nation, kobre, elven]\nregion: Kobre\nstatus: active\n---\n# Elf Kingdom\nAn [[Elves|elven]] kingdom on [[Kobre Continent]], located west of the [[Coalsteel Kingdom]]. The elves of Kobre have warred with the dwarves of Coalsteel for millennia — their isolation on this remote continent leaving only each other as rivals. Unlike the scattered elven diaspora elsewhere on [[Ge'or]], the Kobre elves maintained a continuous, unbroken kingdom.\n## Connections\n- Region: [[Kobre Continent]]\n- East: [[Coalsteel Kingdom]]\n- North: [[Homunculi Kingdom]]\n- Species: [[Elves]]",
    "id": "d-nation-elf-kingdom"
   },
   {
@@ -882,6 +978,7 @@
    "question": "“New Elvengar” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kutten/New Elvengar.md — 14 non-empty lines.",
    "placeholder": "The people of New Elvengar are…",
+   "existing": "---\ntags: [nation, kutten, elven, desert]\nregion: Kutten\nstatus: active\n---\n# New Elvengar\nAn elven kingdom on [[Kutten]] attempting to restore elven rule in the region. Located left of [[Love of the Sea (outpost)]], south of [[Malbodor]] (across a vast stretch of [[Kutten Desert]]), and northwest of [[Oda]]. New Elvengar is small and still struggling — a fledgling state trying to reclaim the legacy of the original [[Elvengar]] that fell in the [[Great Divergence]] (Year 0); the [[The Kutten Catastrophe|Kutten Catastrophe]] followed.\n## Connections\n- Region: [[Kutten]]\n- North (across desert): [[Malbodor]]\n- East: [[Love of the Sea (outpost)]]\n- Northwest: [[Oda]] (across desert)\n- Legacy: Successor to [[Elvengar]]\n- Species: [[Elves]]",
    "id": "d-nation-new-elvengar"
   },
   {
@@ -891,6 +988,7 @@
    "question": "“Oda” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kutten/Oda.md — 14 non-empty lines.",
    "placeholder": "The people of Oda are…",
+   "existing": "---\ntags: [nation, kutten, orc, desert]\nregion: Kutten\nstatus: active\n---\n# Oda\nAn [[Orcs|orc]] kingdom on [[Kutten]], located northwest of [[New Elvengar]] across the sand desert and southwest of [[Malbodor]] across a narrow sea. Another orcish civilization contributing to the scattered settlements of the desolate continent.\n## Connections\n- Region: [[Kutten]]\n- Southeast: [[New Elvengar]] (across desert)\n- Northeast (across sea): [[Malbodor]]\n- Southwest: [[Marko]]\n- Species: [[Orcs]]\n- Religion: [[Ogoron]]",
    "id": "d-nation-oda"
   },
   {
@@ -900,6 +998,7 @@
    "question": "“Yakut Territory (Kutten)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Kutten/Yakut Territory (Kutten).md — 13 non-empty lines.",
    "placeholder": "The people of Yakut Territory (Kutten) are…",
+   "existing": "---\ntags: [nation, kutten, territory, orc, yakut]\nregion: Kutten\naliases: [Yakut Kutten Territory]\nstatus: active\n---\n# Yakut Territory (Kutten)\nA land area on [[Kutten]] controlled by [[Yakut]], located below [[Marko]] across a stretch of desert to the south. This territory extends Yakut's reach from [[Yak Island]] onto the Kutten continent.\n## Connections\n- Region: [[Kutten]]\n- North (across desert): [[Marko]]\n- Parent nation: [[Yakut]] ([[Yak Island]], [[Demon Continent]])\n- Species: [[Yak]] ([[Orcs]] subrace)",
    "id": "d-nation-yakut-territory-kutten"
   },
   {
@@ -909,6 +1008,7 @@
    "question": "“Anos Cattos” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Anos Cattos.md — 12 non-empty lines.",
    "placeholder": "The people of Anos Cattos are…",
+   "existing": "---\ntags: [nation, lumina, anos, outpost, catmen]\nregion: Lumina\nstatus: colony\n---\n# Anos Cattos\nAn outpost of the [[Anos Plutocracy]] on a small island northeast of [[Cattos]] island, off the [[Lumina Continent]]. Inhabited by [[Catmen]] and [[Humans]].\n## Connections\n- Region: [[Lumina Continent]] (offshore)\n- Southwest: [[Cattos]]\n- Controller: [[Anos Plutocracy]]\n- Species: [[Catmen]], [[Humans]]",
    "id": "d-nation-anos-cattos"
   },
   {
@@ -918,6 +1018,7 @@
    "question": "“Anos Lumina Outpost” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Anos Lumina Outpost.md — 12 non-empty lines.",
    "placeholder": "The people of Anos Lumina Outpost are…",
+   "existing": "---\ntags: [nation, lumina, anos, outpost]\nregion: Lumina\nstatus: colony\n---\n# Anos Lumina Outpost\nAn outpost of the [[Anos Plutocracy]] on the [[Lumina Continent]], located southeast of [[Great Cattos]] and northeast of the [[Vennerian Aelefer Channel]].\n## Connections\n- Region: [[Lumina Continent]]\n- Northwest: [[Great Cattos]]\n- Southwest: [[Vennerian Aelefer Channel]]\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-anos-lumina-outpost"
   },
   {
@@ -927,6 +1028,7 @@
    "question": "“Lake Kingdom” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Lake Kingdom.md — 14 non-empty lines.",
    "placeholder": "The people of Lake Kingdom are…",
+   "existing": "---\ntags: [nation, lumina, catmen, kingdom]\nregion: Lumina\nstatus: active\n---\n# Lake Kingdom\nA kingdom on the [[Lumina Continent]] southwest of the [[Gigas Tribe]] and south of the [[Maoma Tribe]]. The Lake Kingdom is the main player on the [[Marti Sea]] side of Lumina. Its name derives from a large lake shared with the [[Gigas Tribe]]. The kingdom is populated by [[Lesser Catmen]].\n## Connections\n- Region: [[Lumina Continent]]\n- North: [[Maoma Tribe]]\n- Northeast: [[Gigas Tribe]]\n- Lake: Shared with [[Gigas Tribe]]\n- Sea access: [[Marti Sea]]\n- Species: [[Lesser Catmen]]",
    "id": "d-nation-lake-kingdom"
   },
   {
@@ -936,6 +1038,7 @@
    "question": "“New Eris” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/New Eris.md — 12 non-empty lines.",
    "placeholder": "The people of New Eris are…",
+   "existing": "---\ntags: [nation, lumina, venner, colony]\nregion: Lumina\nstatus: active\n---\n# New Eris\nA large [[Vennerian Trade Republic|Vennerian]] controlled territory and colony on the southern [[Lumina Continent]], connected to the [[Marti Sea]]. South of the [[Lumina Republic]].\n## Connections\n- Region: [[Lumina Continent]]\n- North: [[Lumina Republic]]\n- Sea: [[Marti Sea]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-new-eris"
   },
   {
@@ -945,6 +1048,7 @@
    "question": "“Tree Tribe” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Tree Tribe.md — 13 non-empty lines.",
    "placeholder": "The people of Tree Tribe are…",
+   "existing": "---\ntags: [nation, lumina, treemen, tribe]\nregion: Lumina\nstatus: active\n---\n# Tree Tribe\nA tribe of [[Treemen]] on the [[Lumina Continent]] east of the [[Lumina Republic]] across a jungle, and southeast of the [[Cammao Kingdom]]. Treemen are humanoid and similar in appearance to humans, but they build their homes inside trees.\n## Connections\n- Region: [[Lumina Continent]]\n- West: [[Lumina Republic]] (across jungle)\n- Northwest: [[Cammao Kingdom]]\n- Southeast: [[Great Cattos]] (near a lake)\n- Species: [[Treemen]]",
    "id": "d-nation-tree-tribe"
   },
   {
@@ -954,6 +1058,7 @@
    "question": "“Vennerian Aelefer Channel” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Vennerian Aelefer Channel.md — 13 non-empty lines.",
    "placeholder": "The people of Vennerian Aelefer Channel are…",
+   "existing": "---\ntags: [nation, lumina, venner, channel]\nregion: Lumina\nstatus: colony\n---\n# Vennerian Aelefer Channel\nA [[Vennerian Trade Republic|Vennerian]] channel on the southern [[Lumina Continent]], south of [[Great Cattos]]. It connects to [[Beast's Bay]], the major bay bordered by [[Lumina Continent]] (west), [[Marti Continent]] (south), and [[Xeti]] (east).\n## Connections\n- Region: [[Lumina Continent]]\n- North: [[Great Cattos]]\n- Northeast: [[Anos Lumina Outpost]]\n- Connects to: [[Beast's Bay]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-vennerian-aelefer-channel"
   },
   {
@@ -963,6 +1068,7 @@
    "question": "“Vennerian Goishi” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lumina/Vennerian Goishi.md — 12 non-empty lines.",
    "placeholder": "The people of Vennerian Goishi are…",
+   "existing": "---\ntags: [nation, lumina, outpost, venner]\nregion: Lumina\nstatus: colony\n---\n# Vennerian Goishi\nA [[Vennerian Trade Republic|Vennerian]] outpost on the [[Lumina Continent]], east of the [[Lumina Kingdom]]. Larger than a typical outpost, Goishi contains actual cities and serves as a major commercial hub connecting Vennerian trade networks to the Lumina interior.\n## Connections\n- Region: [[Lumina Continent]]\n- West: [[Lumina Kingdom]]\n- Southeast: [[Cammao Kingdom]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-vennerian-goishi"
   },
   {
@@ -972,6 +1078,7 @@
    "question": "“Aeid Kingdom” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Luminous Sea Islands/Aeid Kingdom.md — 11 non-empty lines.",
    "placeholder": "The people of Aeid Kingdom are…",
+   "existing": "---\ntags: [nation, erisdar, luminous-sea, kingdom]\nregion: Luminous Sea Islands\naliases:\n  - Aeid Kingdom\n  - Aeid\nstatus: hub\n---\n# 👑 Aeid Kingdom\n> This is the [[Aenid Kingdom]] — the name **\"Aeid Kingdom\"** is a cartographic misspelling that appeared on earlier maps and in early vault drafts. The correct name is **Aenid Kingdom**, a West Erisdar coastal monarchy that claims sovereignty over the [[Luminous Ocean]] and dominates the [[Luminous Sea Islands]] with its navy.\nSee: [[Aenid Kingdom]]",
    "id": "d-nation-aeid-kingdom"
   },
   {
@@ -981,6 +1088,7 @@
    "question": "“Koln” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Luminous Sea Islands/Koln.md — 11 non-empty lines.",
    "placeholder": "The people of Koln are…",
+   "existing": "---\ntags: [nation, luminous-sea-islands, outpost, venner]\nregion: Luminous Sea Islands\nstatus: active\n---\n# Koln\nA [[Vennerian Trade Republic|Vennerian]] outpost on [[Minir]] island, located southeast of [[Dukedam]].\n## Connections\n- Island: [[Minir]]\n- Northwest: [[Dukedam]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-koln"
   },
   {
@@ -990,6 +1098,7 @@
    "question": "“Neopao” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Luminous Sea Islands/Neopao.md — 11 non-empty lines.",
    "placeholder": "The people of Neopao are…",
+   "existing": "---\ntags: [nation, luminous-sea-islands, outpost, venner]\nregion: Luminous Sea Islands\nstatus: active\n---\n# Neopao\nA [[Vennerian Trade Republic|Vennerian]] outpost on [[Minir]] island, located northeast of [[Dukedam]].\n## Connections\n- Island: [[Minir]]\n- Southwest: [[Dukedam]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-neopao"
   },
   {
@@ -999,6 +1108,7 @@
    "question": "“East Incubator” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/East Incubator.md — 13 non-empty lines.",
    "placeholder": "The people of East Incubator are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# East Incubator\nOne of the largest machine nations on [[Lung Continent]], located on a peninsula east of [[Human Sword]] and [[Nightstar]], across a narrow sea. East Incubator's factories produce vast numbers of new machines, making it a critical source of reinforcements for the eternal war against [[The Hive]].\n## Connections\n- Region: [[Lung Continent]] (east peninsula)\n- West: [[Human Sword]], [[Nightstar]]\n- North (across wasteland): [[The Hive]]\n- Species: [[Machines]]\n- Role: Primary incubator — mass production of new machines",
    "id": "d-nation-east-incubator"
   },
   {
@@ -1008,6 +1118,7 @@
    "question": "“Mudrim” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/Mudrim.md — 13 non-empty lines.",
    "placeholder": "The people of Mudrim are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# Mudrim\nA machine nation northwest of [[Nightstar]] and north of [[Tawdry Landing]] on [[Lung Continent]].\n## Connections\n- Region: [[Lung Continent]] (north)\n- Southeast: [[Nightstar]]\n- South: [[Tawdry Landing]]\n- Northwest: [[Skymaster]]\n- Species: [[Machines]]",
    "id": "d-nation-mudrim"
   },
   {
@@ -1017,6 +1128,7 @@
    "question": "“Nightstar” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/Nightstar.md — 13 non-empty lines.",
    "placeholder": "The people of Nightstar are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# Nightstar\nA machine nation north of [[Human Sword]] and northeast of [[Tawdry Landing]] on [[Lung Continent]].\n## Connections\n- Region: [[Lung Continent]] (north)\n- South: [[Human Sword]]\n- Southwest: [[Tawdry Landing]]\n- North: [[Mudrim]]\n- Species: [[Machines]]",
    "id": "d-nation-nightstar"
   },
   {
@@ -1026,6 +1138,7 @@
    "question": "“Skymaster” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/Skymaster.md — 12 non-empty lines.",
    "placeholder": "The people of Skymaster are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# Skymaster\nA machine nation on [[Lung Continent]] northwest of [[Mudrim]].\n## Connections\n- Region: [[Lung Continent]] (northwest)\n- Southeast: [[Mudrim]]\n- North (across wasteland): [[The Hive]]\n- Species: [[Machines]]",
    "id": "d-nation-skymaster"
   },
   {
@@ -1035,6 +1148,7 @@
    "question": "“Steel Holdout” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/Steel Holdout.md — 11 non-empty lines.",
    "placeholder": "The people of Steel Holdout are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# Steel Holdout\nA machine nation in the northwest of [[Lung Continent]], positioned as a defensive bulwark against [[The Hive]].\n## Connections\n- Region: [[Lung Continent]] (northwest)\n- Species: [[Machines]]\n- Enemy: [[The Hive]]",
    "id": "d-nation-steel-holdout"
   },
   {
@@ -1044,6 +1158,7 @@
    "question": "“Tawdry Landing” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Lung/Tawdry Landing.md — 13 non-empty lines.",
    "placeholder": "The people of Tawdry Landing are…",
+   "existing": "---\ntags: [nation, lung, machine]\nregion: Lung Continent\nstatus: active\n---\n# Tawdry Landing\nA machine nation east of [[Steel Holdout]] and north of [[Brotherstar]] on [[Lung Continent]].\n## Connections\n- Region: [[Lung Continent]] (north)\n- West: [[Steel Holdout]]\n- South: [[Brotherstar]]\n- East: [[Human Sword]]\n- Species: [[Machines]]",
    "id": "d-nation-tawdry-landing"
   },
   {
@@ -1053,6 +1168,7 @@
    "question": "“Anos Marti” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Marti/Anos Marti.md — 12 non-empty lines.",
    "placeholder": "The people of Anos Marti are…",
+   "existing": "---\ntags: [nation, marti, outpost, anos]\nregion: Marti\nstatus: colony\n---\n# Anos Marti\nAn outpost of the [[Anos Plutocracy]] on a peninsula on [[Marti Continent]], located north of [[Maboro]] and connected slightly to the eastern side of [[Germina]].\n## Connections\n- Region: [[Marti Continent]]\n- South: [[Maboro]]\n- West: [[Germina]] (slight connection)\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-anos-marti"
   },
   {
@@ -1062,6 +1178,7 @@
    "question": "“Cobal Kingdom” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Marti/Cobal Kingdom.md — 13 non-empty lines.",
    "placeholder": "The people of Cobal Kingdom are…",
+   "existing": "---\ntags: [nation, marti, dwarf]\nregion: Marti\nstatus: active\n---\n# Cobal Kingdom\nA [[Dwarves|dwarf]] kingdom in the far southwestern reaches of [[Marti Continent]], reached by walking vast distances across uninhabited tundra from [[Brase]]. The region is near the southern polar ice — almost permafrost, resembling northern Russia. The Cobal dwarves have adapted to this extreme cold, mining frozen minerals from the ice-bound mountains.\n## Connections\n- Region: [[Marti Continent]]\n- Northeast (across vast tundra): [[Brase]]\n- East (across icy land): [[Kramsadar]]\n- Climate: Near permafrost, polar edge\n- Species: [[Dwarves]]",
    "id": "d-nation-cobal-kingdom"
   },
   {
@@ -1071,6 +1188,7 @@
    "question": "“Vennerian Channel (Marti)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Marti/Vennerian Channel (Marti).md — 13 non-empty lines.",
    "placeholder": "The people of Vennerian Channel (Marti) are…",
+   "existing": "---\ntags: [nation, marti, outpost, venner, channel]\nregion: Marti\naliases: [Vennerian Channel (Marti)]\nstatus: colony\n---\n# Vennerian Channel (Marti)\nA [[Vennerian Trade Republic|Vennerian]]-controlled channel on the northeastern coast of [[Marti Continent]], located northeast of [[Oigopol]]. This channel connects [[Marti Continent]] to [[Xeti]] — the counterpart to the [[Vennerian Aelefer Channel]] that connects Marti to [[Lumina Continent]].\n## Connections\n- Region: [[Marti Continent]]\n- Southwest: [[Oigopol]]\n- Connects to: [[Xeti]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-vennerian-channel-marti"
   },
   {
@@ -1080,6 +1198,7 @@
    "question": "“Meble” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Meble/Meble.md — 14 non-empty lines.",
    "placeholder": "The people of Meble are…",
+   "existing": "---\r\nstatus: hub\r\ntags: [index, hub]\r\n---\r\n# Meble\r\nHub for the Meble region.\r\n## Nations\r\n*Note: [[Sousu]] is the sovereign nation (AGENTS canon 1: Sousu); [[Kolorad (Anos)]], [[Sossan]], [[Sus Principality]] are colonial holdings on Meble — see [[Meble|Meble (Locations)]]. Full chain: Sus Principality → Sossan → Kolorad (Anos) → [[Tatak]] (Dissenbarg).*\r\n- [[Kolorad (Anos)]]\r\n- [[Sossan]]\r\n- [[Sousu]]\r\n- [[Sus Principality]]\r\n## Connections\r\n- World: [[World Dashboard]]\r",
    "id": "d-nation-meble"
   },
   {
@@ -1089,6 +1208,7 @@
    "question": "“Sus Principality” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Meble/Sus Principality.md — 11 non-empty lines.",
    "placeholder": "The people of Sus Principality are…",
+   "existing": "---\ntags: [nation, meble, outpost, limese-league]\nregion: Meble\nstatus: active\n---\n# Sus Principality\nA principality on [[Meble]] island controlled by the [[Limese League]], located **north of [[Sossan]]** — the northernmost link in the island chain **Sus Principality → Sossan → [[Kolorad (Anos)|Kolorad]] → Tatak**.\n## Connections\n- Island: [[Meble]]\n- South: [[Sossan]] (Limese League)\n- Controller: [[Limese League]]",
    "id": "d-nation-sus-principality"
   },
   {
@@ -1098,6 +1218,7 @@
    "question": "“Arrow of Anos” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Merratodoni/Arrow of Anos.md — 13 non-empty lines.",
    "placeholder": "The people of Arrow of Anos are…",
+   "existing": "---\ntags: [nation, merratodoni, outpost, anos]\nregion: Merratodoni\nstatus: colony\n---\n# Arrow of Anos\nAn outpost of the [[Anos Plutocracy]] on a peninsula in eastern [[Merratodoni]], located north of the [[Purple Coast]] and southeast of the [[Human Republic of Northeastern Merratodoni]] across a small sea.\n## Connections\n- Region: [[Merratodoni]]\n- North (across sea): [[Human Republic of Northeastern Merratodoni]]\n- South: [[Purple Coast]]\n- Controller: [[Anos Plutocracy]]\n- Type: Peninsula outpost",
    "id": "d-nation-arrow-of-anos"
   },
   {
@@ -1107,6 +1228,7 @@
    "question": "“Kelkot” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Merratodoni/Kelkot.md — 14 non-empty lines.",
    "placeholder": "The people of Kelkot are…",
+   "existing": "---\ntags: [nation, merratodoni, elven]\nregion: Merratodoni\nstatus: active\n---\n# Kelkot\nAn elven-dominated country in central [[Merratodoni]], located southeast of [[Maemon]] and below [[Luzia]] (reached by heading south through plains). Kelkot's population includes [[Elves]] (the majority and ruling class), Merratodonian [[Catmen]], and [[Humans]].\n## Connections\n- Region: [[Merratodoni]]\n- Northwest: [[Maemon]]\n- North (across plains): [[Luzia]]\n- Southeast: [[Barro and Kob]]\n- Northeast: [[Purple Coast]]\n- Species: [[Elves]] (dominant), [[Catmen]], [[Humans]]",
    "id": "d-nation-kelkot"
   },
   {
@@ -1116,6 +1238,7 @@
    "question": "“Elvenkrad” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/North Erisdar/Elvenkrad.md — 14 non-empty lines.",
    "placeholder": "The people of Elvenkrad are…",
+   "existing": "---\ntags: [nation, erisdar, north, elven]\naliases: [Elvenkrad]\nregion: North Erisdar\nstatus: active\n---\n# 🛡️ Elvenkrad\nThe fortress-state of the restored [[elvish states]] in [[North Erisdar]]. Unlike the cultural center of [[Elvennrin]], Elvenkrad was built for defense — heavily militarized, fortified against any resurgence of [[religious crusades|crusader]] aggression. Its population is smaller than Elvennrin's but its soldiers are the most disciplined on the continent.\n## 🕸️ Connections**Religion:** [[Elven Faith]] — elfic nature religion.\n**Puppet of the Empire:** Elvenkrad borders the [[Erisian Empire]] and is effectively its puppet — forced to concede resources and accept unfair trades.\n- Elvish States: [[Elvennrin]], [[Sousu]]\n- Character: Fortress-state, militarized\n- Recovery: [[The Restored Elvish States|Restored Elvish States]]\n- Precursor: [[Elvengar]]",
    "id": "d-nation-elvenkrad"
   },
   {
@@ -1125,6 +1248,7 @@
    "question": "“Tetras” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/North Erisdar/Tetras.md — 13 non-empty lines.",
    "placeholder": "The people of Tetras are…",
+   "existing": "---\ntags: [nation, erisdar, north]\nregion: North Erisdar\nstatus: active\n---\n# 🔷 Tetras\nA small, fortress-oriented territory in [[North Erisdar]] named for its four-point fortification layout. Tetras has maintained military readiness since the [[Age 4 — Dragon Tyranny|Dragon Tyranny]] era — a holdover from when dragon-king raiders threatened all northern settlements. The dragons are gone, but Tetras has never stopped training.\n**Religion:** [[Onobor]] — Onobor paganism. The faithful believe the [[The Silver Bride|Silver Bride]] is the goddess and the key to immortality and prosperity. *Onobor means \"Ring\" in Tetrian.*\n**Species:** [[Humans]]\n## 🕸️ Connections\n- Region: [[North Erisdar]]\n- Character: Fortress-state, ancient military tradition\n- Origin: Built against [[Age 4 — Dragon Tyranny|Dragon Tyranny]]",
    "id": "d-nation-tetras"
   },
   {
@@ -1134,6 +1258,7 @@
    "question": "“Alborric” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Polar Continent/Alborric.md — 13 non-empty lines.",
    "placeholder": "The people of Alborric are…",
+   "existing": "---\ntags: [nation, polar, angels]\nregion: Polar Continent\nstatus: active\n---\n# Alborric\nThe only nation on the [[Polar Continent]] — the southern polar landmass of [[Ge'or]], like Antarctica. Located below [[Kramsadar]] on [[Marti Continent]], reached by walking through the permafrost and crossing the frozen polar ocean. Alborric is the sole angelic nation in the world, home to the [[Angels]] race, who dwell in the polar mountains.\nTheir faith is **[[Pragmus]]** — the angels believe themselves the creation and employees of the god of [[Ge'or]], sworn to perfect the world. Though their homeland is the south pole, angels are found across Ge'or, helping quietly and rarely seen.\n## Connections\n- Region: [[Polar Continent]]\n- North (across frozen ocean): [[Kramsadar]] ([[Marti Continent]])\n- Species: [[Angels]]\n- Religion: [[Pragmus]]",
    "id": "d-nation-alborric"
   },
   {
@@ -1143,6 +1268,7 @@
    "question": "“Casting City” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Sister/Casting City.md — 13 non-empty lines.",
    "placeholder": "The people of Casting City are…",
+   "existing": "---\ntags: [nation, sister, machine]\nregion: Sister Continent\nstatus: active\n---\n# Casting City\nA small but relevant and wealthy machine nation on [[Sister Continent]], located in the northwest corner behind the [[Mankind Wall]].\n## Connections\n- Region: [[Sister Continent]] (northwest)\n- East: [[Machine Capital]]\n- South: [[Molten Steel Tribe]]\n- Protected by: [[Mankind Wall]]\n- Species: [[Machines]]",
    "id": "d-nation-casting-city"
   },
   {
@@ -1152,6 +1278,7 @@
    "question": "“Molten Steel Tribe” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Sister/Molten Steel Tribe.md — 11 non-empty lines.",
    "placeholder": "The people of Molten Steel Tribe are…",
+   "existing": "---\ntags: [nation, sister, machine]\nregion: Sister Continent\nstatus: active\n---\n# Molten Steel Tribe\nA machine nation on the southern edge of [[Sister Continent]], south of [[Machine Capital]] and [[Radiant Hold]].\n## Connections\n- Region: [[Sister Continent]] (south)\n- North: [[Machine Capital]], [[Radiant Hold]]\n- Species: [[Machines]]",
    "id": "d-nation-molten-steel-tribe"
   },
   {
@@ -1161,6 +1288,7 @@
    "question": "“Radiant Hold” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Sister/Radiant Hold.md — 12 non-empty lines.",
    "placeholder": "The people of Radiant Hold are…",
+   "existing": "---\ntags: [nation, sister, machine]\nregion: Sister Continent\nstatus: active\n---\n# Radiant Hold\nA small machine nation on [[Sister Continent]], located southeast of [[Machine Capital]] and partially surrounding it.\n## Connections\n- Region: [[Sister Continent]] (southeast)\n- Northwest: [[Machine Capital]]\n- South: [[Molten Steel Tribe]]\n- Species: [[Machines]]",
    "id": "d-nation-radiant-hold"
   },
   {
@@ -1170,6 +1298,7 @@
    "question": "“Sister” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Sister/Sister.md — 14 non-empty lines.",
    "placeholder": "The people of Sister are…",
+   "existing": "---\nstatus: hub\ntags: [index, hub]\n---\n# Sister\nHub for the Sister region.\n## Nations\n- [[Casting City]]\n- [[Machine Capital]]\n- [[Molten Steel Tribe]]\n- [[Radiant Hold]]\n- [[Temperance Holdout]]\n## Connections\n- World: [[World Dashboard]]",
    "id": "d-nation-sister"
   },
   {
@@ -1179,6 +1308,7 @@
    "question": "“Temperance Holdout” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Sister/Temperance Holdout.md — 12 non-empty lines.",
    "placeholder": "The people of Temperance Holdout are…",
+   "existing": "---\ntags: [nation, sister, machine]\nregion: Sister Continent\nstatus: active\n---\n# Temperance Holdout\nThe only machine nation on the northeastern tip of [[Sister Continent]], isolated from the main machine civilizations to the south by [[The Hive]]'s territory.\n## Connections\n- Region: [[Sister Continent]] (northeast)\n- Species: [[Machines]]\n- Enemy: [[The Hive]]\n- Status: Isolated — no contact with southern machine nations",
    "id": "d-nation-temperance-holdout"
   },
   {
@@ -1188,6 +1318,7 @@
    "question": "“Aelefer” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Aelefer.md — 13 non-empty lines.",
    "placeholder": "The people of Aelefer are…",
+   "existing": "---\ntags: [nation, south-erisdar, outpost, venner]\nregion: South Erisdar\nstatus: active\n---\n# Aelefer\nA land area in [[South Erisdar]] controlled by the [[Vennerian Trade Republic]], located southwest of the southeastern corner of the [[Erisian Empire]].\n## Connections\n- Region: [[South Erisdar]]\n- North: [[Erisian Empire]]\n- South: [[Scarlet Order]]\n- East: [[Grimmel Republic]]\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-aelefer"
   },
   {
@@ -1197,6 +1328,7 @@
    "question": "“Alexa Church State” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Alexa Church State.md — 11 non-empty lines.",
    "placeholder": "The people of Alexa Church State are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Alexa Church State\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Erisian church state, named after **Alexa**, one of the [[Apostles of Eris]]",
    "id": "d-nation-alexa-church-state"
   },
   {
@@ -1206,6 +1338,7 @@
    "question": "“Arisdian” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Arisdian.md — 10 non-empty lines.",
    "placeholder": "The people of Arisdian are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Arisdian\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-arisdian"
   },
   {
@@ -1215,6 +1348,7 @@
    "question": "“Asheng” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Asheng.md — 10 non-empty lines.",
    "placeholder": "The people of Asheng are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Asheng\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-asheng"
   },
   {
@@ -1224,6 +1358,7 @@
    "question": "“Centaapoli” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Centaapoli.md — 10 non-empty lines.",
    "placeholder": "The people of Centaapoli are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Centaapoli\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-centaapoli"
   },
   {
@@ -1233,6 +1368,7 @@
    "question": "“Cerulea” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Cerulea.md — 11 non-empty lines.",
    "placeholder": "The people of Cerulea are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Cerulea\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Written \"ceruleagl\" on the map; correct spelling **Cerulea**",
    "id": "d-nation-cerulea"
   },
   {
@@ -1242,6 +1378,7 @@
    "question": "“Charia” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Charia.md — 10 non-empty lines.",
    "placeholder": "The people of Charia are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Charia\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-charia"
   },
   {
@@ -1251,6 +1388,7 @@
    "question": "“Cronia” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Cronia.md — 10 non-empty lines.",
    "placeholder": "The people of Cronia are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Cronia\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-cronia"
   },
   {
@@ -1260,6 +1398,7 @@
    "question": "“Duchy of Meadle” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Duchy of Meadle.md — 11 non-empty lines.",
    "placeholder": "The people of Duchy of Meadle are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Duchy of Meadle\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Independent duchy — not part of the Erisian Empire",
    "id": "d-nation-duchy-of-meadle"
   },
   {
@@ -1269,6 +1408,7 @@
    "question": "“Elkenloft” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Elkenloft.md — 10 non-empty lines.",
    "placeholder": "The people of Elkenloft are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Elkenloft\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-elkenloft"
   },
   {
@@ -1278,6 +1418,7 @@
    "question": "“Elmfer” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Elmfer.md — 11 non-empty lines.",
    "placeholder": "The people of Elmfer are…",
+   "existing": "---\ntags: [nation, south-erisdar, elven, elf]\nregion: South Erisdar\nstatus: active\n---\n# Elmfer\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Elmfer** is an [[Elves|elfish]] nation.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-elmfer"
   },
   {
@@ -1287,6 +1428,7 @@
    "question": "“Evern” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Evern.md — 10 non-empty lines.",
    "placeholder": "The people of Evern are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Evern\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-evern"
   },
   {
@@ -1296,6 +1438,7 @@
    "question": "“Ferroson” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Ferroson.md — 10 non-empty lines.",
    "placeholder": "The people of Ferroson are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Ferroson\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-ferroson"
   },
   {
@@ -1305,6 +1448,7 @@
    "question": "“Fezzanite Republic” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Fezzanite Republic.md — 13 non-empty lines.",
    "placeholder": "The people of Fezzanite Republic are…",
+   "existing": "---\ntags: [nation, erisdar, south, republic]\nregion: South Erisdar\nstatus: active\n---\n# 🗳️ Fezzanite Republic\nA republican state in [[South Erisdar]] and one of the few territories to openly break from the [[Erisian Empire]] during the [[The Era of Cracking Walls|Era of Cracking Walls]]. The Fezzanite Republic's declaration of independence was not fought with swords but with ledgers — they simply stopped sending taxes to the imperial capital. The empire was too weak to enforce collection.\n**Religion:** [[Yll-me]] — majority; worship of the star patterns\n**Species:** [[Humans]]\n## 🕸️ Connections\n- Region: [[South Erisdar]]\n- Character: Republican, tax-rebellion origin\n- Broke From: [[Erisian Empire]] during [[The Era of Cracking Walls|Era of Cracking Walls]]",
    "id": "d-nation-fezzanite-republic"
   },
   {
@@ -1314,6 +1458,7 @@
    "question": "“Koel Order” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Koel Order.md — 11 non-empty lines.",
    "placeholder": "The people of Koel Order are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Koel Order\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Independent military-religious order",
    "id": "d-nation-koel-order"
   },
   {
@@ -1323,6 +1468,7 @@
    "question": "“Lamoro” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Lamoro.md — 10 non-empty lines.",
    "placeholder": "The people of Lamoro are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Lamoro\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-lamoro"
   },
   {
@@ -1332,6 +1478,7 @@
    "question": "“Limnya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Limnya.md — 11 non-empty lines.",
    "placeholder": "The people of Limnya are…",
+   "existing": "---\ntags: [nation, south-erisdar, catmen]\nregion: South Erisdar\nstatus: active\n---\n# Limnya\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Limnya** is a **catmen-led** region — ruled by [[Catmen]], though [[Humans]] and others also live there.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-limnya"
   },
   {
@@ -1341,6 +1488,7 @@
    "question": "“Linitra” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Linitra.md — 10 non-empty lines.",
    "placeholder": "The people of Linitra are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Linitra\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-linitra"
   },
   {
@@ -1350,6 +1498,7 @@
    "question": "“Lukka” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Lukka.md — 10 non-empty lines.",
    "placeholder": "The people of Lukka are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Lukka\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-lukka"
   },
   {
@@ -1359,6 +1508,7 @@
    "question": "“Malinya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Malinya.md — 11 non-empty lines.",
    "placeholder": "The people of Malinya are…",
+   "existing": "---\ntags: [nation, south-erisdar, catmen]\nregion: South Erisdar\nstatus: active\n---\n# Malinya\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Malinya** is a **catmen-led** region — ruled by [[Catmen]], though [[Humans]] and others also live there.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-malinya"
   },
   {
@@ -1368,6 +1518,7 @@
    "question": "“Manoco” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Manoco.md — 10 non-empty lines.",
    "placeholder": "The people of Manoco are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Manoco\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-manoco"
   },
   {
@@ -1377,6 +1528,7 @@
    "question": "“Migah” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Migah.md — 12 non-empty lines.",
    "placeholder": "The people of Migah are…",
+   "existing": "---\ntags: [nation, south-erisdar, elven, elf]\nregion: South Erisdar\nstatus: active\n---\n# Migah\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Migah** is an [[Elves|elfish]] nation.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Small territory near [[Obsidian Dwarnov]] and [[Elkenloft]]",
    "id": "d-nation-migah"
   },
   {
@@ -1386,6 +1538,7 @@
    "question": "“Mystili” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Mystili.md — 10 non-empty lines.",
    "placeholder": "The people of Mystili are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Mystili\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-mystili"
   },
   {
@@ -1395,6 +1548,7 @@
    "question": "“Nortrasdor” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Nortrasdor.md — 11 non-empty lines.",
    "placeholder": "The people of Nortrasdor are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Nortrasdor\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Independent order state (written \"NORTRASDOR\" on the map)",
    "id": "d-nation-nortrasdor"
   },
   {
@@ -1404,6 +1558,7 @@
    "question": "“Obsidian Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Obsidian Dwarnov.md — 12 non-empty lines.",
    "placeholder": "The people of Obsidian Dwarnov are…",
+   "existing": "---\ntags: [nation, south-erisdar, dwarven, dwarf]\nregion: South Erisdar\nstatus: active\n---\n# Obsidian Dwarnov\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Obsidian Dwarnov** is a [[Dwarves|dwarven]] country.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Enclave within [[Elkenloft]]",
    "id": "d-nation-obsidian-dwarnov"
   },
   {
@@ -1413,6 +1568,7 @@
    "question": "“Order of Niccas” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Order of Niccas.md — 12 non-empty lines.",
    "placeholder": "The people of Order of Niccas are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Order of Niccas\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Independent military-religious order\n- Named after **Niccas**, one of the [[Apostles of Eris]]",
    "id": "d-nation-order-of-niccas"
   },
   {
@@ -1422,6 +1578,7 @@
    "question": "“Pinc Republic” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Pinc Republic.md — 11 non-empty lines.",
    "placeholder": "The people of Pinc Republic are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Pinc Republic\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- \"PINC REP.\" on the map; Pinc is the name",
    "id": "d-nation-pinc-republic"
   },
   {
@@ -1431,6 +1588,7 @@
    "question": "“Romanium Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Romanium Dwarnov.md — 12 non-empty lines.",
    "placeholder": "The people of Romanium Dwarnov are…",
+   "existing": "---\ntags: [nation, south-erisdar, dwarven, dwarf]\nregion: South Erisdar\nstatus: active\n---\n# Romanium Dwarnov\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Romanium Dwarnov** is a [[Dwarves|dwarven]] country.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Enclave within [[Scarlet Order]] lands — dwarven peaks",
    "id": "d-nation-romanium-dwarnov"
   },
   {
@@ -1440,6 +1598,7 @@
    "question": "“Rudialand” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Rudialand.md — 10 non-empty lines.",
    "placeholder": "The people of Rudialand are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Rudialand\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-rudialand"
   },
   {
@@ -1449,6 +1608,7 @@
    "question": "“Scarlet Order” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Scarlet Order.md — 13 non-empty lines.",
    "placeholder": "The people of Scarlet Order are…",
+   "existing": "---\ntags: [nation, erisdar, south, order]\nregion: South Erisdar\nstatus: active\n---\n# 🔴 Scarlet Order\nA martial-religious order-state in [[South Erisdar]] named for the red of their banners — said to commemorate the [[Formingar Ocean]]'s crimson transformation in the [[The Shattered Dawn|Shattered Dawn]]. Unlike the [[Erisian church]] which they nominally follow, the Scarlet Order emphasizes action over prayer. Their knights are among the most formidable on the continent.\n**Species:** [[Humans]]\n## 🕸️ Connections\n- Region: [[South Erisdar]]\n- Symbolism: Red — Formingar Ocean, [[The Shattered Dawn|Shattered Dawn]]\n- Character: Martial-religious order\n- Faith: [[Erisian church]] — action over prayer",
    "id": "d-nation-scarlet-order"
   },
   {
@@ -1458,6 +1618,7 @@
    "question": "“Syacmori” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Syacmori.md — 10 non-empty lines.",
    "placeholder": "The people of Syacmori are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Syacmori\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-syacmori"
   },
   {
@@ -1467,6 +1628,7 @@
    "question": "“Tarol” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Tarol.md — 11 non-empty lines.",
    "placeholder": "The people of Tarol are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Tarol\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]\n- Island territory off the south coast",
    "id": "d-nation-tarol"
   },
   {
@@ -1476,6 +1638,7 @@
    "question": "“Tundranya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Tundranya.md — 11 non-empty lines.",
    "placeholder": "The people of Tundranya are…",
+   "existing": "---\ntags: [nation, south-erisdar, catmen]\nregion: South Erisdar\nstatus: active\n---\n# Tundranya\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n**Tundranya** is a **catmen-led** region — ruled by [[Catmen]], though [[Humans]] and others also live there.\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-tundranya"
   },
   {
@@ -1485,6 +1648,7 @@
    "question": "“Wrothri” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Erisdar/Wrothri.md — 10 non-empty lines.",
    "placeholder": "The people of Wrothri are…",
+   "existing": "---\ntags: [nation, south-erisdar]\nregion: South Erisdar\nstatus: active\n---\n# Wrothri\nA nation in [[South Erisdar]], on the [[Grimmel Peninsula]].\n## Connections\n- Region: [[South Erisdar]]\n- Peninsula: [[Grimmel Peninsula]]",
    "id": "d-nation-wrothri"
   },
   {
@@ -1494,6 +1658,7 @@
    "question": "“South Sun Empire” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/South Sun Empire/South Sun Empire.md — 8 non-empty lines.",
    "placeholder": "The people of South Sun Empire are…",
+   "existing": "---\ntags: [region, archipelago, tabontabar]\nregion: Tabontabar\nstatus: active\n---\n# South Sun Empire\nAn archipelago in the far west, separated from the mainland — but part of the [[Tabontabar]] continent by canon.\n> *Region hub. Nations to be filed.*",
    "id": "d-nation-south-sun-empire"
   },
   {
@@ -1503,6 +1668,7 @@
    "question": "“Goblin Island (Tuba)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Tuba/Goblin Island (Tuba).md — 13 non-empty lines.",
    "placeholder": "The people of Goblin Island (Tuba) are…",
+   "existing": "---\ntags: [nation, tuba, island, goblins]\nregion: Tuba\naliases: [Tuba Goblin Island]\nstatus: tribe\n---\n# Goblin Island (Tuba)\nA massive island off the coast of [[Tuba Continent]], roughly half the size of the main continental landmass. Located south of the Harpies Tribe across a stretch of jungle and sea. The island is dominated by [[Goblins]].\n## Connections\n- Region: [[Tuba Continent]]\n- North (across jungle + sea): Harpies Tribe\n- East (across sea): [[Vennerian Pride]]\n- Species: [[Goblins]]",
    "id": "d-nation-goblin-island-tuba"
   },
   {
@@ -1512,6 +1678,7 @@
    "question": "“Harpies Tribe (Tuba)” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Tuba/Harpies Tribe (Tuba).md — 14 non-empty lines.",
    "placeholder": "The people of Harpies Tribe (Tuba) are…",
+   "existing": "---\ntags: [nation, tuba, harpies, mountains]\nregion: Tuba\naliases: [Tuba Harpies]\nstatus: tribe\n---\n# Harpies Tribe (Tuba)\nA [[Harpies|harpy]] tribe on [[Tuba Continent]], located east of [[Alkorri]] across thick jungle, nesting in a mountain range. Like all harpies, they follow their biological imperatives — created as weapons during [[The Last Great War]], their instincts remain unchanged.\n## Connections\n- Region: [[Tuba Continent]]\n- West (across jungle): [[Alkorri]]\n- South (across jungle + sea): Goblin Island\n- Southeast (across jungle): [[Vennerian Pride]]\n- Species: [[Harpies]]",
    "id": "d-nation-harpies-tribe-tuba"
   },
   {
@@ -1521,6 +1688,7 @@
    "question": "“Vennerian Pride” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Tuba/Vennerian Pride.md — 12 non-empty lines.",
    "placeholder": "The people of Vennerian Pride are…",
+   "existing": "---\ntags: [nation, tuba, outpost, venner]\nregion: Tuba\nstatus: colony\n---\n# Vennerian Pride\nA [[Vennerian Trade Republic|Vennerian]] controlled land area on [[Tuba Continent]], located on a peninsula east of [[Goblin Island (Tuba)|Goblin Island]] across a stretch of sea, and southeast of the Harpies Tribe across dense jungle.\n## Connections\n- Region: [[Tuba Continent]]\n- West (across sea): [[Goblin Island (Tuba)]]\n- Northwest (across jungle): Harpies Tribe\n- Controller: [[Vennerian Trade Republic]]",
    "id": "d-nation-vennerian-pride"
   },
   {
@@ -1530,6 +1698,7 @@
    "question": "“United Kingdom of the Seamen, Humans, Catmen and Demons” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/United Kingdom of the Seamen/United Kingdom of the Seamen, Humans, Catmen and Demons.md — 10 non-empty lines.",
    "placeholder": "The people of United Kingdom of the Seamen, Humans, Catmen and Demons are…",
+   "existing": "---\ntags: [region, archipelago, seamen]\naliases:\n  - United Kingdom of the Seamen\n  - UK of the Seamen\nstatus: active\n---\n# United Kingdom of the Seamen, Humans, Catmen and Demons\nAn independent island kingdom in the Crab Archipelago — like the Pacific islands of Old Earth, part of no continent. As its full name says, its people are seamen, [[Catmen|humans, catmen]] and demons, bound together in one maritime realm.\n> *Region hub. Nations to be filed.*",
    "id": "d-nation-united-kingdom-of-the-seamen-humans-catmen-and-d"
   },
   {
@@ -1539,6 +1708,7 @@
    "question": "“Aimeled” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Aimeled.md — 8 non-empty lines.",
    "placeholder": "The people of Aimeled are…",
+   "existing": "---\ntags: [nation, west-erisdar]\nregion: West Erisdar\nstatus: active\n---\n# 🏘️ Aimeled\nA nation in [[West Erisdar]], lying east of the [[Aenid Kingdom]]. A pastoral highland realm known for its terraced farms and isolationist stance toward the coastal powers. The land is **desertic**.\n**Religion:** [[Charlmelism]] — the faith of Aimeled; some [[Yll-me]] followers",
    "id": "d-nation-aimeled"
   },
   {
@@ -1548,6 +1718,7 @@
    "question": "“Astravayne” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Astravayne.md — 14 non-empty lines.",
    "placeholder": "The people of Astravayne are…",
+   "existing": "---\ntags: [nation, erisdar, west]\nregion: West Erisdar\nstatus: active\n---\n# 🏘️ Astravayne\nA multi-racial country in [[West Erisdar]] located west of [[Augagarten]]. Astravayne has a notably higher population of [[Beast Races|beast folk]] than the Erisdar average, though it remains a diverse nation with humans, demons, and other species coexisting. The land is **a lot desertic**.\n**Religion:** [[Shurtra]] — star-born faith of [[Mabode]]\n## Connections\n- Region: [[West Erisdar]]\n- East: [[Augagarten]]\n- North: [[Palonia]]\n- South: [[Xikxia]]\n- West: [[Augamouth]]",
    "id": "d-nation-astravayne"
   },
   {
@@ -1557,6 +1728,7 @@
    "question": "“Augagarten” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Augagarten.md — 13 non-empty lines.",
    "placeholder": "The people of Augagarten are…",
+   "existing": "---\ntags: [nation, erisdar, west]\nregion: West Erisdar\nstatus: active\n---\n# Augagarten\nA nation in [[West Erisdar]] located east of [[Astravayne]] and west of the [[Aenid Kingdom]] by land. Sits north of [[Erima]] Island (owned by [[Aenid Kingdom]]). Above Augagarten lies the [[Lyrical Forest]], and to its east rises [[Dragonreach]], a mountain range rich with untold history. The land is **desertic**.\n**Religion:** [[Shurtra]] (majority) — star-born faith of [[Mabode]]; some [[Lyrical Followers]]\n## Connections\n- Region: [[West Erisdar]]\n- Neighbors: [[Astravayne]], [[Aenid Kingdom]]\n- Near: [[Lyrical Forest]], [[Dragonreach]], [[Erima]]\n- Above: [[Galerough]]",
    "id": "d-nation-augagarten"
   },
   {
@@ -1566,6 +1738,7 @@
    "question": "“Direfirth” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Direfirth.md — 14 non-empty lines.",
    "placeholder": "The people of Direfirth are…",
+   "existing": "---\ntags: [nation, erisdar, west]\nregion: West Erisdar\nstatus: active\n---\n# Direfirth\nA country in [[West Erisdar]] above [[Galerough]] and below [[Zane]]. Located west of [[Prosperity Port]].\n## Connections\n- Region: [[West Erisdar]]\n- South: [[Galerough]]\n- North: [[Zane]]\n- East: [[Prosperity Port]]\n- West: [[Suebo]] (island), [[Yaro]]\n- Religion: [[Suebism]]",
    "id": "d-nation-direfirth"
   },
   {
@@ -1575,6 +1748,7 @@
    "question": "“Galerough” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Galerough.md — 12 non-empty lines.",
    "placeholder": "The people of Galerough are…",
+   "existing": "---\ntags: [nation, erisdar, west]\nregion: West Erisdar\nstatus: active\n---\n# Galerough\nA country in [[West Erisdar]] situated above [[Augagarten]]. To its north lies [[Direfirth]].\n**Religion:** [[Lyrical Followers]] — some followers of the forest voices\n## Connections\n- Region: [[West Erisdar]]\n- South: [[Augagarten]]\n- North: [[Direfirth]]",
    "id": "d-nation-galerough"
   },
   {
@@ -1584,6 +1758,7 @@
    "question": "“Kille” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Kille.md — 8 non-empty lines.",
    "placeholder": "The people of Kille are…",
+   "existing": "---\ntags: [nation, west-erisdar]\nregion: West Erisdar\nstatus: active\n---\n# 🏘️ Kille\nA nation in [[West Erisdar]], lying east of the [[Aenid Kingdom]]. A forested lowland territory whose villages cluster along the river routes that feed into central Erisdar's trade networks.\n**Religion:** [[Yll-me]] — majority; worship of the star patterns",
    "id": "d-nation-kille"
   },
   {
@@ -1593,6 +1768,7 @@
    "question": "“Mercur” is a stub (9 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Mercur.md — 9 non-empty lines.",
    "placeholder": "The people of Mercur are…",
+   "existing": "---\ntags: [nation, west-erisdar]\nregion: West Erisdar\nstatus: active\n---\n# 🏘️ Mercur\nA nation in [[West Erisdar]], lying east of the [[Aenid Kingdom]].\n**Religion:** [[Yll-me]] — majority; worship of the star patterns\n**Species:** [[Humans]]",
    "id": "d-nation-mercur"
   },
   {
@@ -1602,6 +1778,7 @@
    "question": "“Palonia” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Palonia.md — 14 non-empty lines.",
    "placeholder": "The people of Palonia are…",
+   "existing": "---\ntags: [nation, erisdar, west]\nregion: West Erisdar\nstatus: active\n---\n# Palonia\nA country in [[West Erisdar]] located above [[Astravayne]]. Palonia accepts most races but maintains a cultural aversion to demons, making it one of the few places in Western Erisdar with such restrictions.\nPalonia is a **[[Mage Republic|mage republic]]** — highly philosophical and sophisticated, its mages and magic schools are famous across the world. Its faith is **[[Palonism]]**, a variation of [[Shurtra]] shaped by the republic's arcane culture.\n## Connections\n- Region: [[West Erisdar]]\n- South: [[Astravayne]]\n- West: [[Augamouth]]\n- Northwest: [[Asatru Knight's Thorn]]\n- Religion: [[Palonism]]",
    "id": "d-nation-palonia"
   },
   {
@@ -1611,6 +1788,7 @@
    "question": "“Prosperity Port” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Prosperity Port.md — 12 non-empty lines.",
    "placeholder": "The people of Prosperity Port are…",
+   "existing": "---\ntags: [nation, erisdar, west, city-state]\nregion: West Erisdar\nstatus: active\n---\n# Prosperity Port\nA city-state in [[West Erisdar]] located above the [[Lyrical Forest]] and west of [[Pilferhorn]].\n**Religion:** [[Lyrical Followers]] — majority; the voices of the forest\n## Connections\n- Region: [[West Erisdar]]\n- South: [[Lyrical Forest]]\n- East: [[Zane]]",
    "id": "d-nation-prosperity-port"
   },
   {
@@ -1620,6 +1798,7 @@
    "question": "“Suebo” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Suebo.md — 14 non-empty lines.",
    "placeholder": "The people of Suebo are…",
+   "existing": "---\ntags: [nation, erisdar, west, city-state, island]\nregion: West Erisdar\nstatus: active\n---\n# Suebo\nAn island [[City-State|city-state]] on [[Suebo Island]] in [[West Erisdar]], west of [[Direfirth]] and west of [[Yaro]]. Suebo occupies the southern portion of its island; the northern areas remain uncolonized.\n## Religion\nSuebo is the birthplace of **[[Suebism]]** — the pagan nature faith that dominates the western isles and coast. The island's name is the dragon-language word for [[Romanium]].\n## Connections\n- Region: [[West Erisdar]]\n- East: [[Direfirth]], [[Yaro]]\n- North of: [[Augamouth]]\n- Religion: [[Suebism]] (origin)",
    "id": "d-nation-suebo"
   },
   {
@@ -1629,6 +1808,7 @@
    "question": "“Yaro” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Yaro.md — 13 non-empty lines.",
    "placeholder": "The people of Yaro are…",
+   "existing": "---\ntags: [nation, erisdar, west, city-state]\nregion: West Erisdar\nstatus: active\n---\n# Yaro\nA coastal [[City-State|city-state]] in [[West Erisdar]] located west of [[Zane]] and north of [[Direfirth]].\n## Connections\n- Region: [[West Erisdar]]\n- East: [[Zane]]\n- South: [[Direfirth]]\n- West: [[Suebo]] (island)\n- Religion: [[Suebism]]",
    "id": "d-nation-yaro"
   },
   {
@@ -1638,6 +1818,7 @@
    "question": "“Zane” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/West Erisdar/Zane.md — 13 non-empty lines.",
    "placeholder": "The people of Zane are…",
+   "existing": "---\ntags: [nation, erisdar, west, city-state]\nregion: West Erisdar\nstatus: active\n---\n# Zane\nA river [[City-State|city-state]] in [[West Erisdar]] north of [[Direfirth]] and west of [[Prosperity Port]]. Zane is built across a river, its people living on both banks.\n## Connections\n- Region: [[West Erisdar]]\n- South: [[Direfirth]]\n- East: [[Prosperity Port]]\n- West: [[Yaro]]\n- Religion: [[Suebism]]",
    "id": "d-nation-zane"
   },
   {
@@ -1647,6 +1828,7 @@
    "question": "“Anos Xeti Outpost” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Anos Xeti Outpost.md — 11 non-empty lines.",
    "placeholder": "The people of Anos Xeti Outpost are…",
+   "existing": "---\ntags: [nation, xeti, outpost, anos]\nregion: Xeti\nstatus: colony\n---\n# Anos Xeti Outpost\nAn outpost of the [[Anos Plutocracy]] on [[Xeti Continent]], located northwest of [[Kuioaba]].\n## Connections\n- Region: [[Xeti Continent]]\n- Southeast: [[Kuioaba]]\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-anos-xeti-outpost"
   },
   {
@@ -1656,6 +1838,7 @@
    "question": "“Kuioaba” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Kuioaba.md — 14 non-empty lines.",
    "placeholder": "The people of Kuioaba are…",
+   "existing": "---\ntags: [nation, xeti, orc, pirates]\nregion: Xeti\nstatus: active\n---\n# Kuioaba\nAn [[Orcs|orc]] nation on the northern coast of [[Xeti Continent]], located north of [[Uiohin]]. The orcs of Kuioaba are raiders and pirates, terrorizing the waters of [[Beast's Bay]] and the surrounding seas.\n## Connections\n- Region: [[Xeti Continent]]\n- South: [[Uiohin]]\n- North: [[Sousu Megrel]] (outpost)\n- Northwest: [[Anos Xeti Outpost]]\n- East (across sea): [[Kumir]] island\n- Species: [[Orcs]] (raiders, pirates)",
    "id": "d-nation-kuioaba"
   },
   {
@@ -1665,6 +1848,7 @@
    "question": "“Blackfang” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Blackfang.md — 11 non-empty lines.",
    "placeholder": "The people of Blackfang are…",
+   "existing": "---\ntags: [nation, xeti, kumir, orc, kingdom]\nregion: Kumir Island\nstatus: active\n---\n# Blackfang\nA small [[Orcs|orc]] kingdom on [[Kumir|Kumir Island]], located east of [[Koeoti]] and the [[New Kolorad|Anos trading post]].\n## Connections\n- Island: [[Kumir]] ([[Xeti Continent]])\n- West: [[Koeoti]], [[New Kolorad]]\n- Species: [[Orcs]]",
    "id": "d-nation-blackfang"
   },
   {
@@ -1674,6 +1858,7 @@
    "question": "“Koeoti” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Koeoti.md — 12 non-empty lines.",
    "placeholder": "The people of Koeoti are…",
+   "existing": "---\ntags: [nation, xeti, kumir, orc, tribe]\nregion: Kumir Island\nstatus: active\n---\n# Koeoti\nAn [[Orcs|orc]] tribe on [[Kumir|Kumir Island]], located south of [[New Kolorad]].\n## Connections\n- Island: [[Kumir]] ([[Xeti Continent]])\n- North: [[New Kolorad]]\n- East: [[Blackfang]]\n- Species: [[Orcs]]",
    "id": "d-nation-koeoti"
   },
   {
@@ -1683,6 +1868,7 @@
    "question": "“New Kolorad” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/New Kolorad.md — 13 non-empty lines.",
    "placeholder": "The people of New Kolorad are…",
+   "existing": "---\ntags: [nation, xeti, kumir, outpost, anos]\nregion: Kumir Island\nstatus: colony\n---\n# New Kolorad\nAn [[Anos Plutocracy|Anos]] trading post on [[Kumir|Kumir Island]], located east of [[Chuchao]].\n## Connections\n- Island: [[Kumir]] ([[Xeti Continent]])\n- West: [[Chuchao]]\n- South: [[Koeoti]]\n- East: [[Blackfang]]\n- Controller: [[Anos Plutocracy]]",
    "id": "d-nation-new-kolorad"
   },
   {
@@ -1692,6 +1878,7 @@
    "question": "“Ograd” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Ograd.md — 14 non-empty lines.",
    "placeholder": "The people of Ograd are…",
+   "existing": "---\ntags: [nation, xeti, orc]\nregion: Xeti\nstatus: active\n---\n# Ograd\nAn [[Orcs|orc]] country on [[Xeti Continent]], located northeast of the [[Vennerian Channel (Marti)|Vennerian Channel]] by land.\n## Connections\n- Region: [[Xeti Continent]]\n- Southwest: [[Vennerian Channel (Marti)|Vennerian Channel]]\n- South: [[Kyuu]]\n- East: [[Koetebalo]]\n- North: [[Uiohin]]\n- Species: [[Orcs]]",
    "id": "d-nation-ograd"
   },
   {
@@ -1701,6 +1888,7 @@
    "question": "“Sousu Megrel” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Sousu Megrel.md — 11 non-empty lines.",
    "placeholder": "The people of Sousu Megrel are…",
+   "existing": "---\ntags: [nation, xeti, outpost, sousu]\nregion: Xeti\nstatus: colony\n---\n# Sousu Megrel\nA [[Sousu]] outpost on the northern coast of [[Xeti Continent]], located north of [[Kuioaba]].\n## Connections\n- Region: [[Xeti Continent]]\n- South: [[Kuioaba]]\n- Controller: [[Sousu]]",
    "id": "d-nation-sousu-megrel"
   },
   {
@@ -1710,6 +1898,7 @@
    "question": "“Uiohin” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
    "context": "Nation file: World/Nations/Xeti/Uiohin.md — 13 non-empty lines.",
    "placeholder": "The people of Uiohin are…",
+   "existing": "---\ntags: [nation, xeti, republic]\nregion: Xeti\nstatus: active\n---\n# Uiohin\nA republic on [[Xeti Continent]], located north of [[Koetebalo]] and [[Ograd]]. Uiohin forms a belt-shaped buffer separating the southern nations from the northern coast. Its population is mixed: [[Wolvesfolk]], [[Ogres]], and [[Orcs]].\n## Connections\n- Region: [[Xeti Continent]]\n- South: [[Koetebalo]], [[Ograd]]\n- North: [[Kuioaba]]\n- Species: [[Wolvesfolk]], [[Ogres]], [[Orcs]]\n- Government: Republic",
    "id": "d-nation-uiohin"
   },
   {
@@ -1719,6 +1908,7 @@
    "question": "What do the people of Archduchy of the Kennberg eat, celebrate, and bury their dead with?",
    "context": "Archduchy of the Kennberg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Archduchy of the Kennberg, they…",
+   "existing": "---\ntags: [nation, erisdar, central, archduchy]\naliases: [The Kennberg, Archduchy]\nregion: Central Erisdar\nstatus: active\n---\n# Archduchy of the Kennberg\nThe ancestral power base of the [[Kennensbach]] dynasty and the economic-military heartland of the [[Erisian Empire]]. Ruled by [[Hermes Kennensbach]] as [[Archduke of the Kennberg]].\n**Species:** [[Humans]] (majority), [[Elves]] (minority)\n## Connections\n- Ruler: [[Hermes Kennensbach]]\n- Dynasty: [[Kennensbach]]\n- Part Of: [[Erisian Empire]]\n- Near: [[valley of Kenn the great]]\n- Region: [[Central Erisdar]]",
    "id": "d-culture-archduchy-of-the-kennberg-culture"
   },
   {
@@ -1728,6 +1918,7 @@
    "question": "What do the people of Baoth eat, celebrate, and bury their dead with?",
    "context": "Baoth (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Baoth, they…",
+   "existing": "---\ntags:\n  - nation\n  - legendary\n  - erisdar\n  - central-erisdar\n  - fallen\n  - dragon\naliases:\n  - Kingdom of Baoth\n  - Legendary Kingdom of Baoth\n  - Old Baoth\n  - The Last Dragon Kingdom\nregion: Central Erisdar\nstatus: historical\n---\n## 📜 Historical Records\n### 🐉 The Dragon Dynasty\nOnly the ruling dynasty of Baoth was draconic. The king — **[[Goldenborn]]** — was a space-evolved [[Dragons|dragon]], a being whose species was born not on any planet but in the cold void between stars. The dragon dynasty maintained power through the **Golden Pact**: a legal-mystical framework that bound every citizen to the crown through blood oaths. The 99% non-dragon population lived, worked, and fought for a ruler who was not their own kind — a system that, remarkably, held for over five centuries.\n### ⚔️ The Last War of Donblond'werv (967 BGD)\nBefore Baoth's rise, the continent of **Donblond'werv** (later renamed [[Erisdar]]) was dominated by sprawling human empires. These empires, at the end of the [[Human Age]], had become corrupt beyond repair — their institutions hollow, their leadership parasitic. Baoth, wielding draconic power and a coalition of species who had been subjugated under human rule, crushed them in the Last War. The human empires fell. Baoth rose. The continent was never again ruled purely by humans.\n### 🔥 The Fall — The Demonic War and the Explosion\nBy the 5th century BGD, Hybrian Shadows had spent over two millennia infiltrating the institutions of Ge'or. Baoth — t",
    "id": "d-culture-baoth-culture"
   },
   {
@@ -1737,6 +1928,7 @@
    "question": "What do the people of Central Erisdar eat, celebrate, and bury their dead with?",
    "context": "Central Erisdar (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Central Erisdar, they…",
+   "existing": "---\nstatus: hub\ntags: [region, erisdar, central]\naliases: [Central Erisdar]\n---\n# Central Erisdar\nThe heartland of [[Erisdar]], containing the [[Erisian Empire]], the [[Pontificate of Eris]], [[Baoth]], [[Lake Leviathan]], and the [[Ruins of Baoth]].\n## Nations\n- [[Archduchy of the Kennberg]]\n- [[Baoth]]\n- [[Elvennrin]]\n- [[Erisian Empire]]\n- [[Erisian Theocracy]]\n- [[Loren]]\n- [[Magna]]\n- [[New Baoth]]\n- [[Pilferhorn]]\n- [[Pontificate of Eris]]\n- [[Sperdia]]\n### Erisian Empire Subdivisions\nSee [[Erisian Empire Subdivisions]] for the full list of duchies, counties, free cities, and church states.\n## Connections\n- Continent: [[Erisdar]]\n- Adjacent Regions: [[North Erisdar]], [[East Erisdar]], [[South Erisdar]], [[West Erisdar]]",
    "id": "d-culture-central-erisdar-culture"
   },
   {
@@ -1746,6 +1938,7 @@
    "question": "What do the people of Elvennrin eat, celebrate, and bury their dead with?",
    "context": "Elvennrin (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Elvennrin, they…",
+   "existing": "---\ntags: [nation, erisdar, north, elven]\naliases: [Elvennrin]\nregion: Central Erisdar\nstatus: active\n---\n# 🧝 Elvennrin\nThe cultural and spiritual heart of the restored [[elvish states]]. After the [[near-extinction of the Elves]], Elvennrin was the first elven nation to re-establish sovereignty — building not on the ruins of [[Elvengar]] but on new ground in [[Central Erisdar]]. Home to the largest surviving concentration of elven population and the center of elven cultural revival.\n**Species:** [[Elves]]\n**Religion:** [[Elven Faith]] — nature cults and elven gods. A repressed-but-accepted elfic country surrounded by fanatical Erisians, Elvennrin never abandoned its gods.\n## 🕸️ Connections\n- Elvish States: [[Elvenkrad]], [[Sousu]]\n- Preceded By: [[Elvengar]] (destroyed in [[The Shattered Dawn|Shattered Dawn]])\n- Recovery: [[The Restored Elvish States|Restored Elvish States]]\n- Persecution: [[Great Elvish Persecution]]\n- Homeland: [[Maemon]] in [[Luzia]]",
    "id": "d-culture-elvennrin-culture"
   },
   {
@@ -1755,6 +1948,7 @@
    "question": "What do the people of Roffran Church eat, celebrate, and bury their dead with?",
    "context": "Roffran Church (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Roffran Church, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - church-states\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Roffran Church\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Sperdia]], [[Limese League]], [[Pinnaport]], [[Rozlan]], [[Edekol]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-roffran-church-culture"
   },
   {
@@ -1764,6 +1958,7 @@
    "question": "What do the people of Rroffran eat, celebrate, and bury their dead with?",
    "context": "Rroffran (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Rroffran, they…",
+   "existing": "---\naliases:\n  - offran church\n  - Offran Church State\n  - Rroffran Church State\ntags:\n  - erisian-empire\n  - subdivision\n  - church-states\nregion: Central Erisdar\nparent: Erisian Empire\nstatus: active\n---\n# Rroffran\n> Erisian Empire subdivision\nRroffran Church State — an ecclesiastical territory within the [[Erisian Empire]], governed by the Church. On the 597 AGD political map it appears as **\"offran church\"** (the label reads \"Rroffran church state\" in the map's legend and \"offran church\" on the map body) — a church state near the [[Limese League]] coast.",
    "id": "d-culture-rroffran-culture"
   },
   {
@@ -1773,6 +1968,7 @@
    "question": "What do the people of Aaros eat, celebrate, and bury their dead with?",
    "context": "Aaros (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Aaros, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Aaros\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Venbell]], [[Onmelia]], [[Trohol]], [[Aspiph]], [[Biani]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-aaros-culture"
   },
   {
@@ -1782,6 +1978,7 @@
    "question": "What do the people of Abalek eat, celebrate, and bury their dead with?",
    "context": "Abalek (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Abalek, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Abalek\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Zamowo]], [[Bugena]], [[Cinnade]], [[Opoleka]], [[Adrenic]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-abalek-culture"
   },
   {
@@ -1791,6 +1988,7 @@
    "question": "What do the people of Abelik Dwarnov eat, celebrate, and bury their dead with?",
    "context": "Abelik Dwarnov (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Abelik Dwarnov, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Abelik Dwarnov\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Dwarf — **Inside Empire:** Yes\r\n**Borders:** [[Prassen-Albridge]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Prassen-Albridge. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? Yes\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-abelik-dwarnov-culture"
   },
   {
@@ -1800,6 +1998,7 @@
    "question": "What do the people of Acugir eat, celebrate, and bury their dead with?",
    "context": "Acugir (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Acugir, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Acugir\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Jonnesfort]], [[Jiohar]], [[Briwten]], [[Xygen]], [[Suigad]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-acugir-culture"
   },
   {
@@ -1809,6 +2008,7 @@
    "question": "What do the people of Adrenic eat, celebrate, and bury their dead with?",
    "context": "Adrenic (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Adrenic, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Adrenic\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Zamowo]], [[Abalek]], [[Opoleka]], [[Piffe]], [[Parrice]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-adrenic-culture"
   },
   {
@@ -1818,6 +2018,7 @@
    "question": "What do the people of Aerli eat, celebrate, and bury their dead with?",
    "context": "Aerli (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Aerli, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Aerli\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Elekven]], [[Engelsag]], [[Surve]], [[Jiohar]], [[Jonnesfort]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-aerli-culture"
   },
   {
@@ -1827,6 +2028,7 @@
    "question": "What do the people of Aidon eat, celebrate, and bury their dead with?",
    "context": "Aidon (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Aidon, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Aidon\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Olfensban]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Olfensban. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-aidon-culture"
   },
   {
@@ -1836,6 +2038,7 @@
    "question": "What do the people of Albjerg eat, celebrate, and bury their dead with?",
    "context": "Albjerg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Albjerg, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Albjerg\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Hasren]], [[Thuirush]], [[Ad Dwarnov]], Jogena, Pross\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-albjerg-culture"
   },
   {
@@ -1845,6 +2048,7 @@
    "question": "What do the people of Armoop eat, celebrate, and bury their dead with?",
    "context": "Armoop (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Armoop, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Armoop\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Volam]], [[Qenem]], [[Roflenstadt]], [[Philipreh]], [[Cinmuph]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-armoop-culture"
   },
   {
@@ -1854,6 +2058,7 @@
    "question": "What do the people of Aspiph eat, celebrate, and bury their dead with?",
    "context": "Aspiph (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Aspiph, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Aspiph\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Biani]], [[Aaros]], [[Trohol]], [[Luitwin]], [[Deboria]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-aspiph-culture"
   },
   {
@@ -1863,6 +2068,7 @@
    "question": "What do the people of Ativa eat, celebrate, and bury their dead with?",
    "context": "Ativa (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Ativa, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Ativa\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Kennberg]], [[Premeresti]], [[Suslan (Geli)]], [[Tropoz]], [[Laniniv]], [[Keth]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-ativa-culture"
   },
   {
@@ -1872,6 +2078,7 @@
    "question": "What do the people of Auris eat, celebrate, and bury their dead with?",
    "context": "Auris (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Auris, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Auris\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Philipreh]], Roflenstadt, Azura, [[Venbell]], [[Zures]], [[Lemer]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** Azura\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-auris-culture"
   },
   {
@@ -1881,6 +2088,7 @@
    "question": "What do the people of Azura eat, celebrate, and bury their dead with?",
    "context": "Azura (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Azura, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Azura\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Auris]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Auris. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-azura-culture"
   },
   {
@@ -1890,6 +2098,7 @@
    "question": "What do the people of Biani eat, celebrate, and bury their dead with?",
    "context": "Biani (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Biani, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Biani\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Zures]], [[Auris]], [[Venbell]], [[Aaros]], [[Aspiph]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-biani-culture"
   },
   {
@@ -1899,6 +2108,7 @@
    "question": "What do the people of Biarzeg eat, celebrate, and bury their dead with?",
    "context": "Biarzeg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Biarzeg, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Biarzeg\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Ieni]], [[Vrasov]], [[Turdivniva]], [[Taliv]], [[Isabira]], [[Kennberg]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-biarzeg-culture"
   },
   {
@@ -1908,6 +2118,7 @@
    "question": "What do the people of Bichai eat, celebrate, and bury their dead with?",
    "context": "Bichai (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Bichai, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Bichai\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Starsh]], [[Dromeda]], [[Elvenkrad]], [[Danya]], [[Korhely]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-bichai-culture"
   },
   {
@@ -1917,6 +2128,7 @@
    "question": "What do the people of Brandenburg eat, celebrate, and bury their dead with?",
    "context": "Brandenburg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Brandenburg, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Brandenburg\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Galtide]], [[Ethis]], Spheros, Prassen-Albridge, [[Cragsad]], [[Ventithelm]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-brandenburg-culture"
   },
   {
@@ -1926,6 +2138,7 @@
    "question": "What do the people of Briwten eat, celebrate, and bury their dead with?",
    "context": "Briwten (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Briwten, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Briwten\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Durinya]], [[Nitersh]], [[Yab]], [[Icoteron]], [[Efe]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-briwten-culture"
   },
   {
@@ -1935,6 +2148,7 @@
    "question": "What do the people of Bugena eat, celebrate, and bury their dead with?",
    "context": "Bugena (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Bugena, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Bugena\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Cristulat]], [[Kennberg (Davis)]], [[Takkina]], [[Cinnade]], [[Zamowo]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-bugena-culture"
   },
   {
@@ -1944,6 +2158,7 @@
    "question": "What do the people of Cerconat eat, celebrate, and bury their dead with?",
    "context": "Cerconat (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Cerconat, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Cerconat\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Vranjob]], [[Miriad]], [[Kennberg (Davis)]], [[Bugena]], [[Cupga]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-cerconat-culture"
   },
   {
@@ -1953,6 +2168,7 @@
    "question": "What do the people of Chiccea eat, celebrate, and bury their dead with?",
    "context": "Chiccea (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Chiccea, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Chiccea\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Litonik]], [[Legvice]], [[Isabira]], [[Luddit]], [[Premeresti]], [[Kennberg]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-chiccea-culture"
   },
   {
@@ -1962,6 +2178,7 @@
    "question": "What do the people of Cinmuph eat, celebrate, and bury their dead with?",
    "context": "Cinmuph (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Cinmuph, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Cinmuph\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Einstadt]], [[Volam]], [[Armoop]], [[Impemire]], [[Dawnden]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-cinmuph-culture"
   },
   {
@@ -1971,6 +2188,7 @@
    "question": "What do the people of Cinnade eat, celebrate, and bury their dead with?",
    "context": "Cinnade (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Cinnade, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Cinnade\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Bugena]], [[Takkina]], [[Spheris]], [[Olfensban]], [[Adrenic]], [[Abalek]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-cinnade-culture"
   },
   {
@@ -1980,6 +2198,7 @@
    "question": "What do the people of Craidel eat, celebrate, and bury their dead with?",
    "context": "Craidel (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Craidel, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Craidel\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Orion]], [[Suigad]], [[Negatis]], [[Dosta]], [[Qenem]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-craidel-culture"
   },
   {
@@ -1989,6 +2208,7 @@
    "question": "What do the people of Cristulat eat, celebrate, and bury their dead with?",
    "context": "Cristulat (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Cristulat, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Cristulat\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Cupga]], [[Bugena]], [[Zamowo]], [[Olimp]], [[Dubadar]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-cristulat-culture"
   },
   {
@@ -1998,6 +2218,7 @@
    "question": "What do the people of Cupga eat, celebrate, and bury their dead with?",
    "context": "Cupga (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Cupga, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Cupga\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[AfBeg]], [[Dobnya]], [[Cerconat]], [[Kennberg (Davis)]], [[Cristulat]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-cupga-culture"
   },
   {
@@ -2007,6 +2228,7 @@
    "question": "What do the people of Danya eat, celebrate, and bury their dead with?",
    "context": "Danya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Danya, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Danya\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Catmen — **Inside Empire:** Yes\r\n**Borders:** [[Korhely]], [[Bichai]], [[Vseko]], [[Frungenya]], [[Piobnya]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? Yes\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-danya-culture"
   },
   {
@@ -2016,6 +2238,7 @@
    "question": "What do the people of Dawnden eat, celebrate, and bury their dead with?",
    "context": "Dawnden (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Dawnden, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Dawnden\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Einstadt]], [[Cinmuph]], [[Philipreh]], [[Impemire]], [[Elvennrin]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-dawnden-culture"
   },
   {
@@ -2025,6 +2248,7 @@
    "question": "What do the people of Dobnya eat, celebrate, and bury their dead with?",
    "context": "Dobnya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Dobnya, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Dobnya\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Catmen — **Inside Empire:** Yes\r\n**Borders:** [[Kent]], [[Piobnya]], [[Frungenya]], [[Vranjob]], [[AfBeg]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? Yes\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-dobnya-culture"
   },
   {
@@ -2034,6 +2258,7 @@
    "question": "What do the people of Doetinch eat, celebrate, and bury their dead with?",
    "context": "Doetinch (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Doetinch, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Doetinch\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** Wexvan, Opoleka, Hajlas, Tibin, [[Kalel]], [[Orion]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-doetinch-culture"
   },
   {
@@ -2043,6 +2268,7 @@
    "question": "What do the people of Dosta eat, celebrate, and bury their dead with?",
    "context": "Dosta (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Dosta, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Dosta\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Qenem]], [[Craidel]], [[Negatis]], [[Xygen]], [[Roflenstadt]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-dosta-culture"
   },
   {
@@ -2052,6 +2278,7 @@
    "question": "What do the people of Dubadar eat, celebrate, and bury their dead with?",
    "context": "Dubadar (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Dubadar, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Dubadar\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Darkne]], [[Magna]], [[Cristulat]], [[Olimp]], [[Sanie]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-dubadar-culture"
   },
   {
@@ -2061,6 +2288,7 @@
    "question": "What do the people of Durinya eat, celebrate, and bury their dead with?",
    "context": "Durinya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Durinya, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Durinya\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Catmen — **Inside Empire:** Yes\r\n**Borders:** [[Xygen]], [[Negatis]], [[Briwten]], [[Lymor]], [[Icoteron]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? Yes\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-durinya-culture"
   },
   {
@@ -2070,6 +2298,7 @@
    "question": "What do the people of Duvdiza eat, celebrate, and bury their dead with?",
    "context": "Duvdiza (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Duvdiza, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Duvdiza\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Cerconat]], [[Miriad]], [[Vseko]], [[Takkina]], [[Kennberg (Davis)]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-duvdiza-culture"
   },
   {
@@ -2079,6 +2308,7 @@
    "question": "What do the people of Dwarvstadt eat, celebrate, and bury their dead with?",
    "context": "Dwarvstadt (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Dwarvstadt, they…",
+   "existing": "---\ntags: [county, erisian-empire, dwarven]\naliases: [Dwarvstadt]\nregion: Central Erisdar\nparent: Erisian Empire\ntype: county\nspecies: dwarven\nstatus: active\n---\n# ⛏️ Dwarvstadt\nA **dwarven county** of the [[Erisian Empire]]. Uniquely among the imperial subdivisions, Dwarvstadt is populated and governed primarily by [[Dwarves]] — an autonomous dwarven enclave within the human-dominated Empire. The county speaks both **Dwarvish** and **Baothian**.\n## 🕸️ Connections\n- Empire: [[Erisian Empire]]\n- Species: [[Dwarves]]\n- Languages: Dwarvish, Baothian\n- Type: County (-stadt)",
    "id": "d-culture-dwarvstadt-culture"
   },
   {
@@ -2088,6 +2318,7 @@
    "question": "What do the people of Edekol eat, celebrate, and bury their dead with?",
    "context": "Edekol (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Edekol, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Edekol\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Roffran Church]], [[Pinnaport]], [[Rozlan]], [[Vrasov]], [[Ototin]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-edekol-culture"
   },
   {
@@ -2097,6 +2328,7 @@
    "question": "What do the people of Editad eat, celebrate, and bury their dead with?",
    "context": "Editad (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Editad, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Editad\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Olimp]], [[Cristulat]], [[Zamowo]], [[Varan]], Zalov, Mirenburg\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-editad-culture"
   },
   {
@@ -2106,6 +2338,7 @@
    "question": "What do the people of Efe eat, celebrate, and bury their dead with?",
    "context": "Efe (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Efe, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Efe\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Xygen]], [[Durinya]], [[Icoteron]], [[Lirini]], [[Mullus]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-efe-culture"
   },
   {
@@ -2115,6 +2348,7 @@
    "question": "What do the people of Ei Dwarnov eat, celebrate, and bury their dead with?",
    "context": "Ei Dwarnov (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Ei Dwarnov, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Ei Dwarnov\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Dwarf — **Inside Empire:** Yes\r\n**Borders:** [[Aerli]], [[Voxi]], [[Marisco Church State]], [[Sleoris]], [[Volimore]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? Yes\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-ei-dwarnov-culture"
   },
   {
@@ -2124,6 +2358,7 @@
    "question": "What do the people of Elekven eat, celebrate, and bury their dead with?",
    "context": "Elekven (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Elekven, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Elekven\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Kalel]], [[Laber]], [[Engelsag]], [[Aerli]], [[Jonnesfort]], [[Orion]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-elekven-culture"
   },
   {
@@ -2133,6 +2368,7 @@
    "question": "What do the people of Elemet eat, celebrate, and bury their dead with?",
    "context": "Elemet (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Elemet, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Elemet\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Kosled]], [[Talis]], [[Lansieur]], [[Marrad]], [[Elvenkrad]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-elemet-culture"
   },
   {
@@ -2142,6 +2378,7 @@
    "question": "What do the people of Ellit eat, celebrate, and bury their dead with?",
    "context": "Ellit (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Ellit, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Ellit\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Roflenstadt]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Roflenstadt. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-ellit-culture"
   },
   {
@@ -2151,6 +2388,7 @@
    "question": "What do the people of Engelsag eat, celebrate, and bury their dead with?",
    "context": "Engelsag (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Engelsag, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Engelsag\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Laber]], [[Talknas]], [[Moisan]], [[Surve]], [[Aerli]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-engelsag-culture"
   },
   {
@@ -2160,6 +2398,7 @@
    "question": "What do the people of Enotis eat, celebrate, and bury their dead with?",
    "context": "Enotis (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Enotis, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Enotis\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Briwten]], [[Stulth]], [[Prassen-Albridge]], [[Morenya]], [[Nitersh]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-enotis-culture"
   },
   {
@@ -2169,6 +2408,7 @@
    "question": "What do the people of Ethis eat, celebrate, and bury their dead with?",
    "context": "Ethis (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Ethis, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Ethis\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Volawall]], [[Pawel]], [[Spheros]], [[Brandenburg]], [[Galtide]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-ethis-culture"
   },
   {
@@ -2178,6 +2418,7 @@
    "question": "What do the people of Exinor eat, celebrate, and bury their dead with?",
    "context": "Exinor (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Exinor, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Exinor\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Orion]], [[Sylran]], [[Isylver]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Orion. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-exinor-culture"
   },
   {
@@ -2187,6 +2428,7 @@
    "question": "What do the people of Frungenya eat, celebrate, and bury their dead with?",
    "context": "Frungenya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Frungenya, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Frungenya\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Catmen — **Inside Empire:** Yes\r\n**Borders:** [[Piobnya]], [[Korhely]], [[Danya]], [[Vranjob]], [[Dobnya]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? Yes\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-frungenya-culture"
   },
   {
@@ -2196,6 +2438,7 @@
    "question": "What do the people of Galtide eat, celebrate, and bury their dead with?",
    "context": "Galtide (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Galtide, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Galtide\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Volawall]], [[Spheros]], [[Ethis]], [[Brandenburg]], [[Ventithelm]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-galtide-culture"
   },
   {
@@ -2205,6 +2448,7 @@
    "question": "What do the people of Haebeas eat, celebrate, and bury their dead with?",
    "context": "Haebeas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Haebeas, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Haebeas\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Orion]], [[Ryarion]], [[Mathin]]\r\n**Enclave status:** Enclaved inside another country? Yes - inside Orion. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-haebeas-culture"
   },
   {
@@ -2214,6 +2458,7 @@
    "question": "What do the people of Hajlas eat, celebrate, and bury their dead with?",
    "context": "Hajlas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Hajlas, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Hajlas\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Opoleka]], [[Tibin]], [[Naamiven]], [[Kalel]], [[Doetinch]], [[Wexvan]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-hajlas-culture"
   },
   {
@@ -2223,6 +2468,7 @@
    "question": "What do the people of Haliv eat, celebrate, and bury their dead with?",
    "context": "Haliv (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Haliv, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Haliv\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** Sanie, Dubadar, [[Olimp]], [[Mirenburg]], [[Venkradian Republic]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-haliv-culture"
   },
   {
@@ -2232,6 +2478,7 @@
    "question": "What do the people of Hasren eat, celebrate, and bury their dead with?",
    "context": "Hasren (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Hasren, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Hasren\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Turnsen]], [[Thuirush]], [[Albjerg]], [[Jogena]], [[Issel]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-hasren-culture"
   },
   {
@@ -2241,6 +2488,7 @@
    "question": "What do the people of Hellideas eat, celebrate, and bury their dead with?",
    "context": "Hellideas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Hellideas, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Hellideas\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Trakci]], [[Jogena]], [[Phaebam]], [[Voxi]], [[Surve]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-hellideas-culture"
   },
   {
@@ -2250,6 +2498,7 @@
    "question": "What do the people of Hirichiv eat, celebrate, and bury their dead with?",
    "context": "Hirichiv (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
    "placeholder": "In Hirichiv, they…",
+   "existing": "---\r\ntags:\r\n  - erisian-empire\r\n  - subdivision\r\n  - counties\r\nregion: Central Erisdar\r\nparent: Erisian Empire\r\nstatus: active\r\n---\r\n# Hirichiv\r\n> Erisian Empire subdivision (Central Erisdar Gazetteer, Sep 2026 map-read)\r\n**Race:** Human — **Inside Empire:** Yes\r\n**Borders:** [[Zalov]], [[Varan]], [[Parrice]], [[Privadov]], [[Mirenburg]]\r\n**Enclave status:** Enclaved inside another country? No. Ends with Nya? No\r\n**Enclaves contained:** None.\r\n**Territory/exclave:** Is a territory/exclave? No. Has Dwarnov in the name? No\r\n**Owned territories:** None.\r\n*Thin stub — land grabbed from the 246-unit map gazetteer. Expand in consolidation wave.*\r",
    "id": "d-culture-hirichiv-culture"
   },
   {

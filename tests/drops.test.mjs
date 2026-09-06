@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   slugify, sessionKey, fitSanitize, nextSessionN, pad2,
-  buildDropPath, shuffled, validateQueue, kindLabel, kindArt, buildDropBody,
+  buildDropPath, shuffled, swappedOrder, validateQueue, kindLabel, kindArt, buildDropBody,
 } from '../public/drops.js';
 
 test('slugify makes safe short slugs', () => {
@@ -57,4 +57,17 @@ test('labels, art, and drop body carry the ruling', () => {
   assert.ok(body.includes('It burns.'));
   assert.ok(body.includes('session: s03'));
   assert.ok(body.includes('card: d-map-x'));
+});
+
+test('swap trades places with the coming card only', () => {
+  const o = ['a', 'b', 'c'];
+  assert.deepEqual(swappedOrder(o, 0), ['b', 'a', 'c']);
+  assert.deepEqual(o, ['a', 'b', 'c']); // no mutation
+  assert.deepEqual(swappedOrder(o, 2), ['a', 'b', 'c']); // nothing behind
+  assert.deepEqual(swappedOrder(o, -1), ['a', 'b', 'c']);
+});
+
+test('queue cards may carry existing archive text', () => {
+  const err = validateQueue({ cards: [{ id: 'x', kind: 'nation', title: 'T', question: 'Q', existing: 'Once…' }] });
+  assert.equal(err, null);
 });

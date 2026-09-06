@@ -64,6 +64,15 @@ export function shuffled(cards, rand = Math.random) {
   return a;
 }
 
+// Choice: trade places with the coming card. Returns a new order;
+// out-of-range swaps return the order untouched.
+export function swappedOrder(order, i) {
+  if (!Array.isArray(order) || i < 0 || i + 1 >= order.length) return order.slice();
+  const a = order.slice();
+  [a[i], a[i + 1]] = [a[i + 1], a[i]];
+  return a;
+}
+
 export function validateQueue(payload) {
   if (!payload || !Array.isArray(payload.cards)) return 'queue.cards missing';
   if (!payload.cards.length) return 'queue is empty';
@@ -150,6 +159,7 @@ if (typeof document !== 'undefined') {
   const state = {
     deck: [], index: 0, filed: 0, skipped: 0,
     sessionN: 1, today: dayStr(), queueCount: 0,
+    verdicts: {}, answers: {},
   };
 
   function artImg(kind) {
@@ -198,6 +208,21 @@ if (typeof document !== 'undefined') {
       body.appendChild(ctx);
     }
     if (pos === 0) {
+      const known = card.existing || card.context;
+      if (known) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mt-3 text-[11px] tracking-[.2em] text-gold border border-gold/25 rounded-full px-4 py-1.5';
+        btn.textContent = 'CONTEXT — WHAT IS WRITTEN';
+        const pre = document.createElement('pre');
+        pre.className = 'hidden mt-3 max-h-56 overflow-y-auto whitespace-pre-wrap text-xs text-cream/70 bg-ink/60 border border-gold/15 rounded-xl p-3 font-sans';
+        pre.textContent = known;
+        btn.addEventListener('click', () => {
+          const hidden = pre.classList.toggle('hidden');
+          btn.textContent = hidden ? 'CONTEXT — WHAT IS WRITTEN' : 'HIDE THE ARCHIVE';
+        });
+        body.append(btn, pre);
+      }
       const ta = document.createElement('textarea');
       ta.id = 'dropAnswer';
       ta.rows = 4;
@@ -220,6 +245,7 @@ if (typeof document !== 'undefined') {
     const current = stack.querySelector('.drop-pos-0');
     if (current) attachDrag(current);
     renderStats();
+    renderSides();
     const ta = $('dropAnswer');
     if (ta) ta.focus({ preventScroll: true });
   }
@@ -299,11 +325,14 @@ if (typeof document !== 'undefined') {
       state.skipped++;
       setStatus(`Skipped — the gap waits for another night.`, null);
     }
+    if (filed) { state.verdicts[card.id] = 'filed'; state.answers[card.id] = text.trim(); }
+    else { state.verdicts[card.id] = 'skipped'; }
     state.index++;
     setTimeout(() => {
       if (state.index >= state.deck.length) {
         $('dropStack').innerHTML = '<p class="text-center font-serif italic text-xl text-cream/60 py-16">The deck is empty. The archive thanks its keeper.</p>';
         renderStats();
+        renderSides();
         return;
       }
       render();
@@ -338,6 +367,106 @@ if (typeof document !== 'undefined') {
     };
     el.addEventListener('pointerup', end);
     el.addEventListener('pointercancel', end);
+  }
+
+  function verdictBadge(v) {
+    if (v === 'filed') return ['✓ FILED', 'text-emerald-300 border-emerald-300/40'];
+    if (v === 'skipped') return ['✗ SKIPPED', 'text-red-300 border-red-300/40'];
+    return ['• UNRULED', 'text-cream/40 border-cream/20'];
+  }
+
+  function miniCard(card) {
+    const box = document.createElement('button');
+    box.type = 'button';
+    box.className = 'drop-side w-full text-left';
+    const thumb = artImg(card.kind);
+    thumb.className = 'drop-side-thumb';
+    const k = document.createElement('p');
+    k.className = 'text-gold text-[9px] tracking-[.25em] font-semibold mt-2';
+    k.textContent = kindLabel(card.kind);
+    const t = document.createElement('p');
+    t.className = 'font-display text-sm font-bold mt-1 text-cream';
+    t.textContent = card.title;
+    box.append(thumb, k, t);
+    return box;
+  }
+
+  function doSwap() {
+    const coming = state.deck[state.index + 1];
+    if (!coming) { setStatus('Nothing waits behind this card.', null); return; }
+    const waiting = state.deck[state.index];
+    state.deck = swappedOrder(state.deck, state.index);
+    render();
+    setStatus(`Traded — “${waiting ? waiting.title : 'this one'}” waits one turn.`, null);
+  }
+
+  function renderSides() {
+    const prev = $('prevPanel');
+    const next = $('nextPanel');
+    if (!prev || !next) return;
+    prev.innerHTML = '';
+    next.innerHTML = '';
+    const head = (txt) => {
+      const p = document.createElement('p');
+      p.className = 'text-[10px] tracking-[.3em] text-cream/40 font-semibold mb-2';
+      p.textContent = txt;
+      return p;
+    };
+    // --- left: where you have been ---
+    prev.appendChild(head('BEHIND YOU'));
+    const last = state.deck[state.index - 1];
+    if (!last) {
+      const p = document.createElement('p');
+      p.className = 'font-serif italic text-cream/40';
+      p.textContent = 'The deck begins here.';
+      prev.appendChild(p);
+    } else {
+      const box = miniCard(last);
+      const [txt, cls] = verdictBadge(state.verdicts[last.id]);
+      const badge = document.createElement('span');
+      badge.className = 'drop-verdict border ' + cls;
+      badge.textContent = txt;
+      box.appendChild(badge);
+      const detail = document.createElement('div');
+      detail.className = 'hidden mt-2';
+      const q = document.createElement('p');
+      q.className = 'text-xs text-cream/60 italic';
+      q.textContent = last.question;
+      detail.appendChild(q);
+      const ans = state.answers[last.id];
+      const a = document.createElement('p');
+      a.className = 'drop-answer';
+      a.textContent = ans ? '“' + ans + '”' : 'Skipped without a ruling.';
+      detail.appendChild(a);
+      box.appendChild(detail);
+      box.addEventListener('click', () => detail.classList.toggle('hidden'));
+      prev.appendChild(box);
+    }
+    // --- right: what is coming ---
+    next.appendChild(head('AHEAD OF YOU'));
+    const coming = state.deck[state.index + 1];
+    if (!coming) {
+      const p = document.createElement('p');
+      p.className = 'font-serif italic text-cream/40';
+      p.textContent = 'This is the last card.';
+      next.appendChild(p);
+    } else {
+      const box = miniCard(coming);
+      const seal = document.createElement('p');
+      seal.className = 'text-[11px] text-cream/40 mt-2';
+      seal.textContent = 'Question sealed until dealt — tap to trade places.';
+      box.appendChild(seal);
+      box.addEventListener('click', doSwap);
+      next.appendChild(box);
+    }
+    const sp = $('stripPrev');
+    const sn = $('stripNext');
+    if (sp && sn) {
+      sp.textContent = last ? `← ${last.title}` : '← start';
+      sn.textContent = coming ? `${coming.title} →` : 'end →';
+      sp.onclick = () => { const b = prev.querySelector('.drop-side'); if (b) b.click(); };
+      sn.onclick = doSwap;
+    }
   }
 
   async function init() {

@@ -36,6 +36,12 @@ function slugify(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'untitled';
 }
 
+// What is already written — so the keeper can remember where a place is.
+// Stubs are tiny by definition; fleshed files get their head only.
+function excerptHead(text, maxLines, maxChars) {
+  return text.split('\n').filter(l => l.trim().length > 0).slice(0, maxLines).join('\n').slice(0, maxChars);
+}
+
 function regionOf(p) {
   // World/Nations/<Region>/... -> <Region>
   const rel = relative(VAULT, p).split(sep);
@@ -73,6 +79,7 @@ for (const f of nations) {
       : `“${name}” is a stub (${n} lines). Give it one ruler, one custom, one conflict.`,
     context: `Nation file: World/Nations/${region}/${name}.md — ${n} non-empty lines.`,
     placeholder: `The people of ${name} are…`,
+    existing: excerptHead(text, 40, 1500),
   });
 }
 
@@ -83,9 +90,9 @@ for (const f of nations) {
   try { text = readFileSync(f, 'utf8'); } catch { continue; }
   if (nonEmptyLines(text) < STUB_LINES) continue;
   if (/^##\s+Culture/m.test(text)) continue;
-  noCulture.push(f);
+  noCulture.push({ f, head: excerptHead(text, 30, 1500) });
 }
-for (const f of noCulture.slice(0, 60)) {
+for (const { f, head } of noCulture.slice(0, 60)) {
   const name = baseName(f);
   const region = regionOf(f) || 'Unknown';
   push({
@@ -95,6 +102,7 @@ for (const f of noCulture.slice(0, 60)) {
     question: `What do the people of ${name} eat, celebrate, and bury their dead with?`,
     context: `${name} (${region}) has no Culture section yet. Three lines is a kingdom.`,
     placeholder: `In ${name}, they…`,
+    existing: head,
   });
 }
 
