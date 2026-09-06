@@ -235,6 +235,13 @@ export const OUTBOX_SAVE_EXTENSIONS = ['md', 'txt', 'json', 'yaml', 'yml', 'csv'
 // Exact honest-queue copy (plan §2): shown on every outbox-backed surface.
 export const QUEUED_CHIP_TEXT = 'Queued offline · not yet published'
 export const SYNC_FAILED_TEXT = 'Sync failed — kept locally, retrying'
+// Phase 3 — conflict stash (plan §3): the server copy moved under us, so the
+// local text is stashed, never overwritten. `kind: 'conflict'` records live in
+// the same outbox store but are NEVER flushed — the user resolves each one by
+// hand (keep-mine / keep-server / merge-manually).
+export const OUTBOX_KIND_CONFLICT = 'conflict'
+export const CONFLICT_BADGE_TEXT = 'Needs your call — server changed since you edited'
+export const CONFLICT_STATUS_TEXT = 'needs your call — the server changed since you edited. Nothing was overwritten'
 
 // Mirror of worker.js sanitizeAdditionsPath: normalized path or null.
 // Same trims, same `..`/`//`/charset/length rules, same .md default,
@@ -269,7 +276,10 @@ export function normalizeOutboxMessage(message, rawPath) {
 }
 
 // Validate a save payload with the worker's exact limits and error copy.
-// Returns the normalized { path, content, oldPath, message } or throws.
+// Returns the normalized { path, content, oldPath, message, baseSha } or
+// throws. baseSha is the sha the editor saw at edit time (mirrored from
+// GET /api/manuscripts or /api/additions/file — never invented); it travels
+// with the flush so a sha-mismatch is never silently overwritten.
 export function validateSavePayload(payload) {
   const body = payload && typeof payload === 'object' ? payload : {}
   const rawPath = typeof body.path === 'string' ? body.path.trim() : ''
@@ -281,7 +291,9 @@ export function validateSavePayload(payload) {
   if (!path) throw new Error('Invalid path — use A-Z 0-9 . _ - / — e.g. my-idea.md')
   const oldPath = rawOld && rawOld !== path ? sanitizeOutboxPath(rawOld) : null
   if (rawOld && rawOld !== path && !oldPath) throw new Error('Invalid previous path')
-  return { path, content, oldPath, message: normalizeOutboxMessage(body.message, rawPath) }
+  const rawBase = typeof body.baseSha === 'string' ? body.baseSha.trim() : ''
+  const baseSha = rawBase && rawBase.length <= 200 ? rawBase : null
+  return { path, content, oldPath, message: normalizeOutboxMessage(body.message, rawPath), baseSha }
 }
 
 function makeOutboxId() {
@@ -328,6 +340,7 @@ export async function enqueueSave(adapter, payload, { now, deviceId } = {}) {
     content: clean.content,
     oldPath: clean.oldPath,
     message: clean.message,
+    baseSha: clean.baseSha,
     createdAt,
     deviceId: typeof deviceId === 'string' && deviceId ? deviceId : defaultDeviceId(),
     attempts: 0,
@@ -360,6 +373,115 @@ export async function getPendingOutboxCount(adapter) {
 
 export async function removeOutboxEntry(adapter, id) {
   await adapter.remove(STORE_OUTBOX, id)
+}
+
+// ---- Phase 3: conflict stash + user resolution ------------------------------
+// The local copy is stashed verbatim under `<path>.conflict-<ts>` and the
+// queued entry is marked conflicted. Nothing here ever writes to the server:
+// keep-mine re-enqueues (a normal flush POST, which the user chose),
+// keep-server drops local state, merge-manually hands both texts to the
+// editor. No auto-overwrite anywhere.
+
+// Honest stash label: the original path plus a millisecond timestamp so two
+// conflicts on one path never collide and the label never passes as saved.
+export function conflictLabel(path, ts) {
+  return `${String(path ?? '')}.conflict-${ts}`
+}
+
+// Stash the queued entry's local content as a `kind: 'conflict'` record.
+// Idempotent per source entry: a second call returns the existing stash.
+export async function stashConflict(adapter, item, { now } = {}) {
+  if (!adapter) throw new Error('stashConflict needs a store adapter')
+  if (!item || item.id == null) throw new Error('stashConflict needs the queued entry')
+  const ts = typeof now === 'number' ? now : Date.now()
+  const entries = await adapter.entries(STORE_OUTBOX)
+  const existing = entries.find(({ value }) => value
+    && value.kind === OUTBOX_KIND_CONFLICT && value.sourceId === item.id)
+  if (existing) return { id: existing.key, ...existing.value }
+  const record = {
+    kind: OUTBOX_KIND_CONFLICT,
+    path: item.path,
+    label: conflictLabel(item.path, ts),
+    content: item.content,
+    oldPath: item.oldPath ?? null,
+    message: item.message ?? '',
+    baseSha: item.baseSha ?? null,
+    sourceId: item.id,
+    createdAt: new Date(ts).toISOString(),
+    deviceId: item.deviceId ?? null,
+    conflicted: true,
+  }
+  const id = await adapter.put(STORE_OUTBOX, record)
+  return { id, ...record }
+}
+
+// Stash records only — listOutbox (flushed saves) never includes these.
+export async function listConflicts(adapter) {
+  const entries = await adapter.entries(STORE_OUTBOX)
+  return entries
+    .map(({ key, value }) => ({ id: key, ...(value ?? {}) }))
+    .filter(item => item && item.kind === OUTBOX_KIND_CONFLICT)
+    .sort((a, b) => String(a.createdAt ?? '').localeCompare(String(b.createdAt ?? ''))
+      || (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
+}
+
+// Distinct conflicts for the header badge: one per stash, plus conflicted
+// saves that predate the stash (Phase 2 flagged entries with no stash yet).
+export async function getConflictOutboxCount(adapter) {
+  const entries = await adapter.entries(STORE_OUTBOX)
+  const stashes = entries.map(({ value }) => value ?? {})
+    .filter(value => value.kind === OUTBOX_KIND_CONFLICT)
+  const stashedSources = new Set(stashes.map(stash => stash.sourceId))
+  const orphaned = entries
+    .map(({ key, value }) => ({ id: key, ...(value ?? {}) }))
+    .filter(item => item.op === OUTBOX_OP_SAVE && item.conflicted && !stashedSources.has(item.id))
+  return stashes.length + orphaned.length
+}
+
+// keep-mine: the stashed text becomes a fresh queued save grounded on the
+// server sha the user just saw; stash + conflicted source are dropped.
+export async function resolveKeepMine(adapter, conflictId, { now, deviceId, freshBaseSha } = {}) {
+  if (!adapter) throw new Error('resolveKeepMine needs a store adapter')
+  const stash = await adapter.get(STORE_OUTBOX, conflictId)
+  if (!stash || stash.kind !== OUTBOX_KIND_CONFLICT) throw new Error('Conflict not found')
+  const record = await enqueueSave(adapter, {
+    path: stash.path,
+    content: stash.content,
+    ...(stash.oldPath ? { oldPath: stash.oldPath } : {}),
+    message: stash.message,
+    ...(freshBaseSha ? { baseSha: freshBaseSha } : {}),
+  }, { now, deviceId: deviceId ?? stash.deviceId ?? undefined })
+  await adapter.remove(STORE_OUTBOX, conflictId)
+  if (stash.sourceId != null) {
+    try { await adapter.remove(STORE_OUTBOX, stash.sourceId) } catch {}
+  }
+  return record
+}
+
+// keep-server: drop the stash and the conflicted source — the server copy
+// stands, nothing is uploaded.
+export async function resolveKeepServer(adapter, conflictId) {
+  if (!adapter) throw new Error('resolveKeepServer needs a store adapter')
+  const stash = await adapter.get(STORE_OUTBOX, conflictId)
+  if (!stash || stash.kind !== OUTBOX_KIND_CONFLICT) throw new Error('Conflict not found')
+  await adapter.remove(STORE_OUTBOX, conflictId)
+  if (stash.sourceId != null) {
+    try { await adapter.remove(STORE_OUTBOX, stash.sourceId) } catch {}
+  }
+  return { dropped: true, path: stash.path, label: stash.label }
+}
+
+// After the user saves merged content for a path through the normal edit
+// flow, the old conflict state for that path is spent — drop it.
+export async function clearPathConflicts(adapter, path) {
+  if (!adapter) throw new Error('clearPathConflicts needs a store adapter')
+  const entries = await adapter.entries(STORE_OUTBOX)
+  for (const { key, value } of entries) {
+    const record = value ?? {}
+    if (record.path !== path) continue
+    if (record.kind === OUTBOX_KIND_CONFLICT) await adapter.remove(STORE_OUTBOX, key)
+    else if (record.op === OUTBOX_OP_SAVE && record.conflicted) await adapter.remove(STORE_OUTBOX, key)
+  }
 }
 
 // Manual retry after exhaustion: clear failure state, keep the payload.
@@ -434,6 +556,9 @@ async function isConflictResponse(response) {
 function outboxSaveBody(item) {
   const payload = { path: item.path, content: item.content, message: item.message }
   if (item.oldPath) payload.oldPath = item.oldPath
+  // baseSha travels only when the editor saw one — the exact-shape POST the
+  // Phase 2 tests assert is untouched when no sha was ever seen.
+  if (item.baseSha) payload.baseSha = item.baseSha
   return payload
 }
 
@@ -485,6 +610,9 @@ export async function flushOutbox(adapter, { fetchImpl, now } = {}) {
         break
       }
       if (await isConflictResponse(response)) {
+        // The server moved under us: stash the local text verbatim and flag
+        // the entry. Never retry, never overwrite — the user decides.
+        await stashConflict(adapter, item, { now: clock })
         await markOutboxConflict(adapter, item, `HTTP ${response.status}`)
         summary.conflicts += 1
         continue

@@ -7,14 +7,21 @@ import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
 import { initInventoryPanel } from './inventory.js'
 import { initManuscriptPresence } from './manuscript-presence.js'
 import {
+  CONFLICT_BADGE_TEXT,
+  CONFLICT_STATUS_TEXT,
   QUEUED_CHIP_TEXT,
   SYNC_FAILED_TEXT,
+  clearPathConflicts,
   createIdbAdapter,
   enqueueSave,
   flushOutbox,
+  getConflictOutboxCount,
   hasOutboxFailures,
   isNetworkFailure,
+  listConflicts,
   listOutbox,
+  resolveKeepMine,
+  resolveKeepServer,
 } from './offline-sync.js'
 import {
   CHAPTER_META_STORAGE_LABEL,
@@ -67,15 +74,18 @@ export function splitManuscriptPath(path) {
   return { book: parts[1], chapter: file }
 }
 
-export function renderManuscriptItem(file, selected, queued = false) {
+export function renderManuscriptItem(file, selected, queued = false, conflicted = false) {
   const path = String(file?.path ?? '')
   const split = splitManuscriptPath(path) || { book: 'BOOK', chapter: path }
-  const badge = queued
-    ? `<span class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-gold/40 px-2.5 py-0.5 text-[10px] tracking-widest text-gold/90">`
-      + `<span aria-hidden="true">◷</span><span>${escapeHtml(QUEUED_CHIP_TEXT)}</span></span>`
-    : ''
-  return `<button type="button" data-manuscript-path="${escapeHtml(path)}" data-queued="${queued ? 'true' : 'false'}" aria-pressed="${selected ? 'true' : 'false'}"`
-    + ` class="w-full text-left p-4 ${selected ? 'bg-gold/10' : ''}${queued ? ' opacity-60' : ''}">`
+  const badge = conflicted
+    ? `<span class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-red-400/40 px-2.5 py-0.5 text-[10px] tracking-widest text-red-200/90">`
+      + `<span aria-hidden="true">◈</span><span>${escapeHtml(CONFLICT_BADGE_TEXT)}</span></span>`
+    : queued
+      ? `<span class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-gold/40 px-2.5 py-0.5 text-[10px] tracking-widest text-gold/90">`
+        + `<span aria-hidden="true">◷</span><span>${escapeHtml(QUEUED_CHIP_TEXT)}</span></span>`
+      : ''
+  return `<button type="button" data-manuscript-path="${escapeHtml(path)}" data-queued="${queued ? 'true' : 'false'}" data-conflicted="${conflicted ? 'true' : 'false'}" aria-pressed="${selected ? 'true' : 'false'}"`
+    + ` class="w-full text-left p-4 ${selected ? 'bg-gold/10' : ''}${queued || conflicted ? ' opacity-60' : ''}">`
     + `<span class="block text-sm font-semibold text-cream/90 truncate">${escapeHtml(split.chapter)}</span>`
     + `<span class="block text-[10px] tracking-widest text-cream/40 mt-1">${escapeHtml(String(split.book).toUpperCase())}</span>`
     + badge
@@ -83,25 +93,60 @@ export function renderManuscriptItem(file, selected, queued = false) {
 }
 
 export function renderManuscriptList(files, selectedPath, queued = []) {
-  const queuedPaths = new Set((queued ?? [])
-    .map(item => (typeof item === 'string' ? item : item?.path))
-    .filter(item => typeof item === 'string' && item))
+  // Queued entries may be plain paths or { path, conflicted } records —
+  // conflicted rows carry the needs-your-call badge, never the queued chip.
+  const queuedState = new Map()
+  for (const item of (queued ?? [])) {
+    const path = typeof item === 'string' ? item : item?.path
+    if (typeof path !== 'string' || !path) continue
+    queuedState.set(path, Boolean(typeof item === 'object' && item?.conflicted))
+  }
   const seen = new Set()
   const rows = [...(files ?? [])]
     .sort((a, b) => String(a?.path ?? '').localeCompare(String(b?.path ?? '')))
     .map(file => {
       const path = String(file?.path ?? '')
       seen.add(path)
-      return renderManuscriptItem(file, file?.path === selectedPath, queuedPaths.has(path))
+      const state = queuedState.get(path)
+      return renderManuscriptItem(file, file?.path === selectedPath, state !== undefined, state === true)
     })
   // Queued saves for chapters the server hasn't seen yet still render —
   // dimmed with the honest queued chip, never presented as saved.
-  for (const path of [...queuedPaths].sort((a, b) => a.localeCompare(b))) {
+  for (const path of [...queuedState.keys()].sort((a, b) => a.localeCompare(b))) {
     if (seen.has(path) || !splitManuscriptPath(path)) continue
-    rows.push(renderManuscriptItem({ path }, path === selectedPath, true))
+    const conflicted = queuedState.get(path) === true
+    rows.push(renderManuscriptItem({ path }, path === selectedPath, !conflicted, conflicted))
   }
   if (!rows.length) return '<p class="p-5 text-sm text-cream/40">No chapters yet — start the first one.</p>'
   return rows.join('')
+}
+
+// H19 Phase 3 — conflict resolution render helpers (pure, node-testable).
+// Hostile server text is always escaped at render; labels name the stash,
+// never pass as saved; nothing here writes anywhere.
+export function renderConflictDiff(mineText, serverText) {
+  const mine = typeof mineText === 'string' ? mineText : ''
+  const server = typeof serverText === 'string' ? serverText : ''
+  return `<div class="grid gap-3 md:grid-cols-2">`
+    + `<div><p class="text-[10px] tracking-widest text-cream/40 mb-1">YOUR QUEUED TEXT · NOT YET PUBLISHED</p>`
+    + `<pre class="whitespace-pre-wrap text-sm text-cream/90">${escapeHtml(mine)}</pre></div>`
+    + `<div><p class="text-[10px] tracking-widest text-cream/40 mb-1">SERVER VERSION · READ-ONLY, NEVER AUTO-SAVED OVER YOURS</p>`
+    + `<pre class="whitespace-pre-wrap text-sm text-cream/90">${escapeHtml(server)}</pre></div>`
+    + `</div>`
+}
+
+export function renderConflictItem(conflict) {
+  const id = conflict?.id == null ? '' : String(conflict.id)
+  const path = String(conflict?.path ?? '')
+  const label = String(conflict?.label ?? (path ? `${path} (unsaved conflict)` : 'unsaved conflict'))
+  return `<article data-conflict-id="${escapeHtml(id)}" data-conflict-path="${escapeHtml(path)}" class="rounded-xl border border-red-400/40 p-4">`
+    + `<p class="text-sm font-semibold text-cream/90">${escapeHtml(label)}</p>`
+    + `<p class="mt-1 text-xs text-red-200/80">${escapeHtml(CONFLICT_BADGE_TEXT)} · nothing was overwritten.</p>`
+    + `<div class="mt-3 flex flex-wrap gap-2">`
+    + `<button type="button" data-conflict-action="keep-mine" class="text-xs tracking-widest border border-gold/40 text-gold px-4 py-2 rounded-full hover:bg-gold/10 transition">Keep mine</button>`
+    + `<button type="button" data-conflict-action="keep-server" class="text-xs tracking-widest border border-cream/30 text-cream/80 px-4 py-2 rounded-full hover:bg-cream/10 transition">Keep server</button>`
+    + `<button type="button" data-conflict-action="merge-manually" class="text-xs tracking-widest border border-cream/30 text-cream/80 px-4 py-2 rounded-full hover:bg-cream/10 transition">Compare &amp; merge</button>`
+    + `</div></article>`
 }
 
 // H19 Phase 2 — compose an outbox additions.save from editor fields.
@@ -224,6 +269,8 @@ async function initManuscripts() {
   let repaintMentions = () => {}
   // H19 Phase 2 — queued offline saves (outbox records) for this studio.
   let queuedRecords = []
+  // H19 Phase 3 — conflict stashes awaiting the user's call.
+  let conflictRecords = []
   let outboxAdapter = null
   try {
     outboxAdapter = createIdbAdapter()
@@ -250,11 +297,36 @@ async function initManuscripts() {
 
   // Re-read the outbox and repaint chips + header count. Never throws —
   // the studio stays usable when IndexedDB is unavailable.
+  // H19 Phase 3 — the conflict section is created after the list when the
+  // page has none, so no markup change is required. Stashes render with
+  // keep-mine / keep-server / merge-manually actions; server text is
+  // always escaped and nothing is ever auto-overwritten.
+  let conflictBox = null
+  try { conflictBox = document.getElementById('msConflicts') } catch { conflictBox = null }
+  if (!conflictBox && list?.parentNode) {
+    conflictBox = document.createElement('section')
+    conflictBox.id = 'msConflicts'
+    conflictBox.setAttribute('aria-live', 'polite')
+    list.parentNode.insertBefore(conflictBox, list.nextSibling)
+  }
+
+  const paintConflicts = () => {
+    if (!conflictBox) return
+    if (!conflictRecords.length) { conflictBox.innerHTML = ''; return }
+    const plural = conflictRecords.length === 1 ? '' : 's'
+    conflictBox.innerHTML = `<h2 class="mt-4 text-xs tracking-widest text-red-200/90">${conflictRecords.length} chapter${plural} need${plural ? '' : 's'} your call — nothing was overwritten.</h2>`
+      + conflictRecords.map(renderConflictItem).join('')
+  }
+
   const refreshQueue = async () => {
     try {
       queuedRecords = outboxAdapter ? await listOutbox(outboxAdapter) : []
     } catch { queuedRecords = [] }
     paint()
+    try {
+      conflictRecords = outboxAdapter ? await listConflicts(outboxAdapter) : []
+    } catch { conflictRecords = [] }
+    paintConflicts()
   }
 
   // Flush queued saves in FIFO order, then reconcile the list. Status only
@@ -280,6 +352,10 @@ async function initManuscripts() {
       setStatus(SYNC_FAILED_TEXT)
     } else if (summary.sent > 0 && !queuedRecords.some(record => !record?.conflicted)) {
       setStatus('Caught up — queued saves are published.')
+    }
+    if (summary.conflicts > 0) {
+      const plural = summary.conflicts === 1 ? '' : 's'
+      setStatus(`${summary.conflicts} conflict${plural} kept — ${CONFLICT_STATUS_TEXT}.`)
     }
   }
 
@@ -380,6 +456,80 @@ async function initManuscripts() {
     void openPath(button.dataset.manuscriptPath)
   })
 
+  // H19 Phase 3 — resolution actions. The live server copy comes from the
+  // same /api/manuscripts shape openPath uses (content for the side-by-side
+  // diff, sha as keep-mine's fresh base) and the side-by-side diff reuses
+  // /api/additions/history data shapes — no new endpoints. Nothing here
+  // writes to the server except keep-mine's user-chosen re-enqueue flush.
+  const serverChapter = async path => {
+    const split = splitManuscriptPath(path)
+    if (!split) return null
+    try {
+      return await requestManuscripts(`/api/manuscripts?book=${encodeURIComponent(split.book)}&chapter=${encodeURIComponent(split.chapter)}`)
+    } catch { return null }
+  }
+
+  const onConflictAction = async (action, conflictId, path) => {
+    if (!outboxAdapter) {
+      setStatus('This device cannot resolve conflicts — reconnect and try again.')
+      return
+    }
+    const id = typeof conflictId === 'string' && /^\d+$/.test(conflictId) ? Number(conflictId) : conflictId
+    if (id == null || id === '') return
+    const stash = conflictRecords.find(record => String(record?.id) === String(id))
+    try {
+      if (action === 'keep-mine') {
+        setStatus('Keeping your version — grounding it on the latest server copy…')
+        const server = await serverChapter(path)
+        const fresh = server && typeof server.sha === 'string' && server.sha ? server.sha : null
+        await resolveKeepMine(outboxAdapter, id, fresh ? { freshBaseSha: fresh } : {})
+        await flushQueued()
+        setStatus('Your version is grounded on the latest server copy and will publish.')
+      } else if (action === 'keep-server') {
+        await resolveKeepServer(outboxAdapter, id)
+        await load()
+        await refreshQueue()
+        setStatus('Server version kept — your queued text for that chapter was dropped.')
+      } else if (action === 'merge-manually') {
+        if (!stash) {
+          setStatus('That conflict is already resolved.')
+          await refreshQueue()
+          return
+        }
+        const server = await serverChapter(path)
+        const serverText = typeof server?.content === 'string' ? server.content : ''
+        const split = splitManuscriptPath(path)
+        if (split) {
+          const parsed = parseManuscriptContent(stash.content ?? '')
+          selectedPath = path
+          bookInput.value = split.book
+          chapterInput.value = split.chapter
+          titleInput.value = parsed.title
+          bodyInput.value = parsed.body
+          paint()
+          repaintMentions()
+        }
+        const article = conflictBox?.querySelector(`[data-conflict-id="${String(id).replace(/"/g, '')}"]`)
+        if (article && !article.querySelector('[data-conflict-diff]')) {
+          const diff = document.createElement('div')
+          diff.setAttribute('data-conflict-diff', 'true')
+          diff.innerHTML = renderConflictDiff(stash.content ?? '', serverText)
+          article.appendChild(diff)
+        }
+        setStatus('Both versions are in front of you — edit, save, and the conflict clears.')
+      }
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'That conflict could not be resolved')
+    }
+  }
+
+  conflictBox?.addEventListener('click', event => {
+    const button = event.target.closest('[data-conflict-action]')
+    if (!button || !conflictBox.contains(button)) return
+    const article = button.closest('[data-conflict-id]')
+    void onConflictAction(button.dataset.conflictAction, article?.dataset.conflictId, article?.dataset.conflictPath)
+  })
+
   document.getElementById('msNew')?.addEventListener('click', () => {
     selectedPath = null
     presence?.close()
@@ -443,6 +593,9 @@ async function initManuscripts() {
       if (!data?.ok || !data?.path) throw new Error('The chapter could not be saved')
       selectedPath = data.path
       clearDraft()
+      // H19 Phase 3 — a normal save of merged content spends this path's
+      // conflict state; the stash and conflicted source are dropped.
+      try { if (outboxAdapter) await clearPathConflicts(outboxAdapter, data.path) } catch {}
       await load()
       paint()
       await paintVersion(selectedPath)
