@@ -125,6 +125,7 @@ test('invite codes and protected route classification fail closed', () => {
   assert.equal(__test.isPrivatePath('/review.html'), true)
   assert.equal(__test.isPrivatePath('/review.js'), true)
   assert.equal(__test.isPrivatePath('/onboarding.js'), true)
+  assert.equal(__test.isPrivatePath('/world-clock.js'), true)
   assert.equal(__test.isPrivatePath('/webs-manager.js'), true)
   assert.equal(__test.isPrivatePath('/atlas-chain.js'), true)
   assert.equal(__test.isPrivatePath('/marginalia.js'), true)

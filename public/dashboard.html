@@ -37,6 +37,8 @@
       <div class="card">
         <h1 class="font-display text-24 font-bold">Welcome, <span id="dashName" class="text-gold">—</span></h1>
         <p class="text-sm text-cream/60 mt-1">You are inside. Invite-only archive — 17 continents, 12 ages, Silver Bride overhead.</p>
+        <p id="worldClock" class="font-mono text-xs text-gold/90 mt-2" title="Site convention — Mikhail can re-anchor this clock; the anchor is not canon.">—</p>
+        <p class="text-kicker text-cream/60 mt-1">site convention · re-anchorable · not canon</p>
         <div class="flex gap-2 mt-4 flex-wrap">
           <a href="/wiki/" class="text-xs bg-gold text-ink px-4 py-2 rounded-full font-semibold">Open Wiki — 1,436 pages</a>
           <a href="/app/" class="text-xs border border-gold/30 text-gold px-4 py-2 rounded-full hover:bg-gold/10">Open Battlestation →</a>
@@ -415,6 +417,7 @@
     loadPulse();
 
   </script>
+  <script type="module" src="/world-clock.js"></script>
   <script type="module" src="/archive-compass.js"></script>
   <script type="module" src="/onboarding.js"></script>
 </body>
