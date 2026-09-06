@@ -1,0 +1,2553 @@
+{
+ "generated": "2026-09-06T06:29:23.714Z",
+ "vault": "C:/Users/pc/Documents/Lore/Lore",
+ "count": 282,
+ "kinds": [
+  "nation",
+  "culture",
+  "orphan",
+  "map",
+  "age",
+  "count"
+ ],
+ "cards": [
+  {
+   "kind": "nation",
+   "title": "Ad Dwarnov",
+   "region": "Central Erisdar",
+   "question": "“Ad Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Ad Dwarnov.md — 12 non-empty lines.",
+   "placeholder": "The people of Ad Dwarnov are…",
+   "id": "d-nation-ad-dwarnov"
+  },
+  {
+   "kind": "nation",
+   "title": "Aelefen (Venner)",
+   "region": "Central Erisdar",
+   "question": "“Aelefen (Venner)” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Aelefen (Venner).md — 12 non-empty lines.",
+   "placeholder": "The people of Aelefen (Venner) are…",
+   "id": "d-nation-aelefen-venner"
+  },
+  {
+   "kind": "nation",
+   "title": "AfBeg",
+   "region": "Central Erisdar",
+   "question": "“AfBeg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/AfBeg.md — 12 non-empty lines.",
+   "placeholder": "The people of AfBeg are…",
+   "id": "d-nation-afbeg"
+  },
+  {
+   "kind": "nation",
+   "title": "Astrofod",
+   "region": "Central Erisdar",
+   "question": "“Astrofod” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Astrofod.md — 12 non-empty lines.",
+   "placeholder": "The people of Astrofod are…",
+   "id": "d-nation-astrofod"
+  },
+  {
+   "kind": "nation",
+   "title": "Beaut",
+   "region": "Central Erisdar",
+   "question": "“Beaut” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Beaut.md — 13 non-empty lines.",
+   "placeholder": "The people of Beaut are…",
+   "id": "d-nation-beaut"
+  },
+  {
+   "kind": "nation",
+   "title": "Ceruleagl",
+   "region": "Central Erisdar",
+   "question": "“Ceruleagl” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Ceruleagl.md — 12 non-empty lines.",
+   "placeholder": "The people of Ceruleagl are…",
+   "id": "d-nation-ceruleagl"
+  },
+  {
+   "kind": "nation",
+   "title": "Cragsad",
+   "region": "Central Erisdar",
+   "question": "“Cragsad” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Cragsad.md — 12 non-empty lines.",
+   "placeholder": "The people of Cragsad are…",
+   "id": "d-nation-cragsad"
+  },
+  {
+   "kind": "nation",
+   "title": "Darkne",
+   "region": "Central Erisdar",
+   "question": "“Darkne” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Darkne.md — 12 non-empty lines.",
+   "placeholder": "The people of Darkne are…",
+   "id": "d-nation-darkne"
+  },
+  {
+   "kind": "nation",
+   "title": "Deboria",
+   "region": "Central Erisdar",
+   "question": "“Deboria” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Deboria.md — 12 non-empty lines.",
+   "placeholder": "The people of Deboria are…",
+   "id": "d-nation-deboria"
+  },
+  {
+   "kind": "nation",
+   "title": "Dromeda",
+   "region": "Central Erisdar",
+   "question": "“Dromeda” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Dromeda.md — 12 non-empty lines.",
+   "placeholder": "The people of Dromeda are…",
+   "id": "d-nation-dromeda"
+  },
+  {
+   "kind": "nation",
+   "title": "Aeger",
+   "region": "Central Erisdar",
+   "question": "“Aeger” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Aeger.md — 12 non-empty lines.",
+   "placeholder": "The people of Aeger are…",
+   "id": "d-nation-aeger"
+  },
+  {
+   "kind": "nation",
+   "title": "Alfrichstadt",
+   "region": "Central Erisdar",
+   "question": "“Alfrichstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Alfrichstadt.md — 12 non-empty lines.",
+   "placeholder": "The people of Alfrichstadt are…",
+   "id": "d-nation-alfrichstadt"
+  },
+  {
+   "kind": "nation",
+   "title": "Aspenwat",
+   "region": "Central Erisdar",
+   "question": "“Aspenwat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Aspenwat.md — 12 non-empty lines.",
+   "placeholder": "The people of Aspenwat are…",
+   "id": "d-nation-aspenwat"
+  },
+  {
+   "kind": "nation",
+   "title": "Auvbach",
+   "region": "Central Erisdar",
+   "question": "“Auvbach” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Auvbach.md — 12 non-empty lines.",
+   "placeholder": "The people of Auvbach are…",
+   "id": "d-nation-auvbach"
+  },
+  {
+   "kind": "nation",
+   "title": "Balern",
+   "region": "Central Erisdar",
+   "question": "“Balern” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Balern.md — 12 non-empty lines.",
+   "placeholder": "The people of Balern are…",
+   "id": "d-nation-balern"
+  },
+  {
+   "kind": "nation",
+   "title": "Dryle",
+   "region": "Central Erisdar",
+   "question": "“Dryle” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Dryle.md — 12 non-empty lines.",
+   "placeholder": "The people of Dryle are…",
+   "id": "d-nation-dryle"
+  },
+  {
+   "kind": "nation",
+   "title": "Duvlon",
+   "region": "Central Erisdar",
+   "question": "“Duvlon” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Duvlon.md — 12 non-empty lines.",
+   "placeholder": "The people of Duvlon are…",
+   "id": "d-nation-duvlon"
+  },
+  {
+   "kind": "nation",
+   "title": "Einstadt",
+   "region": "Central Erisdar",
+   "question": "“Einstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Einstadt.md — 12 non-empty lines.",
+   "placeholder": "The people of Einstadt are…",
+   "id": "d-nation-einstadt"
+  },
+  {
+   "kind": "nation",
+   "title": "Genever",
+   "region": "Central Erisdar",
+   "question": "“Genever” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Genever.md — 12 non-empty lines.",
+   "placeholder": "The people of Genever are…",
+   "id": "d-nation-genever"
+  },
+  {
+   "kind": "nation",
+   "title": "Granssat",
+   "region": "Central Erisdar",
+   "question": "“Granssat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Granssat.md — 12 non-empty lines.",
+   "placeholder": "The people of Granssat are…",
+   "id": "d-nation-granssat"
+  },
+  {
+   "kind": "nation",
+   "title": "Jennesfort",
+   "region": "Central Erisdar",
+   "question": "“Jennesfort” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Jennesfort.md — 12 non-empty lines.",
+   "placeholder": "The people of Jennesfort are…",
+   "id": "d-nation-jennesfort"
+  },
+  {
+   "kind": "nation",
+   "title": "Kalel",
+   "region": "Central Erisdar",
+   "question": "“Kalel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Kalel.md — 12 non-empty lines.",
+   "placeholder": "The people of Kalel are…",
+   "id": "d-nation-kalel"
+  },
+  {
+   "kind": "nation",
+   "title": "Keth",
+   "region": "Central Erisdar",
+   "question": "“Keth” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Keth.md — 12 non-empty lines.",
+   "placeholder": "The people of Keth are…",
+   "id": "d-nation-keth"
+  },
+  {
+   "kind": "nation",
+   "title": "Kimel",
+   "region": "Central Erisdar",
+   "question": "“Kimel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Kimel.md — 12 non-empty lines.",
+   "placeholder": "The people of Kimel are…",
+   "id": "d-nation-kimel"
+  },
+  {
+   "kind": "nation",
+   "title": "Laber",
+   "region": "Central Erisdar",
+   "question": "“Laber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Laber.md — 12 non-empty lines.",
+   "placeholder": "The people of Laber are…",
+   "id": "d-nation-laber"
+  },
+  {
+   "kind": "nation",
+   "title": "Lebel",
+   "region": "Central Erisdar",
+   "question": "“Lebel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Lebel.md — 12 non-empty lines.",
+   "placeholder": "The people of Lebel are…",
+   "id": "d-nation-lebel"
+  },
+  {
+   "kind": "nation",
+   "title": "Lenninstenberg",
+   "region": "Central Erisdar",
+   "question": "“Lenninstenberg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Lenninstenberg.md — 12 non-empty lines.",
+   "placeholder": "The people of Lenninstenberg are…",
+   "id": "d-nation-lenninstenberg"
+  },
+  {
+   "kind": "nation",
+   "title": "Mane",
+   "region": "Central Erisdar",
+   "question": "“Mane” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Mane.md — 12 non-empty lines.",
+   "placeholder": "The people of Mane are…",
+   "id": "d-nation-mane"
+  },
+  {
+   "kind": "nation",
+   "title": "Marshgress",
+   "region": "Central Erisdar",
+   "question": "“Marshgress” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Marshgress.md — 12 non-empty lines.",
+   "placeholder": "The people of Marshgress are…",
+   "id": "d-nation-marshgress"
+  },
+  {
+   "kind": "nation",
+   "title": "Marshloi",
+   "region": "Central Erisdar",
+   "question": "“Marshloi” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Marshloi.md — 12 non-empty lines.",
+   "placeholder": "The people of Marshloi are…",
+   "id": "d-nation-marshloi"
+  },
+  {
+   "kind": "nation",
+   "title": "Matelofn",
+   "region": "Central Erisdar",
+   "question": "“Matelofn” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Matelofn.md — 12 non-empty lines.",
+   "placeholder": "The people of Matelofn are…",
+   "id": "d-nation-matelofn"
+  },
+  {
+   "kind": "nation",
+   "title": "Miriad",
+   "region": "Central Erisdar",
+   "question": "“Miriad” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Miriad.md — 12 non-empty lines.",
+   "placeholder": "The people of Miriad are…",
+   "id": "d-nation-miriad"
+  },
+  {
+   "kind": "nation",
+   "title": "Miwat",
+   "region": "Central Erisdar",
+   "question": "“Miwat” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Miwat.md — 12 non-empty lines.",
+   "placeholder": "The people of Miwat are…",
+   "id": "d-nation-miwat"
+  },
+  {
+   "kind": "nation",
+   "title": "Mulr",
+   "region": "Central Erisdar",
+   "question": "“Mulr” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Mulr.md — 12 non-empty lines.",
+   "placeholder": "The people of Mulr are…",
+   "id": "d-nation-mulr"
+  },
+  {
+   "kind": "nation",
+   "title": "Munchon County",
+   "region": "Central Erisdar",
+   "question": "“Munchon County” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Munchon County.md — 13 non-empty lines.",
+   "placeholder": "The people of Munchon County are…",
+   "id": "d-nation-munchon-county"
+  },
+  {
+   "kind": "nation",
+   "title": "Neopater",
+   "region": "Central Erisdar",
+   "question": "“Neopater” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Neopater.md — 12 non-empty lines.",
+   "placeholder": "The people of Neopater are…",
+   "id": "d-nation-neopater"
+  },
+  {
+   "kind": "nation",
+   "title": "Nitread",
+   "region": "Central Erisdar",
+   "question": "“Nitread” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Nitread.md — 12 non-empty lines.",
+   "placeholder": "The people of Nitread are…",
+   "id": "d-nation-nitread"
+  },
+  {
+   "kind": "nation",
+   "title": "Nortpos",
+   "region": "Central Erisdar",
+   "question": "“Nortpos” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Nortpos.md — 12 non-empty lines.",
+   "placeholder": "The people of Nortpos are…",
+   "id": "d-nation-nortpos"
+  },
+  {
+   "kind": "nation",
+   "title": "Olfensban",
+   "region": "Central Erisdar",
+   "question": "“Olfensban” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Olfensban.md — 12 non-empty lines.",
+   "placeholder": "The people of Olfensban are…",
+   "id": "d-nation-olfensban"
+  },
+  {
+   "kind": "nation",
+   "title": "Opamer",
+   "region": "Central Erisdar",
+   "question": "“Opamer” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Opamer.md — 12 non-empty lines.",
+   "placeholder": "The people of Opamer are…",
+   "id": "d-nation-opamer"
+  },
+  {
+   "kind": "nation",
+   "title": "Ouvlon",
+   "region": "Central Erisdar",
+   "question": "“Ouvlon” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Ouvlon.md — 12 non-empty lines.",
+   "placeholder": "The people of Ouvlon are…",
+   "id": "d-nation-ouvlon"
+  },
+  {
+   "kind": "nation",
+   "title": "Pross",
+   "region": "Central Erisdar",
+   "question": "“Pross” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Pross.md — 12 non-empty lines.",
+   "placeholder": "The people of Pross are…",
+   "id": "d-nation-pross"
+  },
+  {
+   "kind": "nation",
+   "title": "Rivel",
+   "region": "Central Erisdar",
+   "question": "“Rivel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Rivel.md — 12 non-empty lines.",
+   "placeholder": "The people of Rivel are…",
+   "id": "d-nation-rivel"
+  },
+  {
+   "kind": "nation",
+   "title": "Roflenstadt",
+   "region": "Central Erisdar",
+   "question": "“Roflenstadt” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Roflenstadt.md — 12 non-empty lines.",
+   "placeholder": "The people of Roflenstadt are…",
+   "id": "d-nation-roflenstadt"
+  },
+  {
+   "kind": "nation",
+   "title": "Rustred",
+   "region": "Central Erisdar",
+   "question": "“Rustred” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Rustred.md — 12 non-empty lines.",
+   "placeholder": "The people of Rustred are…",
+   "id": "d-nation-rustred"
+  },
+  {
+   "kind": "nation",
+   "title": "Suslann",
+   "region": "Central Erisdar",
+   "question": "“Suslann” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Suslann.md — 12 non-empty lines.",
+   "placeholder": "The people of Suslann are…",
+   "id": "d-nation-suslann"
+  },
+  {
+   "kind": "nation",
+   "title": "Swineber",
+   "region": "Central Erisdar",
+   "question": "“Swineber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Swineber.md — 12 non-empty lines.",
+   "placeholder": "The people of Swineber are…",
+   "id": "d-nation-swineber"
+  },
+  {
+   "kind": "nation",
+   "title": "Kennberg",
+   "region": "Central Erisdar",
+   "question": "“Kennberg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Kennberg.md — 12 non-empty lines.",
+   "placeholder": "The people of Kennberg are…",
+   "id": "d-nation-kennberg"
+  },
+  {
+   "kind": "nation",
+   "title": "Mirenburg",
+   "region": "Central Erisdar",
+   "question": "“Mirenburg” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Mirenburg.md — 12 non-empty lines.",
+   "placeholder": "The people of Mirenburg are…",
+   "id": "d-nation-mirenburg"
+  },
+  {
+   "kind": "nation",
+   "title": "Prassen-Albridge",
+   "region": "Central Erisdar",
+   "question": "“Prassen-Albridge” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Prassen-Albridge.md — 13 non-empty lines.",
+   "placeholder": "The people of Prassen-Albridge are…",
+   "id": "d-nation-prassen-albridge"
+  },
+  {
+   "kind": "nation",
+   "title": "Cherryglade",
+   "region": "Central Erisdar",
+   "question": "“Cherryglade” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Cherryglade.md — 12 non-empty lines.",
+   "placeholder": "The people of Cherryglade are…",
+   "id": "d-nation-cherryglade"
+  },
+  {
+   "kind": "nation",
+   "title": "Kelensborgh",
+   "region": "Central Erisdar",
+   "question": "“Kelensborgh” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Kelensborgh.md — 12 non-empty lines.",
+   "placeholder": "The people of Kelensborgh are…",
+   "id": "d-nation-kelensborgh"
+  },
+  {
+   "kind": "nation",
+   "title": "Memei",
+   "region": "Central Erisdar",
+   "question": "“Memei” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Memei.md — 12 non-empty lines.",
+   "placeholder": "The people of Memei are…",
+   "id": "d-nation-memei"
+  },
+  {
+   "kind": "nation",
+   "title": "Tuvir",
+   "region": "Central Erisdar",
+   "question": "“Tuvir” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Tuvir.md — 10 non-empty lines.",
+   "placeholder": "The people of Tuvir are…",
+   "id": "d-nation-tuvir"
+  },
+  {
+   "kind": "nation",
+   "title": "Draco Order",
+   "region": "Central Erisdar",
+   "question": "“Draco Order” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Draco Order.md — 14 non-empty lines.",
+   "placeholder": "The people of Draco Order are…",
+   "id": "d-nation-draco-order"
+  },
+  {
+   "kind": "nation",
+   "title": "Ever Order",
+   "region": "Central Erisdar",
+   "question": "“Ever Order” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Ever Order.md — 14 non-empty lines.",
+   "placeholder": "The people of Ever Order are…",
+   "id": "d-nation-ever-order"
+  },
+  {
+   "kind": "nation",
+   "title": "Kosled",
+   "region": "Central Erisdar",
+   "question": "“Kosled” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Kosled.md — 12 non-empty lines.",
+   "placeholder": "The people of Kosled are…",
+   "id": "d-nation-kosled"
+  },
+  {
+   "kind": "nation",
+   "title": "Lemer",
+   "region": "Central Erisdar",
+   "question": "“Lemer” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Lemer.md — 12 non-empty lines.",
+   "placeholder": "The people of Lemer are…",
+   "id": "d-nation-lemer"
+  },
+  {
+   "kind": "nation",
+   "title": "Marisco Church State",
+   "region": "Central Erisdar",
+   "question": "“Marisco Church State” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Marisco Church State.md — 12 non-empty lines.",
+   "placeholder": "The people of Marisco Church State are…",
+   "id": "d-nation-marisco-church-state"
+  },
+  {
+   "kind": "nation",
+   "title": "Mercuir",
+   "region": "Central Erisdar",
+   "question": "“Mercuir” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Mercuir.md — 12 non-empty lines.",
+   "placeholder": "The people of Mercuir are…",
+   "id": "d-nation-mercuir"
+  },
+  {
+   "kind": "nation",
+   "title": "Starsh",
+   "region": "Central Erisdar",
+   "question": "“Starsh” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Starsh.md — 12 non-empty lines.",
+   "placeholder": "The people of Starsh are…",
+   "id": "d-nation-starsh"
+  },
+  {
+   "kind": "nation",
+   "title": "Tenac",
+   "region": "Central Erisdar",
+   "question": "“Tenac” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Tenac.md — 13 non-empty lines.",
+   "placeholder": "The people of Tenac are…",
+   "id": "d-nation-tenac"
+  },
+  {
+   "kind": "nation",
+   "title": "Videnya",
+   "region": "Central Erisdar",
+   "question": "“Videnya” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Videnya.md — 13 non-empty lines.",
+   "placeholder": "The people of Videnya are…",
+   "id": "d-nation-videnya"
+  },
+  {
+   "kind": "nation",
+   "title": "Winneber",
+   "region": "Central Erisdar",
+   "question": "“Winneber” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Winneber.md — 12 non-empty lines.",
+   "placeholder": "The people of Winneber are…",
+   "id": "d-nation-winneber"
+  },
+  {
+   "kind": "nation",
+   "title": "Ximpa",
+   "region": "Central Erisdar",
+   "question": "“Ximpa” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Ximpa.md — 13 non-empty lines.",
+   "placeholder": "The people of Ximpa are…",
+   "id": "d-nation-ximpa"
+  },
+  {
+   "kind": "nation",
+   "title": "Yabel",
+   "region": "Central Erisdar",
+   "question": "“Yabel” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Central Erisdar/Yabel.md — 12 non-empty lines.",
+   "placeholder": "The people of Yabel are…",
+   "id": "d-nation-yabel"
+  },
+  {
+   "kind": "nation",
+   "title": "Cubri Archipelago",
+   "region": "Cubri Archipelago",
+   "question": "“Cubri Archipelago” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Cubri Archipelago/Cubri Archipelago.md — 13 non-empty lines.",
+   "placeholder": "The people of Cubri Archipelago are…",
+   "id": "d-nation-cubri-archipelago"
+  },
+  {
+   "kind": "nation",
+   "title": "Sousu Cherlote",
+   "region": "Cubri Archipelago",
+   "question": "“Sousu Cherlote” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Cubri Archipelago/Sousu Cherlote.md — 11 non-empty lines.",
+   "placeholder": "The people of Sousu Cherlote are…",
+   "id": "d-nation-sousu-cherlote"
+  },
+  {
+   "kind": "nation",
+   "title": "Sousu Manga",
+   "region": "Cubri Archipelago",
+   "question": "“Sousu Manga” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Cubri Archipelago/Sousu Manga.md — 10 non-empty lines.",
+   "placeholder": "The people of Sousu Manga are…",
+   "id": "d-nation-sousu-manga"
+  },
+  {
+   "kind": "nation",
+   "title": "Blazeyard",
+   "region": "Demon Continent",
+   "question": "“Blazeyard” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Demon Continent/Blazeyard.md — 14 non-empty lines.",
+   "placeholder": "The people of Blazeyard are…",
+   "id": "d-nation-blazeyard"
+  },
+  {
+   "kind": "nation",
+   "title": "Aeon",
+   "region": "Dissenbarg",
+   "question": "“Aeon” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Aeon.md — 7 non-empty lines.",
+   "placeholder": "The people of Aeon are…",
+   "id": "d-nation-aeon"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos Maloca",
+   "region": "Dissenbarg",
+   "question": "“Anos Maloca” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Anos Maloca.md — 12 non-empty lines.",
+   "placeholder": "The people of Anos Maloca are…",
+   "id": "d-nation-anos-maloca"
+  },
+  {
+   "kind": "nation",
+   "title": "Citrea",
+   "region": "Dissenbarg",
+   "question": "“Citrea” is a stub (9 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Citrea.md — 9 non-empty lines.",
+   "placeholder": "The people of Citrea are…",
+   "id": "d-nation-citrea"
+  },
+  {
+   "kind": "nation",
+   "title": "Cletas Democracy",
+   "region": "Dissenbarg",
+   "question": "“Cletas Democracy” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Cletas Democracy.md — 13 non-empty lines.",
+   "placeholder": "The people of Cletas Democracy are…",
+   "id": "d-nation-cletas-democracy"
+  },
+  {
+   "kind": "nation",
+   "title": "Eribel",
+   "region": "Dissenbarg",
+   "question": "“Eribel” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Eribel.md — 11 non-empty lines.",
+   "placeholder": "The people of Eribel are…",
+   "id": "d-nation-eribel"
+  },
+  {
+   "kind": "nation",
+   "title": "Klatia",
+   "region": "Dissenbarg",
+   "question": "“Klatia” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Klatia.md — 7 non-empty lines.",
+   "placeholder": "The people of Klatia are…",
+   "id": "d-nation-klatia"
+  },
+  {
+   "kind": "nation",
+   "title": "Maedon",
+   "region": "Dissenbarg",
+   "question": "“Maedon” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Maedon.md — 7 non-empty lines.",
+   "placeholder": "The people of Maedon are…",
+   "id": "d-nation-maedon"
+  },
+  {
+   "kind": "nation",
+   "title": "Mienna",
+   "region": "Dissenbarg",
+   "question": "“Mienna” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Mienna.md — 12 non-empty lines.",
+   "placeholder": "The people of Mienna are…",
+   "id": "d-nation-mienna"
+  },
+  {
+   "kind": "nation",
+   "title": "Monik",
+   "region": "Dissenbarg",
+   "question": "“Monik” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Monik.md — 13 non-empty lines.",
+   "placeholder": "The people of Monik are…",
+   "id": "d-nation-monik"
+  },
+  {
+   "kind": "nation",
+   "title": "New Venner",
+   "region": "Dissenbarg",
+   "question": "“New Venner” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/New Venner.md — 13 non-empty lines.",
+   "placeholder": "The people of New Venner are…",
+   "id": "d-nation-new-venner"
+  },
+  {
+   "kind": "nation",
+   "title": "Sua",
+   "region": "Dissenbarg",
+   "question": "“Sua” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Sua.md — 11 non-empty lines.",
+   "placeholder": "The people of Sua are…",
+   "id": "d-nation-sua"
+  },
+  {
+   "kind": "nation",
+   "title": "Taberis",
+   "region": "Dissenbarg",
+   "question": "“Taberis” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Taberis.md — 14 non-empty lines.",
+   "placeholder": "The people of Taberis are…",
+   "id": "d-nation-taberis"
+  },
+  {
+   "kind": "nation",
+   "title": "Taebea",
+   "region": "Dissenbarg",
+   "question": "“Taebea” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Taebea.md — 7 non-empty lines.",
+   "placeholder": "The people of Taebea are…",
+   "id": "d-nation-taebea"
+  },
+  {
+   "kind": "nation",
+   "title": "Temas",
+   "region": "Dissenbarg",
+   "question": "“Temas” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Temas.md — 7 non-empty lines.",
+   "placeholder": "The people of Temas are…",
+   "id": "d-nation-temas"
+  },
+  {
+   "kind": "nation",
+   "title": "Tessa",
+   "region": "Dissenbarg",
+   "question": "“Tessa” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Tessa.md — 7 non-empty lines.",
+   "placeholder": "The people of Tessa are…",
+   "id": "d-nation-tessa"
+  },
+  {
+   "kind": "nation",
+   "title": "Tessalian Tibia",
+   "region": "Dissenbarg",
+   "question": "“Tessalian Tibia” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Tessalian Tibia.md — 11 non-empty lines.",
+   "placeholder": "The people of Tessalian Tibia are…",
+   "id": "d-nation-tessalian-tibia"
+  },
+  {
+   "kind": "nation",
+   "title": "Tissas",
+   "region": "Dissenbarg",
+   "question": "“Tissas” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Dissenbarg/Tissas.md — 7 non-empty lines.",
+   "placeholder": "The people of Tissas are…",
+   "id": "d-nation-tissas"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos-Arebed",
+   "region": "East Erisdar",
+   "question": "“Anos-Arebed” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/East Erisdar/Anos-Arebed.md — 11 non-empty lines.",
+   "placeholder": "The people of Anos-Arebed are…",
+   "id": "d-nation-anos-arebed"
+  },
+  {
+   "kind": "nation",
+   "title": "Away",
+   "region": "East Erisdar",
+   "question": "“Away” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/East Erisdar/Away.md — 12 non-empty lines.",
+   "placeholder": "The people of Away are…",
+   "id": "d-nation-away"
+  },
+  {
+   "kind": "nation",
+   "title": "Dwarvengor",
+   "region": "East Erisdar",
+   "question": "“Dwarvengor” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/East Erisdar/Dwarvengor.md — 13 non-empty lines.",
+   "placeholder": "The people of Dwarvengor are…",
+   "id": "d-nation-dwarvengor"
+  },
+  {
+   "kind": "nation",
+   "title": "Fendigar Dictatorship",
+   "region": "East Erisdar",
+   "question": "“Fendigar Dictatorship” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/East Erisdar/Fendigar Dictatorship.md — 13 non-empty lines.",
+   "placeholder": "The people of Fendigar Dictatorship are…",
+   "id": "d-nation-fendigar-dictatorship"
+  },
+  {
+   "kind": "nation",
+   "title": "New Mann",
+   "region": "East Erisdar",
+   "question": "“New Mann” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/East Erisdar/New Mann.md — 13 non-empty lines.",
+   "placeholder": "The people of New Mann are…",
+   "id": "d-nation-new-mann"
+  },
+  {
+   "kind": "nation",
+   "title": "index",
+   "region": "index.md",
+   "question": "“index” is a stub (7 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/index.md/index.md — 7 non-empty lines.",
+   "placeholder": "The people of index are…",
+   "id": "d-nation-index"
+  },
+  {
+   "kind": "nation",
+   "title": "Coalsteel Kingdom",
+   "region": "Kobre",
+   "question": "“Coalsteel Kingdom” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kobre/Coalsteel Kingdom.md — 12 non-empty lines.",
+   "placeholder": "The people of Coalsteel Kingdom are…",
+   "id": "d-nation-coalsteel-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "Diamonds Kingdom",
+   "region": "Kobre",
+   "question": "“Diamonds Kingdom” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kobre/Diamonds Kingdom.md — 11 non-empty lines.",
+   "placeholder": "The people of Diamonds Kingdom are…",
+   "id": "d-nation-diamonds-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "Elf Kingdom",
+   "region": "Kobre",
+   "question": "“Elf Kingdom” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kobre/Elf Kingdom.md — 12 non-empty lines.",
+   "placeholder": "The people of Elf Kingdom are…",
+   "id": "d-nation-elf-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "New Elvengar",
+   "region": "Kutten",
+   "question": "“New Elvengar” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kutten/New Elvengar.md — 14 non-empty lines.",
+   "placeholder": "The people of New Elvengar are…",
+   "id": "d-nation-new-elvengar"
+  },
+  {
+   "kind": "nation",
+   "title": "Oda",
+   "region": "Kutten",
+   "question": "“Oda” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kutten/Oda.md — 14 non-empty lines.",
+   "placeholder": "The people of Oda are…",
+   "id": "d-nation-oda"
+  },
+  {
+   "kind": "nation",
+   "title": "Yakut Territory (Kutten)",
+   "region": "Kutten",
+   "question": "“Yakut Territory (Kutten)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Kutten/Yakut Territory (Kutten).md — 13 non-empty lines.",
+   "placeholder": "The people of Yakut Territory (Kutten) are…",
+   "id": "d-nation-yakut-territory-kutten"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos Cattos",
+   "region": "Lumina",
+   "question": "“Anos Cattos” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Anos Cattos.md — 12 non-empty lines.",
+   "placeholder": "The people of Anos Cattos are…",
+   "id": "d-nation-anos-cattos"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos Lumina Outpost",
+   "region": "Lumina",
+   "question": "“Anos Lumina Outpost” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Anos Lumina Outpost.md — 12 non-empty lines.",
+   "placeholder": "The people of Anos Lumina Outpost are…",
+   "id": "d-nation-anos-lumina-outpost"
+  },
+  {
+   "kind": "nation",
+   "title": "Lake Kingdom",
+   "region": "Lumina",
+   "question": "“Lake Kingdom” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Lake Kingdom.md — 14 non-empty lines.",
+   "placeholder": "The people of Lake Kingdom are…",
+   "id": "d-nation-lake-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "New Eris",
+   "region": "Lumina",
+   "question": "“New Eris” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/New Eris.md — 12 non-empty lines.",
+   "placeholder": "The people of New Eris are…",
+   "id": "d-nation-new-eris"
+  },
+  {
+   "kind": "nation",
+   "title": "Tree Tribe",
+   "region": "Lumina",
+   "question": "“Tree Tribe” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Tree Tribe.md — 13 non-empty lines.",
+   "placeholder": "The people of Tree Tribe are…",
+   "id": "d-nation-tree-tribe"
+  },
+  {
+   "kind": "nation",
+   "title": "Vennerian Aelefer Channel",
+   "region": "Lumina",
+   "question": "“Vennerian Aelefer Channel” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Vennerian Aelefer Channel.md — 13 non-empty lines.",
+   "placeholder": "The people of Vennerian Aelefer Channel are…",
+   "id": "d-nation-vennerian-aelefer-channel"
+  },
+  {
+   "kind": "nation",
+   "title": "Vennerian Goishi",
+   "region": "Lumina",
+   "question": "“Vennerian Goishi” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lumina/Vennerian Goishi.md — 12 non-empty lines.",
+   "placeholder": "The people of Vennerian Goishi are…",
+   "id": "d-nation-vennerian-goishi"
+  },
+  {
+   "kind": "nation",
+   "title": "Aeid Kingdom",
+   "region": "Luminous Sea Islands",
+   "question": "“Aeid Kingdom” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Luminous Sea Islands/Aeid Kingdom.md — 11 non-empty lines.",
+   "placeholder": "The people of Aeid Kingdom are…",
+   "id": "d-nation-aeid-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "Koln",
+   "region": "Luminous Sea Islands",
+   "question": "“Koln” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Luminous Sea Islands/Koln.md — 11 non-empty lines.",
+   "placeholder": "The people of Koln are…",
+   "id": "d-nation-koln"
+  },
+  {
+   "kind": "nation",
+   "title": "Neopao",
+   "region": "Luminous Sea Islands",
+   "question": "“Neopao” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Luminous Sea Islands/Neopao.md — 11 non-empty lines.",
+   "placeholder": "The people of Neopao are…",
+   "id": "d-nation-neopao"
+  },
+  {
+   "kind": "nation",
+   "title": "East Incubator",
+   "region": "Lung",
+   "question": "“East Incubator” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/East Incubator.md — 13 non-empty lines.",
+   "placeholder": "The people of East Incubator are…",
+   "id": "d-nation-east-incubator"
+  },
+  {
+   "kind": "nation",
+   "title": "Mudrim",
+   "region": "Lung",
+   "question": "“Mudrim” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/Mudrim.md — 13 non-empty lines.",
+   "placeholder": "The people of Mudrim are…",
+   "id": "d-nation-mudrim"
+  },
+  {
+   "kind": "nation",
+   "title": "Nightstar",
+   "region": "Lung",
+   "question": "“Nightstar” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/Nightstar.md — 13 non-empty lines.",
+   "placeholder": "The people of Nightstar are…",
+   "id": "d-nation-nightstar"
+  },
+  {
+   "kind": "nation",
+   "title": "Skymaster",
+   "region": "Lung",
+   "question": "“Skymaster” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/Skymaster.md — 12 non-empty lines.",
+   "placeholder": "The people of Skymaster are…",
+   "id": "d-nation-skymaster"
+  },
+  {
+   "kind": "nation",
+   "title": "Steel Holdout",
+   "region": "Lung",
+   "question": "“Steel Holdout” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/Steel Holdout.md — 11 non-empty lines.",
+   "placeholder": "The people of Steel Holdout are…",
+   "id": "d-nation-steel-holdout"
+  },
+  {
+   "kind": "nation",
+   "title": "Tawdry Landing",
+   "region": "Lung",
+   "question": "“Tawdry Landing” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Lung/Tawdry Landing.md — 13 non-empty lines.",
+   "placeholder": "The people of Tawdry Landing are…",
+   "id": "d-nation-tawdry-landing"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos Marti",
+   "region": "Marti",
+   "question": "“Anos Marti” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Marti/Anos Marti.md — 12 non-empty lines.",
+   "placeholder": "The people of Anos Marti are…",
+   "id": "d-nation-anos-marti"
+  },
+  {
+   "kind": "nation",
+   "title": "Cobal Kingdom",
+   "region": "Marti",
+   "question": "“Cobal Kingdom” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Marti/Cobal Kingdom.md — 13 non-empty lines.",
+   "placeholder": "The people of Cobal Kingdom are…",
+   "id": "d-nation-cobal-kingdom"
+  },
+  {
+   "kind": "nation",
+   "title": "Vennerian Channel (Marti)",
+   "region": "Marti",
+   "question": "“Vennerian Channel (Marti)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Marti/Vennerian Channel (Marti).md — 13 non-empty lines.",
+   "placeholder": "The people of Vennerian Channel (Marti) are…",
+   "id": "d-nation-vennerian-channel-marti"
+  },
+  {
+   "kind": "nation",
+   "title": "Meble",
+   "region": "Meble",
+   "question": "“Meble” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Meble/Meble.md — 14 non-empty lines.",
+   "placeholder": "The people of Meble are…",
+   "id": "d-nation-meble"
+  },
+  {
+   "kind": "nation",
+   "title": "Sus Principality",
+   "region": "Meble",
+   "question": "“Sus Principality” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Meble/Sus Principality.md — 11 non-empty lines.",
+   "placeholder": "The people of Sus Principality are…",
+   "id": "d-nation-sus-principality"
+  },
+  {
+   "kind": "nation",
+   "title": "Arrow of Anos",
+   "region": "Merratodoni",
+   "question": "“Arrow of Anos” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Merratodoni/Arrow of Anos.md — 13 non-empty lines.",
+   "placeholder": "The people of Arrow of Anos are…",
+   "id": "d-nation-arrow-of-anos"
+  },
+  {
+   "kind": "nation",
+   "title": "Kelkot",
+   "region": "Merratodoni",
+   "question": "“Kelkot” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Merratodoni/Kelkot.md — 14 non-empty lines.",
+   "placeholder": "The people of Kelkot are…",
+   "id": "d-nation-kelkot"
+  },
+  {
+   "kind": "nation",
+   "title": "Elvenkrad",
+   "region": "North Erisdar",
+   "question": "“Elvenkrad” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/North Erisdar/Elvenkrad.md — 14 non-empty lines.",
+   "placeholder": "The people of Elvenkrad are…",
+   "id": "d-nation-elvenkrad"
+  },
+  {
+   "kind": "nation",
+   "title": "Tetras",
+   "region": "North Erisdar",
+   "question": "“Tetras” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/North Erisdar/Tetras.md — 13 non-empty lines.",
+   "placeholder": "The people of Tetras are…",
+   "id": "d-nation-tetras"
+  },
+  {
+   "kind": "nation",
+   "title": "Alborric",
+   "region": "Polar Continent",
+   "question": "“Alborric” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Polar Continent/Alborric.md — 13 non-empty lines.",
+   "placeholder": "The people of Alborric are…",
+   "id": "d-nation-alborric"
+  },
+  {
+   "kind": "nation",
+   "title": "Casting City",
+   "region": "Sister",
+   "question": "“Casting City” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Sister/Casting City.md — 13 non-empty lines.",
+   "placeholder": "The people of Casting City are…",
+   "id": "d-nation-casting-city"
+  },
+  {
+   "kind": "nation",
+   "title": "Molten Steel Tribe",
+   "region": "Sister",
+   "question": "“Molten Steel Tribe” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Sister/Molten Steel Tribe.md — 11 non-empty lines.",
+   "placeholder": "The people of Molten Steel Tribe are…",
+   "id": "d-nation-molten-steel-tribe"
+  },
+  {
+   "kind": "nation",
+   "title": "Radiant Hold",
+   "region": "Sister",
+   "question": "“Radiant Hold” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Sister/Radiant Hold.md — 12 non-empty lines.",
+   "placeholder": "The people of Radiant Hold are…",
+   "id": "d-nation-radiant-hold"
+  },
+  {
+   "kind": "nation",
+   "title": "Sister",
+   "region": "Sister",
+   "question": "“Sister” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Sister/Sister.md — 14 non-empty lines.",
+   "placeholder": "The people of Sister are…",
+   "id": "d-nation-sister"
+  },
+  {
+   "kind": "nation",
+   "title": "Temperance Holdout",
+   "region": "Sister",
+   "question": "“Temperance Holdout” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Sister/Temperance Holdout.md — 12 non-empty lines.",
+   "placeholder": "The people of Temperance Holdout are…",
+   "id": "d-nation-temperance-holdout"
+  },
+  {
+   "kind": "nation",
+   "title": "Aelefer",
+   "region": "South Erisdar",
+   "question": "“Aelefer” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Aelefer.md — 13 non-empty lines.",
+   "placeholder": "The people of Aelefer are…",
+   "id": "d-nation-aelefer"
+  },
+  {
+   "kind": "nation",
+   "title": "Alexa Church State",
+   "region": "South Erisdar",
+   "question": "“Alexa Church State” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Alexa Church State.md — 11 non-empty lines.",
+   "placeholder": "The people of Alexa Church State are…",
+   "id": "d-nation-alexa-church-state"
+  },
+  {
+   "kind": "nation",
+   "title": "Arisdian",
+   "region": "South Erisdar",
+   "question": "“Arisdian” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Arisdian.md — 10 non-empty lines.",
+   "placeholder": "The people of Arisdian are…",
+   "id": "d-nation-arisdian"
+  },
+  {
+   "kind": "nation",
+   "title": "Asheng",
+   "region": "South Erisdar",
+   "question": "“Asheng” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Asheng.md — 10 non-empty lines.",
+   "placeholder": "The people of Asheng are…",
+   "id": "d-nation-asheng"
+  },
+  {
+   "kind": "nation",
+   "title": "Centaapoli",
+   "region": "South Erisdar",
+   "question": "“Centaapoli” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Centaapoli.md — 10 non-empty lines.",
+   "placeholder": "The people of Centaapoli are…",
+   "id": "d-nation-centaapoli"
+  },
+  {
+   "kind": "nation",
+   "title": "Cerulea",
+   "region": "South Erisdar",
+   "question": "“Cerulea” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Cerulea.md — 11 non-empty lines.",
+   "placeholder": "The people of Cerulea are…",
+   "id": "d-nation-cerulea"
+  },
+  {
+   "kind": "nation",
+   "title": "Charia",
+   "region": "South Erisdar",
+   "question": "“Charia” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Charia.md — 10 non-empty lines.",
+   "placeholder": "The people of Charia are…",
+   "id": "d-nation-charia"
+  },
+  {
+   "kind": "nation",
+   "title": "Cronia",
+   "region": "South Erisdar",
+   "question": "“Cronia” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Cronia.md — 10 non-empty lines.",
+   "placeholder": "The people of Cronia are…",
+   "id": "d-nation-cronia"
+  },
+  {
+   "kind": "nation",
+   "title": "Duchy of Meadle",
+   "region": "South Erisdar",
+   "question": "“Duchy of Meadle” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Duchy of Meadle.md — 11 non-empty lines.",
+   "placeholder": "The people of Duchy of Meadle are…",
+   "id": "d-nation-duchy-of-meadle"
+  },
+  {
+   "kind": "nation",
+   "title": "Elkenloft",
+   "region": "South Erisdar",
+   "question": "“Elkenloft” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Elkenloft.md — 10 non-empty lines.",
+   "placeholder": "The people of Elkenloft are…",
+   "id": "d-nation-elkenloft"
+  },
+  {
+   "kind": "nation",
+   "title": "Elmfer",
+   "region": "South Erisdar",
+   "question": "“Elmfer” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Elmfer.md — 11 non-empty lines.",
+   "placeholder": "The people of Elmfer are…",
+   "id": "d-nation-elmfer"
+  },
+  {
+   "kind": "nation",
+   "title": "Evern",
+   "region": "South Erisdar",
+   "question": "“Evern” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Evern.md — 10 non-empty lines.",
+   "placeholder": "The people of Evern are…",
+   "id": "d-nation-evern"
+  },
+  {
+   "kind": "nation",
+   "title": "Ferroson",
+   "region": "South Erisdar",
+   "question": "“Ferroson” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Ferroson.md — 10 non-empty lines.",
+   "placeholder": "The people of Ferroson are…",
+   "id": "d-nation-ferroson"
+  },
+  {
+   "kind": "nation",
+   "title": "Fezzanite Republic",
+   "region": "South Erisdar",
+   "question": "“Fezzanite Republic” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Fezzanite Republic.md — 13 non-empty lines.",
+   "placeholder": "The people of Fezzanite Republic are…",
+   "id": "d-nation-fezzanite-republic"
+  },
+  {
+   "kind": "nation",
+   "title": "Koel Order",
+   "region": "South Erisdar",
+   "question": "“Koel Order” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Koel Order.md — 11 non-empty lines.",
+   "placeholder": "The people of Koel Order are…",
+   "id": "d-nation-koel-order"
+  },
+  {
+   "kind": "nation",
+   "title": "Lamoro",
+   "region": "South Erisdar",
+   "question": "“Lamoro” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Lamoro.md — 10 non-empty lines.",
+   "placeholder": "The people of Lamoro are…",
+   "id": "d-nation-lamoro"
+  },
+  {
+   "kind": "nation",
+   "title": "Limnya",
+   "region": "South Erisdar",
+   "question": "“Limnya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Limnya.md — 11 non-empty lines.",
+   "placeholder": "The people of Limnya are…",
+   "id": "d-nation-limnya"
+  },
+  {
+   "kind": "nation",
+   "title": "Linitra",
+   "region": "South Erisdar",
+   "question": "“Linitra” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Linitra.md — 10 non-empty lines.",
+   "placeholder": "The people of Linitra are…",
+   "id": "d-nation-linitra"
+  },
+  {
+   "kind": "nation",
+   "title": "Lukka",
+   "region": "South Erisdar",
+   "question": "“Lukka” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Lukka.md — 10 non-empty lines.",
+   "placeholder": "The people of Lukka are…",
+   "id": "d-nation-lukka"
+  },
+  {
+   "kind": "nation",
+   "title": "Malinya",
+   "region": "South Erisdar",
+   "question": "“Malinya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Malinya.md — 11 non-empty lines.",
+   "placeholder": "The people of Malinya are…",
+   "id": "d-nation-malinya"
+  },
+  {
+   "kind": "nation",
+   "title": "Manoco",
+   "region": "South Erisdar",
+   "question": "“Manoco” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Manoco.md — 10 non-empty lines.",
+   "placeholder": "The people of Manoco are…",
+   "id": "d-nation-manoco"
+  },
+  {
+   "kind": "nation",
+   "title": "Migah",
+   "region": "South Erisdar",
+   "question": "“Migah” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Migah.md — 12 non-empty lines.",
+   "placeholder": "The people of Migah are…",
+   "id": "d-nation-migah"
+  },
+  {
+   "kind": "nation",
+   "title": "Mystili",
+   "region": "South Erisdar",
+   "question": "“Mystili” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Mystili.md — 10 non-empty lines.",
+   "placeholder": "The people of Mystili are…",
+   "id": "d-nation-mystili"
+  },
+  {
+   "kind": "nation",
+   "title": "Nortrasdor",
+   "region": "South Erisdar",
+   "question": "“Nortrasdor” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Nortrasdor.md — 11 non-empty lines.",
+   "placeholder": "The people of Nortrasdor are…",
+   "id": "d-nation-nortrasdor"
+  },
+  {
+   "kind": "nation",
+   "title": "Obsidian Dwarnov",
+   "region": "South Erisdar",
+   "question": "“Obsidian Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Obsidian Dwarnov.md — 12 non-empty lines.",
+   "placeholder": "The people of Obsidian Dwarnov are…",
+   "id": "d-nation-obsidian-dwarnov"
+  },
+  {
+   "kind": "nation",
+   "title": "Order of Niccas",
+   "region": "South Erisdar",
+   "question": "“Order of Niccas” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Order of Niccas.md — 12 non-empty lines.",
+   "placeholder": "The people of Order of Niccas are…",
+   "id": "d-nation-order-of-niccas"
+  },
+  {
+   "kind": "nation",
+   "title": "Pinc Republic",
+   "region": "South Erisdar",
+   "question": "“Pinc Republic” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Pinc Republic.md — 11 non-empty lines.",
+   "placeholder": "The people of Pinc Republic are…",
+   "id": "d-nation-pinc-republic"
+  },
+  {
+   "kind": "nation",
+   "title": "Romanium Dwarnov",
+   "region": "South Erisdar",
+   "question": "“Romanium Dwarnov” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Romanium Dwarnov.md — 12 non-empty lines.",
+   "placeholder": "The people of Romanium Dwarnov are…",
+   "id": "d-nation-romanium-dwarnov"
+  },
+  {
+   "kind": "nation",
+   "title": "Rudialand",
+   "region": "South Erisdar",
+   "question": "“Rudialand” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Rudialand.md — 10 non-empty lines.",
+   "placeholder": "The people of Rudialand are…",
+   "id": "d-nation-rudialand"
+  },
+  {
+   "kind": "nation",
+   "title": "Scarlet Order",
+   "region": "South Erisdar",
+   "question": "“Scarlet Order” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Scarlet Order.md — 13 non-empty lines.",
+   "placeholder": "The people of Scarlet Order are…",
+   "id": "d-nation-scarlet-order"
+  },
+  {
+   "kind": "nation",
+   "title": "Syacmori",
+   "region": "South Erisdar",
+   "question": "“Syacmori” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Syacmori.md — 10 non-empty lines.",
+   "placeholder": "The people of Syacmori are…",
+   "id": "d-nation-syacmori"
+  },
+  {
+   "kind": "nation",
+   "title": "Tarol",
+   "region": "South Erisdar",
+   "question": "“Tarol” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Tarol.md — 11 non-empty lines.",
+   "placeholder": "The people of Tarol are…",
+   "id": "d-nation-tarol"
+  },
+  {
+   "kind": "nation",
+   "title": "Tundranya",
+   "region": "South Erisdar",
+   "question": "“Tundranya” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Tundranya.md — 11 non-empty lines.",
+   "placeholder": "The people of Tundranya are…",
+   "id": "d-nation-tundranya"
+  },
+  {
+   "kind": "nation",
+   "title": "Wrothri",
+   "region": "South Erisdar",
+   "question": "“Wrothri” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Erisdar/Wrothri.md — 10 non-empty lines.",
+   "placeholder": "The people of Wrothri are…",
+   "id": "d-nation-wrothri"
+  },
+  {
+   "kind": "nation",
+   "title": "South Sun Empire",
+   "region": "South Sun Empire",
+   "question": "“South Sun Empire” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/South Sun Empire/South Sun Empire.md — 8 non-empty lines.",
+   "placeholder": "The people of South Sun Empire are…",
+   "id": "d-nation-south-sun-empire"
+  },
+  {
+   "kind": "nation",
+   "title": "Goblin Island (Tuba)",
+   "region": "Tuba",
+   "question": "“Goblin Island (Tuba)” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Tuba/Goblin Island (Tuba).md — 13 non-empty lines.",
+   "placeholder": "The people of Goblin Island (Tuba) are…",
+   "id": "d-nation-goblin-island-tuba"
+  },
+  {
+   "kind": "nation",
+   "title": "Harpies Tribe (Tuba)",
+   "region": "Tuba",
+   "question": "“Harpies Tribe (Tuba)” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Tuba/Harpies Tribe (Tuba).md — 14 non-empty lines.",
+   "placeholder": "The people of Harpies Tribe (Tuba) are…",
+   "id": "d-nation-harpies-tribe-tuba"
+  },
+  {
+   "kind": "nation",
+   "title": "Vennerian Pride",
+   "region": "Tuba",
+   "question": "“Vennerian Pride” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Tuba/Vennerian Pride.md — 12 non-empty lines.",
+   "placeholder": "The people of Vennerian Pride are…",
+   "id": "d-nation-vennerian-pride"
+  },
+  {
+   "kind": "nation",
+   "title": "United Kingdom of the Seamen, Humans, Catmen and Demons",
+   "region": "United Kingdom of the Seamen",
+   "question": "“United Kingdom of the Seamen, Humans, Catmen and Demons” is a stub (10 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/United Kingdom of the Seamen/United Kingdom of the Seamen, Humans, Catmen and Demons.md — 10 non-empty lines.",
+   "placeholder": "The people of United Kingdom of the Seamen, Humans, Catmen and Demons are…",
+   "id": "d-nation-united-kingdom-of-the-seamen-humans-catmen-and-d"
+  },
+  {
+   "kind": "nation",
+   "title": "Aimeled",
+   "region": "West Erisdar",
+   "question": "“Aimeled” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Aimeled.md — 8 non-empty lines.",
+   "placeholder": "The people of Aimeled are…",
+   "id": "d-nation-aimeled"
+  },
+  {
+   "kind": "nation",
+   "title": "Astravayne",
+   "region": "West Erisdar",
+   "question": "“Astravayne” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Astravayne.md — 14 non-empty lines.",
+   "placeholder": "The people of Astravayne are…",
+   "id": "d-nation-astravayne"
+  },
+  {
+   "kind": "nation",
+   "title": "Augagarten",
+   "region": "West Erisdar",
+   "question": "“Augagarten” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Augagarten.md — 13 non-empty lines.",
+   "placeholder": "The people of Augagarten are…",
+   "id": "d-nation-augagarten"
+  },
+  {
+   "kind": "nation",
+   "title": "Direfirth",
+   "region": "West Erisdar",
+   "question": "“Direfirth” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Direfirth.md — 14 non-empty lines.",
+   "placeholder": "The people of Direfirth are…",
+   "id": "d-nation-direfirth"
+  },
+  {
+   "kind": "nation",
+   "title": "Galerough",
+   "region": "West Erisdar",
+   "question": "“Galerough” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Galerough.md — 12 non-empty lines.",
+   "placeholder": "The people of Galerough are…",
+   "id": "d-nation-galerough"
+  },
+  {
+   "kind": "nation",
+   "title": "Kille",
+   "region": "West Erisdar",
+   "question": "“Kille” is a stub (8 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Kille.md — 8 non-empty lines.",
+   "placeholder": "The people of Kille are…",
+   "id": "d-nation-kille"
+  },
+  {
+   "kind": "nation",
+   "title": "Mercur",
+   "region": "West Erisdar",
+   "question": "“Mercur” is a stub (9 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Mercur.md — 9 non-empty lines.",
+   "placeholder": "The people of Mercur are…",
+   "id": "d-nation-mercur"
+  },
+  {
+   "kind": "nation",
+   "title": "Palonia",
+   "region": "West Erisdar",
+   "question": "“Palonia” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Palonia.md — 14 non-empty lines.",
+   "placeholder": "The people of Palonia are…",
+   "id": "d-nation-palonia"
+  },
+  {
+   "kind": "nation",
+   "title": "Prosperity Port",
+   "region": "West Erisdar",
+   "question": "“Prosperity Port” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Prosperity Port.md — 12 non-empty lines.",
+   "placeholder": "The people of Prosperity Port are…",
+   "id": "d-nation-prosperity-port"
+  },
+  {
+   "kind": "nation",
+   "title": "Suebo",
+   "region": "West Erisdar",
+   "question": "“Suebo” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Suebo.md — 14 non-empty lines.",
+   "placeholder": "The people of Suebo are…",
+   "id": "d-nation-suebo"
+  },
+  {
+   "kind": "nation",
+   "title": "Yaro",
+   "region": "West Erisdar",
+   "question": "“Yaro” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Yaro.md — 13 non-empty lines.",
+   "placeholder": "The people of Yaro are…",
+   "id": "d-nation-yaro"
+  },
+  {
+   "kind": "nation",
+   "title": "Zane",
+   "region": "West Erisdar",
+   "question": "“Zane” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/West Erisdar/Zane.md — 13 non-empty lines.",
+   "placeholder": "The people of Zane are…",
+   "id": "d-nation-zane"
+  },
+  {
+   "kind": "nation",
+   "title": "Anos Xeti Outpost",
+   "region": "Xeti",
+   "question": "“Anos Xeti Outpost” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Anos Xeti Outpost.md — 11 non-empty lines.",
+   "placeholder": "The people of Anos Xeti Outpost are…",
+   "id": "d-nation-anos-xeti-outpost"
+  },
+  {
+   "kind": "nation",
+   "title": "Kuioaba",
+   "region": "Xeti",
+   "question": "“Kuioaba” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Kuioaba.md — 14 non-empty lines.",
+   "placeholder": "The people of Kuioaba are…",
+   "id": "d-nation-kuioaba"
+  },
+  {
+   "kind": "nation",
+   "title": "Blackfang",
+   "region": "Xeti",
+   "question": "“Blackfang” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Blackfang.md — 11 non-empty lines.",
+   "placeholder": "The people of Blackfang are…",
+   "id": "d-nation-blackfang"
+  },
+  {
+   "kind": "nation",
+   "title": "Koeoti",
+   "region": "Xeti",
+   "question": "“Koeoti” is a stub (12 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Koeoti.md — 12 non-empty lines.",
+   "placeholder": "The people of Koeoti are…",
+   "id": "d-nation-koeoti"
+  },
+  {
+   "kind": "nation",
+   "title": "New Kolorad",
+   "region": "Xeti",
+   "question": "“New Kolorad” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/New Kolorad.md — 13 non-empty lines.",
+   "placeholder": "The people of New Kolorad are…",
+   "id": "d-nation-new-kolorad"
+  },
+  {
+   "kind": "nation",
+   "title": "Ograd",
+   "region": "Xeti",
+   "question": "“Ograd” is a stub (14 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Ograd.md — 14 non-empty lines.",
+   "placeholder": "The people of Ograd are…",
+   "id": "d-nation-ograd"
+  },
+  {
+   "kind": "nation",
+   "title": "Sousu Megrel",
+   "region": "Xeti",
+   "question": "“Sousu Megrel” is a stub (11 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Sousu Megrel.md — 11 non-empty lines.",
+   "placeholder": "The people of Sousu Megrel are…",
+   "id": "d-nation-sousu-megrel"
+  },
+  {
+   "kind": "nation",
+   "title": "Uiohin",
+   "region": "Xeti",
+   "question": "“Uiohin” is a stub (13 lines). Give it one ruler, one custom, one conflict.",
+   "context": "Nation file: World/Nations/Xeti/Uiohin.md — 13 non-empty lines.",
+   "placeholder": "The people of Uiohin are…",
+   "id": "d-nation-uiohin"
+  },
+  {
+   "kind": "culture",
+   "title": "Archduchy of the Kennberg culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Archduchy of the Kennberg eat, celebrate, and bury their dead with?",
+   "context": "Archduchy of the Kennberg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Archduchy of the Kennberg, they…",
+   "id": "d-culture-archduchy-of-the-kennberg-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Baoth culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Baoth eat, celebrate, and bury their dead with?",
+   "context": "Baoth (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Baoth, they…",
+   "id": "d-culture-baoth-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Central Erisdar culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Central Erisdar eat, celebrate, and bury their dead with?",
+   "context": "Central Erisdar (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Central Erisdar, they…",
+   "id": "d-culture-central-erisdar-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Elvennrin culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Elvennrin eat, celebrate, and bury their dead with?",
+   "context": "Elvennrin (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Elvennrin, they…",
+   "id": "d-culture-elvennrin-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Roffran Church culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Roffran Church eat, celebrate, and bury their dead with?",
+   "context": "Roffran Church (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Roffran Church, they…",
+   "id": "d-culture-roffran-church-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Rroffran culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Rroffran eat, celebrate, and bury their dead with?",
+   "context": "Rroffran (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Rroffran, they…",
+   "id": "d-culture-rroffran-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Aaros culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Aaros eat, celebrate, and bury their dead with?",
+   "context": "Aaros (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Aaros, they…",
+   "id": "d-culture-aaros-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Abalek culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Abalek eat, celebrate, and bury their dead with?",
+   "context": "Abalek (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Abalek, they…",
+   "id": "d-culture-abalek-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Abelik Dwarnov culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Abelik Dwarnov eat, celebrate, and bury their dead with?",
+   "context": "Abelik Dwarnov (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Abelik Dwarnov, they…",
+   "id": "d-culture-abelik-dwarnov-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Acugir culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Acugir eat, celebrate, and bury their dead with?",
+   "context": "Acugir (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Acugir, they…",
+   "id": "d-culture-acugir-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Adrenic culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Adrenic eat, celebrate, and bury their dead with?",
+   "context": "Adrenic (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Adrenic, they…",
+   "id": "d-culture-adrenic-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Aerli culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Aerli eat, celebrate, and bury their dead with?",
+   "context": "Aerli (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Aerli, they…",
+   "id": "d-culture-aerli-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Aidon culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Aidon eat, celebrate, and bury their dead with?",
+   "context": "Aidon (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Aidon, they…",
+   "id": "d-culture-aidon-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Albjerg culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Albjerg eat, celebrate, and bury their dead with?",
+   "context": "Albjerg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Albjerg, they…",
+   "id": "d-culture-albjerg-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Armoop culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Armoop eat, celebrate, and bury their dead with?",
+   "context": "Armoop (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Armoop, they…",
+   "id": "d-culture-armoop-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Aspiph culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Aspiph eat, celebrate, and bury their dead with?",
+   "context": "Aspiph (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Aspiph, they…",
+   "id": "d-culture-aspiph-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Ativa culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Ativa eat, celebrate, and bury their dead with?",
+   "context": "Ativa (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Ativa, they…",
+   "id": "d-culture-ativa-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Auris culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Auris eat, celebrate, and bury their dead with?",
+   "context": "Auris (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Auris, they…",
+   "id": "d-culture-auris-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Azura culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Azura eat, celebrate, and bury their dead with?",
+   "context": "Azura (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Azura, they…",
+   "id": "d-culture-azura-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Biani culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Biani eat, celebrate, and bury their dead with?",
+   "context": "Biani (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Biani, they…",
+   "id": "d-culture-biani-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Biarzeg culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Biarzeg eat, celebrate, and bury their dead with?",
+   "context": "Biarzeg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Biarzeg, they…",
+   "id": "d-culture-biarzeg-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Bichai culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Bichai eat, celebrate, and bury their dead with?",
+   "context": "Bichai (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Bichai, they…",
+   "id": "d-culture-bichai-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Brandenburg culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Brandenburg eat, celebrate, and bury their dead with?",
+   "context": "Brandenburg (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Brandenburg, they…",
+   "id": "d-culture-brandenburg-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Briwten culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Briwten eat, celebrate, and bury their dead with?",
+   "context": "Briwten (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Briwten, they…",
+   "id": "d-culture-briwten-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Bugena culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Bugena eat, celebrate, and bury their dead with?",
+   "context": "Bugena (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Bugena, they…",
+   "id": "d-culture-bugena-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Cerconat culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Cerconat eat, celebrate, and bury their dead with?",
+   "context": "Cerconat (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Cerconat, they…",
+   "id": "d-culture-cerconat-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Chiccea culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Chiccea eat, celebrate, and bury their dead with?",
+   "context": "Chiccea (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Chiccea, they…",
+   "id": "d-culture-chiccea-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Cinmuph culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Cinmuph eat, celebrate, and bury their dead with?",
+   "context": "Cinmuph (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Cinmuph, they…",
+   "id": "d-culture-cinmuph-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Cinnade culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Cinnade eat, celebrate, and bury their dead with?",
+   "context": "Cinnade (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Cinnade, they…",
+   "id": "d-culture-cinnade-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Craidel culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Craidel eat, celebrate, and bury their dead with?",
+   "context": "Craidel (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Craidel, they…",
+   "id": "d-culture-craidel-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Cristulat culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Cristulat eat, celebrate, and bury their dead with?",
+   "context": "Cristulat (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Cristulat, they…",
+   "id": "d-culture-cristulat-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Cupga culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Cupga eat, celebrate, and bury their dead with?",
+   "context": "Cupga (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Cupga, they…",
+   "id": "d-culture-cupga-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Danya culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Danya eat, celebrate, and bury their dead with?",
+   "context": "Danya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Danya, they…",
+   "id": "d-culture-danya-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Dawnden culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Dawnden eat, celebrate, and bury their dead with?",
+   "context": "Dawnden (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Dawnden, they…",
+   "id": "d-culture-dawnden-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Dobnya culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Dobnya eat, celebrate, and bury their dead with?",
+   "context": "Dobnya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Dobnya, they…",
+   "id": "d-culture-dobnya-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Doetinch culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Doetinch eat, celebrate, and bury their dead with?",
+   "context": "Doetinch (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Doetinch, they…",
+   "id": "d-culture-doetinch-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Dosta culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Dosta eat, celebrate, and bury their dead with?",
+   "context": "Dosta (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Dosta, they…",
+   "id": "d-culture-dosta-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Dubadar culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Dubadar eat, celebrate, and bury their dead with?",
+   "context": "Dubadar (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Dubadar, they…",
+   "id": "d-culture-dubadar-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Durinya culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Durinya eat, celebrate, and bury their dead with?",
+   "context": "Durinya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Durinya, they…",
+   "id": "d-culture-durinya-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Duvdiza culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Duvdiza eat, celebrate, and bury their dead with?",
+   "context": "Duvdiza (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Duvdiza, they…",
+   "id": "d-culture-duvdiza-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Dwarvstadt culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Dwarvstadt eat, celebrate, and bury their dead with?",
+   "context": "Dwarvstadt (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Dwarvstadt, they…",
+   "id": "d-culture-dwarvstadt-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Edekol culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Edekol eat, celebrate, and bury their dead with?",
+   "context": "Edekol (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Edekol, they…",
+   "id": "d-culture-edekol-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Editad culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Editad eat, celebrate, and bury their dead with?",
+   "context": "Editad (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Editad, they…",
+   "id": "d-culture-editad-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Efe culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Efe eat, celebrate, and bury their dead with?",
+   "context": "Efe (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Efe, they…",
+   "id": "d-culture-efe-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Ei Dwarnov culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Ei Dwarnov eat, celebrate, and bury their dead with?",
+   "context": "Ei Dwarnov (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Ei Dwarnov, they…",
+   "id": "d-culture-ei-dwarnov-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Elekven culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Elekven eat, celebrate, and bury their dead with?",
+   "context": "Elekven (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Elekven, they…",
+   "id": "d-culture-elekven-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Elemet culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Elemet eat, celebrate, and bury their dead with?",
+   "context": "Elemet (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Elemet, they…",
+   "id": "d-culture-elemet-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Ellit culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Ellit eat, celebrate, and bury their dead with?",
+   "context": "Ellit (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Ellit, they…",
+   "id": "d-culture-ellit-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Engelsag culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Engelsag eat, celebrate, and bury their dead with?",
+   "context": "Engelsag (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Engelsag, they…",
+   "id": "d-culture-engelsag-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Enotis culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Enotis eat, celebrate, and bury their dead with?",
+   "context": "Enotis (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Enotis, they…",
+   "id": "d-culture-enotis-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Ethis culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Ethis eat, celebrate, and bury their dead with?",
+   "context": "Ethis (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Ethis, they…",
+   "id": "d-culture-ethis-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Exinor culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Exinor eat, celebrate, and bury their dead with?",
+   "context": "Exinor (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Exinor, they…",
+   "id": "d-culture-exinor-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Frungenya culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Frungenya eat, celebrate, and bury their dead with?",
+   "context": "Frungenya (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Frungenya, they…",
+   "id": "d-culture-frungenya-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Galtide culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Galtide eat, celebrate, and bury their dead with?",
+   "context": "Galtide (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Galtide, they…",
+   "id": "d-culture-galtide-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Haebeas culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Haebeas eat, celebrate, and bury their dead with?",
+   "context": "Haebeas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Haebeas, they…",
+   "id": "d-culture-haebeas-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Hajlas culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Hajlas eat, celebrate, and bury their dead with?",
+   "context": "Hajlas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Hajlas, they…",
+   "id": "d-culture-hajlas-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Haliv culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Haliv eat, celebrate, and bury their dead with?",
+   "context": "Haliv (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Haliv, they…",
+   "id": "d-culture-haliv-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Hasren culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Hasren eat, celebrate, and bury their dead with?",
+   "context": "Hasren (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Hasren, they…",
+   "id": "d-culture-hasren-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Hellideas culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Hellideas eat, celebrate, and bury their dead with?",
+   "context": "Hellideas (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Hellideas, they…",
+   "id": "d-culture-hellideas-culture"
+  },
+  {
+   "kind": "culture",
+   "title": "Hirichiv culture",
+   "region": "Central Erisdar",
+   "question": "What do the people of Hirichiv eat, celebrate, and bury their dead with?",
+   "context": "Hirichiv (Central Erisdar) has no Culture section yet. Three lines is a kingdom.",
+   "placeholder": "In Hirichiv, they…",
+   "id": "d-culture-hirichiv-culture"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link Star Paladins of Mann",
+   "region": "Vault-wide",
+   "question": "“Star Paladins of Mann” has no inbound links — nothing points to it. Which nation, faith, or event should claim it, and why?",
+   "context": "Orphan file flagged in the Sep 5 vault scan. Ruling wires it into the world.",
+   "placeholder": "Star Paladins of Mann belongs to…",
+   "id": "d-orphan-link-star-paladins-of-mann"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link Silver Talon Guard",
+   "region": "Vault-wide",
+   "question": "“Silver Talon Guard” has no inbound links — nothing points to it. Which nation, faith, or event should claim it, and why?",
+   "context": "Orphan file flagged in the Sep 5 vault scan. Ruling wires it into the world.",
+   "placeholder": "Silver Talon Guard belongs to…",
+   "id": "d-orphan-link-silver-talon-guard"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link Armageddon",
+   "region": "Vault-wide",
+   "question": "“Armageddon” has no inbound links — nothing points to it. Which nation, faith, or event should claim it, and why?",
+   "context": "Orphan file flagged in the Sep 5 vault scan. Ruling wires it into the world.",
+   "placeholder": "Armageddon belongs to…",
+   "id": "d-orphan-link-armageddon"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link Beaut",
+   "region": "Vault-wide",
+   "question": "“Beaut” has no inbound links — nothing points to it. Which nation, faith, or event should claim it, and why?",
+   "context": "Orphan file flagged in the Sep 5 vault scan. Ruling wires it into the world.",
+   "placeholder": "Beaut belongs to…",
+   "id": "d-orphan-link-beaut"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link Ximpa",
+   "region": "Vault-wide",
+   "question": "“Ximpa” has no inbound links — nothing points to it. Which nation, faith, or event should claim it, and why?",
+   "context": "Orphan file flagged in the Sep 5 vault scan. Ruling wires it into the world.",
+   "placeholder": "Ximpa belongs to…",
+   "id": "d-orphan-link-ximpa"
+  },
+  {
+   "kind": "orphan",
+   "title": "Link the Arms pages",
+   "region": "Vault-wide",
+   "question": "11 weapon pages under World/Military/Arms have zero inbound links. Which armies, orders, or wars forged them?",
+   "context": "Orphan cluster flagged in the Sep 5 vault scan. One ruling wires all eleven.",
+   "placeholder": "These arms were carried by…",
+   "id": "d-orphan-link-the-arms-pages"
+  },
+  {
+   "kind": "map",
+   "title": "Name Dunmorrow",
+   "region": "Cartography",
+   "question": "Violin-shaped tan island, south near the pale shelf. Proposed: Dunmorrow. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-dunmorrow"
+  },
+  {
+   "kind": "map",
+   "title": "Name Eburne",
+   "region": "Cartography",
+   "question": "Beige amoeba island beside it. Proposed: Eburne. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-eburne"
+  },
+  {
+   "kind": "map",
+   "title": "Name Emberfold",
+   "region": "Cartography",
+   "question": "Orange north coast of Kobre with no nation. Proposed: Emberfold — or fold into Coalsteel as “the Burned Shore”. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-emberfold"
+  },
+  {
+   "kind": "map",
+   "title": "Name Frosthooks",
+   "region": "Cartography",
+   "question": "Great hooked glaciated archipelago, uninhabited. Proposed: Frosthooks. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-frosthooks"
+  },
+  {
+   "kind": "map",
+   "title": "Name Whitespire Island",
+   "region": "Cartography",
+   "question": "Glacier island with a white ice-spire. Proposed: Whitespire Island. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-whitespire-island"
+  },
+  {
+   "kind": "map",
+   "title": "Name Winter Coast",
+   "region": "Cartography",
+   "question": "Cut label near Romanium Island (“…TER COAST”). Proposed: Winter Coast. Confirm the name — or give a better one and one line of why.",
+   "context": "597 AGD map loose end. The border becomes canon the moment it is ruled.",
+   "placeholder": "It shall be called…",
+   "id": "d-map-name-winter-coast"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 0",
+   "region": "Timeline",
+   "question": "The Lost Era — 15,000 years nearly blank. Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 0, …",
+   "id": "d-age-open-age-0"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 1",
+   "region": "Timeline",
+   "question": "First Tribes — who walked first? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 1, …",
+   "id": "d-age-open-age-1"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 2",
+   "region": "Timeline",
+   "question": "First Empires — who crowned first? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 2, …",
+   "id": "d-age-open-age-2"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 3",
+   "region": "Timeline",
+   "question": "Dragon Tyranny — what did Baoth demand? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 3, …",
+   "id": "d-age-open-age-3"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 10",
+   "region": "Timeline",
+   "question": "Late fracture — what cracked? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 10, …",
+   "id": "d-age-open-age-10"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 11",
+   "region": "Timeline",
+   "question": "The present (597 AGD) — what defines right now? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 11, …",
+   "id": "d-age-open-age-11"
+  },
+  {
+   "kind": "age",
+   "title": "Open Age 12",
+   "region": "Timeline",
+   "question": "The Strife, unwritten future — what is coming? Give this age one event, one name history remembers.",
+   "context": "Thin age flagged on the backlog board. One ruling opens it.",
+   "placeholder": "In Age 12, …",
+   "id": "d-age-open-age-12"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Central Erisdar",
+   "region": "Central Erisdar",
+   "question": "The archive holds 248 nation files for Central Erisdar. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-central-erisdar"
+  },
+  {
+   "kind": "count",
+   "title": "Survey South Erisdar",
+   "region": "South Erisdar",
+   "question": "The archive holds 42 nation files for South Erisdar. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-south-erisdar"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Dissenbarg",
+   "region": "Dissenbarg",
+   "question": "The archive holds 23 nation files for Dissenbarg. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-dissenbarg"
+  },
+  {
+   "kind": "count",
+   "title": "Survey West Erisdar",
+   "region": "West Erisdar",
+   "question": "The archive holds 20 nation files for West Erisdar. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-west-erisdar"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Demon Continent",
+   "region": "Demon Continent",
+   "question": "The archive holds 17 nation files for Demon Continent. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-demon-continent"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Lumina",
+   "region": "Lumina",
+   "question": "The archive holds 15 nation files for Lumina. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-lumina"
+  },
+  {
+   "kind": "count",
+   "title": "Survey North Erisdar",
+   "region": "North Erisdar",
+   "question": "The archive holds 12 nation files for North Erisdar. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-north-erisdar"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Xeti",
+   "region": "Xeti",
+   "question": "The archive holds 12 nation files for Xeti. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-xeti"
+  },
+  {
+   "kind": "count",
+   "title": "Survey East Erisdar",
+   "region": "East Erisdar",
+   "question": "The archive holds 11 nation files for East Erisdar. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-east-erisdar"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Marti",
+   "region": "Marti",
+   "question": "The archive holds 11 nation files for Marti. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-marti"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Luminous Sea Islands",
+   "region": "Luminous Sea Islands",
+   "question": "The archive holds 10 nation files for Luminous Sea Islands. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-luminous-sea-islands"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Lung",
+   "region": "Lung",
+   "question": "The archive holds 10 nation files for Lung. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-lung"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Merratodoni",
+   "region": "Merratodoni",
+   "question": "The archive holds 8 nation files for Merratodoni. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-merratodoni"
+  },
+  {
+   "kind": "count",
+   "title": "Survey Kutten",
+   "region": "Kutten",
+   "question": "The archive holds 7 nation files for Kutten. How many are true sovereigns — and which one matters most?",
+   "context": "Live count from the vault, computed at deck build. The ruling is yours.",
+   "placeholder": "Of these, …",
+   "id": "d-count-survey-kutten"
+  }
+ ]
+}

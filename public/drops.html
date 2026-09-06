@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Lore Drops — World of Ge'or</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/article-layouts.css" />
+  <link rel="stylesheet" href="/archive-compass.css" />
+  <style>
+    #dropStack { position: relative; height: 640px; max-height: 78vh; min-height: 520px; touch-action: pan-y; }
+    .drop-card {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(24,20,14,.98), rgba(12,10,8,.98));
+      border: 1px solid rgba(212,161,90,.25); border-radius: 1.25rem;
+      overflow-y: auto; overscroll-behavior: contain;
+      box-shadow: 0 24px 60px rgba(0,0,0,.55);
+      transition: transform .18s ease, opacity .18s ease, box-shadow .3s ease, border-color .3s ease;
+      will-change: transform;
+    }
+    .drop-pos-2 { transform: translateY(-18px) scale(.94); opacity: .45; pointer-events: none; }
+    .drop-pos-1 { transform: translateY(-9px) scale(.97); opacity: .75; pointer-events: none; }
+    .drop-pos-0 { cursor: grab; }
+    .drop-pos-0:active { cursor: grabbing; }
+    .drop-banner { height: 180px; overflow: hidden; border-bottom: 1px solid rgba(212,161,90,.15); }
+    .drop-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .drop-filed { border-color: rgba(52,211,153,.8) !important; box-shadow: 0 0 60px rgba(52,211,153,.35) !important; }
+    .drop-rejected { border-color: rgba(248,113,113,.8) !important; box-shadow: 0 0 60px rgba(248,113,113,.35) !important; }
+    @keyframes dropShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    .drop-shake { animation: dropShake .35s ease; border-color: rgba(248,113,113,.8) !important; }
+  </style>
+</head>
+<body class="font-sans">
+  <div class="tl-shell">
+    <header class="border-b border-gold/10 bg-ink/80 backdrop-blur">
+      <div class="max-w-[1120px] mx-auto px-5 h-16 flex items-center justify-between gap-4">
+        <a href="/" class="font-display text-xs tracking-[.2em]">WORLD OF GE'OR</a>
+        <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
+      </div>
+    </header>
+    <main class="max-w-[720px] mx-auto px-5 py-12 md:py-16">
+      <div class="text-center max-w-[600px] mx-auto">
+        <div class="rounded-2xl overflow-hidden border border-gold/15">
+          <img src="/drops-art/drops-hero.webp" onerror="this.onerror=null;this.src='/drops-art/drops-hero.jpg'" alt="" class="w-full h-44 object-cover" />
+        </div>
+        <p class="text-gold text-[10px] tracking-[.3em] font-semibold mt-6">THE KEEPER'S DECK • PRIVATE</p>
+        <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">LORE DROPS</h1>
+        <p class="font-serif italic text-xl text-cream/60 mt-3">Every card is a real gap in the archive. Rule it, and it is filed.</p>
+        <p id="dropStats" role="status" class="text-xs text-cream/40 mt-4">Shuffling…</p>
+      </div>
+      <div id="dropStack" class="mt-8" aria-live="polite"></div>
+      <p id="dropStatus" role="status" class="text-xs mt-3 text-center h-4 text-cream/40"></p>
+      <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+        <button id="btnFile" class="bg-gold text-ink rounded-full px-8 py-3 text-xs tracking-widest font-semibold">FILE IT ↓</button>
+        <button id="btnSkip" class="rounded-full border border-gold/25 px-8 py-3 text-xs tracking-widest text-cream/70">SKIP ↓</button>
+      </div>
+      <p class="text-[11px] text-cream/30 text-center mt-4">Drag the card down, or Ctrl+Enter to file. Filed rulings commit to the archive's drop ledger.</p>
+      <footer class="mt-12 text-center">
+        <p class="text-[10px] tracking-[.25em] text-cream/30">PRIVATE ARCHIVE · MIKHAIL &amp; ICHI</p>
+        <a href="/wiki/" class="inline-flex mt-4 border border-gold/25 text-gold rounded-full px-5 py-2 text-xs tracking-widest">OPEN THE ARCHIVE</a>
+      </footer>
+    </main>
+  </div>
+  <script type="module" src="/drops.js"></script>
+  <script type="module" src="/archive-compass.js"></script>
+</body>
+</html>

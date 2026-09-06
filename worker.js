@@ -91,6 +91,8 @@ const PRIVATE_ASSET_PATHS = new Set([
   '/gallery.js',
   '/gallery-curation.js',
   '/oracle.js',
+  '/drops.js',
+  '/drops-queue.json',
   '/chronicles.js',
   '/primer.js',
   '/desk.js',
@@ -159,6 +161,8 @@ const ROUTE_ALIASES = new Map([
   ['/search/', '/search.html'],
   ['/dashboard', '/dashboard.html'],
   ['/dashboard/', '/dashboard.html'],
+  ['/drops', '/drops.html'],
+  ['/drops/', '/drops.html'],
   ['/admin', '/admin.html'],
   ['/admin/', '/admin.html'],
   ['/app', '/app/index.html'],
@@ -413,7 +417,7 @@ function isPrivatePath(pathname) {
   try { decoded = decodeURIComponent(pathname); } catch {}
   return decoded === '/wiki' || decoded.startsWith('/wiki/') ||
     decoded === '/app' || decoded.startsWith('/app/') ||
-    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/calendar', '/gazetteer', '/trees', '/arcs', '/quests', '/statblocks', '/notebook', '/manuscripts', '/boards', '/webs', '/graph', '/entry', '/recaps', '/review', '/gallery', '/oracle', '/chronicles', '/primer', '/desk', '/audio', '/dashboard', '/admin']
+    ['/atlas', '/map-editor', '/species', '/search', '/timeline', '/calendar', '/gazetteer', '/trees', '/arcs', '/quests', '/statblocks', '/notebook', '/manuscripts', '/boards', '/webs', '/graph', '/entry', '/recaps', '/review', '/gallery', '/oracle', '/chronicles', '/primer', '/desk', '/drops', '/audio', '/dashboard', '/admin']
       .some(root => decoded === root || decoded === `${root}/` || decoded === `${root}.html`) ||
     PRIVATE_ASSET_PATHS.has(decoded);
 }
