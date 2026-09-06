@@ -1326,6 +1326,7 @@ export default {
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS plots (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), parent_id TEXT REFERENCES plots(id), title TEXT NOT NULL, summary TEXT NOT NULL DEFAULT '', is_master INTEGER NOT NULL DEFAULT 0, sort INTEGER NOT NULL DEFAULT 0)`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS threads (id TEXT PRIMARY KEY, arc_id TEXT NOT NULL REFERENCES arcs(id), title TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'seed', created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS boards (id TEXT PRIMARY KEY, owner_email TEXT NOT NULL, title TEXT NOT NULL, doc_json TEXT NOT NULL DEFAULT '{}', updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
+          env.DB.prepare(`CREATE TABLE IF NOT EXISTS board_shares (board_id TEXT NOT NULL, shared_with_email TEXT NOT NULL, granted_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (board_id, shared_with_email))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS member_library (user_email TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, kind TEXT NOT NULL DEFAULT 'folio', progress INTEGER NOT NULL DEFAULT 0, saved INTEGER NOT NULL DEFAULT 0, last_visited_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), PRIMARY KEY (user_email, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_items (id TEXT PRIMARY KEY, kind TEXT NOT NULL, path TEXT NOT NULL, title TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', content_json TEXT NOT NULL, created_by TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')), UNIQUE(kind, path))`),
           env.DB.prepare(`CREATE TABLE IF NOT EXISTS workflow_history (id INTEGER PRIMARY KEY AUTOINCREMENT, workflow_id TEXT NOT NULL, status TEXT NOT NULL, summary TEXT NOT NULL, actor_email TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')))`),
@@ -1334,6 +1335,7 @@ export default {
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notes_member_page ON notes(member_email, page)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_notebook_notes_member_updated ON notebook_notes(member_email, updated_at DESC)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_plots_arc_parent ON plots(arc_id, parent_id)`),
+          env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_board_shares_with ON board_shares(shared_with_email)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_threads_arc_state ON threads(arc_id, state)`),
            env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_boards_owner ON boards(owner_email)`),
           env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at DESC)`),
@@ -2127,6 +2129,61 @@ export default {
         }
       }
 
+      // --- Wave H14: board sharing (read-only grants by email) --------------
+      // Owners share with exact member emails. Grantees can GET the shared
+      // doc; they can never PUT/POST/DELETE the board or its shares. Every
+      // denial on a board the caller does not own (or that does not exist)
+      // is the same generic 404 as E3 — no existence or membership oracle.
+      if (url.pathname === '/api/boards/shared' && request.method === 'GET') {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        try {
+          await ensureTables();
+          const { results } = await env.DB.prepare(`SELECT b.id, b.title, b.updated_at, s.granted_by FROM boards b
+            JOIN board_shares s ON s.board_id = b.id
+            WHERE s.shared_with_email = ? ORDER BY b.updated_at DESC LIMIT 100`).bind(user.email).all();
+          return json({ boards: (results || []).map(row => ({
+            id: row.id, title: row.title ?? '', updated_at: row.updated_at, granted_by: row.granted_by ?? '',
+          })) });
+        } catch {
+          return json({ error: 'Whiteboards are temporarily unavailable' }, 503);
+        }
+      }
+
+      const boardShareMatch = url.pathname.match(/^\/api\/boards\/([^/]+)\/shares(?:\/([^/]+))?$/);
+      if (boardShareMatch && ((request.method === 'POST' && !boardShareMatch[2]) || (request.method === 'DELETE' && boardShareMatch[2]))) {
+        const user = await requireUser(request, env);
+        if (!user) return json({ error: 'Authentication required' }, 401);
+        const boardId = cleanBoardId(boardShareMatch[1]);
+        if (!boardId) return json({ error: 'Whiteboard not found' }, 404);
+        const throttle = await consumeRateLimit(request, env, 'reveal');
+        if (!throttle.allowed) return rateLimited(throttle.retryAfter);
+        try {
+          await ensureTables();
+          const own = await env.DB.prepare('SELECT id FROM boards WHERE id = ? AND owner_email = ?')
+            .bind(boardId, user.email).first();
+          if (!own) return json({ error: 'Whiteboard not found' }, 404);
+          if (request.method === 'POST') {
+            let body;
+            try { body = await readJson(request, 4096); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }
+            if (!isJsonObject(body)) return json({ error: 'JSON object required' }, 400);
+            const address = normalizeEmail(body.email);
+            if (!isValidEmail(address)) return json({ error: 'Valid member email required' }, 400);
+            if (address === user.email) return json({ error: 'A board cannot be shared with its owner' }, 400);
+            await env.DB.prepare(`INSERT OR IGNORE INTO board_shares (board_id, shared_with_email, granted_by)
+              VALUES (?, ?, ?)`).bind(boardId, address, user.email).run();
+            return json({ share: { board_id: boardId, shared_with_email: address, granted_by: user.email } }, 201);
+          }
+          const address = normalizeEmail(decodeURIComponent(boardShareMatch[2]));
+          if (!isValidEmail(address)) return json({ error: 'Whiteboard not found' }, 404);
+          await env.DB.prepare('DELETE FROM board_shares WHERE board_id = ? AND shared_with_email = ?')
+            .bind(boardId, address).run();
+          return json({ ok: true, board_id: boardId });
+        } catch {
+          return json({ error: 'Whiteboard shares are temporarily unavailable' }, 503);
+        }
+      }
+
       // GET / PUT / DELETE /api/boards/:id — own boards only (id +
       // owner_email bind, zero changes means missing or another member's
       // board: generic 404).
@@ -2146,13 +2203,18 @@ export default {
             const deleted = await env.DB.prepare('DELETE FROM boards WHERE id = ? AND owner_email = ?')
               .bind(boardId, user.email).run();
             if (!deleted.meta.changes) return json({ error: 'Whiteboard not found' }, 404);
+            await env.DB.prepare('DELETE FROM board_shares WHERE board_id = ?').bind(boardId).run();
             return json({ ok: true, id: boardId });
           }
           if (request.method === 'GET') {
             const row = await env.DB.prepare(`SELECT id, title, doc_json, updated_at FROM boards
               WHERE id = ? AND owner_email = ?`).bind(boardId, user.email).first();
-            if (!row) return json({ error: 'Whiteboard not found' }, 404);
-            return json({ board: boardJson(row) });
+            if (row) return json({ board: boardJson(row) });
+            const grant = await env.DB.prepare(`SELECT b.id, b.title, b.doc_json, b.updated_at FROM boards b
+              JOIN board_shares s ON s.board_id = b.id
+              WHERE b.id = ? AND s.shared_with_email = ?`).bind(boardId, user.email).first();
+            if (!grant) return json({ error: 'Whiteboard not found' }, 404);
+            return json({ board: boardJson(grant), shared: true });
           }
           let body;
           try { body = await readJson(request, MAX_SAVE_JSON_BYTES); } catch (e) { return json({ error: e.message }, e instanceof RangeError ? 413 : 400); }

@@ -48,6 +48,43 @@ export function renderBoardList(boards, selectedId) {
   return list.map(board => renderBoardItem(board, board?.id === selectedId)).join('')
 }
 
+// --- Sharing (H14) — pure helpers, no fetch, no endpoints -------------------
+// Shared boards list the title and updated date only. The owner's email
+// (granted_by) is never rendered — the row is labeled `Shared board` only.
+export function formatSharedDate(value) {
+  const time = Date.parse(value ?? '')
+  if (!Number.isFinite(time)) return ''
+  return new Date(time).toISOString().slice(0, 10)
+}
+
+export function renderSharedBoardItem(board, selected) {
+  const title = typeof board?.title === 'string' && board.title.trim() ? board.title : 'Untitled board'
+  const updated = formatSharedDate(board?.updated_at)
+  return `<button type="button" data-board-id="${escapeHtml(String(board?.id ?? ''))}" data-shared="true" aria-pressed="${selected ? 'true' : 'false'}"`
+    + ` class="w-full text-left p-4 ${selected ? 'bg-gold/10' : ''}">`
+    + `<span class="block text-sm font-semibold text-cream/90 truncate">${escapeHtml(title)}</span>`
+    + `<span class="block text-[10px] tracking-widest text-cream/40 mt-2">SHARED BOARD${updated ? ` · ${escapeHtml(updated)}` : ''}</span>`
+    + `</button>`
+}
+
+export function renderSharedBoardList(boards, selectedId) {
+  const list = [...(boards ?? [])]
+  if (!list.length) return '<p class="p-5 text-sm text-cream/40">No boards shared with you yet.</p>'
+  return list.map(board => renderSharedBoardItem(board, board?.id === selectedId)).join('')
+}
+
+// Shared boards open read-only: true only for the owned view.
+export function canEditBoard(view) {
+  return view === 'owned'
+}
+
+// Plain-text share dialog result; the browser assigns it via textContent.
+export function shareResultText(kind, email) {
+  const address = typeof email === 'string' && email.trim() ? email.trim() : 'that address'
+  if (kind === 'revoked') return `Removed ${address}`
+  return `Shared with ${address}`
+}
+
 // One card on the canvas: escaped text, positioned at world coords.
 export function renderCard(card, selected) {
   const title = typeof card?.title === 'string' && card.title.trim() ? card.title : 'Untitled card'
@@ -121,10 +158,20 @@ async function initBoards() {
   const cardWiki = document.getElementById('cardWiki')
   const arrowList = document.getElementById('arrowList')
   const linkButton = document.getElementById('linkMode')
+  const sharedList = document.getElementById('sharedBoardList')
+  const sharedBanner = document.getElementById('sharedBanner')
+  const shareButton = document.getElementById('boardShare')
+  const shareDialog = document.getElementById('shareDialog')
+  const shareEmail = document.getElementById('shareEmail')
+  const shareRevokeEmail = document.getElementById('shareRevokeEmail')
+  const shareMessage = document.getElementById('shareMessage')
   if (!list || !viewport || !world || !cardLayer || !arrowLayer) return
 
   let boards = []
+  let sharedBoards = []
   let boardId = null
+  let sharedId = null
+  let viewingShared = false
   let cards = []
   let arrows = []
   let selectedCardId = null
@@ -165,11 +212,16 @@ async function initBoards() {
   }
 
   const paint = () => {
-    list.innerHTML = renderBoardList(boards, boardId)
+    list.innerHTML = renderBoardList(boards, viewingShared ? null : boardId)
     list.setAttribute('aria-busy', 'false')
+    if (sharedList) {
+      sharedList.innerHTML = renderSharedBoardList(sharedBoards, viewingShared ? sharedId : null)
+      sharedList.setAttribute('aria-busy', 'false')
+    }
     cardLayer.innerHTML = cards.map(card => renderCard(card, card?.id === selectedCardId)).join('')
     arrowList.innerHTML = renderArrowList(arrows, byId())
     paintArrows()
+    applyReadOnly(viewingShared)
     const card = selected()
     if (cardTitle) cardTitle.value = card?.title ?? ''
     if (cardBody) cardBody.value = card?.body ?? ''
@@ -177,10 +229,25 @@ async function initBoards() {
     paintCount()
   }
 
+  // Shared view is strictly read-only: hide edit affordances, disable the
+  // editors, and show the banner. Owned view restores everything.
+  const applyReadOnly = readOnly => {
+    for (const node of [document.getElementById('boardSave'), document.getElementById('boardDelete'), document.getElementById('addCard'), linkButton]) {
+      if (node) node.hidden = readOnly
+    }
+    if (shareButton) shareButton.hidden = readOnly || !boardId
+    if (titleInput) titleInput.disabled = readOnly
+    for (const node of [cardTitle, cardBody, cardWiki, document.getElementById('cardDelete')]) {
+      if (node) node.disabled = readOnly
+    }
+    if (sharedBanner) sharedBanner.hidden = !readOnly
+  }
+
   const currentTitle = () => boards.find(board => board?.id === boardId)?.title ?? ''
   const syncTitleInput = () => { if (titleInput && document.activeElement !== titleInput) titleInput.value = currentTitle() }
 
   const doSave = async () => {
+    if (viewingShared) return
     if (!boardId || !dirty) return
     dirty = false
     try {
@@ -205,6 +272,7 @@ async function initBoards() {
   }
 
   const scheduleSave = () => {
+    if (viewingShared) return
     dirty = true
     setStatus('Unsaved changes…')
     clearTimeout(saveTimer)
@@ -213,6 +281,8 @@ async function initBoards() {
 
   const loadBoard = async id => {
     boardId = id
+    sharedId = null
+    viewingShared = false
     selectedCardId = null
     linkFrom = null
     try {
@@ -226,6 +296,44 @@ async function initBoards() {
       setStatus(cards.length ? '' : 'An empty canvas — add the first card.')
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'The whiteboard could not be opened')
+    }
+  }
+
+  const loadSharedBoard = async id => {
+    sharedId = id
+    viewingShared = true
+    selectedCardId = null
+    linkFrom = null
+    linking = false
+    if (linkButton) {
+      linkButton.setAttribute('aria-pressed', 'false')
+      linkButton.textContent = 'LINK: OFF'
+    }
+    try {
+      setStatus('Opening the shared board…')
+      const data = await requestBoards(`/api/boards/${encodeURIComponent(id)}`)
+      cards = Array.isArray(data?.board?.cards) ? data.board.cards : []
+      arrows = Array.isArray(data?.board?.arrows) ? data.board.arrows : []
+      dirty = false
+      syncTitleInput()
+      paint()
+      setStatus(cards.length ? 'Read-only shared board.' : 'Read-only shared board — empty canvas.')
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'The whiteboard could not be opened')
+    }
+  }
+
+  const loadSharedList = async () => {
+    if (!sharedList) return
+    try {
+      const data = await requestBoards('/api/boards/shared')
+      sharedBoards = Array.isArray(data?.boards) ? data.boards : []
+      if (sharedId && !sharedBoards.some(board => board?.id === sharedId)) sharedId = null
+      sharedList.innerHTML = renderSharedBoardList(sharedBoards, viewingShared ? sharedId : null)
+      sharedList.setAttribute('aria-busy', 'false')
+    } catch {
+      sharedList.innerHTML = '<p class="p-5 text-sm text-cream/40">Shared boards are unavailable right now.</p>'
+      sharedList.setAttribute('aria-busy', 'false')
     }
   }
 
@@ -246,6 +354,7 @@ async function initBoards() {
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'The whiteboards could not be opened')
     }
+    await loadSharedList()
   }
 
   const toWorld = event => {
@@ -289,6 +398,7 @@ async function initBoards() {
   let drag = null
   cardLayer.addEventListener('pointerdown', event => {
     if (event.target.closest('a')) return
+    if (viewingShared) return
     const node = event.target.closest('[data-card-id]')
     if (!node) return
     const id = node.dataset.cardId
@@ -338,8 +448,54 @@ async function initBoards() {
   list.addEventListener('click', event => {
     const button = event.target.closest('[data-board-id]')
     if (!button) return
-    if (dirty) { void doSave() }
+    if (dirty && !viewingShared) { void doSave() }
     void loadBoard(button.dataset.boardId)
+  })
+
+  sharedList?.addEventListener('click', event => {
+    const button = event.target.closest('[data-board-id]')
+    if (!button) return
+    if (dirty && !viewingShared) { void doSave() }
+    void loadSharedBoard(button.dataset.boardId)
+  })
+
+  const setShareMessage = message => { if (shareMessage) shareMessage.textContent = message }
+  shareButton?.addEventListener('click', () => {
+    if (viewingShared || !boardId) return
+    setShareMessage('')
+    if (shareDialog) shareDialog.hidden = false
+    shareEmail?.focus()
+  })
+  document.getElementById('shareClose')?.addEventListener('click', () => {
+    if (shareDialog) shareDialog.hidden = true
+  })
+  document.getElementById('shareAdd')?.addEventListener('click', async () => {
+    if (viewingShared || !boardId) return
+    const email = (shareEmail?.value ?? '').trim()
+    if (!email) { setShareMessage('Enter an email address to share with.'); return }
+    try {
+      setShareMessage('Sharing…')
+      await requestBoards(`/api/boards/${encodeURIComponent(boardId)}/shares`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      setShareMessage(shareResultText('shared', email))
+    } catch (error) {
+      setShareMessage(error instanceof Error ? error.message : 'The board could not be shared')
+    }
+  })
+  document.getElementById('shareRevoke')?.addEventListener('click', async () => {
+    if (viewingShared || !boardId) return
+    const email = (shareRevokeEmail?.value ?? '').trim()
+    if (!email) { setShareMessage('Enter an email address to revoke.'); return }
+    try {
+      setShareMessage('Revoking…')
+      await requestBoards(`/api/boards/${encodeURIComponent(boardId)}/shares/${encodeURIComponent(email)}`, { method: 'DELETE' })
+      setShareMessage(shareResultText('revoked', email))
+    } catch (error) {
+      setShareMessage(error instanceof Error ? error.message : 'Access could not be revoked')
+    }
   })
 
   document.getElementById('boardNew')?.addEventListener('click', async () => {
@@ -360,6 +516,7 @@ async function initBoards() {
   })
 
   document.getElementById('addCard')?.addEventListener('click', () => {
+    if (viewingShared) return
     if (!boardId) { setStatus('Open a board first.'); return }
     const rect = viewport.getBoundingClientRect()
     const center = {
@@ -375,6 +532,7 @@ async function initBoards() {
   })
 
   linkButton?.addEventListener('click', () => {
+    if (viewingShared) return
     linking = !linking
     linkFrom = null
     linkButton.setAttribute('aria-pressed', linking ? 'true' : 'false')
@@ -385,6 +543,7 @@ async function initBoards() {
   document.getElementById('boardSave')?.addEventListener('click', () => { void doSave() })
 
   document.getElementById('boardDelete')?.addEventListener('click', async () => {
+    if (viewingShared) return
     if (!boardId) { setStatus('Nothing selected to delete.'); return }
     if (!confirm('Delete this whiteboard and all its cards?')) return
     try {
@@ -404,6 +563,7 @@ async function initBoards() {
   })
 
   titleInput?.addEventListener('change', () => {
+    if (viewingShared) return
     const board = boards.find(entry => entry?.id === boardId)
     if (!board) return
     const title = titleInput.value.trim().slice(0, 200)
@@ -414,6 +574,7 @@ async function initBoards() {
   })
 
   const editorChanged = () => {
+    if (viewingShared) return
     const card = selected()
     if (!card) return
     card.title = cardTitle?.value ?? ''
@@ -430,6 +591,7 @@ async function initBoards() {
   cardWiki?.addEventListener('input', editorDebounced)
 
   document.getElementById('cardDelete')?.addEventListener('click', () => {
+    if (viewingShared) return
     const card = selected()
     if (!card) { setStatus('No card selected.'); return }
     cards = cards.filter(entry => entry?.id !== card.id)
@@ -440,6 +602,7 @@ async function initBoards() {
   })
 
   arrowList?.addEventListener('click', event => {
+    if (viewingShared) return
     const button = event.target.closest('[data-arrow-remove]')
     if (!button) return
     arrows = arrows.filter(arrow => arrow?.id !== button.dataset.arrowRemove)
