@@ -22,6 +22,7 @@ const expectedRooms = [
   { href: '/graph', title: 'Relation Graph' },
   { href: '/gallery', title: 'Character Gallery' },
   { href: '/oracle', title: 'Prompt Oracle' },
+  { href: '/drops', title: 'Lore Drops' },
   { href: '/notebook', title: 'Notebook' },
   { href: '/boards', title: 'Whiteboards' },
   { href: '/manuscripts', title: 'Manuscripts' },
@@ -47,7 +48,7 @@ function roomsSection() {
   return dashboardHtml.slice(sectionStart, sectionEnd)
 }
 
-test('dashboard rooms grid links all 22 wave rooms, each resolving via the alias map', () => {
+test('dashboard rooms grid links all 23 wave rooms, each resolving via the alias map', () => {
   const section = roomsSection()
   const hrefs = [...section.matchAll(/href="([^"]+)"/g)].map(match => match[1])
   assert.equal(hrefs.length, expectedRooms.length, `rooms grid has ${expectedRooms.length} links`)
