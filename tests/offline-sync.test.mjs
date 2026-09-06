@@ -154,14 +154,19 @@ test('rememberSearchIndexes preserves an existing manifest, mints one otherwise'
   assert.deepEqual(await loadSnapshot(adapter, 'search-extra'), sampleEntries('extra'))
 })
 
-test('offline-sync.js never touches /api/; search.js wires the fallback', () => {
+test('offline-sync.js only reaches /api/ through the outbox saver; search.js wires the fallback', () => {
   const offlineSource = readFileSync(new URL('../public/offline-sync.js', import.meta.url), 'utf8')
-  // No fetch of /api/ anywhere: every '/api/' mention must be a comment or
-  // the refusal guard (fetchSnapshot skips api URLs defensively).
+  // The outbox flush is the one legit /api/ POST: the OUTBOX_SAVE_URL
+  // constant plus its runFetch(OUTBOX_SAVE_URL, ...) call. Every other
+  // '/api/' mention must be a comment or the fetchSnapshot refusal guard.
   for (const line of offlineSource.split('\n')) {
-    if (line.includes('/api/')) assert.match(line, /^\s*\/\/|refused/, `suspicious /api/ use: ${line.trim()}`)
+    if (!line.includes('/api/')) continue
+    if (line.includes('OUTBOX_SAVE_URL')) continue
+    assert.match(line, /^\s*\/\/|refused/, `suspicious /api/ use: ${line.trim()}`)
   }
   assert.doesNotMatch(offlineSource, /fetch\(\s*['"`]\/api\//)
+  assert.match(offlineSource, /OUTBOX_SAVE_URL = '\/api\/additions\/save'/)
+  assert.match(offlineSource, /runFetch\(OUTBOX_SAVE_URL/)
   assert.match(offlineSource, /outbox/)
   assert.match(offlineSource, /QuotaExceededError/)
   const searchSource = readFileSync(new URL('../public/search.js', import.meta.url), 'utf8')

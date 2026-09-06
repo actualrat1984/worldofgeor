@@ -7,6 +7,16 @@ import { initMentionAutocomplete, paintLinkedFolios } from './mentions.js'
 import { initInventoryPanel } from './inventory.js'
 import { initManuscriptPresence } from './manuscript-presence.js'
 import {
+  QUEUED_CHIP_TEXT,
+  SYNC_FAILED_TEXT,
+  createIdbAdapter,
+  enqueueSave,
+  flushOutbox,
+  hasOutboxFailures,
+  isNetworkFailure,
+  listOutbox,
+} from './offline-sync.js'
+import {
   CHAPTER_META_STORAGE_LABEL,
   cleanChapterEra,
   cleanPov,
@@ -57,20 +67,83 @@ export function splitManuscriptPath(path) {
   return { book: parts[1], chapter: file }
 }
 
-export function renderManuscriptItem(file, selected) {
+export function renderManuscriptItem(file, selected, queued = false) {
   const path = String(file?.path ?? '')
   const split = splitManuscriptPath(path) || { book: 'BOOK', chapter: path }
-  return `<button type="button" data-manuscript-path="${escapeHtml(path)}" aria-pressed="${selected ? 'true' : 'false'}"`
-    + ` class="w-full text-left p-4 ${selected ? 'bg-gold/10' : ''}">`
+  const badge = queued
+    ? `<span class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-gold/40 px-2.5 py-0.5 text-[10px] tracking-widest text-gold/90">`
+      + `<span aria-hidden="true">◷</span><span>${escapeHtml(QUEUED_CHIP_TEXT)}</span></span>`
+    : ''
+  return `<button type="button" data-manuscript-path="${escapeHtml(path)}" data-queued="${queued ? 'true' : 'false'}" aria-pressed="${selected ? 'true' : 'false'}"`
+    + ` class="w-full text-left p-4 ${selected ? 'bg-gold/10' : ''}${queued ? ' opacity-60' : ''}">`
     + `<span class="block text-sm font-semibold text-cream/90 truncate">${escapeHtml(split.chapter)}</span>`
     + `<span class="block text-[10px] tracking-widest text-cream/40 mt-1">${escapeHtml(String(split.book).toUpperCase())}</span>`
+    + badge
     + `</button>`
 }
 
-export function renderManuscriptList(files, selectedPath) {
-  const list = [...(files ?? [])].sort((a, b) => String(a?.path ?? '').localeCompare(String(b?.path ?? '')))
-  if (!list.length) return '<p class="p-5 text-sm text-cream/40">No chapters yet — start the first one.</p>'
-  return list.map(file => renderManuscriptItem(file, file?.path === selectedPath)).join('')
+export function renderManuscriptList(files, selectedPath, queued = []) {
+  const queuedPaths = new Set((queued ?? [])
+    .map(item => (typeof item === 'string' ? item : item?.path))
+    .filter(item => typeof item === 'string' && item))
+  const seen = new Set()
+  const rows = [...(files ?? [])]
+    .sort((a, b) => String(a?.path ?? '').localeCompare(String(b?.path ?? '')))
+    .map(file => {
+      const path = String(file?.path ?? '')
+      seen.add(path)
+      return renderManuscriptItem(file, file?.path === selectedPath, queuedPaths.has(path))
+    })
+  // Queued saves for chapters the server hasn't seen yet still render —
+  // dimmed with the honest queued chip, never presented as saved.
+  for (const path of [...queuedPaths].sort((a, b) => a.localeCompare(b))) {
+    if (seen.has(path) || !splitManuscriptPath(path)) continue
+    rows.push(renderManuscriptItem({ path }, path === selectedPath, true))
+  }
+  if (!rows.length) return '<p class="p-5 text-sm text-cream/40">No chapters yet — start the first one.</p>'
+  return rows.join('')
+}
+
+// H19 Phase 2 — compose an outbox additions.save from editor fields.
+// Mirrors the worker's manuscriptPath + cleanManuscriptTitle/Body rules so a
+// queued save lands on exactly the path an online POST would have written.
+// Throws with the worker's copy when the chapter could not be saved online
+// either. Title/body caps match /api/manuscripts (100k body); the 900k
+// additions limit is enforced again at enqueue time.
+export function composeQueuedSave({ book, chapter, title, body }) {
+  const cleanSegment = value => {
+    if (typeof value !== 'string') return null
+    const segment = value.trim()
+    if (!segment || segment.length > 80) return null
+    if (!/^[A-Za-z0-9._\- ]+$/.test(segment)) return null
+    if (segment === '.' || segment === '..' || segment.startsWith('.') || segment.endsWith('.')) return null
+    return segment
+  }
+  const cleanBook = cleanSegment(book)
+  const cleanChapter = cleanSegment(chapter)
+  if (!cleanBook || !cleanChapter) throw new Error('Valid book and chapter required (A-Z 0-9 . _ - space)')
+  const file = cleanChapter.includes('.') ? cleanChapter : `${cleanChapter}.md`
+  const path = `${MANUSCRIPT_ROOT}/${cleanBook}/${file}`
+  const cleanTitle = title == null ? '' : title
+  if (typeof cleanTitle !== 'string') throw new Error('Title within 200 chars and a body within 100k chars required')
+  const trimmedTitle = cleanTitle.trim()
+  if (trimmedTitle.length > 200) throw new Error('Title within 200 chars and a body within 100k chars required')
+  const chapterBody = typeof body === 'string' ? body.trim() : ''
+  if (!chapterBody || chapterBody.length > MANUSCRIPT_BODY_MAX) {
+    throw new Error('Title within 200 chars and a body within 100k chars required')
+  }
+  return {
+    path,
+    content: buildManuscriptContent(trimmedTitle, chapterBody),
+    message: `manuscript ${path} via /manuscripts`,
+  }
+}
+
+// Pending-count suffix for the manuscripts header. Empty when nothing is
+// queued — the header only mentions the outbox when it is non-empty.
+export function manuscriptPendingSuffix(pending) {
+  const count = Math.max(0, Math.floor(Number(pending) || 0))
+  return count > 0 ? ` · ${count} queued offline` : ''
 }
 
 // --- Browser rendering (never runs under node --test) -----------------------
@@ -149,6 +222,12 @@ async function initManuscripts() {
   let selectedPath = null
   let saveTimer = null
   let repaintMentions = () => {}
+  // H19 Phase 2 — queued offline saves (outbox records) for this studio.
+  let queuedRecords = []
+  let outboxAdapter = null
+  try {
+    outboxAdapter = createIdbAdapter()
+  } catch { outboxAdapter = null }
 
   const setStatus = message => { if (status) status.textContent = message }
   const draftKey = () => selectedPath
@@ -159,12 +238,74 @@ async function initManuscripts() {
   const clearDraft = () => { try { localStorage.removeItem(draftKey()) } catch {} }
 
   const paint = () => {
-    list.innerHTML = renderManuscriptList(files, selectedPath)
+    list.innerHTML = renderManuscriptList(files, selectedPath, queuedRecords)
     list.setAttribute('aria-busy', 'false')
     const books = new Set(files.map(file => splitManuscriptPath(file?.path)?.book).filter(Boolean))
-    if (count) count.textContent = files.length
+    const base = files.length
       ? `${files.length} chapter${files.length === 1 ? '' : 's'} · ${books.size} book${books.size === 1 ? '' : 's'} · kept in the archive`
       : 'No chapters yet'
+    const pending = queuedRecords.filter(record => !record?.conflicted).length
+    if (count) count.textContent = `${base}${manuscriptPendingSuffix(pending)}`
+  }
+
+  // Re-read the outbox and repaint chips + header count. Never throws —
+  // the studio stays usable when IndexedDB is unavailable.
+  const refreshQueue = async () => {
+    try {
+      queuedRecords = outboxAdapter ? await listOutbox(outboxAdapter) : []
+    } catch { queuedRecords = [] }
+    paint()
+  }
+
+  // Flush queued saves in FIFO order, then reconcile the list. Status only
+  // changes when the flush did something worth reporting.
+  const flushQueued = async () => {
+    await refreshQueue()
+    if (!outboxAdapter) return
+    let summary
+    try {
+      summary = await flushOutbox(outboxAdapter)
+    } catch { return }
+    if (summary.stopped === 'unauthorized') {
+      location.href = '/?next=' + encodeURIComponent('/manuscripts')
+      return
+    }
+    const activity = summary.sent > 0 || summary.failed > 0 || summary.conflicts > 0 || summary.stopped
+    if (summary.sent > 0) await load()
+    if (activity) await refreshQueue()
+    else return
+    if (summary.stopped === 'network' || summary.stopped === 'offline') {
+      setStatus('Connection lost — queued saves stay on this device and will retry.')
+    } else if (hasOutboxFailures(queuedRecords)) {
+      setStatus(SYNC_FAILED_TEXT)
+    } else if (summary.sent > 0 && !queuedRecords.some(record => !record?.conflicted)) {
+      setStatus('Caught up — queued saves are published.')
+    }
+  }
+
+  // Queue the editor contents instead of POSTing. The draft stays local;
+  // nothing here is presented as saved.
+  const queueOfflineSave = async payload => {
+    let composed
+    try {
+      composed = composeQueuedSave(payload)
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'That chapter could not be queued')
+      return
+    }
+    if (!outboxAdapter) {
+      setStatus('This device cannot queue offline saves — reconnect and save again.')
+      return
+    }
+    try {
+      await enqueueSave(outboxAdapter, composed)
+      selectedPath = composed.path
+      await refreshQueue()
+      const pending = queuedRecords.filter(record => !record?.conflicted).length
+      setStatus(`${QUEUED_CHIP_TEXT}${manuscriptPendingSuffix(pending)} · will publish when you reconnect.`)
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'That chapter could not be queued')
+    }
   }
 
   const paintVersion = async path => {
@@ -286,6 +427,12 @@ async function initManuscripts() {
       setStatus('That chapter is over the 100k character cap — trim it before saving.')
       return
     }
+    // Offline: queue instead of POSTing — the save is labeled queued,
+    // never presented as published.
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+      await queueOfflineSave(payload)
+      return
+    }
     try {
       setStatus('Saving to the archive…')
       const data = await requestManuscripts('/api/manuscripts', {
@@ -301,6 +448,11 @@ async function initManuscripts() {
       await paintVersion(selectedPath)
       setStatus(`Saved to the archive · ${String(data.sha || '').slice(0, 7)}.`)
     } catch (error) {
+      // The network dropped mid-save: keep it locally and say so honestly.
+      if (isNetworkFailure(error)) {
+        await queueOfflineSave(payload)
+        return
+      }
       setStatus(error instanceof Error ? error.message : 'The chapter could not be saved')
     }
   })
@@ -360,6 +512,10 @@ async function initManuscripts() {
   })
 
   await load()
+  await flushQueued()
+  try {
+    window.addEventListener('online', () => { void flushQueued() })
+  } catch {}
 }
 
 if (typeof document !== 'undefined') initManuscripts()
