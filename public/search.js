@@ -1,4 +1,5 @@
 import { closestTitle, kindBadge, mergeExtra, scoreEntry } from './search-sources.js'
+import { createIdbAdapter, offlineBannerText, rememberSearchIndexes, tryOfflineSearchLoad } from './offline-sync.js'
 
 const input = document.getElementById('archiveSearch')
 const results = document.getElementById('searchResults')
@@ -88,11 +89,28 @@ document.getElementById('clearRecent').addEventListener('click', () => { localSt
 
 try {
   results.innerHTML = Array.from({length:4},()=>'<div class="skel h-20 rounded-xl"></div>').join('')
-  const response = await fetch('/wiki-index.json', { credentials:'same-origin' })
-  if (response.status === 401) { location.href='/?next='+encodeURIComponent('/search'); throw new Error('Authentication required') }
-  if (!response.ok) throw new Error('The index could not be opened')
-  const data = await response.json(); index = Array.isArray(data) ? data.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : []
-  try { const extraResponse = await fetch('/wiki/search-extra-index.json', { credentials:'same-origin' }); if (extraResponse.ok) { const extraData = await extraResponse.json(); extraIndex = Array.isArray(extraData) ? extraData.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : [] } } catch { extraIndex = [] }
+  // H19 Phase 1: when the device reports offline, read the search indexes
+  // from the IndexedDB snapshot instead of fetching. Any failure falls
+  // through to the network path, whose error box still applies.
+  let offlineBanner = ''
+  let snapshotStore = null
+  try { snapshotStore = createIdbAdapter() } catch { snapshotStore = null }
+  if (snapshotStore && typeof navigator !== 'undefined' && navigator.onLine === false) {
+    try {
+      const snap = await tryOfflineSearchLoad({ adapter: snapshotStore, isOnline: navigator.onLine })
+      if (snap) { index = snap.index; extraIndex = snap.extraIndex; offlineBanner = offlineBannerText(snap.manifest) }
+    } catch { offlineBanner = '' }
+  }
+  if (!offlineBanner) {
+    const response = await fetch('/wiki-index.json', { credentials:'same-origin' })
+    if (response.status === 401) { location.href='/?next='+encodeURIComponent('/search'); throw new Error('Authentication required') }
+    if (!response.ok) throw new Error('The index could not be opened')
+    const data = await response.json(); index = Array.isArray(data) ? data.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : []
+    try { const extraResponse = await fetch('/wiki/search-extra-index.json', { credentials:'same-origin' }); if (extraResponse.ok) { const extraData = await extraResponse.json(); extraIndex = Array.isArray(extraData) ? extraData.filter(item => item && typeof item.title === 'string' && typeof item.url === 'string') : [] } } catch { extraIndex = [] }
+    // Remember what the network gave us so the next offline visit can search it.
+    if (snapshotStore && (index.length || extraIndex.length)) { try { await rememberSearchIndexes(snapshotStore, index, extraIndex) } catch {} }
+  }
   fetch('/api/archive-state',{credentials:'same-origin'}).then(response=>response.ok?response.json():null).then(data=>{ if(data){ syncedBookmarks=new Set((data.saved||[]).map(item=>item.path)); if(activeFilter==='saved') renderSearch(input.value) } }).catch(()=>{})
   input.value = new URLSearchParams(location.search).get('q') || ''; results.innerHTML = ''; renderRecent(); renderSearch(input.value); input.focus({preventScroll:true})
+  if (offlineBanner) status.textContent = offlineBanner
 } catch (error) { results.innerHTML = `<div class="rounded-xl border border-red-400/20 bg-red-400/5 p-5 text-sm text-red-200">${escapeHtml(error.message)}</div>`; status.textContent='Index unavailable' }
