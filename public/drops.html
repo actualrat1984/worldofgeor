@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/article-layouts.css" />
   <link rel="stylesheet" href="/archive-compass.css" />
   <style>
-    #dropStack { position: relative; height: 640px; max-height: 78vh; min-height: 520px; touch-action: pan-y; }
+    #dropStack { position: relative; height: 520px; max-height: 70vh; min-height: 420px; touch-action: pan-y; }
     .drop-card {
       position: absolute; inset: 0;
       background: linear-gradient(180deg, rgba(24,20,14,.98), rgba(12,10,8,.98));
@@ -25,7 +25,7 @@
     .drop-pos-1 { transform: translateY(-9px) scale(.97); opacity: .75; pointer-events: none; }
     .drop-pos-0 { cursor: grab; }
     .drop-pos-0:active { cursor: grabbing; }
-    .drop-banner { height: 180px; overflow: hidden; border-bottom: 1px solid rgba(212,161,90,.15); }
+    .drop-banner { height: 110px; overflow: hidden; border-bottom: 1px solid rgba(212,161,90,.15); }
     .drop-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .drop-filed { border-color: rgba(52,211,153,.8) !important; box-shadow: 0 0 60px rgba(52,211,153,.35) !important; }
     .drop-rejected { border-color: rgba(248,113,113,.8) !important; box-shadow: 0 0 60px rgba(248,113,113,.35) !important; }
@@ -46,22 +46,22 @@
         <nav class="flex items-center gap-2" aria-label="Archive navigation"><a href="/wiki/" class="text-xs border border-gold/20 rounded-full px-3 py-2">WIKI</a><a href="/map-editor" class="text-xs border border-gold/20 rounded-full px-3 py-2">ATLAS STUDIO</a><a href="/dashboard" class="text-xs bg-gold text-ink rounded-full px-4 py-2 font-semibold">DASHBOARD</a></nav>
       </div>
     </header>
-    <main class="max-w-[1080px] mx-auto px-5 py-12 md:py-16">
+    <main class="max-w-[1080px] mx-auto px-5 py-8">
       <div class="text-center max-w-[600px] mx-auto">
         <div class="rounded-2xl overflow-hidden border border-gold/15">
-          <img src="/drops-art/drops-hero.webp" onerror="this.onerror=null;this.src='/drops-art/drops-hero.jpg'" alt="" class="w-full h-44 object-cover" />
+          <img src="/drops-art/drops-hero.webp" onerror="this.onerror=null;this.src='/drops-art/drops-hero.jpg'" alt="" class="w-full h-28 object-cover" />
         </div>
         <p class="text-gold text-[10px] tracking-[.3em] font-semibold mt-6">THE KEEPER'S DECK • PRIVATE</p>
         <h1 class="font-display text-3xl md:text-5xl font-bold mt-3">LORE DROPS</h1>
         <p class="font-serif italic text-xl text-cream/60 mt-3">Every card is a real gap in the archive. Rule it, and it is filed.</p>
         <p id="dropStats" role="status" class="text-xs text-cream/40 mt-4">Shuffling…</p>
       </div>
-      <div class="grid md:grid-cols-[1fr_1.7fr_1fr] gap-4 items-start mt-8">
-        <aside id="prevPanel" aria-label="Previous card" class="hidden md:block md:sticky md:top-6"></aside>
+      <div class="grid lg:grid-cols-[1fr_1.7fr_1fr] gap-4 items-start mt-6">
+        <aside id="prevPanel" aria-label="Previous card" class="hidden lg:block lg:sticky lg:top-6"></aside>
         <div id="dropStack" aria-live="polite"></div>
-        <aside id="nextPanel" aria-label="Next card" class="hidden md:block md:sticky md:top-6"></aside>
+        <aside id="nextPanel" aria-label="Next card" class="hidden lg:block lg:sticky lg:top-6"></aside>
       </div>
-      <div class="md:hidden mt-4 flex items-center justify-between gap-2">
+      <div class="lg:hidden mt-4 flex items-center justify-between gap-2">
         <button id="stripPrev" type="button" class="text-[11px] text-cream/50 border border-gold/20 rounded-full px-3 py-1.5 max-w-[45%] truncate">← start</button>
         <button id="stripNext" type="button" class="text-[11px] text-cream/50 border border-gold/20 rounded-full px-3 py-1.5 max-w-[45%] truncate">end →</button>
       </div>

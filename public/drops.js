@@ -190,15 +190,15 @@ if (typeof document !== 'undefined') {
     banner.className = 'drop-banner';
     banner.appendChild(artImg(card.kind));
     const body = document.createElement('div');
-    body.className = 'p-5 sm:p-6';
+    body.className = 'p-4';
     const eyebrow = document.createElement('p');
     eyebrow.className = 'text-gold text-[10px] tracking-[.3em] font-semibold';
     eyebrow.textContent = kindLabel(card.kind);
     const title = document.createElement('h2');
-    title.className = 'font-display text-2xl font-bold mt-2';
+    title.className = 'font-display text-xl font-bold mt-2';
     title.textContent = card.title;
     const q = document.createElement('p');
-    q.className = 'font-serif italic text-lg text-cream/80 mt-2';
+    q.className = 'font-serif italic text-base text-cream/80 mt-2';
     q.textContent = card.question;
     body.append(eyebrow, title, q);
     if (card.context) {
@@ -215,7 +215,7 @@ if (typeof document !== 'undefined') {
         btn.className = 'mt-3 text-[11px] tracking-[.2em] text-gold border border-gold/25 rounded-full px-4 py-1.5';
         btn.textContent = 'CONTEXT — WHAT IS WRITTEN';
         const pre = document.createElement('pre');
-        pre.className = 'hidden mt-3 max-h-56 overflow-y-auto whitespace-pre-wrap text-xs text-cream/70 bg-ink/60 border border-gold/15 rounded-xl p-3 font-sans';
+        pre.className = 'hidden mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap text-xs text-cream/70 bg-ink/60 border border-gold/15 rounded-xl p-3 font-sans';
         pre.textContent = known;
         btn.addEventListener('click', () => {
           const hidden = pre.classList.toggle('hidden');
@@ -225,7 +225,7 @@ if (typeof document !== 'undefined') {
       }
       const ta = document.createElement('textarea');
       ta.id = 'dropAnswer';
-      ta.rows = 4;
+      ta.rows = 3;
       ta.placeholder = card.placeholder || 'Rule it here…';
       ta.className = 'mt-4 w-full rounded-xl bg-ink/60 border border-gold/20 focus:border-gold/60 outline-none p-3 text-sm text-cream placeholder:text-cream/30';
       ta.setAttribute('aria-label', 'Your ruling for ' + card.title);
