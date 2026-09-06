@@ -11,7 +11,15 @@
   <link rel="stylesheet" href="/article-layouts.css" />
   <link rel="stylesheet" href="/archive-compass.css" />
   <style>
-    #dropStack { position: relative; height: 520px; max-height: 70vh; min-height: 420px; touch-action: pan-y; }
+    #dropStack { position: relative; height: 600px; max-height: 76vh; min-height: 460px; touch-action: pan-y; }
+    .drop-deck { display: grid; gap: 1rem; align-items: start; margin-top: 1.5rem; }
+    .drop-centercol { width: 100%; max-width: 520px; margin: 0 auto; }
+    .drop-aside { display: none; }
+    @media (min-width: 1100px) {
+      .drop-deck { grid-template-columns: 1fr 1.5fr 1fr; }
+      .drop-aside { display: block; position: sticky; top: 1.5rem; }
+      .drop-stripwrap { display: none; }
+    }
     .drop-card {
       position: absolute; inset: 0;
       background: linear-gradient(180deg, rgba(24,20,14,.98), rgba(12,10,8,.98));
@@ -25,7 +33,7 @@
     .drop-pos-1 { transform: translateY(-9px) scale(.97); opacity: .75; pointer-events: none; }
     .drop-pos-0 { cursor: grab; }
     .drop-pos-0:active { cursor: grabbing; }
-    .drop-banner { height: 110px; overflow: hidden; border-bottom: 1px solid rgba(212,161,90,.15); }
+    .drop-banner { height: 140px; overflow: hidden; border-bottom: 1px solid rgba(212,161,90,.15); }
     .drop-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .drop-filed { border-color: rgba(52,211,153,.8) !important; box-shadow: 0 0 60px rgba(52,211,153,.35) !important; }
     .drop-rejected { border-color: rgba(248,113,113,.8) !important; box-shadow: 0 0 60px rgba(248,113,113,.35) !important; }
@@ -56,12 +64,12 @@
         <p class="font-serif italic text-xl text-cream/60 mt-3">Every card is a real gap in the archive. Rule it, and it is filed.</p>
         <p id="dropStats" role="status" class="text-xs text-cream/40 mt-4">Shuffling…</p>
       </div>
-      <div class="grid lg:grid-cols-[1fr_1.7fr_1fr] gap-4 items-start mt-6">
-        <aside id="prevPanel" aria-label="Previous card" class="hidden lg:block lg:sticky lg:top-6"></aside>
-        <div id="dropStack" aria-live="polite"></div>
-        <aside id="nextPanel" aria-label="Next card" class="hidden lg:block lg:sticky lg:top-6"></aside>
+      <div class="drop-deck">
+        <aside id="prevPanel" aria-label="Previous card" class="drop-aside"></aside>
+        <div class="drop-centercol"><div id="dropStack" aria-live="polite"></div></div>
+        <aside id="nextPanel" aria-label="Next card" class="drop-aside"></aside>
       </div>
-      <div class="lg:hidden mt-4 flex items-center justify-between gap-2">
+      <div class="drop-stripwrap mt-4 flex items-center justify-between gap-2">
         <button id="stripPrev" type="button" class="text-[11px] text-cream/50 border border-gold/20 rounded-full px-3 py-1.5 max-w-[45%] truncate">← start</button>
         <button id="stripNext" type="button" class="text-[11px] text-cream/50 border border-gold/20 rounded-full px-3 py-1.5 max-w-[45%] truncate">end →</button>
       </div>

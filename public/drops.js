@@ -190,7 +190,7 @@ if (typeof document !== 'undefined') {
     banner.className = 'drop-banner';
     banner.appendChild(artImg(card.kind));
     const body = document.createElement('div');
-    body.className = 'p-4';
+    body.className = 'p-5';
     const eyebrow = document.createElement('p');
     eyebrow.className = 'text-gold text-[10px] tracking-[.3em] font-semibold';
     eyebrow.textContent = kindLabel(card.kind);
